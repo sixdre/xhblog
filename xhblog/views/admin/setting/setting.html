@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="webapp">
 
 	<head>
 		<meta charset="UTF-8" />
@@ -53,6 +53,7 @@
 		
 		<!--自己的样式-->
 		<link rel="stylesheet" type="text/css" href="/admin/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/lib/AngularJS-Toaster/toaster.css"/>
 		
 		<link type="image/x-icon" href="/admin/img/favicon.png" rel="shortcut icon" />
 <!--
@@ -116,6 +117,7 @@
 	</head>
 
 	<body>
+		
 		<div id="theme-wrapper">
 			<%include ../header.html%>
 			
@@ -146,57 +148,14 @@
 													<!--操作区-->
 													<div class="col-md-2">
 														<ul class="list-group">
-															<li class="list-group-item active cur_poi" id="banner_set">首页轮播图</a></li>
-															<!--<li class="list-group-item cur_poi" id="art_list">文章列表</li>
-															<li class="list-group-item cur_poi" id="art_search">搜索文章</li>-->
+															<li class="list-group-item cur_poi" ui-sref="banner" ui-sref-active="active">首页轮播图</a></li>
+															<li class="list-group-item cur_poi" ui-sref="friends" ui-sref-active="active">友情链接</li>
 														</ul>
 													</div>
 													
 
 													<!--模板区-->
-													<div class="col-md-10" id="setting_tpl">
-														<form class="form-horizontal col-md-5" id="banner_form" role="form" enctype="multipart/form-data">
-														
-															<div class="form-group">
-																<label class="col-sm-2 control-label">图片</label>
-																<div class="input-group col-sm-10">
-																	<span class="input-group-addon"><i class="fa fa-image"></i></span>
-																	<input type="file" class="form-control" name="banner" required="required" >
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="col-sm-2 control-label">链接</label>
-																<div class="input-group col-sm-10">
-																	<span class="input-group-addon"><i class="fa fa-undo"></i></span>
-																	<input type="url" class="form-control" name="link" required="required" >
-																</div>
-															</div>
-															<div class="form-group">
-																<label class="col-sm-2 control-label">描述</label>
-																<div class="input-group col-sm-10">
-																	<span class="input-group-addon"><i class="fa fa-edit"></i></span>
-																	<input type="txt" class="form-control" name="dec" required="required" >
-																</div>
-															</div>
-															
-															<div class="form-group">
-																<label class="col-sm-2 control-label">权重</label>
-																<div class="input-group col-sm-10">
-																	<select class="form-control" name="weight">
-																		<option>0</option>
-																		<option>1</option>
-																		<option>2</option>			
-																	</select>
-																</div>
-															</div>
-															
-															<div class="form-group">
-																<div class="col-lg-offset-2 col-lg-10">
-																	<button type="submit" class="btn btn-info">提交</button>
-																</div>
-															</div>
-														</form>
-														
+													<div class="col-md-10"  ui-view="">
 														
 													</div>
 												</div>
@@ -219,8 +178,6 @@
 		<%include ../theme_config.html%>
 		
 		
-		<!--angular-->
-		<script src="/javascripts/angular.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/admin/js/demo-skin-changer.js"></script>
 		<script src="/admin/js/jquery.js"></script>
 		<script src="/admin/js/bootstrap.js"></script>
@@ -232,70 +189,43 @@
 		<script src="/ueditor/ueditor.all.min.js"></script>
 		
 		<!--分页-->
-		<script src="/javascripts/jquery.page.js" type="text/javascript" charset="utf-8"></script>
 		
 		<script src="/admin/js/scripts.js"></script>
 		<script src="/admin/js/pace.min.js"></script>
 
+		<!--angular-->
+		<script src="/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/lib/angular-ui-router/release/angular-ui-router.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/lib/angular-animate/angular-animate.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/lib/angular-sanitize/angular-sanitize.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/lib/AngularJS-Toaster/toaster.js" type="text/javascript" charset="utf-8"></script>
+		<script src="//cdn.bootcss.com/angular-ui-select/0.20.0/select.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/webapp.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/routes/settings.client.routes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/services/settings.client.services.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/controllers/settings.client.controllers.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+
+
+
+
 		<!--me-->	
 		<script type="text/javascript">
-		//hello
-			var Banner = function(){};
-				Banner.prototype = {
-				    submit:function(opts){				//发表
-				    	var formData = new FormData($("#banner_form")[0]);
-						$.ajax({
-							url: '/admin/setting/sub',
-							type: 'POST',
-							data: formData,
-							async: true,
-							cache: false,
-							contentType: false,
-							processData: false,
-							success: function(data) {
-								if(data.code>0){
-									alert('提交成功!');
-									window.location.reload();
-								}else if(data.code==(-2)){
-									alert('请上传图片');
-								}else{
-									alert('请按要求填写');
-								}
-							},
-							error: function() {
-								alert("与服务器通信发生错误");
-							}
-						});
-						
-				        return this;
-				    },
-				    
-				};
-				
-				var banner=new Banner();
-				
-				
-				
-				
-				//发表点击
-				$('#setting_tpl').delegate('#banner_form button[type="submit"]','click',function() {
-					banner.submit()
+			function checkURL(URL) {
+				var str = URL;
+				//下面的代码中应用了转义字符"\"输出一个字符"/"
+				var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+				var objExp = new RegExp(Expression);
+				if(objExp.test(str) == true) {
+					return true;
+				} else {
 					return false;
-				});
-				
-				function checkURL(URL) {
-					var str = URL;
-					//下面的代码中应用了转义字符"\"输出一个字符"/"
-					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-					var objExp = new RegExp(Expression);
-					if(objExp.test(str) == true) {
-						return true;
-					} else {
-						return false;
-					}
 				}
-				
-				console.log(checkURL("blog.baidu1.net"))
+			}
+			
+			console.log(checkURL("blog.baidu1.net"))
 				
 				
 				

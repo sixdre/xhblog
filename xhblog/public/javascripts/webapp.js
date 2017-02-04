@@ -1,1 +1,6 @@
-var webapp=angular.module('webapp',["ui.router",'toaster', 'ngAnimate','ui.select','ngSanitize']);
+var webapp=angular.module('webapp',
+["ui.router",
+ 'toaster', 
+ 'ngAnimate',
+ 'ui.select',
+ 'ngSanitize']);

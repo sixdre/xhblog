@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="webapp">
 
 	<head>
 		<meta charset="UTF-8" />
@@ -111,10 +111,8 @@
 		</script>
 	</head>
 
-	<body ng-app="webapp" ng-controller="articleCtrl">
-		<!--提示tip-->
-		<toaster-container toaster-options="{'position-class': 'toast-top-center'}"></toaster-container>
-		<!--提示tip end-->
+	<body  ng-controller="articleCtrl">
+		
 		
 		<div id="theme-wrapper">
 			<%include ../header.html%>
@@ -153,7 +151,7 @@
 													</div>
 
 													<!--模板区-->
-													<div class="col-md-10" id="art_tpl" ui-view="">
+													<div class="col-md-10" id="art_tpl"  ui-view="">
 														
 														
 														
