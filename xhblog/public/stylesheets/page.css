@@ -1,0 +1,169 @@
+/*分页样式*/
+.plus-page {
+	/*min-width: 1200px;*/
+    text-align: center;
+    margin:35px auto;
+}
+
+.plus-page .pages {
+    display: inline-block;
+}
+
+.plus-page .pages a,
+.plus-page .pages span.current,
+.plus-page .pages span.disabled {
+    display: inline-block;
+    color: #444;
+    display: inline-block;
+    height: 34px;
+    line-height: 34px;
+    width: 34px;
+    margin: 0 5px;
+    border-radius: 4px;
+    vertical-align: middle;
+    background: #f4f4f4;
+    overflow: hidden;
+    font-size: 12px;
+    -webkit-box-shadow: 0 1px 4px #f0eff0;
+    -moz-box-shadow: 0 1px 4px #f0eff0;
+    -ms-box-shadow: 0 1px 4px #f0eff0;
+    box-shadow: 0 1px 4px #f0eff0;
+}
+
+.plus-page .pages span.current {
+    color: #fff;
+    background-color: #34aaf2;
+}
+
+.plus-page .pages span.disabled {
+    color: #bfbfbf;
+    background: #f2f2f2;
+    cursor: default;
+    overflow: hidden;
+}
+
+.plus-page .pages a:hover {
+    text-decoration: none;
+    background: #34aaf2;
+    color: #fff;
+}
+
+.plus-page .pages i {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    margin: 12px 0 0 10px;
+}
+
+.plus-page .pages i.i-prev {
+    border-right-color: #444;
+}
+
+.plus-page .pages i.i-next {
+    border-left-color: #444;
+    margin-left: 15px;
+}
+
+.plus-page .pages a:hover i.i-prev {
+    border-right-color: #fff;
+}
+
+.plus-page .pages a:hover i.i-next {
+    border-left-color: #fff;
+}
+
+.plus-page .pages-more, .pages-more * {
+    display: inline-block;
+}
+
+.plus-page .pages-more {
+    font-size: 14px;
+    color: #444;
+    line-height: 34px;
+}
+
+.plus-page .pages-more input,
+.plus-page .pages-list,
+.plus-page .pages-more .go {
+    width: 60px;
+    height: 34px;
+    border-radius: 4px;
+    padding: 0 5px;
+    font-size: 12px;
+    -webkit-box-shadow: 0 1px 4px #f0eff0;
+    -moz-box-shadow: 0 1px 4px #f0eff0;
+    -ms-box-shadow: 0 1px 4px #f0eff0;
+    box-shadow: 0 1px 4px #f0eff0;
+}
+.plus-page .pages-more .goPage{
+   background: #F4F4F4;
+}
+.plus-page .pages-more .go {
+    width: 34px;
+    background: #f4f4f4;
+    margin: 0 5px;
+    font-size: 14px;
+    color: #444;
+}
+
+.plus-page .pages-list {
+    background: #f4f4f4;
+    position: relative;
+    text-align: left;
+    text-indent: 5px;
+    cursor: default;
+}
+
+.plus-page .pages-list span {
+    width: 100%;
+    height: 34px;
+    text-indent: 0;
+    position: relative;
+    z-index: 99;
+    line-height: 34px;
+}
+
+.plus-page .pages-list i {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: #444;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    z-index: 9;
+}
+
+.plus-page .pages-list ul {
+	padding: 0;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 12px;
+    -webkit-box-shadow: 0 1px 4px #f0eff0;
+    -moz-box-shadow: 0 1px 4px #f0eff0;
+    -ms-box-shadow: 0 1px 4px #f0eff0;
+    box-shadow: 0 1px 4px #f0eff0;
+}
+
+.plus-page .pages-list li {
+    display: block;
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    background: #fff;
+    margin: 0;
+    text-align: center;
+    text-indent: 0;
+}
+
+.plus-page .pages-list li:hover,
+.plus-page .pages-more .go:hover {
+    background: #34aaf2;
+    color: #fff;
+}
+
+

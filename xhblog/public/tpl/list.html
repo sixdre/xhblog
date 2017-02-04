@@ -1,0 +1,57 @@
+<div class="col-md-10">
+<div class="table-responsive">
+	<table class="table  user-list table-hover">
+		<thead>
+			<tr>
+				<th><span>User</span></th>
+				<th><span>Created</span></th>
+				<th class="text-center"><span>Title</span></th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody id="showarticlepagetbody">
+			<tr ng-repeat="item in articlelist">
+				<td>
+					<img src="img/samples/scarlet-159.png" class="img-circle" alt="">
+					<a href="#" class="user-link">{{item.author}}</a>
+					<span class="user-subhead">{{item.author}}</span>
+					<input type="text" class="article_id" hidden="hidden" readonly="readonly" value="{{item._id}}" />
+				</td>
+				<td ng-bind="format(item.time)"></td>
+				<td class="text-center" ng-bind="item.title"></td>
+				<td style="width: 20%;">
+					<a href="javascript:void(0);" class="table-link">
+						<span class="fa-stack">
+				<i class="fa fa-square fa-stack-2x"></i>
+				<i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
+			</span>
+					</a>
+					<a href="javascript:void(0);" class="table-link">
+						<span class="fa-stack">
+				<i class="fa fa-square fa-stack-2x"></i>
+				<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+			</span>
+					</a>
+					<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="remove(item)" class="table-link danger remove">
+						<span class="fa-stack">
+				<i class="fa fa-square fa-stack-2x"></i>
+				<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+			</span>
+					</a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+</div>
+
+<!--分页区-->
+<div class="pager-box" style="clear: both;margin: 30px auto;">
+	<!-- 分页 -->
+	<div class="plus-page">
+		<div class="pages"></div>
+		<div class="pages-more"></div>
+	</div>
+</div>
+<!--分页区end-->
+</div>

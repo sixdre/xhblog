@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate" media="handheld" href="#" />
+		<meta charset="utf-8">
+		<title><%=title%></title>
+		<link rel="stylesheet" type="text/css" href="/font/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/common.css">
+		<link rel="stylesheet" type="text/css" href="/stylesheets/module.css">
+		<link rel="stylesheet" type="text/css" href="/stylesheets/new-index.css">
+		<style type="text/css">
+			#SOHUCS #SOHU_MAIN .section-title-w .title-user-w .user-wrap-w {
+				display: none;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+		<%include header.html%>
+		<div class="column w-1200 center mt-20 clearfix pb-60">
+			<div class="article-details-crumb clearfix w-per100 f12"> <span><a href="/" >首页</a></span>&gt;<span><a href="../../index.htm" >浏览</a></span>&gt;<span><a href="javascript:void(0);"><%=article.title%></a></span> </div>
+			<div class="col-l-main f-l w-870">
+				<h1 class="f34 mt-50" style="height:auto"><%=article.title%></h1>
+				<div class="clearfix mt-25 pb-15 article-details-info">
+					<div class="article-details-user clearfix mr-15"> <span class="f13">作者：<%=article.author%></span> </div>
+					<span class="new-article-time"></span> <span class="mr-15"><%=article.create_time.toLocaleDateString()%></span>
+					<label><!--<span>来源：</span><span class="article-iheima">DOTA2</span>--><i class="fa fa-eye"></i> <%=article.views%></label>
+					<div class="article-my-review f-r clearfix"> <span class="article-review-icon"></span> <span>(<a href="#SOHUCS" id="changyan_count_unit"></a>)</span> </div>
+				</div>
+
+				<div class="article-details-tag clearfix mt-15 f13">
+					<a href="#"> <span>DOTA2</span> </a>
+					<a href="#"> <span>赛事</span> </a>
+				</div>
+
+				<div class="article-details-content article-content">
+					<%-article.tagcontent%>
+				</div>
+				
+			
+				<ul class="article_next_prev clearfix">
+					<%if(nextArticle){%>
+						<li class="next">【下一篇】<a href="/detial/<%=nextArticle.bId%>"><%=nextArticle.title%></a></li>
+					<%}else{%>
+						<li class="next">【下一篇】<a href="javascript:void(0);">无</a></li>
+					<%}%>
+					<%if(prevArticle){%>
+						<li class="prev">【上一篇】<a href="/detial/<%=prevArticle.bId%>"><%=prevArticle.title%></a></li>
+					<%}else{%>
+						<li class="prev">【上一篇】<a href="javascript:void(0);">无</a></li>
+					<%}%>
+				</ul>
+				
+
+
+
+
+				<div id="SOHUCS" sid="2293"></div>
+				<script charset="utf-8" type="text/javascript" src="/javascripts/changyan.js"></script>
+				<script type="text/javascript">
+				/*	$(function(){*/
+						window.changyan.api.config({
+							appid: 'cyrR1e0sL',
+							conf: 'prod_820fa03d9740bc431b67c4cb4c69b073'
+						});
+					/*})*/
+				</script>
+				<div style="width:25px;height:20px;position:relative;bottom:32px;left:845px;background-color:#FFF;"></div>
+			</div>
+
+			<div class="col-r-extra f-r w-300">
+				<div class="article-hot clearfix mt-20">
+					<h2 class="f24"><span>热门</span>文章</h2>
+					<ul>
+						<%hot.forEach(function(value,i){%>
+						<li class="clearfix">
+							<div class="f-l">
+								<a href="/detial/<%=value.bId%>" class="f-l" target='_blank'><img src="/images/hd1.jpg"></a>
+							</div>
+							<div class="f-l text_right">
+								<h3 class="f14"><a href="/detial/<%=value.bId%>" ><%=value.title%></a></h3>
+								<span class="hot-article-time f-l f13"><%=value.create_time.toLocaleDateString()%></span>
+							</div>
+						</li>
+						<%})%>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<%include footer.html%>
+		<script type="text/javascript" src="/javascripts/jquery.SuperSlide.2.1.1.js"></script>
+	</body>
+</html>

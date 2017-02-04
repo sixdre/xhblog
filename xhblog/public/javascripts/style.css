@@ -1,0 +1,119 @@
+.validator-tooltips {
+    border: 1px solid #00B800;
+    margin: 0;
+    background: #e8ffe8;
+    color: #000;
+    height: 14px;
+    line-height: 14px;
+}
+
+.validator-tooltips span,
+.validator-wrongtips span {
+    position: absolute;
+    left: -5px;
+    top: 6px;
+    height: 9px;
+    width: 6px;
+    display: block;
+}
+
+.validator-wrongtips {
+    border: 1px solid #f66;
+    background: #fee;
+}
+
+.validator-wrongtips span {
+    background-position: -40px -569px;
+}
+
+.validator-tooltips,
+.validator-wrongtips {
+    position: absolute;
+    left: -500px;
+    top: -500px;
+    font-size: 12px;
+    padding: 3px 6px;
+}
+
+.validator-warn {
+    background-color: yellow;
+}
+
+.validator-msg {
+    background: #fff url("images/icons.gif")/*tpa=http://img.iheima.com/js/lib/validator/images/icons.gif*/ no-repeat -25px -75px;
+    border: 1px solid #fff;
+    display: inline;
+    margin-left: 5px;
+    padding: 2px 2px 2px 18px;
+    vertical-align: -1px;
+    *vertical-align: 5px;
+    _vertical-align: 3px;
+}
+
+.validator-pass {
+    /*background-color: #E6FFE6;
+    border-color: #00BE00;*/
+}
+
+.validator-error-warn {
+    background-position: 1px -38px;
+    background-color: #FFC;
+    border-color: #FF6600;
+}
+
+.validator-error-empty {
+    background-position: 1px -38px;
+    background-color: #FFF2E9;
+    border-color: #FF6600;
+}
+
+.validator-tips {
+    background-position: 1px 2px;
+    background-color: #E2F5FF;
+    border-color: #00A8FF;
+}
+
+.validator-block {
+    background-position: 1px -18px;
+    background-color: #FFF2E9;
+    border-color: #FF6600;
+}
+
+.validator-clearfix {
+    clear: both;
+}
+
+.validator-password-info {
+    *margin-left: 5px;
+    width: 220px;
+    height: 20px;
+    background: transparent url("images/levels.gif")/*tpa=http://img.iheima.com/js/lib/validator/images/levels.gif*/ left top no-repeat;
+}
+
+.validator-infobox {
+    background-color: #FFF2E9;
+    border: 1px solid #FF6600;
+    color: #666;
+    line-height: 22px;
+    margin: 0;
+    padding: 2px 7px 0 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.validator-error {
+    background-color: #FFF2E9 !important;
+    border-color: #FF6600 !important;
+}
+
+/*.validator-pass {
+    background-color: #E6FFE6;
+    border-color: #00BE00;
+}*/
+
+input.validator-error,
+textarea.validator-error,
+select.validator-error {
+    border-color: #FF6600 !important;
+    color: red !important;
+}

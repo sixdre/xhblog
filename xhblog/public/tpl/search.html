@@ -1,0 +1,15 @@
+<div class="col-md-4">
+	<div class="input-group">
+		<input id="search_title" type="text" class="form-control" ng-model="val" placeholder="请输入您要搜索的文章标题">
+		<span class="input-group-btn">
+			<button id="search_btn" class="btn btn-primary" type="button" ng-click="search(val);">Go!</button>
+		</span>
+	</div>
+	<div id="showSerach_results">
+		<ul>
+			<li ng-repeat="item in searchResult">{{item.title}}</li>
+		</ul>
+	</div>
+</div>
+
+

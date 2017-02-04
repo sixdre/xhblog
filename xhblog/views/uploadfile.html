@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>node.js实现表单上传与下载文件</title>
+	</head>
+
+	<body>
+		<form action="/fileupload" method="post" id="frmUploadFile" enctype='multipart/form-data' >
+			<label for="resource">上传文档</label>
+			<input type="file" id="resource" name="resource">
+			<input type="text" name="gender" value="33" />
+			<button type="submit" id="sub">新建任务</button>
+		</form>
+
+		<a href="download/kkk">下载文件</a>
+	</body>
+	
+	<script src="/javascripts/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$('#sub').on('click',function(){
+		 	var formData = new FormData($("#frmUploadFile")[0]);
+//		 	formData.append('name','33');  
+		 	console.log(formData)
+			$.ajax({
+				url: '/fileupload',
+				type: 'POST',
+				data: formData,
+				async: true,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					console.log(data.path)
+					
+				},
+				error: function() {
+					alert("与服务器通信发生错误");
+				}
+			});
+			
+			return false;
+		})
+	</script>
+</html>
