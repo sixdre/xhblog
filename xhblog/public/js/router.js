@@ -45,6 +45,7 @@ app.run(
 				.state('app.article', {
 					url: '/article',
 					templateUrl: '/tpl/admin_tpl/article/article.html',
+					controller: 'articleCtrl',
 					resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
