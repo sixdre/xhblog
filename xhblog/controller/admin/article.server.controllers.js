@@ -69,7 +69,7 @@ module.exports={
 	},
 	//文章列表
 	list:function(req, res) {
-		var query = Article.find({}).sort({"time": -1}).skip(0).limit(5);
+		var query = Article.find({}).sort({"time": -1});
 		Article.count({},function(err,c){
 			query.find({},function(err,article){
 				if(err){
