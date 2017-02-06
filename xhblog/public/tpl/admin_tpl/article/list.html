@@ -1,0 +1,75 @@
+<div class="col-md-12">
+	<div ba-panel="" ba-panel-title="Editable Cells" ba-panel-class="with-scroll">
+		<div class="panel with-scroll animated zoomIn" zoom-in="">
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title">Editable Cells</h3></div>
+			<div class="panel-body" >
+				<div class="ng-scope">
+					<div class="horizontal-scroll">
+						<table class="table table-hover" st-table="editableTableData">
+							<thead>
+								<tr class="sortable">
+									<th class="table-id" st-sort="id" st-sort-default="true">#</th>
+									<th st-sort="author">Author</th>
+									<th st-sort="title">Title</th>
+									<th st-sort="created">Created</th>
+									<th st-sort="">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  ng-repeat="item in articlelist" class="editable-tr-wrap ng-scope">
+									<td class="table-id ng-binding">{{$index+1}}</td>
+									<td><span editable-text="item.author" blur="cancel" class="ng-scope ng-binding editable editable-click">{{item.author}}</span></td>
+									<td><span editable-text="item.title" blur="cancel" class="ng-scope ng-binding editable editable-click">{{item.title.substring(0,10)}}</span></td>
+									<td><span editable-text="item.created" blur="cancel" class="ng-scope ng-binding editable editable-click" ng-bind="format(item.time)"></span></td>
+									<td>
+										<a href="javascript:void(0);" class="table-link">
+											<span class="fa-stack">
+												<i class="fa fa-square fa-stack-2x"></i>
+												<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+											</span>
+										</a>
+										<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="remove(item)" class="table-link danger remove">
+											<span class="fa-stack">
+												<i class="fa fa-square fa-stack-2x"></i>
+												<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+											</span>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="6" class="text-center">
+										<div st-pagination="" st-items-by-page="12" st-displayed-pages="5" class="ng-isolate-scope">
+											<!-- ngIf: numPages && pages.length >= 2 -->
+											<nav ng-if="numPages &amp;&amp; pages.length >= 2" class="ng-scope">
+												<ul class="pagination">
+													<!-- ngRepeat: page in pages -->
+													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope active">
+														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">1</a>
+													</li>
+													<!-- end ngRepeat: page in pages -->
+													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope">
+														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">2</a>
+													</li>
+													<!-- end ngRepeat: page in pages -->
+													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope">
+														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">3</a>
+													</li>
+													
+													<!-- end ngRepeat: page in pages -->
+												</ul>
+											</nav>
+											<!-- end ngIf: numPages && pages.length >= 2 -->
+										</div>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
