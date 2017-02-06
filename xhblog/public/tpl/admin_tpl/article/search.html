@@ -40,7 +40,7 @@
 			<ul class="list-group no-borders pull-in m-b-none">
 				<li class="list-group-item" ng-repeat="item in searchResult">
 					<a href="#" class="h4 text-primary m-b-sm m-t-sm block">{{item.title}}</a>
-					<p>{{item.tagcontent}}</p>
+					<p ng-bind-html="item.tagcontent"></p>
 					<p><span class="label bg-primary pos-rlt m-r inline wrapper-xs"><i class="arrow right arrow-primary"></i> Tags:</span>
 						<a class="m-r-sm">{{item.type}}</a>
 						<!--<a href class="m-r-sm">admin</a>
