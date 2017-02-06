@@ -104,7 +104,11 @@ app.run(
 					templateUrl: '/tpl/admin_tpl/setting/banner.html',
 					
 				})
-				
+				.state('app.setting.friends', {
+					url: '/friends',
+					templateUrl: '/tpl/admin_tpl/setting/friends.html',
+					
+				})
 				
 				
 		}
