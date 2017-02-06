@@ -4,11 +4,11 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 	 * @params arg=0 表示错误弹框
 	 * @params arg=1 表示成功弹框
 	 * */
-	function defPop(arg,content){
+	function defPop(arg,content,title){
 		if(arg==1){
 			toaster.pop({
 				type: 'success',
-	            title: 'Title text',
+	            title:  title||'Title text',
 	            positionClass: "toast-top-center",
 	            body: content,
 	            showCloseButton: true,
@@ -20,7 +20,7 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 		}else if(arg==0){
 			toaster.pop({
 				type: 'err',
-	            title: 'Title text',
+	            title: title||'Title text',
 	            positionClass: "toast-top-center",
 	            body: content,
 	            showCloseButton: true,
@@ -34,7 +34,6 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 		
 		articleServices.list('').then(function(res){
 			$scope.articlelist=res.data.article;
-			console.log(res.data.article);
 		},function(data){
 			alert('出错了')
 		})
@@ -74,6 +73,9 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 			defPop(0,"请输入要搜索文章的标题!");
 		}
 		articleServices.search(title).then(function(res){
+			if(res.data.code<0){
+				return defPop(0,"没有找到相关文章！","搜索结果");
+			}
 			var data=res.data.results;
 			$scope.searchResult=data;
 			$scope.number=res.data.number;
