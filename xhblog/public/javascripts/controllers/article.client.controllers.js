@@ -76,17 +76,5 @@ angular.module('webapp').controller('articleCtrl',['$scope','$http','$window','t
 		uetrue.destroy();
 	}
 	uetrue=UE.getEditor('editor');
-	
-/*	var vm=this;
-	$scope.article_type = [
-      {type: 'IT技术', value: 1},
-      {type: '网络热点', value: 2}
-    ];*/
-	
-
-
-	
-	
-	
 }]);
 
