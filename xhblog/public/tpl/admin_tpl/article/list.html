@@ -17,7 +17,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="item in articlelist | orderBy:'time':blo" class="editable-tr-wrap ng-scope">
+								<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:3" class="editable-tr-wrap ng-scope">
 									
 									<td class="table-id">{{$index+1}}</td>
 									<td><span class="ng-scope ng-binding">{{item.author}}</span></td>
