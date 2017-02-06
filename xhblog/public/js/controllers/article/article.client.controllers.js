@@ -32,8 +32,9 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 	
 	$scope.loadlist=function(){
 		
-		articleServices.list('').then(function(data){
-			$scope.articlelist=data.data.article;
+		articleServices.list('').then(function(res){
+			$scope.articlelist=res.data.article;
+			console.log(res.data.article);
 		},function(data){
 			alert('出错了')
 		})

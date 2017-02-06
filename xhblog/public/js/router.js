@@ -71,6 +71,13 @@ app.run(
 				.state('app.article.list', {
 					url: '/list',
 					templateUrl: '/tpl/admin_tpl/article/list.html',
+					/*deps: ['uiLoad',
+                        function( uiLoad){
+                          return uiLoad.load([
+                             '/vendor/jquery/datatables/dataTables.bootstrap.css'
+                         ]);
+                     }]*/
+					/*templateUrl: '/tpl/admin_tpl/article/table_list.html',*/
 					
 				})
 				.state('app.article.search', {
