@@ -49,7 +49,7 @@ module.exports={
 	sub:function(req,res){
 		if (req.file) {
 			var article = Article({
-				author: req.session["loginmanager"].name,
+				author: "xuhao",
 				title:req.body.article_title,
 				type: req.body.article_type,
 				content:req.body.content,
@@ -121,7 +121,8 @@ module.exports={
 			}else if(docs.length){
 				res.json({
 					code:1,
-					results:docs
+					results:docs,
+					number:docs.length
 				})
 			}else{
 				res.json({

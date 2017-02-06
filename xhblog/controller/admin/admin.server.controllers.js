@@ -14,7 +14,15 @@ var upload = multer({ dest:  "public/upload" });  */
 module.exports={
 	showadmin:function(req,res){
 		var loginmanager = req.session["loginmanager"];
-		if(loginmanager){
+		Article.count({},function(err,c){
+			res.render('admin/admin', 
+				{
+					title: '个人博客后台管理系统',
+					loginmanager: loginmanager||{},
+					total:c,
+				});
+		});
+		/*if(loginmanager){
 			Article.count({},function(err,c){
 				res.render('admin/admin', 
 					{
@@ -25,7 +33,7 @@ module.exports={
 			})
 		}else{
 			res.redirect('login');
-		}
+		}*/
 	},
 	//后台管理登录
 	showlogin:function(req,res){
