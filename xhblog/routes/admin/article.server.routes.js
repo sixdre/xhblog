@@ -7,11 +7,10 @@ var md5 = require('md5');
 //这里指定了一个临时目录（上传后的文件均保存到该目录下），  
 //真正开发是一般加入path模块后使用path.join(__dirname,'temp');  
 //var upload = multer({ dest:  "public/upload" });  
-
 var storage = multer.diskStorage({
     //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
     //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
-    destination: "public/upload/"+new Date().toLocaleDateString(),
+    destination: "public/upload/"+moment(Date.now()).format('YYYY-MM'),
     limits: {
 	    fileSize: 100000000
 	},
