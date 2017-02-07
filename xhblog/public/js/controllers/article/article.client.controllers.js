@@ -1,4 +1,4 @@
-//
+//alert 服务
 angular.module('app').factory('defPopService',["$window","toaster",function($window,toaster){
 	var factory={};
 	/*defPop 封装弹框
@@ -52,8 +52,7 @@ angular.module('app').controller('articleCtrl',
  		 })
 	 };	
 	
-	
-	
+
 	//列表显示
 	$scope.loadlist=function(){
 		articleServices.list('').then(function(res){
@@ -66,7 +65,7 @@ angular.module('app').controller('articleCtrl',
 	
 
 	$scope.format=function(arg){
-		return moment(arg).format('YYYY-MM-DD HH:mm:ss')
+		return moment(arg).format('YYYY-MM-DD HH:mm:ss');
 	};
 	$scope.remove=function(item){
 		var id = item.bId;
@@ -77,7 +76,7 @@ angular.module('app').controller('articleCtrl',
 			}
 		},function(err){
 			defPopService.defPop(0,"服务器出错了！");
-		})
+		});
 	};
 	$scope.save=function(){
 		var formData = new FormData($("#Article_form")[0]);
@@ -91,7 +90,7 @@ angular.module('app').controller('articleCtrl',
 			}
 		},function(err){
 			defPopService.defPop(0,"服务器出错了！");
-		})
+		});
 	};
 
 	$scope.search=function(title){
@@ -107,7 +106,7 @@ angular.module('app').controller('articleCtrl',
 			$scope.number=res.data.number;
 		},function(err){
 			defPopService.defPop(0,"服务器出错了！");
-		})
+		});
 	};
 	
 	//编辑文章
@@ -124,10 +123,7 @@ angular.module('app').controller('articleCtrl',
           templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
           controller: 'ModalInstanceCtrl',
           resolve: {
-        	  items: function () {		//注入到ModalInstanceCtrl 里的items
-        		  return $scope.findarticleresult;
-        	  },
-        	  id:function(){
+        	  id:function(){		//注入到ModalInstanceCtrl 里的id
         		  return $scope.id;
         	  }
           }
@@ -145,19 +141,18 @@ angular.module('app').controller('articleCtrl',
 
 }]);
 angular.module('app').controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"items","id","articleServices","defPopService",
-	 function($scope,$modalInstance,items,id,articleServices,defPopService){
-		$scope.items = items;
+	['$scope', '$modalInstance',"id","articleServices","defPopService",
+	 function($scope,$modalInstance,id,articleServices,defPopService){
 		var id=id;
 		articleServices.find(id).then(function(res){
-			$scope.findarticleresult=res.data.article;
+			$scope.up_item=res.data.article;
 			UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
 			var upUe=UE.getEditor('up_editor',{
 		        initialFrameHeight:200		//高度设置
 		    });;  
 		    upUe.addListener("ready", function () {
 	        // editor准备好之后才可以使用
-		    	upUe.setContent($scope.findarticleresult.tagcontent);
+		    	upUe.setContent($scope.up_item.tagcontent);
 	        });
 		},function(err){
 			defPopService.defPop(0,"服务器出错了！");

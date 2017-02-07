@@ -86,12 +86,9 @@
 						<div class="new-img-list pos-r f-l mr-18 clearfix">
 							<a href="/detial/<%=value.bId%>"> <img src="/images/hd3.jpg" />
 								<a href="/detial/<%=value.bId%>" target="_blank"> 
-									<%if(value.type=="0"){%>
-										<span class="pos-a f14"> IT技术 </span> 
-									<%}%>
-									<%if(value.type=="1"){%>
-										<span class="pos-a f14"> 网络热点 </span> 
-									<%}%>
+								
+									<span class="pos-a f14"><%=value.type%></span> 
+								
 								</a>
 							</a>
 						</div>
@@ -108,12 +105,7 @@
 									<span></span>
 									<span class="mr-20">
 										<a href="">
-										<%if(value.type=="0"){%>
-											IT技术 
-										<%}%>
-										<%if(value.type=="1"){%>
-											网络热点
-										<%}%>
+											<%=value.type%>
 										</a>
 									</span>
 									<span class="mr-20"><i class="fa fa-thumbs-o-up"></i> <%=value.likes%></span>
