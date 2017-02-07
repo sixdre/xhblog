@@ -1,4 +1,4 @@
-angular.module('app').controller('articleCtrl',['$scope','$http','$window','toaster','articleServices',function($scope,$http,$window,toaster,articleServices){
+angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log','toaster','articleServices',function($scope,$http,$window,$log,toaster,articleServices){
 
 	/*defPop 封装弹框
 	 * @params arg=0 表示错误弹框
@@ -30,15 +30,33 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','toas
 	}
 	
 	
+	 $scope.maxSize = 5;
+	 $scope.limit=3;
+     $scope.bigTotalItems =0;
+     $scope.bigCurrentPage = 1;
+    
+      //分页显示
+	 $scope.pageChanged = function() {
+    	 articleServices.page({current:$scope.bigCurrentPage,textCount:3}).then(function(res){
+    		 $scope.articlelist=res.data.page;
+    	 },function(err){
+ 			alert('出错了')
+ 		 })
+	 };	
+	
+	
+	
+	//列表显示
 	$scope.loadlist=function(){
-		
 		articleServices.list('').then(function(res){
 			$scope.articlelist=res.data.article;
-		},function(data){
+			$scope.bigTotalItems =res.data.article.length;
+		},function(err){
 			alert('出错了')
 		})
 	};
 	
+
 	$scope.format=function(arg){
 		return moment(arg).format('YYYY-MM-DD HH:mm:ss')
 	};
