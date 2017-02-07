@@ -1,14 +1,11 @@
-angular.module('app').controller('articleCtrl',
-		['$scope','$http','$window','$log','$modal','toaster','articleServices',
-		 function($scope,$http,$window,$log,$modal,toaster,articleServices){
-
-
-	
+//
+angular.module('app').factory('defPopService',["$window","toaster",function($window,toaster){
+	var factory={};
 	/*defPop 封装弹框
 	 * @params arg=0 表示错误弹框
 	 * @params arg=1 表示成功弹框
 	 * */
-	function defPop(arg,content,title){
+	factory.defPop=function(arg,content,title){
 		if(arg==1){
 			toaster.pop({
 				type: 'success',
@@ -32,8 +29,15 @@ angular.module('app').controller('articleCtrl',
 			});
 		}
 	}
-	
-	
+
+	return factory;
+}]);
+
+
+angular.module('app').controller('articleCtrl',
+		['$scope','$http','$window','$log','$modal','toaster','articleServices',"defPopService",
+		 function($scope,$http,$window,$log,$modal,toaster,articleServices,defPopService){
+
 	 $scope.maxSize = 5;	//
 	 $scope.limit=5;		//每页显示的文章数
      $scope.bigTotalItems =0;
@@ -44,7 +48,7 @@ angular.module('app').controller('articleCtrl',
     	 articleServices.page({current:$scope.bigCurrentPage,textCount:$scope.limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     	 },function(err){
-    		 defPop(0,"出错了！");
+    		 defPopService.defPop(0,"出错了！");
  		 })
 	 };	
 	
@@ -56,7 +60,7 @@ angular.module('app').controller('articleCtrl',
 			$scope.articlelist=res.data.article;
 			$scope.bigTotalItems =res.data.article.length;
 		},function(err){
-			defPop(0,"出错了！");
+			defPopService.defPop(0,"出错了！");
 		});
 	};
 	
@@ -69,10 +73,10 @@ angular.module('app').controller('articleCtrl',
 		articleServices.remove(id).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				defPop(1,"删除成功!");
+				defPopService.defPop(1,"删除成功!");
 			}
 		},function(err){
-			defPop(0,"服务器出错了！");
+			defPopService.defPop(0,"服务器出错了！");
 		})
 	};
 	$scope.save=function(){
@@ -83,26 +87,26 @@ angular.module('app').controller('articleCtrl',
 		articleServices.save(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				defPop(1,"发表成功!");
+				defPopService.defPop(1,"发表成功!");
 			}
 		},function(err){
-			defPop(0,"服务器出错了！");
+			defPopService.defPop(0,"服务器出错了！");
 		})
 	};
 
 	$scope.search=function(title){
 		if(!title){
-			defPop(0,"请输入要搜索文章的标题!");
+			defPopService.defPop(0,"请输入要搜索文章的标题!");
 		}
 		articleServices.search(title).then(function(res){
 			if(res.data.code<0){
-				return defPop(0,"没有找到相关文章！","搜索结果");
+				return defPopService.defPop(0,"没有找到相关文章！","搜索结果");
 			}
 			var data=res.data.results;
 			$scope.searchResult=data;
 			$scope.number=res.data.number;
 		},function(err){
-			defPop(0,"服务器出错了！");
+			defPopService.defPop(0,"服务器出错了！");
 		})
 	};
 	
@@ -141,8 +145,8 @@ angular.module('app').controller('articleCtrl',
 
 }]);
 angular.module('app').controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"items","id","articleServices",
-	 function($scope,$modalInstance,items,id,articleServices){
+	['$scope', '$modalInstance',"items","id","articleServices","defPopService",
+	 function($scope,$modalInstance,items,id,articleServices,defPopService){
 		$scope.items = items;
 		var id=id;
 		articleServices.find(id).then(function(res){
@@ -156,7 +160,7 @@ angular.module('app').controller('ModalInstanceCtrl',
 		    	upUe.setContent($scope.findarticleresult.tagcontent);
 	        });
 		},function(err){
-			defPop(0,"服务器出错了！");
+			defPopService.defPop(0,"服务器出错了！");
 		});
 		
 		
@@ -171,9 +175,12 @@ angular.module('app').controller('ModalInstanceCtrl',
 	    		content:UE.getEditor('up_editor').getContentTxt()
 	    	};
 	    	articleServices.update(arg).then(function(res){
-	    		console.log(res)
+	    		var data=res.data;
+	    		if(data.code>0){
+	    			defPopService.defPop(1,"更新成功！");
+	    		}
 	    	},function(err){
-	    		
+	    		defPopService.defPop(0,"更新失败！");
 	    	});
 	    	
 	    };
