@@ -92,9 +92,12 @@ module.exports={
 		query.find(function(err, docs) {
 			if(!err){
 				if(docs != '') {
-					res.render('admin/article/article_page', {
+					res.json({
+						page:docs
+					})
+					/*res.render('admin/article/article_page', {
 						page: docs || {}
-					});
+					});*/
 				}else{
 					res.json({
 						code:-1

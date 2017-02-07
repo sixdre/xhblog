@@ -6,7 +6,7 @@
 		<div class="col-md-2">
 			<ul class="list-group list-group-sp">
 				<li class="list-group-item poin-ter"  ui-sref="app.article.editor" ui-sref-active="active">发表文章</li>
-				<li class="list-group-item poin-ter"  ui-sref="app.article.list" ui-sref-active="active">文章列表</li>
+				<li class="list-group-item poin-ter"  ui-sref="app.article.list({page:1})" ng-class="{active:$state.includes('app.article.list')}">文章列表</li>
 				<li class="list-group-item poin-ter"  ui-sref="app.article.search" ui-sref-active="active">搜索文章</li>
 			</ul>
 		</div>

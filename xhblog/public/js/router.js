@@ -45,6 +45,9 @@ app.run(
 				.state('app.article', {
 					url: '/article',
 					templateUrl: '/tpl/admin_tpl/article/article.html',
+					controller:function($state){
+						$state.go('app.article.editor');
+					},
 					controller: 'articleCtrl',
 					resolve: {
                       deps: ['uiLoad',
@@ -70,8 +73,11 @@ app.run(
 	                }
 				})
 				.state('app.article.list', {
-					url: '/list',
+					url: '/list/:page',
 					templateUrl: '/tpl/admin_tpl/article/list.html',
+					/*controller:function($stateParams){
+						console.log($stateParams.page)
+					}*/
 					/*deps: ['uiLoad',
                         function( uiLoad){
                           return uiLoad.load([
@@ -89,6 +95,9 @@ app.run(
 				.state('app.setting', {
 					url: '/setting',
 					templateUrl: '/tpl/admin_tpl/setting/setting.html',
+					controller:function($state){
+						$state.go('app.setting.banner');
+					},
 					resolve: {
 	                      deps: ['uiLoad',
 	                        function( uiLoad){

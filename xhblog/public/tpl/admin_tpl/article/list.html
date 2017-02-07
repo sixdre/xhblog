@@ -3,7 +3,7 @@
 		<div class="panel with-scroll animated zoomIn" zoom-in="">
 			<div class="panel-heading clearfix">
 				<h3 class="panel-title">Editable Cells</h3></div>
-			<div class="panel-body" >
+			<div class="panel-body" ng-controller="articleCtrl">
 				<div class="ng-scope">
 					<div class="horizontal-scroll">
 						<table class="table table-hover dataTable" ng-init="blo=true">
@@ -17,7 +17,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:3" class="editable-tr-wrap ng-scope">
+								<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:limit" class="editable-tr-wrap ng-scope">
 									
 									<td class="table-id">{{$index+1}}</td>
 									<td><span class="ng-scope ng-binding">{{item.author}}</span></td>
@@ -42,28 +42,17 @@
 							<tfoot>
 								<tr>
 									<td colspan="6" class="text-center">
-										<div st-pagination="" st-items-by-page="12" st-displayed-pages="5" class="ng-isolate-scope">
-											<!-- ngIf: numPages && pages.length >= 2 -->
-											<nav ng-if="numPages &amp;&amp; pages.length >= 2" class="ng-scope">
-												<ul class="pagination">
-													<!-- ngRepeat: page in pages -->
-													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope active">
-														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">1</a>
-													</li>
-													<!-- end ngRepeat: page in pages -->
-													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope">
-														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">2</a>
-													</li>
-													<!-- end ngRepeat: page in pages -->
-													<li ng-repeat="page in pages" ng-class="{active: page==currentPage}" class="ng-scope">
-														<a href="javascript: void(0);" ng-click="selectPage(page)" class="ng-binding">3</a>
-													</li>
-													
-													<!-- end ngRepeat: page in pages -->
-												</ul>
-											</nav>
-											<!-- end ngIf: numPages && pages.length >= 2 -->
-										</div>
+										<div>
+											<pagination ng-change="pageChanged()" 
+												items-per-page="3"
+												total-items="bigTotalItems" 
+												ng-model="bigCurrentPage" 
+												max-size="maxSize" 
+												class="pagination-sm m-t-none m-b" 
+												boundary-links="true" 
+												rotate="false" 
+												num-pages="numPages"></pagination>
+									    </div>
 									</td>
 								</tr>
 							</tfoot>

@@ -54,7 +54,13 @@ angular.module('app').factory('articleServices',['$http','$q',function($http,$q)
 		},
 		search:function(title){
 			return handelRequest("POST",'/admin/article/search',{title:title});
+		},
+		page:function(arg){
+			return handelRequest("POST",'/admin/article/page',arg);
 		}
+		
+		
+		
 	}
 	
 }])
