@@ -3,7 +3,7 @@ var mongoose=require('mongoose');
 var Article = mongoose.model('Article');				//文章
 var Manager = mongoose.model('Manager');				//管理员
 var Banner = mongoose.model('Banner');					//banner图
-
+var Friend = mongoose.model('Friend');					//友情链接
 
 //检查是否为链接
 function checkURL(URL) {
@@ -70,7 +70,7 @@ exports.showSettings=function(req,res){
 };
 
 
-exports.sub=function(req,res){
+exports.post_banner=function(req,res){
 	upload(req, res, function (err) {
 		if(err){
 			return console.log("upload err:",err)
@@ -109,6 +109,25 @@ exports.sub=function(req,res){
 				code:-1
 			})
 		}
+	})
+	
+};
+
+
+exports.addFriend=function(req,res){
+	console.log(req.body);
+	var friend=new Friend({
+		title:req.body.title,
+		url:req.body.url
+	});
+	friend.save(function(err){
+		if(err){
+			return console.log('添加失败 err：'+err);
+		}
+		res.json({
+			code:1
+		});
+		
 	})
 	
 }

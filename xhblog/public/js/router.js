@@ -95,9 +95,9 @@ app.run(
 				.state('app.setting', {
 					url: '/setting',
 					templateUrl: '/tpl/admin_tpl/setting/setting.html',
-					controller:function($state){
+					/*controller:function($state){
 						$state.go('app.setting.banner');
-					},
+					},*/
 					resolve: {
 	                      deps: ['uiLoad',
 	                        function( uiLoad){

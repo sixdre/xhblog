@@ -25,12 +25,12 @@ angular.module('app').factory('settingServices',['$http','$q',function($http,$q)
 	
 	
 	return {
-		submit:function(data){
+		post_banner:function(data){
 			function ss(){
 				var deferred=$q.defer();
 				var config={
 					method:"POST",
-					url:'/admin/setting/sub',
+					url:'/admin/setting/post_banner',
 					data:data,
 					headers: {'Content-Type':undefined},
               		transformRequest:angular.identity   
@@ -45,6 +45,9 @@ angular.module('app').factory('settingServices',['$http','$q',function($http,$q)
 			
 			return ss();
 			
+		},
+		addFriend:function(data){
+			return handelRequest("POST","/admin/setting/addFriend",data);
 		}
 	}
 	

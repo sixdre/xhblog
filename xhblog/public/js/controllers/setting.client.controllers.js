@@ -1,27 +1,32 @@
-angular.module('app').controller('settingCtrl',['$scope','$http','$window','toaster','settingServices',function($scope,$http,$window,toaster,settingServices){
+angular.module('app').controller('settingCtrl',['$scope','$http','$window','defPopService','settingServices',function($scope,$http,$window,defPopService,settingServices){
 
-	$scope.submit=function(){
+	$scope.addbanner=function(){
 		var formData = new FormData($("#banner_form")[0]);
-		settingServices.submit(formData).then(function(res){
+		settingServices.post_banner(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				toaster.pop({
-					type: 'success',
-	                title: 'Title text',
-	                positionClass: "toast-top-center",
-	                body: '提交成功',
-	                showCloseButton: true,
-	                timeout:1000,
-	                onHideCallback: function () { 
-		              $window.location.reload();
-		            }
-				});
+				defPopService.defPop(1,"提交成功");
 			}
 		},function(err){
 			
 		})
 	};
-
+	
+	$scope.addfriend=function(){
+		var formData={
+			title:$scope.friend_title,
+			url:$scope.friend_url
+		};
+		settingServices.addFriend(formData).then(function(res){
+			var data=res.data;
+			if(data.code>0){
+				return defPopService.defPop(1,"添加成功");
+			}
+		},function(err){
+			
+		})
+		return false;
+	}
 	
 	
 }])
