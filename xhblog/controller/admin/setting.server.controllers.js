@@ -33,7 +33,7 @@ var md5 = require('md5');
 var storage = multer.diskStorage({
     //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
     //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
-    destination: "public/upload/banner/"+new Date().toLocaleDateString(),
+    destination: "public/upload/banner/"+moment(Date.now()).format('YYYY-MM'),
     limits: {
 	    fileSize: 100000000
 	},
