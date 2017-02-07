@@ -52,15 +52,17 @@
 </div>
 <div class="wrapper-md">
 	<div ng-controller="settingCtrl">
-		<div class="col-md-2">
-			<ul class="list-group list-group-sp">
-				<li class="list-group-item poin-ter" ui-sref="app.setting.banner.add" ui-sref-active="active">添加</li>
-				<li class="list-group-item poin-ter" ui-sref="app.setting.banner.list" ui-sref-active="active">列表</li>
-			</ul>
-		</div>
-		<div class="col-md-10"  ui-view="">
-															
-															
+		<div class="row">
+			<div class="col-md-2">
+				<ul class="list-group list-group-sp">
+					<li class="list-group-item poin-ter" ui-sref="app.setting.banner.add" ui-sref-active="active">添加</li>
+					<li class="list-group-item poin-ter" ui-sref="app.setting.banner.list" ui-sref-active="active">列表</li>
+				</ul>
+			</div>
+			<div class="col-md-10"  ui-view="">
+																
+																
+			</div>
 		</div>
 	</div>
 </div>
