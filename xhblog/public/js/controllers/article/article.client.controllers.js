@@ -121,7 +121,6 @@ angular.module('app').controller('articleCtrl',
           controller: 'ModalInstanceCtrl',
           resolve: {
         	  items: function () {		//注入到ModalInstanceCtrl 里的items
-        		  console.log(1);
         		  return $scope.findarticleresult;
         	  },
         	  id:function(){
@@ -165,9 +164,17 @@ angular.module('app').controller('ModalInstanceCtrl',
 	      item: $scope.items[0]
 	    };*/
 
-	    $scope.ok = function () {
-	      /*$modalInstance.close();*/
-	      alert('更新')
+	    $scope.update = function (id) {
+	    	var arg={
+	    		id:id,
+	    		tagcontent:UE.getEditor('up_editor').getContent(),
+	    		content:UE.getEditor('up_editor').getContentTxt()
+	    	};
+	    	articleServices.update(arg).then(function(res){
+	    		console.log(res)
+	    	},function(err){
+	    		
+	    	});
 	    	
 	    };
 

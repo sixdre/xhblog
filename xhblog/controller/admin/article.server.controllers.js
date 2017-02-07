@@ -153,12 +153,26 @@ module.exports={
 			}
 		})
 	},
+	//编辑文章搜寻
 	find:function(req,res){
 		const id=req.body.id;
 		console.log(id);
 		Article.findById(id,function(doc){
 			res.json({
 				article:doc
+			})
+		})
+	},
+	update:function(req,res){
+		const id=req.body.id;
+		const content=req.body.content;
+		const tagcontent=req.body.tagcontent;
+		Article.update({bId:id},{tagcontent:tagcontent},{content:content},function(err){
+			if(err){
+				return console.log('update err :'+err)
+			}
+			res.json({
+				code:1
 			})
 		})
 	}

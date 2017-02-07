@@ -60,6 +60,9 @@ angular.module('app').factory('articleServices',['$http','$q',function($http,$q)
 		},
 		find:function(id){
 			return handelRequest("POST",'/admin/article/find',{id:id});
+		},
+		update:function(arg){
+			return handelRequest("POST",'/admin/article/update',arg);
 		}
 		
 		
