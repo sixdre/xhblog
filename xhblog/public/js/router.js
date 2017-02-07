@@ -94,7 +94,8 @@ app.run(
 				})
 				.state('app.setting', {
 					url: '/setting',
-					templateUrl: '/tpl/admin_tpl/setting/setting.html',
+					template: '<div ui-view class="fade-in-up"></div>',
+					/*templateUrl: '/tpl/admin_tpl/setting/setting.html',*/
 					/*controller:function($state){
 						$state.go('app.setting.banner');
 					},*/
@@ -106,7 +107,8 @@ app.run(
 	                                '/js/controllers/setting.client.controllers.js'
 	                          ]);
 	                      }]
-		                }
+		                },
+		           
 					
 				})
 				.state('app.setting.banner', {
@@ -114,12 +116,32 @@ app.run(
 					templateUrl: '/tpl/admin_tpl/setting/banner.html',
 					
 				})
+				.state('app.setting.banner.add', {
+					url: '/banner_add',
+					templateUrl: '/tpl/admin_tpl/setting/banner_add.html',
+					
+				})
+				.state('app.setting.banner.list', {
+					url: '/banner_list',
+					templateUrl: '/tpl/admin_tpl/setting/banner_list.html',
+					
+				})
 				.state('app.setting.friends', {
 					url: '/friends',
 					templateUrl: '/tpl/admin_tpl/setting/friends.html',
 					
 				})
-				
+				.state('app.setting.friends.add', {
+					url: '/friends_add',
+					templateUrl: '/tpl/admin_tpl/setting/friends_add.html',
+					controller: 'settingCtrl'
+					
+				})
+				.state('app.setting.friends.list', {
+					url: '/friends_list',
+					templateUrl: '/tpl/admin_tpl/setting/friends_list.html',
+					
+				})
 				
 		}
 	);

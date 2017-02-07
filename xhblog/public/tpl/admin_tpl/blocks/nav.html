@@ -10,17 +10,45 @@
       <span class="font-bold" translate="aside.nav.CALENDAR">Calendar</span>
     </a>
   </li>
-   <li ui-sref-active="active">
-    <a ui-sref="app.article">
+   <li ng-class="{active:$state.includes('app.article')}">
+    <a ui-sref="app.article.editor">
       <i class="glyphicon glyphicon-book icon text-info-dker"></i>
       <span class="font-bold" translate="aside.nav.ARTICLE">article</span>
     </a>
   </li>
-  <li ui-sref-active="active">
+<!--  <li ui-sref-active="active">
     <a ui-sref="app.setting">
       <i class="glyphicon glyphicon-cog icon text-info-dker"></i>
       <span class="font-bold" translate="aside.nav.SETTING">setting</span>
     </a>
+  </li>-->
+    <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <b class="badge bg-info pull-right">3</b>
+      <i class="glyphicon glyphicon-th"></i>
+      <span>setting</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>setting</span>
+        </a>
+      </li>
+      <li ng-class="{active:$state.includes('app.setting.banner')}">
+        <a ui-sref="app.setting.banner.add">
+          <span>banner</span>
+        </a>
+      </li>
+      <li ng-class="{active:$state.includes('app.setting.friends')}">
+        <a ui-sref="app.setting.friends.add">
+          <span>friend</span>
+        </a>
+      </li>
+    </ul>
   </li>
 </ul>
 <!-- / list -->

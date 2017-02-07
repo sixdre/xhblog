@@ -1,4 +1,4 @@
-<div ng-controller="settingCtrl" class="col-md-5">
+<!--<div ng-controller="settingCtrl" class="col-md-5">
 	<form id="friend_form">
 		<div class="form-group row">
 			<div class="col-md-2">
@@ -22,4 +22,23 @@
 			</div>
 		</div>
 	</form>
+</div>
+-->
+	
+<div class="bg-light lter b-b wrapper-md">
+   <h1 class="m-n font-thin h3">Banner</h1>
+</div>
+<div class="wrapper-md">
+	<div ng-controller="settingCtrl">
+		<div class="col-md-2">
+			<ul class="list-group list-group-sp">
+				<li class="list-group-item poin-ter" ui-sref="app.setting.friends.add" ui-sref-active="active">添加</li>
+				<li class="list-group-item poin-ter" ui-sref="app.setting.friends.list" ui-sref-active="active">列表</li>
+			</ul>
+		</div>
+		<div class="col-md-10"  ui-view="">
+															
+															
+		</div>
+	</div>
 </div>
