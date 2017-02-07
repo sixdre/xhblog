@@ -9,6 +9,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var ueditor = require("ueditor");			//编辑器
 global.moment = require('moment'); 			//时间格式化
+global.md5=require("md5");
 //var common = require('./common');			//公用
 
 

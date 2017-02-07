@@ -59,7 +59,7 @@ module.exports={
 		var manger = new Manager({
 			name: req.body.name,
 			email:req.body.email,
-			password: req.body.password
+			password: md5(req.body.password)
 		});
 		Manager.findOne({power:1},function(err,manager1){
 			if(err){
@@ -92,7 +92,7 @@ module.exports={
 			if(!manager){
 				res.json({code:-1})
 			}else{
-				if(manager.password == password){
+				if(manager.password == md5(password)){
 					req.session["loginmanager"] = manager
 					res.json({code : 1})
 				}else{
