@@ -31,13 +31,14 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log
 	
 	
 	 $scope.maxSize = 5;
-	 $scope.limit=3;
+	 $scope.limit=1;
      $scope.bigTotalItems =0;
      $scope.bigCurrentPage = 1;
     
       //分页显示
 	 $scope.pageChanged = function() {
-    	 articleServices.page({current:$scope.bigCurrentPage,textCount:3}).then(function(res){
+		 console.log($scope.bigCurrentPage);
+    	 articleServices.page({current:$scope.bigCurrentPage,textCount:$scope.limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     	 },function(err){
  			alert('出错了')
