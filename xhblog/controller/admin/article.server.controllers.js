@@ -167,7 +167,11 @@ module.exports={
 		const id=req.body.id;
 		const content=req.body.content;
 		const tagcontent=req.body.tagcontent;
-		Article.update({bId:id},{tagcontent:tagcontent},{content:content},function(err){
+		Article.update({bId:id},{
+			tagcontent:tagcontent,
+			content:content,
+			update_time:Date.now()
+			},function(err){
 			if(err){
 				return console.log('update err :'+err)
 			}
