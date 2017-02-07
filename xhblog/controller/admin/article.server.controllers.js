@@ -139,7 +139,7 @@ module.exports={
 	 * 文章删除
 	 * */
 	remove:function(req, res) {
-		var id=req.body.id;
+		const id=req.body.id;
 		/*console.log(id)*/
 		console.log(id);
 		Article.remove({bId:id},function(err,docs){
@@ -151,6 +151,15 @@ module.exports={
 					code:1
 				})
 			}
+		})
+	},
+	find:function(req,res){
+		const id=req.body.id;
+		console.log(id);
+		Article.findById(id,function(doc){
+			res.json({
+				article:doc
+			})
 		})
 	}
 

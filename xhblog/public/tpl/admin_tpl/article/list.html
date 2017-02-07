@@ -24,7 +24,7 @@
 									<td><span class="ng-scope ng-binding">{{item.title.substring(0,10)}}</span></td>
 									<td><span class="ng-scope ng-binding" ng-bind="format(item.time)"></span></td>
 									<td>
-										<a href="javascript:void(0);" class="table-link">
+										<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
 											<span class="fa-stack">
 												<i class="fa fa-square fa-stack-2x"></i>
 												<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
@@ -63,3 +63,8 @@
 		</div>
 	</div>
 </div>
+
+<!--编辑弹框-->
+<script type="text/ng-template" id="myModalEditor.html">
+	<div ng-include="'tpl/editor_modal.html'"></div>
+</script>

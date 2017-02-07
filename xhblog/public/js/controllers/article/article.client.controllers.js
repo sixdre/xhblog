@@ -1,5 +1,9 @@
-angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log','toaster','articleServices',function($scope,$http,$window,$log,toaster,articleServices){
+angular.module('app').controller('articleCtrl',
+		['$scope','$http','$window','$log','$modal','toaster','articleServices',
+		 function($scope,$http,$window,$log,$modal,toaster,articleServices){
 
+
+	
 	/*defPop 封装弹框
 	 * @params arg=0 表示错误弹框
 	 * @params arg=1 表示成功弹框
@@ -30,18 +34,17 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log
 	}
 	
 	
-	 $scope.maxSize = 5;
-	 $scope.limit=1;
+	 $scope.maxSize = 5;	//
+	 $scope.limit=5;		//每页显示的文章数
      $scope.bigTotalItems =0;
      $scope.bigCurrentPage = 1;
     
       //分页显示
 	 $scope.pageChanged = function() {
-		 console.log($scope.bigCurrentPage);
     	 articleServices.page({current:$scope.bigCurrentPage,textCount:$scope.limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     	 },function(err){
- 			alert('出错了')
+    		 defPop(0,"出错了！");
  		 })
 	 };	
 	
@@ -53,8 +56,8 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log
 			$scope.articlelist=res.data.article;
 			$scope.bigTotalItems =res.data.article.length;
 		},function(err){
-			alert('出错了')
-		})
+			defPop(0,"出错了！");
+		});
 	};
 	
 
@@ -101,10 +104,79 @@ angular.module('app').controller('articleCtrl',['$scope','$http','$window','$log
 		},function(err){
 			defPop(0,"服务器出错了！");
 		})
-	}
+	};
+	
+	//编辑文章
+	$scope.items = ['item1', 'item2', 'item3'];
+	$scope.edit=function(item){
+		$scope.id=item.bId;
+		/*articleServices.find(id).then(function(res){
+			$scope.findarticleresult=res.data.article;
+			 console.log($scope.findarticleresult);
+		},function(err){
+			defPop(0,"服务器出错了！");
+		});*/
+       var modalInstance = $modal.open({
+          templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
+          controller: 'ModalInstanceCtrl',
+          resolve: {
+        	  items: function () {		//注入到ModalInstanceCtrl 里的items
+        		  console.log(1);
+        		  return $scope.findarticleresult;
+        	  },
+        	  id:function(){
+        		  return $scope.id;
+        	  }
+          }
+        });
+
+       /* modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+        });*/
+	};
+	
 	
 	$scope.loadlist();
-	
-	
+
 }]);
+angular.module('app').controller('ModalInstanceCtrl',
+	['$scope', '$modalInstance',"items","id","articleServices",
+	 function($scope,$modalInstance,items,id,articleServices){
+		$scope.items = items;
+		var id=id;
+		articleServices.find(id).then(function(res){
+			$scope.findarticleresult=res.data.article;
+			UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
+			var upUe=UE.getEditor('up_editor',{
+		        initialFrameHeight:200		//高度设置
+		    });;  
+		    upUe.addListener("ready", function () {
+	        // editor准备好之后才可以使用
+		    	upUe.setContent($scope.findarticleresult.tagcontent);
+	        });
+		},function(err){
+			defPop(0,"服务器出错了！");
+		});
+		
+		
+	    /*$scope.selected = {
+	      item: $scope.items[0]
+	    };*/
+
+	    $scope.ok = function () {
+	      /*$modalInstance.close();*/
+	      alert('更新')
+	    	
+	    };
+
+	    $scope.cancel = function () {
+	      $modalInstance.dismiss('cancel');
+	    };
+}])
+
+
+
+
 
