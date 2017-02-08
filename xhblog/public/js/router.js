@@ -76,6 +76,7 @@ app.run(
 				.state('app.article.list', {
 					url: '/list/:page',
 					templateUrl: '/tpl/admin_tpl/article/list.html',
+					controller:"articleListCtrl"
 					/*controller:function($stateParams){
 						console.log($stateParams.page)
 					}*/

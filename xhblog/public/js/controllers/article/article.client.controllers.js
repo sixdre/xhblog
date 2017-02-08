@@ -1,13 +1,12 @@
 
 
-angular.module('app').controller('articleCtrl',
-		['$scope','$http','$window','$log','$modal','toaster','articleServices',"defPopService",
-		 function($scope,$http,$window,$log,$modal,toaster,articleServices,defPopService){
-	
+app.controller('articleCtrl',
+		['$scope','$http',"$stateParams",'$window','$log','$modal','toaster','articleServices',"defPopService",
+		 function($scope,$http,$stateParams,$window,$log,$modal,toaster,articleServices,defPopService){
 	//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,
-		limit:5,		//每页显示的文章数
+		limit:2,		//每页显示的文章数
 	    bigTotalItems:0,	//文章总数
         bigCurrentPage:1
     };		
@@ -99,8 +98,8 @@ angular.module('app').controller('articleCtrl',
 					status:1,
 					content:"出错了！"
 			 });
-		});
-	};
+		})
+	}
 	
 	
 	
@@ -204,11 +203,21 @@ angular.module('app').controller('articleCtrl',
         });*/
 	};
 	
+	
+	
+}]);
+
+app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
+	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page);
 	$scope.loadlist();
 	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
-
 }]);
-angular.module('app').controller('ModalInstanceCtrl',
+
+
+
+
+
+app.controller('ModalInstanceCtrl',
 	['$scope', '$modalInstance',"id","pageChanged","articleServices","defPopService",
 	 function($scope,$modalInstance,id,pageChanged,articleServices,defPopService){
 		var id=id;
