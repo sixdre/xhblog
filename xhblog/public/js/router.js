@@ -144,6 +144,14 @@ app.run(
 					templateUrl: '/tpl/admin_tpl/setting/friends_list.html',
 					
 				})
+				.state('access', {
+	                  url: '/access',
+	                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
+	             })
+				.state('access.404', {
+	                  url: '/404',
+	                  templateUrl: '/tpl/admin_tpl/404.html'
+	              })
 				
 		}
 	);
