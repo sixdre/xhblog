@@ -166,7 +166,7 @@ angular.module('app').controller('articleCtrl',
 				return defPopService.defPop({
 					status:0,
 					title:"搜索结果",
-					content:"请输入要搜索文章的标题！"
+					content:"没有找到相关文章！"
 			    });
 				
 			}
@@ -218,7 +218,7 @@ angular.module('app').controller('ModalInstanceCtrl',
 			UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
 			var upUe=UE.getEditor('up_editor',{
 		        initialFrameHeight:200		//高度设置
-		    });;  
+		    });  
 		    upUe.addListener("ready", function () {
 		    	// editor准备好之后才可以使用
 		    	upUe.setContent($scope.up_item.tagcontent);
