@@ -43,11 +43,12 @@ app.run(
 					}
 				})
 				.state('app.article', {
+					abstract: true,
 					url: '/article',
 					templateUrl: '/tpl/admin_tpl/article/article.html',
-					controller:function($state){
+					/*controller:function($state){
 						$state.go('app.article.editor');
-					},
+					},*/
 					controller: 'articleCtrl',
 					resolve: {
                       deps: ['uiLoad',
@@ -93,6 +94,7 @@ app.run(
 					
 				})
 				.state('app.setting', {
+					abstract: true,
 					url: '/setting',
 					template: '<div ui-view class="fade-in-up"></div>',
 					/*templateUrl: '/tpl/admin_tpl/setting/setting.html',*/
