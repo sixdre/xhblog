@@ -13,6 +13,10 @@ angular.module('app').controller('articleCtrl',
 	 $scope.pageChanged = function(cp,limit) {
     	 articleServices.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
+    		 angular.forEach($scope.articlelist,function(v){
+    			 v.check=false;
+    		 });
+    		 
     	 },function(err){
     		 defPopService.defPop({
 					status:0,
@@ -21,6 +25,66 @@ angular.module('app').controller('articleCtrl',
  		 })
 	 };	
 	
+	 
+	 $scope.checkedIds = [];		//id组
+	 var str="";//
+	 var flag='';//是否点击了全选，是为a
+	 $scope.x=false;//默认未选中
+	//文章全选操作
+	$scope.selectAll=function(c,v){
+		/*angular.forEach($scope.articlelist,function (v) {
+			v.check=$scope.select_all;
+			if($scope.checkedIds.indexOf(v.bId)<0){
+				$scope.checkedIds.push(v.bId);
+			}
+        });*/
+		$scope.item_checked=!$scope.item_checked;
+		if(c==true){
+			angular.forEach($scope.articlelist,function (v) {
+				if($scope.checkedIds.indexOf(v.bId)<0){
+					$scope.checkedIds.push(v.bId);
+				}
+            });
+		}else{
+			 angular.forEach($scope.articlelist,function (v) {
+				$scope.checkedIds=[];
+	         });
+		}
+		flag="a";
+	}
+	//单选
+	$scope.selectOne = function (id) {
+		/*var index = $scope.checkedIds.indexOf(item.bId);
+		console.log($scope.checkedIds)
+		console.log(index);*/
+		var index = $scope.checkedIds.indexOf(id);
+		if(index === -1) {					//如果没有那就添加到数组中
+			 $scope.checkedIds.push(id);				
+        } else if (index !== -1){			//否则就删除掉
+            $scope.checkedIds.splice(index, 1);
+        };
+    }
+    
+	$scope.del=function(){
+		
+		 $http({
+			method:"POST",
+			url:"/admin/article/del",
+			data:{ids:$scope.checkedIds}
+		 }).then(function(res){
+			console.log(res)
+		 }).catch(function(err){
+			console.log(err)
+		 })
+	}
+	
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 
 	//列表显示
 	$scope.loadlist=function(){
@@ -34,51 +98,6 @@ angular.module('app').controller('articleCtrl',
 		});
 	};
 	
-	 $scope.checkedIds = [];		//id组
-	 var str="";//
-	 var flag='';//是否点击了全选，是为a
-	 $scope.x=false;//默认未选中
-	//文章全选操作
-	$scope.selectAll=function(c,v){
-		if(c==true){
-			$scope.item_checked=true;
-			angular.forEach($scope.articlelist,function (v) {
-				if($scope.checkedIds.indexOf(v.bId)){
-					$scope.checkedIds.push(v.bId);
-				}
-				
-            });
-			
-		}else{
-			$scope.item_checked=false;
-			 angular.forEach($scope.articlelist,function (v) {
-				$scope.checkedIds=[];
-	         });
-		}
-		flag="a";
-	}
-	//单选
-	$scope.selectOne = function (id,x) {
-		var index = $scope.checkedIds.indexOf(id);
-		if(index === -1) {					//如果没有那就添加到数组中
-			 $scope.checkedIds.push(id);				
-        } else if (index !== -1){			//否则就删除掉
-            $scope.checkedIds.splice(index, 1);
-        };
-    }
-    
-	$scope.del=function(){
-		 console.log($scope.checkedIds);
-		/*$http({
-			method:"POST",
-			url:"/admin/article/del",
-			data:{ids:$scope.checkedIds}
-		 }).then(function(res){
-			console.log(res)
-		 }).catch(function(err){
-			console.log(err)
-		 })*/
-	}
 	
 	
 	

@@ -40,7 +40,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:limit" class="editable-tr-wrap">			
-					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-change="selectOne(item.bId,item_checked)"><i></i></label></td>
+					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 					<td>{{item.author}}</td>
 					<td>{{item.title.substring(0,10)}}</td>
 					<td ng-bind="format(item.time)"></td>
