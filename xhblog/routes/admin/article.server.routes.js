@@ -42,4 +42,5 @@ module.exports = function(app) {
 	app.post('/admin/article/sub',upload.single('resource'),articleCtrl.sub);
 	app.post('/admin/article/find', articleCtrl.find);
 	app.post('/admin/article/update', articleCtrl.update);
+	app.post('/admin/article/del', articleCtrl.del);
 }

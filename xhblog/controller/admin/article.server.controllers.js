@@ -179,6 +179,14 @@ module.exports={
 				code:1
 			})
 		})
+	},
+	
+	del:function(req,res){
+		console.log(req.body.ids);
+		Article.remove({bId:{$in:req.body.ids}})
+	    .then(function(){
+	        res.json({code:1})
+	    })
 	}
 
 

@@ -5,7 +5,10 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 		settingServices.post_banner(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				defPopService.defPop(1,"提交成功");
+				defPopService.defPop({
+					status:1,
+					content:"添加成功！"
+				});
 			}
 		},function(err){
 			
@@ -20,7 +23,10 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 		settingServices.addFriend(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				return defPopService.defPop(1,"添加成功");
+				defPopService.defPop({
+					status:1,
+					content:"添加成功！"
+				});
 			}
 		},function(err){
 			

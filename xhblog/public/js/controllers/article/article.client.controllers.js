@@ -10,11 +10,14 @@ angular.module('app').controller('articleCtrl',
      $scope.bigCurrentPage = 1;
     
       //分页显示
-	 $scope.pageChanged = function() {
-    	 articleServices.page({current:$scope.bigCurrentPage,textCount:$scope.limit}).then(function(res){
+	 $scope.pageChanged = function(cp,limit) {
+    	 articleServices.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     	 },function(err){
-    		 defPopService.defPop(0,"出错了！");
+    		 defPopService.defPop({
+					status:0,
+					content:"出错了！"
+			 });
  		 })
 	 };	
 	
@@ -22,12 +25,63 @@ angular.module('app').controller('articleCtrl',
 	//列表显示
 	$scope.loadlist=function(){
 		articleServices.list('').then(function(res){
-			$scope.articlelist=res.data.article;
 			$scope.bigTotalItems =res.data.article.length;
 		},function(err){
-			defPopService.defPop(0,"出错了！");
+			 defPopService.defPop({
+					status:1,
+					content:"出错了！"
+			 });
 		});
 	};
+	
+	 $scope.checkedIds = [];		//id组
+	 var str="";//
+	 var flag='';//是否点击了全选，是为a
+	 $scope.x=false;//默认未选中
+	//文章全选操作
+	$scope.selectAll=function(c,v){
+		if(c==true){
+			$scope.item_checked=true;
+			angular.forEach($scope.articlelist,function (v) {
+				if($scope.checkedIds.indexOf(v.bId)){
+					$scope.checkedIds.push(v.bId);
+				}
+				
+            });
+			
+		}else{
+			$scope.item_checked=false;
+			 angular.forEach($scope.articlelist,function (v) {
+				$scope.checkedIds=[];
+	         });
+		}
+		flag="a";
+	}
+	//单选
+	$scope.selectOne = function (id,x) {
+		var index = $scope.checkedIds.indexOf(id);
+		if(index === -1) {					//如果没有那就添加到数组中
+			 $scope.checkedIds.push(id);				
+        } else if (index !== -1){			//否则就删除掉
+            $scope.checkedIds.splice(index, 1);
+        };
+    }
+    
+	$scope.del=function(){
+		 console.log($scope.checkedIds);
+		/*$http({
+			method:"POST",
+			url:"/admin/article/del",
+			data:{ids:$scope.checkedIds}
+		 }).then(function(res){
+			console.log(res)
+		 }).catch(function(err){
+			console.log(err)
+		 })*/
+	}
+	
+	
+	
 	
 
 	$scope.format=function(arg){
@@ -38,12 +92,23 @@ angular.module('app').controller('articleCtrl',
 		articleServices.remove(id).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				defPopService.defPop(1,"删除成功!");
+				 defPopService.defPop({
+					status:1,
+					content:"删除成功!",
+					callback:function(){
+						$scope.pageChanged();
+					}
+				 });
 			}
 		},function(err){
-			defPopService.defPop(0,"服务器出错了！");
+			 defPopService.defPop({
+					status:0,
+					content:"出错了！"
+			 });
 		});
 	};
+	
+	//发布文章
 	$scope.save=function(){
 		var formData = new FormData($("#Article_form")[0]);
 		formData.append('author',$('#manager_name').text().trim());
@@ -52,45 +117,60 @@ angular.module('app').controller('articleCtrl',
 		articleServices.save(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
-				defPopService.defPop(1,"发表成功!");
+				defPopService.defPop({
+					status:1,
+					content:"发表成功!"
+				 });
 			}
 		},function(err){
-			defPopService.defPop(0,"服务器出错了！");
+			 defPopService.defPop({
+					status:0,
+					content:"出错了！"
+			 });
 		});
 	};
-
+	
+	//搜索文章
 	$scope.search=function(title){
 		if(!title){
-			return defPopService.defPop(0,"请输入要搜索文章的标题!");
+			return defPopService.defPop({
+					status:0,
+					content:"请输入要搜索文章的标题！"
+			 });
+			
 		}
 		articleServices.search(title).then(function(res){
 			if(res.data.code<0){
-				return defPopService.defPop(0,"没有找到相关文章！","搜索结果");
+				return defPopService.defPop({
+					status:0,
+					title:"搜索结果",
+					content:"请输入要搜索文章的标题！"
+			    });
+				
 			}
 			var data=res.data.results;
 			$scope.searchResult=data;
 			$scope.number=res.data.number;
 		},function(err){
-			defPopService.defPop(0,"服务器出错了！");
+			defPopService.defPop({
+				status:0,
+				content:"服务器出错了！"
+		    });
 		});
 	};
 	
 	//编辑文章
-	$scope.items = ['item1', 'item2', 'item3'];
 	$scope.edit=function(item){
 		$scope.id=item.bId;
-		/*articleServices.find(id).then(function(res){
-			$scope.findarticleresult=res.data.article;
-			 console.log($scope.findarticleresult);
-		},function(err){
-			defPop(0,"服务器出错了！");
-		});*/
        var modalInstance = $modal.open({
           templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
           controller: 'ModalInstanceCtrl',
           resolve: {
         	  id:function(){		//注入到ModalInstanceCtrl 里的id
         		  return $scope.id;
+        	  },
+        	  pageChanged:function(){
+        		
         	  }
           }
         });
@@ -102,14 +182,15 @@ angular.module('app').controller('articleCtrl',
         });*/
 	};
 	
-	
 	$scope.loadlist();
+	$scope.pageChanged(1,5);
 
 }]);
 angular.module('app').controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"id","articleServices","defPopService",
-	 function($scope,$modalInstance,id,articleServices,defPopService){
+	['$scope', '$modalInstance',"id","pageChanged","articleServices","defPopService",
+	 function($scope,$modalInstance,id,pageChanged,articleServices,defPopService){
 		var id=id;
+		var pageChanged=pageChanged;
 		articleServices.find(id).then(function(res){
 			$scope.up_item=res.data.article;
 			UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
@@ -117,17 +198,16 @@ angular.module('app').controller('ModalInstanceCtrl',
 		        initialFrameHeight:200		//高度设置
 		    });;  
 		    upUe.addListener("ready", function () {
-	        // editor准备好之后才可以使用
+		    	// editor准备好之后才可以使用
 		    	upUe.setContent($scope.up_item.tagcontent);
 	        });
 		},function(err){
-			defPopService.defPop(0,"服务器出错了！");
+			defPopService.defPop({
+				status:0,
+				content:"服务器出错了！"
+		    });
 		});
 		
-		
-	    /*$scope.selected = {
-	      item: $scope.items[0]
-	    };*/
 
 	    $scope.update = function (id) {
 	    	var arg={
@@ -138,10 +218,18 @@ angular.module('app').controller('ModalInstanceCtrl',
 	    	articleServices.update(arg).then(function(res){
 	    		var data=res.data;
 	    		if(data.code>0){
-	    			defPopService.defPop(1,"更新成功！");
+	    			defPopService.defPop({
+	    				status:1,
+	    				content:"更新成功！"
+	    		    });
+	    			
 	    		}
 	    	},function(err){
-	    		defPopService.defPop(0,"更新失败！");
+	    		defPopService.defPop({
+    				status:0,
+    				content:"更新失败！"
+    		    });
+	    	
 	    	});
 	    	
 	    };

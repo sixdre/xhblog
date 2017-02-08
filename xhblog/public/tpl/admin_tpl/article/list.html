@@ -1,4 +1,90 @@
-<div class="col-md-12">
+<div class="panel panel-default" ng-controller="articleCtrl">
+	<div class="panel-heading">
+		Responsive Table
+	</div>
+	<div class="row wrapper">
+		<div class="col-sm-5 m-b-xs">
+			<select class="input-sm form-control w-sm inline v-middle">
+				<option value="0">Bulk action</option>
+				<option value="1">Delete selected</option>
+				<option value="2">Bulk edit</option>
+				<option value="3">Export</option>
+			</select>
+			<button class="btn btn-sm btn-default" ng-click="del()">Apply</button>
+		</div>
+		<div class="col-sm-4">
+		</div>
+		<div class="col-sm-3">
+			<div class="input-group">
+				<input type="text" class="input-sm form-control" placeholder="Search">
+				<span class="input-group-btn">
+            <button class="btn btn-sm btn-default" type="button">Go!</button>
+          </span>
+			</div>
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped b-t b-light" ng-init="blo=true">
+			<thead>
+				<tr>
+					<th style="width:20px;">
+						<label class="i-checks m-b-none">
+			                <input type="checkbox" ng-model="select_all" ng-change="selectAll(select_all,articlelist)"><i></i>
+			            </label>
+					</th>
+					<th>Author</th>
+					<th>Title</th>
+					<th>Created</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:limit" class="editable-tr-wrap">			
+					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-change="selectOne(item.bId,item_checked)"><i></i></label></td>
+					<td>{{item.author}}</td>
+					<td>{{item.title.substring(0,10)}}</td>
+					<td ng-bind="format(item.time)"></td>
+					<td>
+						<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
+							<span class="fa-stack">
+								<i class="fa fa-square fa-stack-2x"></i>
+								<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+						<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="remove(item)" class="table-link danger remove">
+							<span class="fa-stack">
+								<i class="fa fa-square fa-stack-2x"></i>
+								<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer class="panel-footer">
+		<div class="row">
+			<div class="col-sm-4 text-center">
+				<small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+			</div>
+			<div class="col-sm-8 text-right text-center-xs">
+				<pagination ng-change="pageChanged(bigCurrentPage,limit)" 
+					items-per-page="limit"
+					total-items="bigTotalItems" 
+					ng-model="bigCurrentPage" 
+					max-size="maxSize" 
+					class="pagination-sm m-t-none m-b" 
+					boundary-links="true" 
+					rotate="false" 
+					num-pages="numPages"></pagination>
+			</div>
+		</div>
+	</footer>
+</div>
+
+
+
+<!--<div class="col-md-12">
 	<div ba-panel="" ba-panel-title="Editable Cells" ba-panel-class="with-scroll">
 		<div class="panel with-scroll animated zoomIn" zoom-in="">
 			<div class="panel-heading clearfix">
@@ -62,7 +148,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>-->
 
 <!--编辑弹框-->
 <script type="text/ng-template" id="myModalEditor.html">

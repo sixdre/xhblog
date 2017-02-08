@@ -5,25 +5,25 @@ angular.module('app').factory('defPopService',["$window","toaster",function($win
 	 * @params arg=0 表示错误弹框
 	 * @params arg=1 表示成功弹框
 	 * */
-	factory.defPop=function(arg,content,title){
-		if(arg==1){
+	factory.defPop=function(obj){
+		if(obj.status==1){
 			toaster.pop({
 				type: 'success',
-	            title:  title||'Title text',
+	            title:  obj.title||'Success',
 	            positionClass: "toast-top-center",
-	            body: content,
+	            body: obj.content,
 	            showCloseButton: true,
 	            timeout:200,
 	            onHideCallback: function () { 
-	              $window.location.reload();
+	            	obj.callback?obj.callback():window.location.reload();
 	            }
 			});
-		}else if(arg==0){
+		}else if(obj.status==0){
 			toaster.pop({
 				type: 'err',
-	            title: title||'Title text',
+	            title: obj.title||'Error',
 	            positionClass: "toast-top-center",
-	            body: content,
+	            body:obj.content,
 	            showCloseButton: true,
 	            timeout:1000,
 			});
