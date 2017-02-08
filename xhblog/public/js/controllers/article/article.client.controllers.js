@@ -3,11 +3,17 @@
 angular.module('app').controller('articleCtrl',
 		['$scope','$http','$window','$log','$modal','toaster','articleServices',"defPopService",
 		 function($scope,$http,$window,$log,$modal,toaster,articleServices,defPopService){
+	
+	//分页配置参数
+	$scope.pageConfig = {
+		maxSize:5,
+		limit:5,		//每页显示的文章数
+	    bigTotalItems:0,	//文章总数
+        bigCurrentPage:1
+    };		
+			
+			
 
-	 $scope.maxSize = 5;	//
-	 $scope.limit=5;		//每页显示的文章数
-     $scope.bigTotalItems =0;
-     $scope.bigCurrentPage = 1;
     
       //分页显示
 	 $scope.pageChanged = function(cp,limit) {
@@ -27,19 +33,16 @@ angular.module('app').controller('articleCtrl',
 	
 	 
 	 $scope.checkedIds = [];		//id组
-	 var str="";//
-	 var flag='';//是否点击了全选，是为a
-	 $scope.x=false;//默认未选中
 	//文章全选操作
-	$scope.selectAll=function(c,v){
+	$scope.selectAll=function(allCheck){
 		/*angular.forEach($scope.articlelist,function (v) {
 			v.check=$scope.select_all;
 			if($scope.checkedIds.indexOf(v.bId)<0){
 				$scope.checkedIds.push(v.bId);
 			}
         });*/
-		$scope.item_checked=!$scope.item_checked;
-		if(c==true){
+		/*$scope.item_checked=!$scope.item_checked;*/
+		if(allCheck==true){
 			angular.forEach($scope.articlelist,function (v) {
 				if($scope.checkedIds.indexOf(v.bId)<0){
 					$scope.checkedIds.push(v.bId);
@@ -50,7 +53,6 @@ angular.module('app').controller('articleCtrl',
 				$scope.checkedIds=[];
 	         });
 		}
-		flag="a";
 	}
 	//单选
 	$scope.selectOne = function (id) {
@@ -66,30 +68,32 @@ angular.module('app').controller('articleCtrl',
     }
     
 	$scope.del=function(){
-		
-		 $http({
+		$http({
 			method:"POST",
 			url:"/admin/article/del",
 			data:{ids:$scope.checkedIds}
 		 }).then(function(res){
-			console.log(res)
+			var data=res.data;
+			if(data.code>0){
+				defPopService.defPop({
+					status:1,
+					content:"删除成功!",
+					callback:function(){
+						$scope.pageChanged();
+					}
+				 });
+			}
 		 }).catch(function(err){
 			console.log(err)
 		 })
 	}
 	
 	 
-	 
-	 
-	 
-	 
-	 
-	 
 
 	//列表显示
 	$scope.loadlist=function(){
 		articleServices.list('').then(function(res){
-			$scope.bigTotalItems =res.data.article.length;
+			$scope.pageConfig.bigTotalItems =res.data.article.length;
 		},function(err){
 			 defPopService.defPop({
 					status:1,
@@ -97,7 +101,6 @@ angular.module('app').controller('articleCtrl',
 			 });
 		});
 	};
-	
 	
 	
 	
@@ -202,7 +205,7 @@ angular.module('app').controller('articleCtrl',
 	};
 	
 	$scope.loadlist();
-	$scope.pageChanged(1,5);
+	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
 
 }]);
 angular.module('app').controller('ModalInstanceCtrl',

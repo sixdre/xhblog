@@ -1,4 +1,4 @@
-<div class="panel panel-default" ng-controller="articleCtrl">
+<div class="panel panel-default">
 	<div class="panel-heading">
 		Responsive Table
 	</div>
@@ -29,7 +29,7 @@
 				<tr>
 					<th style="width:20px;">
 						<label class="i-checks m-b-none">
-			                <input type="checkbox" ng-model="select_all" ng-change="selectAll(select_all,articlelist)"><i></i>
+			                <input type="checkbox" ng-model="select_all" ng-click="selectAll(select_all)"><i></i>
 			            </label>
 					</th>
 					<th>Author</th>
@@ -39,7 +39,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:limit" class="editable-tr-wrap">			
+				<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:pageConfig.limit" class="editable-tr-wrap">			
 					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 					<td>{{item.author}}</td>
 					<td>{{item.title.substring(0,10)}}</td>
@@ -68,11 +68,11 @@
 				<small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
 			</div>
 			<div class="col-sm-8 text-right text-center-xs">
-				<pagination ng-change="pageChanged(bigCurrentPage,limit)" 
-					items-per-page="limit"
-					total-items="bigTotalItems" 
-					ng-model="bigCurrentPage" 
-					max-size="maxSize" 
+				<pagination ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)" 
+					items-per-page="pageConfig.limit"
+					total-items="pageConfig.bigTotalItems" 
+					ng-model="pageConfig.bigCurrentPage" 
+					max-size="pageConfig.maxSize" 
 					class="pagination-sm m-t-none m-b" 
 					boundary-links="true" 
 					rotate="false" 
