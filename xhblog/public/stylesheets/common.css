@@ -903,7 +903,7 @@ footer{
 .bottom-nav ul li a{
     border-right: #000 solid 1px; 
     border-left: #424242 solid 1px; 
-    padding:0px 33px; 
+    padding:0px 66px; 
 }
 .bottom-nav ul li:first-child a{
     border-left: none;

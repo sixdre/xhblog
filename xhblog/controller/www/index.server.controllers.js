@@ -109,7 +109,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 
 
 
-
 module.exports={
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
