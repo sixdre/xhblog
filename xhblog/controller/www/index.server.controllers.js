@@ -93,6 +93,23 @@ var Indexs=function(req,res,currentPage,pageSize){
 }
   
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports={
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
@@ -184,62 +201,95 @@ module.exports={
 		})
 	},
 	showRegist:function(req,res){
+		
 		res.render("www/regist",{
 			title:"用户注册"
 		})
 	},
 	doLogin:function(req,res){
 		const username=req.query.username,
-		  password=md5(req.query.password);
-		User.findOne({username:username},function(err,user){
-			if(err){
-				return console.dir("查询出错");
-			}else if(!user){
-				res.json({
-					code:-1,
-					message:"该用户没有注册！"
-				})
-			}else if(user&&user.password!==password){
-				res.json({
-					code:0,
-					message:"用户密码不正确！"
-				})
-			}else{
-				res.json({
-					code:1,
-					message:"登录成功！"
-				})
-			}
-		})	
+		  password=req.query.password;
+
+		if(validator.isEmpty(username)){
+			res.json({
+				code:-2,
+				message:"请输入用户名！"
+			});
+		}else if(validator.isEmpty(password)){
+			res.json({
+				code:-2,
+				message:"请输入密码！"
+			});
+		}else{
+			User.findOne({username:username},function(err,user){
+				if(err){
+					return console.dir("查询出错");
+				}else if(!user){
+					res.json({
+						code:-1,
+						message:"该用户没有注册！"
+					})
+				}else if(user&&user.password!==md5(password)){
+					res.json({
+						code:0,
+						message:"用户密码不正确！"
+					})
+				}else{
+					res.json({
+						code:1,
+						message:"登录成功！"
+					})
+				}
+			})	
+		}
 	},
 	doRegist:function(req,res){
 		const username=req.body.username,
-			  password=md5(req.body.password);
+			  password=req.body.password;
 		const user=new User({
 			username:username,
-			password:password
+			password:md5(password)
 		});
-		console.log(username);
-		User.findOne({username:username},function(err,result){
-			if(err){
-				return console.dir("查询出错");
-			}else if(result){
-				res.json({
-					code:-1,
-					message:"用户名已被创建"
-				});
-			}else{
-				user.save(function(err){
-					if(err){
-						return console.dir("保存用户出错");
-					}
+		if(validator.isEmpty(username)){
+			res.json({
+				code:-2,
+				message:"用户名不得为空！"
+			});
+		}else if(validator.isEmpty(password)){
+			res.json({
+				code:-2,
+				message:"密码不得为空！"
+			});
+		}else if(!validator.isLength(password,{min:3})){
+			res.json({
+				code:-2,
+				message:"密码不得小于3位！"
+			});
+		}else{
+			User.findOne({username:username},function(err,result){
+				if(err){
+					return console.dir("查询出错");
+				}else if(result){
 					res.json({
-						code:1,
-						message:"成功注册"
+						code:-1,
+						message:"用户名已被创建"
 					});
-				});
-			}
-		});
+				}else{
+					user.save(function(err){
+						if(err){
+							return console.dir("保存用户出错");
+						}
+						res.json({
+							code:1,
+							message:"成功注册"
+						});
+					});
+				}
+			});
+		}
+	},
+	showWord:function(res,req){
+		res.send("111")
 	}
 	
 

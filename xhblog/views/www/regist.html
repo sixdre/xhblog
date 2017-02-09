@@ -18,37 +18,13 @@
 				<label for="">密码</label><input type="password" name="password"/>
 			</div>
 			<div>
-				<input id="submit" type="submit" value="提交" />
+				<input id="regist_submit" type="submit" value="提交" />
 			</div>
 		</form>
 		
 		
 		<script src="/javascripts/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript">
-			$(function(){
-				
-				$('#submit').on('click',function(){
-					$.ajax({
-						type:"POST",
-						url:"/doRegist",
-						async:true,
-						data:$("#registForm").serialize(), 
-						success:function(res){
-							if(res.code>0){
-								alert('注册成功!');
-								window.location.href="/login";
-							}else{
-								alert('注册失败!'+res.message);
-							}
-						},
-						error:function(err){
-							
-						}
-					});
-				})
-				
-
-			})
-		</script>
+		<script type="text/javascript" src="/javascripts/jquery.SuperSlide.2.1.1.js"></script>
+		<script src="/javascripts/script.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>
