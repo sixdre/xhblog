@@ -1,5 +1,5 @@
 ##个人博客node.js版<br>
-####此项目为个人初学node.js和angular自己开发的一个博客小项目
+####此项目为个人初学node.js和angular.js自己开发的一个博客小项目
 ##*如何使用*<br>
 安装`mongodb`数据库<br>
 安装nodemon,首先确保你的电脑已经安装了node,然后npm install nodemon -g<br>
