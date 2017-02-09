@@ -1,3 +1,5 @@
+个人博客node.js版
+===
 安装mongodb数据库
 启动数据库 
 进入到项目所在目录 双击start.bat 
