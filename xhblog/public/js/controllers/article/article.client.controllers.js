@@ -18,6 +18,7 @@ app.controller('articleCtrl',
 	 $scope.pageChanged = function(cp,limit) {
     	 articleServices.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
+    		 $scope.pageConfig.bigTotalItems =res.data.total;
     		 angular.forEach($scope.articlelist,function(v){
     			 v.check=false;
     		 });
@@ -209,7 +210,6 @@ app.controller('articleCtrl',
 
 app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
 	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page);
-	$scope.loadlist();
 	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
 }]);
 

@@ -89,24 +89,28 @@ module.exports={
 		var query = Article.find({}).sort({
 			"time": -1
 		}).skip(textCount*current).limit(textCount);
-		query.find(function(err, docs) {
-			if(!err){
-				if(docs != '') {
-					res.json({
-						page:docs
-					})
-					/*res.render('admin/article/article_page', {
-						page: docs || {}
-					});*/
+		Article.count({},function(err,total){
+			query.find(function(err, docs) {
+				if(!err){
+					if(docs != '') {
+						res.json({
+							page:docs,
+							total:total
+						})
+						/*res.render('admin/article/article_page', {
+							page: docs || {}
+						});*/
+					}else{
+						res.json({
+							code:-1
+						})
+					}
 				}else{
-					res.json({
-						code:-1
-					})
+					console.log("Something happend.");
 				}
-			}else{
-				console.log("Something happend.");
-			}
+			})
 		})
+		
 	},
 	/*搜索文章页面显示*/
 	showsearch:function(req, res) {
