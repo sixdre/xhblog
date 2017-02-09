@@ -2,6 +2,7 @@
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Banner = mongoose.model('Banner');			//轮播图
+const User = mongoose.model('User');				//用户
 const async = require('async');
 //var shoppingModel = global.dbHandle.getModel('shopping');
 
@@ -177,6 +178,69 @@ module.exports={
 			});
 		});
 	},
+	showLogin:function(req,res){
+		res.render("www/login",{
+			title:"用户登录"
+		})
+	},
+	showRegist:function(req,res){
+		res.render("www/regist",{
+			title:"用户注册"
+		})
+	},
+	doLogin:function(req,res){
+		const username=req.query.username,
+		  password=md5(req.query.password);
+		User.findOne({username:username},function(err,user){
+			if(err){
+				return console.dir("查询出错");
+			}else if(!user){
+				res.json({
+					code:-1,
+					message:"该用户没有注册！"
+				})
+			}else if(user&&user.password!==password){
+				res.json({
+					code:0,
+					message:"用户密码不正确！"
+				})
+			}else{
+				res.json({
+					code:1,
+					message:"登录成功！"
+				})
+			}
+		})	
+	},
+	doRegist:function(req,res){
+		const username=req.body.username,
+			  password=md5(req.body.password);
+		const user=new User({
+			username:username,
+			password:password
+		});
+		console.log(username);
+		User.findOne({username:username},function(err,result){
+			if(err){
+				return console.dir("查询出错");
+			}else if(result){
+				res.json({
+					code:-1,
+					message:"用户名已被创建"
+				});
+			}else{
+				user.save(function(err){
+					if(err){
+						return console.dir("保存用户出错");
+					}
+					res.json({
+						code:1,
+						message:"成功注册"
+					});
+				});
+			}
+		});
+	}
 	
 
 }

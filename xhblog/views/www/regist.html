@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate" media="handheld" href="#" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/login_regist.css"/>
+		<title><%=title%></title>
+		
+	</head>
+	<body>
+		<form id="registForm" method="POST" onsubmit="return false;">
+			<div>
+				<label for="">用户名</label><input type="text" name="username"/>
+			</div>
+			<div>
+				<label for="">密码</label><input type="password" name="password"/>
+			</div>
+			<div>
+				<input id="submit" type="submit" value="提交" />
+			</div>
+		</form>
+		
+		
+		<script src="/javascripts/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+				$('#submit').on('click',function(){
+					$.ajax({
+						type:"POST",
+						url:"/doRegist",
+						async:true,
+						data:$("#registForm").serialize(), 
+						success:function(res){
+							if(res.code>0){
+								alert('注册成功!');
+								window.location.href="/login";
+							}else{
+								alert('注册失败!'+res.message);
+							}
+						},
+						error:function(err){
+							
+						}
+					});
+				})
+				
+
+			})
+		</script>
+	</body>
+</html>

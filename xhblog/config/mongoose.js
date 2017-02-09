@@ -7,6 +7,7 @@ module.exports=function(){
     require('../models/manager.server.model.js');
     require('../models/banners.server.model.js');
     require('../models/leave_message.server.model.js');
-     require('../models/friends.service.model.js');
+    require('../models/friends.service.model.js');
+    require('../models/users.server.model.js');
     return db;
 }

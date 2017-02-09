@@ -19,10 +19,7 @@ app.controller('articleCtrl',
     	 articleServices.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     		 $scope.pageConfig.bigTotalItems =res.data.total;
-    		 angular.forEach($scope.articlelist,function(v){
-    			 v.check=false;
-    		 });
-    		 
+    		
     	 },function(err){
     		 defPopService.defPop({
 					status:0,

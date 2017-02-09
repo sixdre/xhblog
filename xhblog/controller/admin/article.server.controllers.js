@@ -7,6 +7,33 @@ var Manager = mongoose.model('Manager');			//管理员
 var formidable = require('formidable');
 var fs = require('fs'); 							//node.js核心的文件处理模块
 
+var multer = require ('multer');  //上传文件中间件 multer
+var md5 = require('md5');
+//设置上传的目录，  
+//这里指定了一个临时目录（上传后的文件均保存到该目录下），  
+//真正开发是一般加入path模块后使用path.join(__dirname,'temp');  
+//var upload = multer({ dest:  "public/upload" });  
+var storage = multer.diskStorage({
+    //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
+    //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
+    destination: "public/upload/"+moment(Date.now()).format('YYYY-MM'),
+    limits: {
+	    fileSize: 100000000
+	},
+    //TODO:文件区分目录存放
+    //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
+    filename: function (req, file, cb) {
+        var fileFormat =(file.originalname).split(".");
+        cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
+});
+
+//添加配置文件到muler对象。
+var upload = multer({
+    storage: storage,
+    //其他设置请参考multer的limits
+    //limits:{}
+}).single('resource');
 
 module.exports={
 	//文章
@@ -47,7 +74,16 @@ module.exports={
 		});
 	},
 	sub:function(req,res){
-		if (req.file) {
+		upload(req, res, function (err) {
+			if(err){
+				return console.log("upload err:",err)
+			}
+			if(!req.file){
+				res.json({
+					code:-2
+				});
+				return ;
+			}
 			var article = Article({
 				author: "xuhao",
 				title:req.body.article_title,
@@ -64,7 +100,30 @@ module.exports={
 					code:1
 				})
 			});
-	    }
+			
+			
+		});
+		
+		
+		
+		/*if (req.file) {
+			var article = Article({
+				author: "xuhao",
+				title:req.body.article_title,
+				type: req.body.article_type,
+				content:req.body.content,
+				tagcontent:req.body.tagcontent,
+				imgurl:req.file.destination.substring(6)+"/"+req.file.filename
+			});
+			article.save(function(err, article) {
+				if(err){
+					return console.log(err)
+				}
+				res.json({
+					code:1
+				})
+			});
+	    }*/
 
 	},
 	//文章列表
