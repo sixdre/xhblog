@@ -244,10 +244,12 @@ module.exports={
 	},
 	doRegist:function(req,res){
 		const username=req.body.username,
-			  password=req.body.password;
+			  password=req.body.password,
+			  email=req.body.email;
 		const user=new User({
 			username:username,
-			password:md5(password)
+			password:md5(password),
+			email:req.body.email
 		});
 		if(validator.isEmpty(username)){
 			res.json({
@@ -258,6 +260,16 @@ module.exports={
 			res.json({
 				code:-2,
 				message:"密码不得为空！"
+			});
+		}else if(validator.isEmpty(email)){
+			res.json({
+				code:-2,
+				message:"邮箱不得为空！"
+			});
+		}else if(!validator.isEmail(email)){
+			res.json({
+				code:-2,
+				message:"请输入正确的邮箱！"
 			});
 		}else if(!validator.isLength(password,{min:3})){
 			res.json({
