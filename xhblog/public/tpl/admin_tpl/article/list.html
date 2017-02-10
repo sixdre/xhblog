@@ -150,7 +150,14 @@
 	</div>
 </div>-->
 
-<!--编辑弹框-->
-<script type="text/ng-template" id="myModalEditor.html">
-	<div ng-include="'tpl/editor_modal.html'"></div>
+
+<!--删除对话框-->
+<script type="text/ng-template" id="confirm.html">
+	<div class="modal-header">
+	    <h3 class="modal-title">确定删除吗？</h3>
+	</div>
+	<div class="modal-footer">                  
+	    <button class="btn btn-default" ng-click="cancel()">取消</button>
+	    <button class="btn btn-primary" ng-click="confirm()">确定</button>
+	</div>
 </script>

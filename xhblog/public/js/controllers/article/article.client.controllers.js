@@ -1,5 +1,4 @@
 
-
 app.controller('articleCtrl',
 		['$scope','$http',"$stateParams",'$window','$log','$modal','toaster','articleServices',"defPopService",
 		 function($scope,$http,$stateParams,$window,$log,$modal,toaster,articleServices,defPopService){
@@ -65,7 +64,48 @@ app.controller('articleCtrl',
     }
     
 	$scope.del=function(){
-		$http({
+	  var modalInstance = $modal.open({
+	          templateUrl: 'confirm.html',
+	          size:"sm",
+	          controller: 'ModalInstanceCtrl',
+	          resolve: {
+	        	  data:function(){		//注入到ModalInstanceCtrl 里的data
+	        		  var obj={
+	        			  id:$scope.id,
+	        			  handle:0
+	        		  }
+	        		  return obj;
+	        	  }
+	          }
+      });
+	  modalInstance.result.then(function (arg) {
+			if(arg.code>0){
+				$http({
+					method:"POST",
+					url:"/admin/article/del",
+					data:{ids:$scope.checkedIds}
+				 }).then(function(res){
+					var data=res.data;
+					if(data.code>0){
+						defPopService.defPop({
+							status:1,
+							content:"删除成功!",
+							callback:function(){
+								$scope.pageChanged();
+							}
+						 });
+					}
+				 }).catch(function(err){
+					console.log(err)
+				 })
+			 }
+       }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+       });
+		
+		
+		
+		/*$http({
 			method:"POST",
 			url:"/admin/article/del",
 			data:{ids:$scope.checkedIds}
@@ -82,7 +122,7 @@ app.controller('articleCtrl',
 			}
 		 }).catch(function(err){
 			console.log(err)
-		 })
+		 })*/
 	}
 	
 	 
@@ -102,29 +142,50 @@ app.controller('articleCtrl',
 	
 	
 	
-
+	
 	$scope.format=function(arg){
 		return moment(arg).format('YYYY-MM-DD HH:mm:ss');
 	};
 	$scope.remove=function(item){
 		var id = item.bId;
-		articleServices.remove(id).then(function(res){
-			var data=res.data;
-			if(data.code>0){
-				 defPopService.defPop({
-					status:1,
-					content:"删除成功!",
-					callback:function(){
-						$scope.pageChanged();
+		var modalInstance = $modal.open({
+	          templateUrl: 'confirm.html',
+	          size:"sm",
+	          controller: 'ModalInstanceCtrl',
+	          resolve: {
+	        	  data:function(){		//注入到ModalInstanceCtrl 里的data
+	        		  var obj={
+	        			  id:$scope.id,
+	        			  handle:0
+	        		  }
+	        		  return obj;
+	        	  }
+	          }
+        });
+		 modalInstance.result.then(function (arg) {
+			if(arg.code>0){
+				articleServices.remove(id).then(function(res){
+					var data=res.data;
+					if(data.code>0){
+						 defPopService.defPop({
+							status:1,
+							content:"删除成功!",
+							callback:function(){
+								$scope.pageChanged();
+							}
+						 });
 					}
-				 });
-			}
-		},function(err){
-			 defPopService.defPop({
-					status:0,
-					content:"出错了！"
-			 });
-		});
+				},function(err){
+					 defPopService.defPop({
+							status:0,
+							content:"出错了！"
+					 });
+				});
+			 }
+         }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+         });
+	
 	};
 	
 	//发布文章
@@ -181,17 +242,18 @@ app.controller('articleCtrl',
 	//编辑文章
 	$scope.edit=function(item){
 		$scope.id=item.bId;
-       var modalInstance = $modal.open({
-          templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
-          controller: 'ModalInstanceCtrl',
-          resolve: {
-        	  id:function(){		//注入到ModalInstanceCtrl 里的id
-        		  return $scope.id;
-        	  },
-        	  pageChanged:function(){
-        		
-        	  }
-          }
+        var modalInstance = $modal.open({
+            templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
+            controller: 'ModalInstanceCtrl',
+            resolve: {
+        	    data:function(){		//注入到ModalInstanceCtrl 里的data
+        		    var obj={
+        			    id:$scope.id,
+        			    handle:1		
+        		    }
+        		  return obj;
+        	    },
+             }
         });
 
        /* modalInstance.result.then(function (selectedItem) {
@@ -215,28 +277,28 @@ app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$state
 
 
 app.controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"id","pageChanged","articleServices","defPopService",
-	 function($scope,$modalInstance,id,pageChanged,articleServices,defPopService){
-		var id=id;
-		var pageChanged=pageChanged;
-		articleServices.find(id).then(function(res){
-			$scope.up_item=res.data.article;
-			UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
-			var upUe=UE.getEditor('up_editor',{
-		        initialFrameHeight:200		//高度设置
-		    });  
-		    upUe.addListener("ready", function () {
-		    	// editor准备好之后才可以使用
-		    	upUe.setContent($scope.up_item.tagcontent);
-	        });
-		},function(err){
-			defPopService.defPop({
-				status:0,
-				content:"服务器出错了！"
-		    });
-		});
+	['$scope', '$modalInstance',"data","articleServices","defPopService",
+	 function($scope,$modalInstance,data,articleServices,defPopService){
+		var id=data.id;
 		
-
+		if(data.handle==1){
+			articleServices.find(id).then(function(res){
+				$scope.up_item=res.data.article;
+				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
+				var upUe=UE.getEditor('up_editor',{
+			        initialFrameHeight:200		//高度设置
+			    });  
+			    upUe.addListener("ready", function () {
+			    	// editor准备好之后才可以使用
+			    	upUe.setContent($scope.up_item.tagcontent);
+		        });
+			},function(err){
+				defPopService.defPop({
+					status:0,
+					content:"服务器出错了！"
+			    });
+			});
+		}
 	    $scope.update = function (id) {
 	    	var arg={
 	    		id:id,
@@ -263,8 +325,16 @@ app.controller('ModalInstanceCtrl',
 	    };
 
 	    $scope.cancel = function () {
-	      $modalInstance.dismiss('cancel');
+	       $modalInstance.dismiss('cancel');
 	    };
+	    
+	    $scope.confirm=function(){
+	        $modalInstance.close({
+	        	code:1
+	        });
+	    }
+	    
+	    
 }])
 
 
