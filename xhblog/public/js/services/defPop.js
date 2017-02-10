@@ -1,4 +1,4 @@
-//alert 服务
+//封装toaster 服务
 angular.module('app').factory('defPopService',["$window","toaster",function($window,toaster){
 	var factory={};
 	/*defPop 封装弹框
@@ -20,7 +20,7 @@ angular.module('app').factory('defPopService',["$window","toaster",function($win
 			});
 		}else if(obj.status==0){
 			toaster.pop({
-				type: 'err',
+				type: 'error',
 	            title: obj.title||'Error',
 	            positionClass: "toast-top-center",
 	            body:obj.content,
