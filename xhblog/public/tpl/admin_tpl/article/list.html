@@ -10,7 +10,7 @@
 				<option value="2">Bulk edit</option>
 				<option value="3">Export</option>
 			</select>
-			<button class="btn btn-sm btn-default" ng-click="del()">Apply</button>
+			<button class="btn btn-sm btn-default" ng-click="del()">删除</button>
 		</div>
 		<div class="col-sm-4">
 		</div>
@@ -24,7 +24,7 @@
 		</div>
 	</div>
 	<div class="table-responsive">
-		<table class="table table-striped b-t b-light" ng-init="blo=true">
+		<table class="table table-striped b-t b-light" ng-init="timesort=true">
 			<thead>
 				<tr>
 					<th style="width:20px;">
@@ -34,12 +34,16 @@
 					</th>
 					<th>Author</th>
 					<th>Title</th>
-					<th>Created</th>
+					<th ng-click="timesort=!timesort">
+						Created 
+						<i ng-if="timesort" class="fa fa-sort-down"></i>
+						<i ng-if="!timesort" class="fa fa-sort-up"></i>
+					</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in articlelist | orderBy:'time':blo |limitTo:pageConfig.limit" class="editable-tr-wrap">			
+				<tr ng-repeat="item in articlelist | orderBy:'time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">			
 					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 					<td>{{item.author}}</td>
 					<td>{{item.title.substring(0,10)}}</td>
