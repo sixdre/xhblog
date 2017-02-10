@@ -23,15 +23,14 @@ var db=mongoose();
 var app = global.app= express();
 
 
-
-
+app.use(cookieParser("xhtest"));
 //设置session
 app.use(session({
-  secret: '12345',
-  name: 'name',
+  secret: 'xhtest',
+  //name: 'name',			//设置 cookie 中，保存 session 的字段名称，默认为 connect.sid 。
   cookie: {maxAge: 1000 * 60 * 60 * 24 * 30}, //超时时间
   saveUninitialized: true,
-  resave: false
+  resave: true
 //store:new MongoStore({url: 'mongodb://localhost/runoob'})
 }));
 
@@ -46,7 +45,6 @@ app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
