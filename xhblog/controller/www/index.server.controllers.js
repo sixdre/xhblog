@@ -106,12 +106,28 @@ function checkSession(ss,callback){
 	}
 }
 
+/*
+ * checkUserStatus 检查用户是否登陆
+ * */
+function checkUserStatus(req,res,next){
+	if(!req.session["userSession"]){
+        res.redirect('login');		//res.redirect会终端ajax请求
+    }
+	next();
+}
+
 
 module.exports={
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,1);
 	},
+	
+	/*showIndex:function(req,res){
+		auth(req,res,function(){
+			
+		})
+	},*/
 	showDetial:function(req,res){
 		const bid=req.params["bid"];
 		async.waterfall([
@@ -300,8 +316,10 @@ module.exports={
 		}
 	},
 	showWord:function(req,res){
-		res.render("www/word",{
-			title:'留言'
+		checkUserStatus(req,res,function(){
+			res.render("www/word",{
+				title:'留言'
+			})
 		})
 	},
 	postWord:function(req,res){
@@ -312,7 +330,6 @@ module.exports={
 					code:-1,
 					message:"请先登录"
 				});
-				res.redirect('/login');
 			}
 			var lm=new Lm({
 				message:req.body.content,
@@ -322,7 +339,7 @@ module.exports={
 				if(err){
 					return console.dir("err:"+err)
 				}
-				console.dir("success");
+				console.dir("留言成功");
 				res.json({
 					code:1,
 					message:"留言成功"
