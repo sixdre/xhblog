@@ -10,9 +10,7 @@ app.controller('articleCtrl',
         bigCurrentPage:1
     };		
 			
-			
 
-    
       //分页显示
 	 $scope.pageChanged = function(cp,limit) {
     	 articleServices.page({current:cp,textCount:limit}).then(function(res){

@@ -7,6 +7,7 @@ module.exports = function(app) {
 	app.post('/admin/logOut', adminCtrl.logout);
 	app.post('/admin/doRegist', adminCtrl.doRegist);
 	app.post('/admin/doLogin', adminCtrl.doLogin);
+	app.get('/admin/loadData', adminCtrl.loadData);
 	
 }
 

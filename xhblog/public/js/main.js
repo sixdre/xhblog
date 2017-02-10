@@ -3,13 +3,26 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 
-    function(              $scope,   $translate,   $localStorage,   $window ) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window',"$http", 
+    function(              $scope,   $translate,   $localStorage,   $window,$http ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
       isSmartDevice( $window ) && angular.element($window.document.body).addClass('smart');
-
+      
+      $http({				//向后台请求主页面要展示的数据（文章总数，未读留言）
+    	  method:"GET",
+    	  url:"/admin/loadData"
+      }).then(function(res){
+		  $scope.articleTotal=res.data.total;
+		  $scope.lm=res.data.lmdoc;
+	  }).catch(function(err){
+		 console.log(err)
+	  })
+      
+      
+      
+      
       // config
       $scope.app = {
         name: 'Angulr',

@@ -2,18 +2,18 @@
 var mongoose=require('mongoose');
 var Article = mongoose.model('Article');			//文章
 var Manager = mongoose.model('Manager');			//管理员
-
+var Lm=mongoose.model("Lm");						//留言
 
 var formidable = require('formidable');
 var fs = require('fs'); 							//node.js核心的文件处理模块
-
+const async = require('async');
 
 /*var multer = require ('multer');   
 var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		var loginmanager = req.session["loginmanager"];
+		var loginmanager = req.session["manager"];
 		Article.count({},function(err,c){
 			res.render('admin/admin', 
 				{
@@ -21,7 +21,7 @@ module.exports={
 					loginmanager: loginmanager||{},
 					total:c,
 				});
-		});
+		})
 		/*if(loginmanager){
 			Article.count({},function(err,c){
 				res.render('admin/admin', 
@@ -34,6 +34,30 @@ module.exports={
 		}else{
 			res.redirect('login');
 		}*/
+	},
+	loadData:function(req,res){
+		var loginmanager = req.session["manager"];
+		async.waterfall([function(callback){
+			Lm.find({}).exec(function(err,lmdoc){
+				if(err){
+					return console.log("err");
+				}
+				callback(null,lmdoc);
+			})
+		},function(lmdoc,callback){
+			Article.count({}).exec(function(err,total){
+				if(err){
+					return console.log("err");
+				}
+				callback(null,lmdoc,total);
+			})
+		}],function(err,lmdoc,total){
+			res.json({
+				loginmanager: loginmanager||{},
+				total:total,
+				lmdoc:lmdoc
+			});
+		})
 	},
 	//后台管理登录
 	showlogin:function(req,res){
@@ -49,7 +73,7 @@ module.exports={
 	},
 	//后台退出
 	logout:function(req, res) {
-		delete req.session["loginmanager"]
+		delete req.session["manager"]
 		res.json({
 			code : 1
 		})
@@ -93,7 +117,7 @@ module.exports={
 				res.json({code:-1})
 			}else{
 				if(manager.password == md5(password)){
-					req.session["loginmanager"] = manager
+					req.session["manager"] = manager
 					res.json({code : 1})
 				}else{
 					res.json({code : -2})
