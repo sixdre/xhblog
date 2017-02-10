@@ -38,7 +38,7 @@ module.exports={
 	loadData:function(req,res){
 		var loginmanager = req.session["manager"];
 		async.waterfall([function(callback){
-			Lm.find({}).exec(function(err,lmdoc){
+			Lm.find({status:0}).exec(function(err,lmdoc){
 				if(err){
 					return console.log("err");
 				}

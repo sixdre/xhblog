@@ -36,16 +36,28 @@
             <a href class="dropdown-toggle" dropdown-toggle>
               <i class="icon-bell fa-fw"></i>
               <span class="visible-xs-inline">Notifications</span>
-              <span class="badge badge-sm up bg-danger pull-right-xs">2</span>
+              <span class="badge badge-sm up bg-danger pull-right-xs">{{lm.length}}</span>
             </a>
             <!-- dropdown -->
             <div class="dropdown-menu w-xl animated fadeInUp">
               <div class="panel bg-white">
                 <div class="panel-heading b-light bg-light">
-                  <strong>You have <span>2</span> notifications</strong>
+                  <strong>你有<span>{{lm.length}}</span> 条留言</strong>
                 </div>
-                <div class="list-group">
-                  <a href class="media list-group-item">
+                <div class="list-group" ui-jq="slimScroll" ui-options="{height:'150px', size:'5px'}">
+                	
+                	 <a ng-repeat="item in lm" class="media list-group-item">
+                    <span class="pull-left thumb-sm">
+                      <img src="/img/a0.jpg" alt="..." class="img-circle">
+                    </span>
+                    <span class="media-body block m-b-none">
+                      {{item.message|limitTo:10}}<br>
+                      <small class="text-muted"> {{item.post_time|date:'yyyy-MM-dd HH:mm:ss'}}</small>
+                    </span>
+                  </a>
+                	
+                	
+                  <!--<a href class="media list-group-item">
                     <span class="pull-left thumb-sm">
                       <img src="/img/a0.jpg" alt="..." class="img-circle">
                     </span>
@@ -59,7 +71,7 @@
                       1.0 initial released<br>
                       <small class="text-muted">1 hour ago</small>
                     </span>
-                  </a>
+                  </a>-->
                 </div>
                 <div class="panel-footer text-sm">
                   <a href class="pull-right"><i class="fa fa-cog"></i></a>
