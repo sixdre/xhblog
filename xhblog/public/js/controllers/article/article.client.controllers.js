@@ -63,7 +63,7 @@ app.controller('articleCtrl',
         };
     }
     
-	$scope.del=function(){
+	$scope.del=function(){				//多选或单选删除
 	  var modalInstance = $modal.open({
 	          templateUrl: 'confirm.html',
 	          size:"sm",
@@ -78,56 +78,33 @@ app.controller('articleCtrl',
 	        	  }
 	          }
       });
-	  modalInstance.result.then(function (arg) {
-			if(arg.code>0){
-				$http({
-					method:"POST",
-					url:"/admin/article/del",
-					data:{ids:$scope.checkedIds}
-				 }).then(function(res){
-					var data=res.data;
-					if(data.code>0){
-						defPopService.defPop({
-							status:1,
-							content:"删除成功!",
-							callback:function(){
-								$scope.pageChanged();
-							}
-						 });
-					}
-				 }).catch(function(err){
-					console.log(err)
-				 })
-			 }
+	  modalInstance.result.then(function () {
+			$http({
+				method:"POST",
+				url:"/admin/article/del",
+				data:{ids:$scope.checkedIds}
+			 }).then(function(res){
+				var data=res.data;
+				if(data.code>0){
+					defPopService.defPop({
+						status:1,
+						content:"删除成功!",
+						callback:function(){
+							$scope.pageChanged();
+						}
+					 });
+				}
+			 }).catch(function(err){
+				console.log(err)
+			 })
        }, function () {
           $log.info('Modal dismissed at: ' + new Date());
        });
-		
-		
-		
-		/*$http({
-			method:"POST",
-			url:"/admin/article/del",
-			data:{ids:$scope.checkedIds}
-		 }).then(function(res){
-			var data=res.data;
-			if(data.code>0){
-				defPopService.defPop({
-					status:1,
-					content:"删除成功!",
-					callback:function(){
-						$scope.pageChanged();
-					}
-				 });
-			}
-		 }).catch(function(err){
-			console.log(err)
-		 })*/
 	}
 	
 	 
 
-	//列表显示
+	//列表显示  
 	$scope.loadlist=function(){
 		articleServices.list('').then(function(res){
 			$scope.pageConfig.bigTotalItems =res.data.article.length;
@@ -139,14 +116,10 @@ app.controller('articleCtrl',
 		})
 	}
 	
-	
-	
-	
-	
-	$scope.format=function(arg){
+	$scope.format=function(arg){			//时间格式化，可用angular自带的$filter格式化时间
 		return moment(arg).format('YYYY-MM-DD HH:mm:ss');
 	};
-	$scope.remove=function(item){
+	$scope.remove=function(item){				//图标点击删除
 		var id = item.bId;
 		var modalInstance = $modal.open({
 	          templateUrl: 'confirm.html',
@@ -162,26 +135,24 @@ app.controller('articleCtrl',
 	        	  }
 	          }
         });
-		 modalInstance.result.then(function (arg) {
-			if(arg.code>0){
-				articleServices.remove(id).then(function(res){
-					var data=res.data;
-					if(data.code>0){
-						 defPopService.defPop({
-							status:1,
-							content:"删除成功!",
-							callback:function(){
-								$scope.pageChanged();
-							}
-						 });
-					}
-				},function(err){
+		 modalInstance.result.then(function () {
+			articleServices.remove(id).then(function(res){
+				var data=res.data;
+				if(data.code>0){
 					 defPopService.defPop({
-							status:0,
-							content:"出错了！"
+						status:1,
+						content:"删除成功!",
+						callback:function(){
+							$scope.pageChanged();
+						}
 					 });
-				});
-			 }
+				}
+			},function(err){
+				 defPopService.defPop({
+						status:0,
+						content:"出错了！"
+				 });
+			});
          }, function () {
             $log.info('Modal dismissed at: ' + new Date());
          });
@@ -255,17 +226,11 @@ app.controller('articleCtrl',
         	    },
              }
         });
-
-       /* modalInstance.result.then(function (selectedItem) {
-          $scope.selected = selectedItem;
-        }, function () {
-          $log.info('Modal dismissed at: ' + new Date());
-        });*/
 	};
-	
-	
-	
 }]);
+
+
+
 
 app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
 	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page);
@@ -273,15 +238,11 @@ app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$state
 }]);
 
 
-
-
-
 app.controller('ModalInstanceCtrl',
 	['$scope', '$modalInstance',"data","articleServices","defPopService",
 	 function($scope,$modalInstance,data,articleServices,defPopService){
 		var id=data.id;
-		
-		if(data.handle==1){
+		if(data.handle==1){				//
 			articleServices.find(id).then(function(res){
 				$scope.up_item=res.data.article;
 				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
@@ -329,8 +290,8 @@ app.controller('ModalInstanceCtrl',
 	    };
 	    
 	    $scope.confirm=function(){
-	        $modalInstance.close({
-	        	code:1
+	        $modalInstance.close({			//里面的参数为向 modalInstance.result.then(function (e) {})中传递一个数据
+	        	code:1						
 	        });
 	    }
 	    

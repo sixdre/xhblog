@@ -43,7 +43,7 @@
 					<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 					<td>{{item.author}}</td>
 					<td>{{item.title.substring(0,10)}}</td>
-					<td ng-bind="format(item.time)"></td>
+					<td ng-bind="item.time|date:'yyyy-MM-dd HH:mm:ss'"></td>				
 					<td>
 						<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
 							<span class="fa-stack">
