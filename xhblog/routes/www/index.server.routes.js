@@ -4,7 +4,7 @@ var IndexCtrl = require('../../controller/www/index.server.controllers');
  * checkUserStatus 检查用户当前状态
  * */
 function checkUserStatus(req,res,next){
-	if (req.session.user) {
+	if (req.session.userSession) {
         next();
      } else {
         req.session.error = 'Access denied!';
@@ -25,7 +25,7 @@ module.exports = function(app) {
 	app.post('/doRegist', IndexCtrl.doRegist);					//注册
 	
 	app.get('/word',checkUserStatus,IndexCtrl.showWord);		//留言
-	
+	app.post('/word',IndexCtrl.postWord);						//提交留言
 	
 	
 	//app.post('/detial:cc', Index.showDetial);

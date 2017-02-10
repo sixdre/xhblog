@@ -3,6 +3,7 @@ const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
+const Lm = mongoose.model('Lm');				//留言
 const async = require('async');
 //var shoppingModel = global.dbHandle.getModel('shopping');
 
@@ -93,20 +94,17 @@ var Indexs=function(req,res,currentPage,pageSize){
 }
   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+ * checkSession 检测session
+ * 
+ * */
+function checkSession(ss,callback){
+	if(ss){
+		return callback(null);
+	}else{
+		return callback("err");
+	}
+}
 
 
 module.exports={
@@ -234,10 +232,12 @@ module.exports={
 						message:"用户密码不正确！"
 					})
 				}else{
+					req.session["userSession"] = user;
 					res.json({
 						code:1,
 						message:"登录成功！"
-					})
+					});
+					
 				}
 			})	
 		}
@@ -299,8 +299,36 @@ module.exports={
 			});
 		}
 	},
-	showWord:function(res,req){
-		res.send("111")
+	showWord:function(req,res){
+		res.render("www/word",{
+			title:'留言'
+		})
+	},
+	postWord:function(req,res){
+		checkSession(req.session["userSession"],function(status){
+			if(status){
+				console.log(status)
+				res.json({
+					code:-1,
+					message:"请先登录"
+				});
+				res.redirect('/login');
+			}
+			var lm=new Lm({
+				message:req.body.content,
+				userid:req.session["userSession"]._id
+			});
+			lm.save(function(err){
+				if(err){
+					return console.dir("err:"+err)
+				}
+				console.dir("success");
+				res.json({
+					code:1,
+					message:"留言成功"
+				});
+			})
+		});
 	}
 	
 

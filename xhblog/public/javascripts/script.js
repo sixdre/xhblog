@@ -25,6 +25,7 @@ $(function() {
 			success:function(res){
 				if(res.code>0){
 					alert(res.message);
+					window.location.href="/";
 				}else{
 					alert(res.message)
 				}
@@ -54,6 +55,27 @@ $(function() {
 			}
 		});
 	});
+	
+	//留言提交
+	$('#word_submit').on('click',function(){
+		$.ajax({
+			type:"POST",
+			url:"/word",
+			async:true,
+			data:$("#word_form").serialize(), 
+			success:function(res){
+				if(res.code>0){
+					alert(res.message);
+				}else{
+					alert(res.message)
+				}
+			},
+			error:function(err){
+				
+			}
+		});
+	});
+	
 	
 	
 	

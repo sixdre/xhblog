@@ -9,8 +9,16 @@ const LMSchema=new Schema({
 	post_time:{
 		type:Date,
 		default:Date.now
+	},
+	status:{
+		type:Number,
+		default: 0			//0表示未读  1表示已读
+	},
+	userid:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
 	}
-})
+});
 mongoose.model("Lm",LMSchema);
 
 
