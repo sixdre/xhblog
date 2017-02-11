@@ -1,8 +1,13 @@
-var mongoose=require('mongoose');
-var config=require('./db_url.js');
+const mongoose=require('mongoose');
+const config=require('./db_url.js');
 
 module.exports=function(){
-    var db=mongoose.connect(config.mongodb);
+    mongoose.connect(config.mongodb);
+    const db = mongoose.connection;
+    db.on('error',console.error.bind(console,'连接错误：请检查是否开启了数据库'));
+	db.once('open',function(callback){
+	  console.log('MongoDB连接成功！！');
+	});
     require('../models/articles.server.model.js');
     require('../models/manager.server.model.js');
     require('../models/banners.server.model.js');
