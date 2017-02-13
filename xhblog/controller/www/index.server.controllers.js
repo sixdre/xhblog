@@ -54,7 +54,6 @@ db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : 1}}}]) *
  * */
 var Indexs=function(req,res,currentPage,pageSize){
 	async.waterfall([
-		
 		function(callback){
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banner){
 				if(err){
@@ -82,6 +81,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 		}
 	],function(err,banner,total,article,newart,hot){
 		res.render('www/', {
+			user:req.session["userSession"],
 			title: '个人博客首页',
 			banner:banner,
 			total:total,
