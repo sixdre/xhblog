@@ -1,3 +1,4 @@
+"use strict";
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
