@@ -37,15 +37,12 @@
 			<li>
 				<a href="news.htm">新闻</a>
 				<ul>
+					<%typeNums.forEach(function(v,i){%>
 					<li>
-						<a href="news.htm">访谈</a>
+						<a href="news.htm"><%=v._id%> <span><%=v.total%></span></a>
 					</li>
-					<li>
-						<a href="news.htm">攻略</a>
-					</li>
-					<li>
-						<a href="news.htm">官方</a>
-					</li>
+					<%})%>
+				
 				</ul>
 			</li>
 			<li>

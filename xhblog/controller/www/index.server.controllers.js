@@ -78,8 +78,20 @@ var Indexs=function(req,res,currentPage,pageSize){
 			Article.findByHot(3,function(hot){
 				callback(null,banner,total,doc,newart,hot);
 			})
+		},
+		function(banner,total,doc,newart,hot,callback){
+			Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
+				if(err){
+					return console.dir(err);
+				}
+				var typeNums=[];
+				for(var i=0;i<result.length;i++){
+					typeNums.push(result[i].total);
+				}
+				callback(null,banner,total,doc,newart,hot,result);
+			})
 		}
-	],function(err,banner,total,article,newart,hot){
+	],function(err,banner,total,article,newart,hot,result){
 		res.render('www/', {
 			user:req.session["userSession"],
 			title: '个人博客首页',
@@ -89,7 +101,8 @@ var Indexs=function(req,res,currentPage,pageSize){
 			newart:newart[0],	//最新文章
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
-			pagesize:pageSize			//列表数
+			pagesize:pageSize,			//列表数
+			typeNums:result			//不同类型文章类型的数量
 		});
 	});
 }
@@ -122,6 +135,18 @@ module.exports={
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,1);
+		
+		/*Article.find({}).exec(function(err,doc){
+			if(err){
+				return console.dir(err);
+			}
+			for(var i=0;i<doc.length;i++){
+				console.log(doc[i].type);
+				if(doc[i].type="IT技术"){
+					console.log(1);
+				}
+			}
+		})*/
 	},
 	
 	/*showIndex:function(req,res){
