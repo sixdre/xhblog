@@ -46,6 +46,7 @@ $(function() {
 			success:function(res){
 				if(res.code>0){
 					alert(res.message);
+					window.location.href="/";
 				}else{
 					alert(res.message)
 				}
