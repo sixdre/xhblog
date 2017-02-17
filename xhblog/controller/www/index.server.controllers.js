@@ -184,14 +184,28 @@ module.exports={
 					}
 					callback(null,doc,hot,nextArticle,prevArticle);
 				});
+			},
+			function(doc,hot,nextArticle,prevArticle,callback){
+				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
+					if(err){
+						return console.dir(err);
+					}
+					var typeNums=[];
+					for(var i=0;i<result.length;i++){
+						typeNums.push(result[i].total);
+					}
+					callback(null,doc,hot,nextArticle,prevArticle,result);
+				})
 			}
-		],function(err,doc,hot,nextArticle,prevArticle){
+		],function(err,doc,hot,nextArticle,prevArticle,result){
 			res.render("www/detial",{
+				user:req.session["userSession"],
 				article:doc,
 				hot:hot,
 				title:doc.title,
 				nextArticle:nextArticle,
-				prevArticle:prevArticle
+				prevArticle:prevArticle,
+				typeNums:result			//不同类型文章类型的数量
 			});
 		})
 		
@@ -225,11 +239,24 @@ module.exports={
 				Article.findByTitle(title,function(doc){
 					callback(null,doc);
 				});
+			},
+			function(doc,callback){
+				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
+					if(err){
+						return console.dir(err);
+					}
+					var typeNums=[];
+					for(var i=0;i<result.length;i++){
+						typeNums.push(result[i].total);
+					}
+					callback(null,doc,result);
+				})
 			}
-			
-		],function(err,article){
+		],function(err,article,typeNums){
 			res.render("www/search_results",{
+				user:req.session["userSession"],
 				article:article,
+				typeNums:typeNums,
 				title:'搜索结果'
 			});
 		});
