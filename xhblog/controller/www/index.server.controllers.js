@@ -359,6 +359,7 @@ module.exports={
 			}
 			var lm=new Lm({
 				message:req.body.content,
+				username:req.session["userSession"].username,
 				userid:req.session["userSession"]._id
 			});
 			lm.save(function(err){

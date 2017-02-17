@@ -14,6 +14,9 @@ const LMSchema=new Schema({
 		type:Number,
 		default: 0			//0表示未读  1表示已读
 	},
+	username:{
+		type:"String"
+	},
 	userid:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
