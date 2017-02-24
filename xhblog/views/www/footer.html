@@ -40,6 +40,16 @@
 	}
 </style>
 <footer>
+	<div class="footer clearfix">
+		<div class="friends_link">
+			<h4 class="title">友情链接</h4>
+			<ul>
+				<%friend.forEach(function(v,i){%>
+					<li><a href="<%=v.url%>"><%=v.title%></a></li>
+				<%})%>
+			</ul>
+		</div>
+	</div>
 	<div class="w-per100 f14 clearfix center iheima-copy"> Copyright&nbsp;&copy;&nbsp;&nbsp;小浩个人博客&nbsp;&nbsp; AllRight&nbsp;Reserved&nbsp;&nbsp;&nbsp;版权所有</div>
 </footer>
 

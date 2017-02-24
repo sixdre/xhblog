@@ -16,6 +16,23 @@ const FriendSchema=new Schema({
 		default:Date.now
 	}
 })
+//查找所有
+FriendSchema.statics.findAll = function(callback) {
+    return this.model('Friend')
+        .find({})
+        .sort({ post_time: -1 })
+        .exec(function (error, doc) {
+            if (error) {
+                console.log(error);
+                callback([]);
+            } else {
+                callback(doc);
+            }
+        });
+}
+
+
+
 mongoose.model("Friend",FriendSchema);
 
 

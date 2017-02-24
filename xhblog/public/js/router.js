@@ -7,7 +7,7 @@ app.run(
 	.config(
 		function($stateProvider, $urlRouterProvider) {
 			$urlRouterProvider
-				.otherwise('/app/dashboard');
+				.otherwise('/app/article/editor');
 			$stateProvider
 				.state('app', {
 					abstract: true,

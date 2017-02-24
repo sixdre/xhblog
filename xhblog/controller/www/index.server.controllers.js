@@ -5,6 +5,7 @@ const Article = mongoose.model('Article');			//文章
 const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
 const Lm = mongoose.model('Lm');				//留言
+const Friend=mongoose.model("Friend");
 const async = require('async');
 //var shoppingModel = global.dbHandle.getModel('shopping');
 
@@ -90,8 +91,13 @@ var Indexs=function(req,res,currentPage,pageSize){
 				}
 				callback(null,banner,total,doc,newart,hot,result);
 			})
+		},
+		function(banner,total,doc,newart,hot,result,callback){		//友情链接
+			Friend.findAll(function(friend){
+				callback(null,banner,total,doc,newart,hot,result,friend);
+			})
 		}
-	],function(err,banner,total,article,newart,hot,result){
+	],function(err,banner,total,article,newart,hot,result,friend){
 		res.render('www/', {
 			user:req.session["userSession"],
 			title: '个人博客首页',
@@ -102,7 +108,8 @@ var Indexs=function(req,res,currentPage,pageSize){
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize,			//列表数
-			typeNums:result			//不同类型文章类型的数量
+			typeNums:result,			//不同类型文章类型的数量,
+			friend:friend			//友情链接
 		});
 	});
 }

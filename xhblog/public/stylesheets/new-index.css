@@ -213,8 +213,28 @@
     max-width: 750px;
 }
 
-
-
+/*友情链接*/
+.footer{
+	width: 1200px;
+	margin: 0 auto;
+}
+.friends_link{
+	width: 400px;
+	float: left;
+}
+.friends_link .title{
+	font-size: 16px;
+	color: #fff;
+	font-weight: normal;
+	padding: 20px 0;
+}
+.friends_link ul li>a{
+	color: #777;
+}
+.friends_link ul li:hover a{
+	color: #ff5e53;
+	text-decoration: underline;
+}
 
 
 
