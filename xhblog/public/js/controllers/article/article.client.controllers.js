@@ -62,7 +62,13 @@ app.controller('articleCtrl',
     }
     
 	$scope.del=function(){				//多选或单选删除
-	  var modalInstance = $modal.open({
+		if($scope.checkedIds.length==0){
+			return defPopService.defPop({
+					status:0,
+					content:"请选择要删除的文章！"
+			 });
+		}
+	    var modalInstance = $modal.open({
 	          templateUrl: 'confirm.html',
 	          size:"sm",
 	          controller: 'ModalInstanceCtrl',
