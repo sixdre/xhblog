@@ -407,7 +407,11 @@ module.exports={
 				});
 			})
 		});
+	},
+	about:function(req,res){
+		res.render("www/about",{
+			title:'关于我'
+		})
 	}
-	
 
 }
