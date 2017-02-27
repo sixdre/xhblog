@@ -24,8 +24,19 @@ angular.module('app')
 		 console.log(err)
 	  })
       
-      
-      
+      //退出登录
+      $scope.logout=function(){
+		  $http({
+			  method:"POST",
+			  url:"/admin/logout"
+		  }).then(function(res){
+			  if(res.data.code==1){
+				  $state.go("access.signin");
+			  }
+		  },function(err){
+			  
+		  })
+	  }
       
       // config
       $scope.app = {

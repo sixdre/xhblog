@@ -74,7 +74,7 @@ module.exports={
 	},
 	//后台退出
 	logout:function(req, res) {
-		delete req.session["manager"]
+		delete req.session["manager"];
 		res.json({
 			code : 1
 		})
