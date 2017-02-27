@@ -1,12 +1,1 @@
-import absFloor from './abs-floor';
-
-export default function toInt(argumentForCoercion) {
-    var coercedNumber = +argumentForCoercion,
-        value = 0;
-
-    if (coercedNumber !== 0 && isFinite(coercedNumber)) {
-        value = absFloor(coercedNumber);
-    }
-
-    return value;
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

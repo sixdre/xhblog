@@ -1,14 +1,1 @@
-{
-  "name": "jquery",
-  "main": "dist/jquery.js",
-  "license": "MIT",
-  "ignore": [
-    "package.json"
-  ],
-  "keywords": [
-    "jquery",
-    "javascript",
-    "browser",
-    "library"
-  ]
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

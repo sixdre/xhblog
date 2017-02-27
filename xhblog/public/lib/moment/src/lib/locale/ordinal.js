@@ -1,7 +1,1 @@
-export var defaultOrdinal = '%d';
-export var defaultOrdinalParse = /\d{1,2}/;
-
-export function ordinal (number) {
-    return this._ordinal.replace('%d', number);
-}
-
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

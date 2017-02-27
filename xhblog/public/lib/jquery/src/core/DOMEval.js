@@ -1,16 +1,1 @@
-define( [
-	"../var/document"
-], function( document ) {
-	"use strict";
-
-	function DOMEval( code, doc ) {
-		doc = doc || document;
-
-		var script = doc.createElement( "script" );
-
-		script.text = code;
-		doc.head.appendChild( script ).parentNode.removeChild( script );
-	}
-
-	return DOMEval;
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

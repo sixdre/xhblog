@@ -1,3 +1,1 @@
-export default function isDate(input) {
-    return input instanceof Date || Object.prototype.toString.call(input) === '[object Date]';
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

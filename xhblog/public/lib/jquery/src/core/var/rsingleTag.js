@@ -1,6 +1,1 @@
-define( function() {
-	"use strict";
-
-	// Match a standalone tag
-	return ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i );
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

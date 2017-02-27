@@ -1,5 +1,1 @@
-import { createLocalOrUTC } from './from-anything';
-
-export function createUTC (input, format, locale, strict) {
-    return createLocalOrUTC(input, format, locale, strict, true).utc();
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

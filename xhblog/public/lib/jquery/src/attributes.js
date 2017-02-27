@@ -1,13 +1,1 @@
-define( [
-	"./core",
-	"./attributes/attr",
-	"./attributes/prop",
-	"./attributes/classes",
-	"./attributes/val"
-], function( jQuery ) {
-
-"use strict";
-
-// Return jQuery for attributes-only inclusion
-return jQuery;
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

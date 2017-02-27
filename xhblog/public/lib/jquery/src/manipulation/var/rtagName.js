@@ -1,5 +1,1 @@
-define( function() {
-	"use strict";
-
-	return ( /<([a-z][^\/\0>\x20\t\r\n\f]+)/i );
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

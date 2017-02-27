@@ -1,3 +1,1 @@
-export default function isArray(input) {
-    return input instanceof Array || Object.prototype.toString.call(input) === '[object Array]';
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

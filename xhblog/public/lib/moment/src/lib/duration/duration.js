@@ -1,16 +1,1 @@
-// Side effect imports
-import './prototype';
-
-import { createDuration } from './create';
-import { isDuration } from './constructor';
-import {
-    getSetRelativeTimeRounding,
-    getSetRelativeTimeThreshold
-} from './humanize';
-
-export {
-    createDuration,
-    isDuration,
-    getSetRelativeTimeRounding,
-    getSetRelativeTimeThreshold
-};
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

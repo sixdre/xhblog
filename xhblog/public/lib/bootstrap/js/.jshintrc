@@ -1,15 +1,1 @@
-{
-  "asi"      : true,
-  "browser"  : true,
-  "eqeqeq"   : false,
-  "eqnull"   : true,
-  "es3"      : true,
-  "expr"     : true,
-  "jquery"   : true,
-  "latedef"  : true,
-  "laxbreak" : true,
-  "nonbsp"   : true,
-  "strict"   : true,
-  "undef"    : true,
-  "unused"   : true
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

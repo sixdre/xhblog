@@ -1,11 +1,1 @@
-define( [
-	"../var/support"
-], function( support ) {
-
-"use strict";
-
-support.focusin = "onfocusin" in window;
-
-return support;
-
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

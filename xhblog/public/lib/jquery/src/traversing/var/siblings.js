@@ -1,17 +1,1 @@
-define( function() {
-
-"use strict";
-
-return function( n, elem ) {
-	var matched = [];
-
-	for ( ; n; n = n.nextSibling ) {
-		if ( n.nodeType === 1 && n !== elem ) {
-			matched.push( n );
-		}
-	}
-
-	return matched;
-};
-
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

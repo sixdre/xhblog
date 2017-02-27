@@ -1,3 +1,1 @@
-export default function hasOwnProp(a, b) {
-    return Object.prototype.hasOwnProperty.call(a, b);
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

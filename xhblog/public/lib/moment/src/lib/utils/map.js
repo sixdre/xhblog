@@ -1,7 +1,1 @@
-export default function map(arr, fn) {
-    var res = [], i;
-    for (i = 0; i < arr.length; ++i) {
-        res.push(fn(arr[i], i));
-    }
-    return res;
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

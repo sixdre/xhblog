@@ -1,9 +1,1 @@
-export function creationData() {
-    return {
-        input: this._i,
-        format: this._f,
-        locale: this._locale,
-        isUTC: this._isUTC,
-        strict: this._strict
-    };
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

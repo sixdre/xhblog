@@ -1,7 +1,1 @@
-export default function absCeil (number) {
-    if (number < 0) {
-        return Math.floor(number);
-    } else {
-        return Math.ceil(number);
-    }
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

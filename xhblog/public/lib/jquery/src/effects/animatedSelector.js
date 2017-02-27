@@ -1,15 +1,1 @@
-define( [
-	"../core",
-	"../selector",
-	"../effects"
-], function( jQuery ) {
-
-"use strict";
-
-jQuery.expr.pseudos.animated = function( elem ) {
-	return jQuery.grep( jQuery.timers, function( fn ) {
-		return elem === fn.elem;
-	} ).length;
-};
-
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

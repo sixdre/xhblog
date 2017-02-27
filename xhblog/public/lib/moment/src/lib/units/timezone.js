@@ -1,16 +1,1 @@
-import { addFormatToken } from '../format/format';
-
-// FORMATTING
-
-addFormatToken('z',  0, 0, 'zoneAbbr');
-addFormatToken('zz', 0, 0, 'zoneName');
-
-// MOMENTS
-
-export function getZoneAbbr () {
-    return this._isUTC ? 'UTC' : '';
-}
-
-export function getZoneName () {
-    return this._isUTC ? 'Coordinated Universal Time' : '';
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

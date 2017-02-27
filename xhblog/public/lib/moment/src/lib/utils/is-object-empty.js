@@ -1,8 +1,1 @@
-export default function isObjectEmpty(obj) {
-    var k;
-    for (k in obj) {
-        // even if its not own property I'd still call it non-empty
-        return false;
-    }
-    return true;
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

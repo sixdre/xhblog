@@ -1,13 +1,1 @@
-export { hooks, setHookCallback };
-
-var hookCallback;
-
-function hooks () {
-    return hookCallback.apply(null, arguments);
-}
-
-// This is done to register the method called with moment()
-// without creating circular dependencies.
-function setHookCallback (callback) {
-    hookCallback = callback;
-}
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

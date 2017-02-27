@@ -12,7 +12,8 @@ app.run(
 				.state('app', {
 					abstract: true,
 					url: '/app',
-					templateUrl: '/tpl/admin_tpl/blocks/app.html',
+					templateUrl: '/tpl/admin_tpl/blocks/app.html'
+	
 				})
 				.state('app.dashboard', {
 					url: '/dashboard',

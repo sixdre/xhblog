@@ -1,8 +1,1 @@
-define( function() {
-	"use strict";
-
-	// Only count HTML whitespace
-	// Other whitespace should count in values
-	// https://html.spec.whatwg.org/multipage/infrastructure.html#space-character
-	return ( /[^\x20\t\r\n\f]+/g );
-} );
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。

@@ -1,5 +1,1 @@
-;(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    global.moment = factory()
-}(this, (function () { 'use strict';
+意外错误。未能在撤销／重做时从本地历史记录复原文件内容。
