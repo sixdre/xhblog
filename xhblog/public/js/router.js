@@ -159,7 +159,7 @@ app.run(
 	                      }]
 	                  }
 	             })
-	             .state('access.singup', {
+	             .state('access.signup', {
 	            	 url: '/signup',
 	                  templateUrl: '/tpl/admin_tpl/signup.html',
 	                  resolve: {

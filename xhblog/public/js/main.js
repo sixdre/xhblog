@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window',"$http", 
-    function(              $scope,   $translate,   $localStorage,   $window,$http ) {
+  .controller('AppCtrl',['$scope','$translate','$localStorage','$window',"$http","$state" ,
+    function($scope,$translate,$localStorage,$window,$http,$state ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -16,6 +16,10 @@ angular.module('app')
       }).then(function(res){
 		  $scope.articleTotal=res.data.total;
 		  $scope.lm=res.data.lmdoc;
+		  $scope.manager=res.data.manager;
+		  if(!$scope.manager){
+			  $state.go("access.signin");
+		  }
 	  }).catch(function(err){
 		 console.log(err)
 	  })

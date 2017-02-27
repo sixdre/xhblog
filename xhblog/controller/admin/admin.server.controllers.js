@@ -13,12 +13,12 @@ var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		var loginmanager = req.session["manager"];
+		var manager = req.session["manager"];
 		Article.count({},function(err,c){
 			res.render('admin/admin', 
 				{
 					title: '个人博客后台管理系统',
-					loginmanager: loginmanager||{},
+					manager: manager||{},
 					total:c,
 				});
 		})
@@ -35,8 +35,9 @@ module.exports={
 			res.redirect('login');
 		}*/
 	},
+	//前台请求主数据接口
 	loadData:function(req,res){
-		var loginmanager = req.session["manager"];
+		var manager = req.session["manager"];
 		async.waterfall([function(callback){
 			Lm.find({status:0}).exec(function(err,lmdoc){
 				if(err){
@@ -53,9 +54,9 @@ module.exports={
 			})
 		}],function(err,lmdoc,total){
 			res.json({
-				loginmanager: loginmanager||{},
-				total:total,
-				lmdoc:lmdoc
+				manager: manager,	//管理员
+				total:total,	//文章总数
+				lmdoc:lmdoc		//留言
 			});
 		})
 	},
@@ -114,13 +115,13 @@ module.exports={
 		Manager.findOne({email:email},function(err,manager){
 			if(err){return console.dir(err)}
 			if(!manager){
-				res.json({code:-1})
+				res.json({code:-1});
 			}else{
 				if(manager.password == md5(password)){
-					req.session["manager"] = manager
-					res.json({code : 1})
+					req.session["manager"] = manager;
+					res.json({code : 1});
 				}else{
-					res.json({code : -2})
+					res.json({code : -2});
 				}
 			}
 		})
