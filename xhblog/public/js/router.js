@@ -149,10 +149,30 @@ app.run(
 	                  url: '/access',
 	                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
 	             })
+	             .state('access.signin', {
+	            	 url: '/signin',
+	                  templateUrl: '/tpl/admin_tpl/signin.html',
+	                  resolve: {
+	                      deps: ['uiLoad',
+	                        function( uiLoad ){
+	                          return uiLoad.load( ['/js/controllers/signin.js'] );
+	                      }]
+	                  }
+	             })
+	             .state('access.singup', {
+	            	 url: '/signup',
+	                  templateUrl: '/tpl/admin_tpl/signup.html',
+	                  resolve: {
+	                      deps: ['uiLoad',
+	                        function( uiLoad ){
+	                          return uiLoad.load( ['/js/controllers/signup.js'] );
+	                      }]
+	                  }
+	             })
 				.state('access.404', {
 	                  url: '/404',
 	                  templateUrl: '/tpl/admin_tpl/404.html'
-	              })
+	             })
 				
 		}
 	);
