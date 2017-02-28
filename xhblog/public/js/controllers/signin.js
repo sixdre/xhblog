@@ -15,7 +15,7 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     		  alert("账号不存在");
     	  }else if(code==1){
     		  /*$rootScope.$state.isLogin = true;*/
-    		  $state.go('app.dashboard');
+    		  $state.go('app.calendar');
     	  }else{
     		  alert("服务器出错了!");
     	  }
