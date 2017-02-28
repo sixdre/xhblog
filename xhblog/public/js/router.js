@@ -71,7 +71,7 @@ app.run(
 	                              function(){
 	                                  return $ocLazyLoad.load([
 											'/js/services/article.client.services.js',
-											'/js/controllers/article/article.client.controllers.js'
+											'/js/controllers/article.client.controllers.js'
 	                                  ]);
 	                              }
 	                          );
@@ -91,14 +91,14 @@ app.run(
 				.state('app.article.editor', {
 					url: '/editor',
 					templateUrl: '/tpl/admin_tpl/article/editor.html',
-					resolve: {
+					/*resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
                           return uiLoad.load([
                              '/js/controllers/article/editor.client.controllers.js'
                          ]);
                       }]
-	                }
+	                }*/
 				})
 				.state('app.article.list', {
 					url: '/list/:page',
