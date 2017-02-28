@@ -8,8 +8,14 @@ app.controller('articleCtrl',
 		limit:2,		//每页显示的文章数
 	    bigTotalItems:0,	//文章总数
         bigCurrentPage:1
-    };		
-			
+    };
+	$scope.article = {};
+	$scope.ArticleType = [					//文章类型
+	      { name: '网络热点', value:"网络热点" },	
+	      { name: 'IT技术', value:"IT技术" },
+	      { name: 'HTML', value:"HTML" },
+	      { name: 'JS', value:"JS" }
+	 ];		
 
       //分页显示
 	 $scope.pageChanged = function(cp,limit) {
@@ -26,7 +32,7 @@ app.controller('articleCtrl',
 	 };	
 	
 	 
-	 $scope.checkedIds = [];		//id组
+	$scope.checkedIds = [];		//id组
 	//文章全选操作
 	$scope.selectAll=function(allCheck){
 		/*angular.forEach($scope.articlelist,function (v) {
@@ -162,13 +168,13 @@ app.controller('articleCtrl',
          });
 	
 	};
-	
 	//发布文章
 	$scope.save=function(){
 		var formData = new FormData($("#Article_form")[0]);
 		formData.append('author',$('#manager_name').text().trim());
 		formData.append('content',UE.getEditor('editor').getContentTxt());
 		formData.append('tagcontent',UE.getEditor('editor').getContent());
+		formData.append("article_type",$scope.article.type.name);	//类型
 		articleServices.save(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){

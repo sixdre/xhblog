@@ -65,6 +65,19 @@ app.run(
 					},*/
 					controller: 'articleCtrl',
 					resolve: {
+	                      deps: ['$ocLazyLoad',
+	                        function( $ocLazyLoad ){
+	                          return $ocLazyLoad.load('ui.select').then(
+	                              function(){
+	                                  return $ocLazyLoad.load([
+											'/js/services/article.client.services.js',
+											'/js/controllers/article/article.client.controllers.js'
+	                                  ]);
+	                              }
+	                          );
+	                      }]
+	                  }
+					/*resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
                           return uiLoad.load([
@@ -72,7 +85,7 @@ app.run(
                                 '/js/controllers/article/article.client.controllers.js'
                           ]);
                       }]
-	                }
+	                }*/
 					
 				})
 				.state('app.article.editor', {
