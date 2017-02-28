@@ -1,8 +1,7 @@
 <div class="modal-header">
-    <h3 class="modal-title">Modal!</h3>
+    <h3 class="modal-title">更新</h3>
 </div>
 <div class="modal-body">
-   <p>{{up_item.author}}</p>
    <form>
    		<div class="form-group clear">
    			<label class="col-lg-2 control-label">标题</label>
@@ -13,7 +12,7 @@
    		<div class="form-group clear">
    			<label class="col-lg-2 control-label">类型</label>
    			<div class="col-lg-10">
-                <input type="text" class="form-control" ng-model="up_item.type">
+                <input type="text" class="form-control" readonly="readonly" ng-model="up_item.type">
             </div>
    		</div>
    </form>
