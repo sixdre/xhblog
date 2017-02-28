@@ -1,3 +1,4 @@
 .project
 xhblog/public/upload/
 xhblog/public/img/ueditor/
+xhblog/node_modules
