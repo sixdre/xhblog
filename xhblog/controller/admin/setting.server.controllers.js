@@ -53,23 +53,9 @@ var upload = multer({
 }).single('banner');
 
 
-exports.showSettings=function(req,res){
-	var loginmanager = req.session["loginmanager"];
-	if(loginmanager){
-		Article.count({},function(err,c){
-			res.render('admin/setting/setting', 
-				{
-					title: '网站设置_个人博客后台管理系统',
-					loginmanager: loginmanager||{},
-					total:c,
-				});
-		})
-	}else{
-		res.redirect('login');
-	}
-};
-
-
+/*
+ * 网站banner提交
+ * */
 exports.post_banner=function(req,res){
 	upload(req, res, function (err) {
 		if(err){
@@ -98,22 +84,24 @@ exports.post_banner=function(req,res){
 		
 			banner.save(function(err,doc){
 				if(err){
-					return console.log("banner save err:",err)
+					return console.log("banner save err:",err);
 				}
 				res.json({
 					code:1
-				})
+				});
 			})
 		}else{
 			res.json({
 				code:-1
-			})
+			});
 		}
 	})
 	
 };
 
-
+/*
+ * 友情链接添加
+ * */
 exports.addFriend=function(req,res){
 	console.log(req.body);
 	var friend=new Friend({
@@ -127,7 +115,5 @@ exports.addFriend=function(req,res){
 		res.json({
 			code:1
 		});
-		
-	})
-	
+	});
 }

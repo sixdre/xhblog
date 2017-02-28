@@ -21,19 +21,7 @@ module.exports={
 					manager: manager||{},
 					total:c,
 				});
-		})
-		/*if(loginmanager){
-			Article.count({},function(err,c){
-				res.render('admin/admin', 
-					{
-						title: '个人博客后台管理系统',
-						loginmanager: loginmanager||{},
-						total:c,
-					});
-			})
-		}else{
-			res.redirect('login');
-		}*/
+		});
 	},
 	//前台请求主数据接口
 	loadData:function(req,res){
@@ -59,18 +47,6 @@ module.exports={
 				lmdoc:lmdoc		//留言
 			});
 		})
-	},
-	//后台管理登录
-	showlogin:function(req,res){
-		res.render('admin/login', {
-			title: '后台管理登录'
-		});
-	},
-	//后台管理注册
-	showregist:function(req, res) {
-		res.render('admin/regist', {
-			title: '后台管理注册'
-		});
 	},
 	//后台退出
 	logout:function(req, res) {

@@ -14,7 +14,6 @@
 	            <ui-select-match placeholder="请选择文章的标签">{{$select.selected.name}}</ui-select-match>
 	            <ui-select-choices repeat="item in ArticleType">
 	              <div ng-bind-html="item.name"></div>
-	            <!--  <small ng-bind-html="item.email | highlight: $select.search"></small>-->
 	            </ui-select-choices>
 	        </ui-select>
 			<!--<select name="article_type" class="form-control">

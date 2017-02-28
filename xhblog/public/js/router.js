@@ -13,8 +13,7 @@ app.run(
 				.state('app', {
 					abstract: true,
 					url: '/app',
-					templateUrl: '/tpl/admin_tpl/blocks/app.html',
-	
+					templateUrl: '/tpl/admin_tpl/blocks/app.html'
 				})
 				.state('app.dashboard', {
 					url: '/dashboard',
@@ -60,9 +59,6 @@ app.run(
 					abstract: true,
 					url: '/article',
 					templateUrl: '/tpl/admin_tpl/article/article.html',
-					/*controller:function($state){
-						$state.go('app.article.editor');
-					},*/
 					controller: 'articleCtrl',
 					resolve: {
 	                      deps: ['$ocLazyLoad',
@@ -76,29 +72,11 @@ app.run(
 	                              }
 	                          );
 	                      }]
-	                  }
-					/*resolve: {
-                      deps: ['uiLoad',
-                        function( uiLoad){
-                          return uiLoad.load([
-                                '/js/services/article.client.services.js',
-                                '/js/controllers/article/article.client.controllers.js'
-                          ]);
-                      }]
-	                }*/
-					
+	                  }					
 				})
 				.state('app.article.editor', {
 					url: '/editor',
-					templateUrl: '/tpl/admin_tpl/article/editor.html',
-					/*resolve: {
-                      deps: ['uiLoad',
-                        function( uiLoad){
-                          return uiLoad.load([
-                             '/js/controllers/article/editor.client.controllers.js'
-                         ]);
-                      }]
-	                }*/
+					templateUrl: '/tpl/admin_tpl/article/editor.html'
 				})
 				.state('app.article.list', {
 					url: '/list/:page',
@@ -118,17 +96,12 @@ app.run(
 				})
 				.state('app.article.search', {
 					url: '/search',
-					templateUrl: '/tpl/admin_tpl/article/search.html',
-					
+					templateUrl: '/tpl/admin_tpl/article/search.html'
 				})
 				.state('app.setting', {
 					abstract: true,
 					url: '/setting',
 					template: '<div ui-view class="fade-in-up"></div>',
-					/*templateUrl: '/tpl/admin_tpl/setting/setting.html',*/
-					/*controller:function($state){
-						$state.go('app.setting.banner');
-					},*/
 					resolve: {
 	                      deps: ['uiLoad',
 	                        function( uiLoad){
@@ -138,39 +111,31 @@ app.run(
 	                          ]);
 	                      }]
 		                },
-		           
-					
 				})
 				.state('app.setting.banner', {
 					url: '/banner',
-					templateUrl: '/tpl/admin_tpl/setting/banner.html',
-					
+					templateUrl: '/tpl/admin_tpl/setting/banner.html'
 				})
 				.state('app.setting.banner.add', {
 					url: '/banner_add',
-					templateUrl: '/tpl/admin_tpl/setting/banner_add.html',
-					
+					templateUrl: '/tpl/admin_tpl/setting/banner_add.html'
 				})
 				.state('app.setting.banner.list', {
 					url: '/banner_list',
-					templateUrl: '/tpl/admin_tpl/setting/banner_list.html',
-					
+					templateUrl: '/tpl/admin_tpl/setting/banner_list.html'
 				})
 				.state('app.setting.friends', {
 					url: '/friends',
-					templateUrl: '/tpl/admin_tpl/setting/friends.html',
-					
+					templateUrl: '/tpl/admin_tpl/setting/friends.html'
 				})
 				.state('app.setting.friends.add', {
 					url: '/friends_add',
 					templateUrl: '/tpl/admin_tpl/setting/friends_add.html',
 					controller: 'settingCtrl'
-					
 				})
 				.state('app.setting.friends.list', {
 					url: '/friends_list',
-					templateUrl: '/tpl/admin_tpl/setting/friends_list.html',
-					
+					templateUrl: '/tpl/admin_tpl/setting/friends_list.html'
 				})
 				.state('access', {
 	                  url: '/access',

@@ -36,43 +36,6 @@ var upload = multer({
 }).single('resource');
 
 module.exports={
-	//文章
-	showarticle:function(req, res) {
-		var loginmanager = req.session["loginmanager"];
-		Article.count({},function(err,c){
-			res.render('admin/article/article', {
-				title: '文章_个人博客后台管理系统',
-				loginmanager: loginmanager||{},
-				total:c
-			});
-		})
-	},
-	/*
-	 文章编辑器
-	 * */
-	showeditor:function(req, res) {
-		res.render('admin/article/editor')
-	},
-	/*
-	 * 提交文章
-	 * */
-	submit_article:function(req, res) {
-		var article = new Article({
-			author: req.session["loginmanager"],
-			title:req.body.title,
-			type: req.body.type,
-			content:req.body.content,
-			tagcontent:req.body.tagcontent
-		});
-		article.save(function(err, article) {
-			if(err){
-				return console.log(err);
-			}
-			res.json({
-				code:1,
-			})
-		});
-	},
 	sub:function(req,res){
 		upload(req, res, function (err) {
 			if(err){
@@ -155,14 +118,11 @@ module.exports={
 						res.json({
 							page:docs,
 							total:total
-						})
-						/*res.render('admin/article/article_page', {
-							page: docs || {}
-						});*/
+						});
 					}else{
 						res.json({
 							code:-1
-						})
+						});
 					}
 				}else{
 					console.log("Something happend.");
@@ -171,11 +131,6 @@ module.exports={
 		})
 		
 	},
-	/*搜索文章页面显示*/
-	showsearch:function(req, res) {
-		res.render('admin/article/article_search')
-	},
-	
 	/*
 	 搜索文章
 	 * */
@@ -203,7 +158,6 @@ module.exports={
 	 * */
 	remove:function(req, res) {
 		const id=req.body.id;
-		/*console.log(id)*/
 		console.log(id);
 		Article.remove({bId:id},function(err,docs){
 			

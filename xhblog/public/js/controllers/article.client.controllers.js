@@ -36,13 +36,6 @@ app.controller('articleCtrl',
 	$scope.checkedIds = [];		//id组
 	//文章全选操作
 	$scope.selectAll=function(allCheck){
-		/*angular.forEach($scope.articlelist,function (v) {
-			v.check=$scope.select_all;
-			if($scope.checkedIds.indexOf(v.bId)<0){
-				$scope.checkedIds.push(v.bId);
-			}
-        });*/
-		/*$scope.item_checked=!$scope.item_checked;*/
 		if(allCheck==true){
 			angular.forEach($scope.articlelist,function (v) {
 				if($scope.checkedIds.indexOf(v.bId)<0){
@@ -57,9 +50,6 @@ app.controller('articleCtrl',
 	}
 	//单选
 	$scope.selectOne = function (id) {
-		/*var index = $scope.checkedIds.indexOf(item.bId);
-		console.log($scope.checkedIds)
-		console.log(index);*/
 		var index = $scope.checkedIds.indexOf(id);
 		if(index === -1) {					//如果没有那就添加到数组中
 			 $scope.checkedIds.push(id);				
@@ -291,16 +281,13 @@ app.controller('ModalInstanceCtrl',
 	    				status:1,
 	    				content:"更新成功！"
 	    		    });
-	    			
 	    		}
 	    	},function(err){
 	    		defPopService.defPop({
     				status:0,
     				content:"更新失败！"
     		    });
-	    	
 	    	});
-	    	
 	    };
 
 	    $scope.cancel = function () {
