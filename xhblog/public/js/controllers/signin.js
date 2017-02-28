@@ -2,7 +2,7 @@
 
 /* Controllers */
   // signin controller
-app.controller('SigninFormController', ['$scope', '$http', '$state', function($scope, $http, $state) {
+app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state', function($rootScope,$scope, $http, $state) {
     $scope.user = {};
     $scope.authError = null;
     $scope.login = function() {
@@ -14,9 +14,10 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', function($s
     	  if(code==-1){
     		  alert("账号不存在");
     	  }else if(code==1){
+    		  /*$rootScope.$state.isLogin = true;*/
     		  $state.go('app.dashboard');
     	  }else{
-    		  alert("服务器出错了");
+    		  alert("服务器出错了!");
     	  }
         /*if ( !response.data.user ) {
           $scope.authError = 'Email or Password not right';

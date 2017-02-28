@@ -2,22 +2,35 @@ app.run(
 		function($rootScope, $state, $stateParams) {
 			$rootScope.$state = $state;
 			$rootScope.$stateParams = $stateParams;
+			$rootScope.$state.isLogin = false;
 		}
 	)
 	.config(
 		function($stateProvider, $urlRouterProvider) {
 			$urlRouterProvider
-				.otherwise('/app/article/editor');
+				.otherwise('/app/dashboard');
 			$stateProvider
 				.state('app', {
 					abstract: true,
 					url: '/app',
-					templateUrl: '/tpl/admin_tpl/blocks/app.html'
+					templateUrl: '/tpl/admin_tpl/blocks/app.html',
 	
 				})
 				.state('app.dashboard', {
 					url: '/dashboard',
 					templateUrl: '/tpl/admin_tpl/dashboard.html',
+					/*onEnter:function($rootScope){
+					
+					},
+					onExit:function(){
+						console.log(2);
+					}*/
+					/*controllerProvider :function($rootScope){
+						if($rootScope.$state.isLogin == false){
+		                    $rootScope.$state.go('access.signin');
+		                }
+		                return function(){};
+					}*/
 				})
 				.state('app.calendar', {
 					url: '/calendar',
