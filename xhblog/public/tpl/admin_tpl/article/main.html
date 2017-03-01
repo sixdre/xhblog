@@ -1,0 +1,106 @@
+<style>
+	table th,table td{
+		text-align: center;
+	}
+</style>
+<div class="bg-light lter b-b wrapper-md">
+	<h1 class="m-n font-thin h3">文章管理</h1>
+</div>
+<div class="wrapper-md">
+	<div class="">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Responsive Table
+			</div>
+			<div class="row wrapper">
+				<div class="col-sm-5 m-b-xs">
+					<select class="input-sm form-control w-sm inline v-middle">
+						<option value="0">Bulk action</option>
+						<option value="1">Delete selected</option>
+						<option value="2">Bulk edit</option>
+						<option value="3">Export</option>
+					</select>
+					<button class="btn btn-sm btn-default" ng-click="del()">删除</button>
+				</div>
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-3">
+					<div class="input-group">
+						<input type="text" class="input-sm form-control" placeholder="Search">
+						<span class="input-group-btn">
+							<a class="btn btn-sm btn-default" ui-sref="app.article.search">Go!</a>
+			                <!--<button class="btn btn-sm btn-default" type="button">Go!</button>-->
+			            </span>
+					</div>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped b-t b-light table-responsive" ng-init="timesort=true">
+					<thead>
+						<tr>
+							<th style="width:15px;">
+								<label class="i-checks m-b-none">
+					                <input type="checkbox" ng-model="select_all" ng-click="selectAll(select_all)"><i></i>
+					            </label>
+							</th>
+							<th>标题</th>
+							<th ng-click="timesort=!timesort">
+								发布时间
+								<i ng-if="timesort" class="fa fa-sort-down"></i>
+								<i ng-if="!timesort" class="fa fa-sort-up"></i>
+							</th>
+							<th>分类</th>
+							<th>浏览量</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in articlelist | orderBy:'time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">
+							<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
+							<td>{{item.title.substring(0,10)}}</td>
+							<td ng-bind="item.time|date:'yyyy-MM-dd HH:mm:ss'"></td>
+							<td>{{item.type}}</td>
+							<td>{{item.views}}</td>
+							<td>
+								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
+									<span class="fa-stack">
+								<i class="fa fa-square fa-stack-2x"></i>
+								<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+							</span>
+								</a>
+								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="remove(item)" class="table-link danger remove">
+									<span class="fa-stack">
+								<i class="fa fa-square fa-stack-2x"></i>
+								<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+							</span>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<footer class="panel-footer">
+				<div class="row">
+					<div class="col-sm-4 text-center">
+						<small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+					</div>
+					<div class="col-sm-8 text-right text-center-xs">
+						<pagination ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)" items-per-page="pageConfig.limit" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm m-t-none m-b" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+</div>
+
+<!--删除对话框-->
+<script type="text/ng-template" id="confirm.html">
+	<div class="modal-header">
+	    <h3 class="modal-title">确定删除吗？</h3>
+	    <p>此操作不可逆</p>
+	</div>
+	<div class="modal-footer">                  
+	    <button class="btn btn-default" ng-click="cancel()">取消</button>
+	    <button class="btn btn-primary" ng-click="confirm()">确定</button>
+	</div>
+</script>
