@@ -14,6 +14,10 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 			
 		})
 	};
+	
+	
+	$scope.isNewHandle=true;			//判断当前是新增友链还是更新友链
+	
 	/*
 	 * loadfriend 加载友情链接
 	 * */
@@ -69,6 +73,30 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 			
 		})
 	}
+	/*
+	 * editFriend 更新友链
+	 * */
+	$scope.editfriend=function(item){
+		$scope.isNewHandle=false;
+		$scope.friend=item;
+	}
+	$scope.updatefriend=function(item){
+		settingServices.updateFriend(item).then(function(res){
+			if(res.data.code==1){
+				defPopService.defPop({
+					status:1,
+					content:"更新成功！",
+					callback:function(){
+						$scope.friend={};
+						$scope.isNewHandle=true;
+					}
+				});
+			}
+		},function(err){
+			
+		})
+	}
+	
 	$scope.loadfriend();
 	
 	

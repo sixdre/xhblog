@@ -146,5 +146,37 @@ exports.delFriend=function(req,res){
 			code:1
 		});
 	})
-
 }
+/*
+ * 友情链接更新
+ * */
+exports.updateFriend=function(req,res){
+	const id=req.body._id,
+	title=req.body.title,
+	url=req.body.url,
+	logo=req.body.logo,
+	sort=req.body.sort;
+	Friend.update({_id:id},{
+		title:title,
+		url:url,
+		logo:logo,
+		sort:sort,
+		update_time:Date.now()
+		},function(err){
+		if(err){
+			return console.log('update err :'+err)
+		}
+		res.json({
+			code:1
+		});
+	})
+}
+
+
+
+
+
+
+
+
+

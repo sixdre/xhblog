@@ -52,6 +52,9 @@ angular.module('app').factory('settingServices',['$http','$q',function($http,$q)
 		},
 		delFriend:function(id){
 			return handelRequest("POST","/admin/setting/delFriend",{id:id});
+		},
+		updateFriend:function(data){
+			return handelRequest("POST","/admin/setting/updateFriend",data);
 		}
 	}
 	

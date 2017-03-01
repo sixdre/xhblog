@@ -21,7 +21,7 @@
 	                <td>{{friend.logo}}</td>
 	                <td>{{friend.sort}}</td>
 	                <td>
-	                    <a href="javascript:void(0)" ng-click="editLink(friend);" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> <span>编辑</span></a>
+	                    <a href="javascript:void(0)" ng-click="editfriend(friend);" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> <span>编辑</span></a>
 	                    <a href="javascript:void(0)" ng-click="delfriend(friend._id);" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> <span>删除</span></a>
 	                </td>
 	            </tr>
@@ -30,7 +30,7 @@
 	    </div>
         <div class="col-md-12" style="padding: 20px;">
             <div class="panel">
-                <div class="panel-heading"><h3 class="panel-title">保存友链</h3></div>
+                <div class="panel-heading"><h3 class="panel-title" ng-if="isNewHandle">保存友链</h3><h3 class="panel-title" ng-if="!isNewHandle">更新友链</h3></div>
                 <div class="panel-body">
 
                     <form id="linkForm" class="form-inline" role="form" novalidate="novalidate">
@@ -54,7 +54,9 @@
                             <input type="number" id="sort" name="sort" ng-model="friend.sort" class="form-control" value="0">
                         </div>
 
-                        <button type="submit" class="btn btn-success" ng-click="addfriend()">保存链接</button>
+                        <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend()">保存链接</button>
+                        <button ng-if="!isNewHandle" type="submit" class="btn btn-success" ng-click="updatefriend(friend)">更新链接</button>
+                        
                     </form>
                 </div> <!-- panel-body -->
             </div> <!-- panel -->
