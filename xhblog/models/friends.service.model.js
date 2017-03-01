@@ -11,9 +11,20 @@ const FriendSchema=new Schema({
 		type:"String",
 		required:true 
 	},
+	logo:{
+		type:String
+	},
+	sort:{
+		type: Number, 
+		default: 0
+	},
 	post_time:{
 		type:Date,
 		default:Date.now
+	},
+	update_time:{ 
+		type: Date, 
+		default: Date.now 
 	}
 })
 //查找所有

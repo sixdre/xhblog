@@ -100,13 +100,30 @@ exports.post_banner=function(req,res){
 };
 
 /*
+ * 查询友链
+ * */
+exports.loadFriend=function(req,res){
+	Friend.find({}).sort({time:-1}).exec(function(err,doc){
+		if(err){
+			return console.dir(err);
+		}
+		res.json({
+			code:1,
+			doc:doc
+		});
+	})
+}
+
+/*
  * 友情链接添加
  * */
 exports.addFriend=function(req,res){
 	console.log(req.body);
 	var friend=new Friend({
 		title:req.body.title,
-		url:req.body.url
+		url:req.body.url,
+		logo:req.body.logo,
+		sort:req.body.sort
 	});
 	friend.save(function(err){
 		if(err){
@@ -116,4 +133,18 @@ exports.addFriend=function(req,res){
 			code:1
 		});
 	});
+}
+/*
+ * 友情链接删除
+ * */
+exports.delFriend=function(req,res){
+	Friend.remove({_id:req.body.id}).exec(function(err){
+		if(err){
+			return console.log(err);
+		}
+		res.json({
+			code:1
+		});
+	})
+
 }

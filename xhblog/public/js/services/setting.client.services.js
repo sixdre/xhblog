@@ -42,12 +42,16 @@ angular.module('app').factory('settingServices',['$http','$q',function($http,$q)
 				})
 				return deferred.promise;
 			};
-			
 			return ss();
-			
+		},
+		loadFriend:function(){
+			return handelRequest("GET","/admin/setting/loadFriend");
 		},
 		addFriend:function(data){
 			return handelRequest("POST","/admin/setting/addFriend",data);
+		},
+		delFriend:function(id){
+			return handelRequest("POST","/admin/setting/delFriend",{id:id});
 		}
 	}
 	

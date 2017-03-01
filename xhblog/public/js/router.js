@@ -106,6 +106,20 @@ app.run(
 					/*templateUrl: '/tpl/admin_tpl/article/table_list.html',*/
 					
 				})
+				.state("app.friend",{
+					url:"/friend",
+					templateUrl:'/tpl/admin_tpl/setting/newFriend.html',
+					controller:"settingCtrl",
+					resolve: {
+	                      deps: ['uiLoad',
+	                        function( uiLoad){
+	                          return uiLoad.load([
+	                                '/js/services/setting.client.services.js',
+	                                '/js/controllers/setting.client.controllers.js'
+	                          ]);
+	                      }]
+		            }
+				})
 				.state('app.article.search', {
 					url: '/search',
 					templateUrl: '/tpl/admin_tpl/article/search.html'
