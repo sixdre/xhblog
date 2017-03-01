@@ -204,6 +204,9 @@ module.exports={
 	    .then(function(){
 	        res.json({code:1})
 	    })
+	},
+	testUpload:function(req,res){
+		console.log(1);
 	}
 
 

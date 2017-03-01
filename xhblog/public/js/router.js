@@ -63,7 +63,7 @@ app.run(
 					resolve: {
 	                      deps: ['$ocLazyLoad',
 	                        function( $ocLazyLoad ){
-	                          return $ocLazyLoad.load('ui.select').then(
+	                          return $ocLazyLoad.load(['ui.select','angularFileUpload']).then(
 	                              function(){
 	                                  return $ocLazyLoad.load([
 											'/js/services/article.client.services.js',
