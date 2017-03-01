@@ -32,12 +32,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	 * addfriend 添加友情链接
 	 * */
 	$scope.addfriend=function(data){
-		/*var formData={		//old
-			title:$scope.friend.title,
-			url:$scope.friend.url,
-			logo:$scope.friend.logo,
-			sort:$scope.friend.sort
-		};*/
+
 		settingServices.addFriend(data).then(function(res){
 			var data=res.data;
 			if(data.code>0){
@@ -81,7 +76,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 		$scope.friend=item;
 	}
 	$scope.updatefriend=function(item){
-		settingServices.updateFriend(item).then(function(res){
+		settingServices.addFriend(item).then(function(res){
 			if(res.data.code==1){
 				defPopService.defPop({
 					status:1,

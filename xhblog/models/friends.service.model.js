@@ -25,24 +25,14 @@ const FriendSchema=new Schema({
 	update_time:{ 
 		type: Date, 
 		default: Date.now 
-	},
-	meta:{
-		createAt:{
-			type:Date,
-			default:Date.now()
-		},
-		updateAt:{
-			type:Date,
-			default:Date.now()
-		}
 	}
 })
 
 FriendSchema.pre("save",function(next){
 	if(this.isNew){
-		this.meta.createAt=this.meta.updateAt=Date.now();
+		this.post_time=this.update_time=Date.now();
 	}else{
-		this.meta.updateAt=Date.now();
+		this.update_time=Date.now();
 	}
 	next();
 })
