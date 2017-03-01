@@ -31,14 +31,14 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	/*
 	 * addfriend 添加友情链接
 	 * */
-	$scope.addfriend=function(){
-		var formData={
+	$scope.addfriend=function(data){
+		/*var formData={		//old
 			title:$scope.friend.title,
 			url:$scope.friend.url,
 			logo:$scope.friend.logo,
 			sort:$scope.friend.sort
-		};
-		settingServices.addFriend(formData).then(function(res){
+		};*/
+		settingServices.addFriend(data).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -46,7 +46,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					content:"添加成功！",
 					callback:function(){
 						$scope.friend={};
-						$scope.friends.push(formData);
+						$scope.friends.push(data);
 					}
 				});
 			}

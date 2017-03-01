@@ -54,8 +54,8 @@
                             <input type="number" id="sort" name="sort" ng-model="friend.sort" class="form-control" value="0">
                         </div>
 
-                        <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend()">保存链接</button>
-                        <button ng-if="!isNewHandle" type="submit" class="btn btn-success" ng-click="updatefriend(friend)">更新链接</button>
+                        <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend(friend)">保存链接</button>
+                        <button ng-if="!isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend(friend)">更新链接</button>
                         
                     </form>
                 </div> <!-- panel-body -->

@@ -118,21 +118,44 @@ exports.loadFriend=function(req,res){
  * 友情链接添加
  * */
 exports.addFriend=function(req,res){
-	console.log(req.body);
-	var friend=new Friend({
-		title:req.body.title,
-		url:req.body.url,
-		logo:req.body.logo,
-		sort:req.body.sort
-	});
-	friend.save(function(err){
-		if(err){
-			return console.log('添加失败 err：'+err);
-		}
-		res.json({
-			code:1
+	const id=req.body._id,
+	title=req.body.title,
+	url=req.body.url,
+	logo=req.body.logo,
+	sort=req.body.sort;
+	if(id==undefined){			//说明是新增
+		var friend=new Friend({
+			title:req.body.title,
+			url:req.body.url,
+			logo:req.body.logo,
+			sort:req.body.sort
 		});
-	});
+		friend.save(function(err){
+			if(err){
+				return console.log('添加失败 err：'+err);
+			}
+			res.json({
+				code:1
+			});
+		});
+	}else{						//更新
+		console.log(1);
+		Friend.update({_id:id},{
+			title:title,
+			url:url,
+			logo:logo,
+			sort:sort,
+			update_time:Date.now()
+			},function(err){
+			if(err){
+				return console.log('update err :'+err)
+			}
+			res.json({
+				code:1
+			});
+		})
+	}
+	
 }
 /*
  * 友情链接删除
