@@ -10,13 +10,28 @@
       <span class="font-bold" translate="aside.nav.CALENDAR">Calendar</span>
     </a>
   </li>
-   <li ng-class="{active:$state.includes('app.article')}">
+  <!--<li ng-class="{active:$state.includes('app.article')}">
     <a ui-sref="app.article.editor">
       <i class="glyphicon glyphicon-book icon text-info-dker"></i>
       <span class="font-bold" translate="aside.nav.ARTICLE">article</span>
       <b class="badge bg-info pull-right">{{articleTotal}}</b>
     </a>
+  </li>-->
+  
+  <li ui-sref-active="active">
+    <a ui-sref="app.article.publish">
+      <i class="fa fa-pencil-square-o text-info-dker"></i>
+      <span class="font-bold">发布文章</span>
+    </a>
   </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.article.main">
+      <i class="fa fa-list icon text-info-dker"></i>
+      <span class="font-bold">文章管理</span>
+    </a>
+  </li>
+  
+  
 <!--  <li ui-sref-active="active">
     <a ui-sref="app.setting">
       <i class="glyphicon glyphicon-cog icon text-info-dker"></i>
@@ -30,7 +45,7 @@
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
       <i class="glyphicon glyphicon-cog"></i>
-      <span>setting</span>
+      <span>网站设置</span>
     </a>
     <ul class="nav nav-sub dk">
       <li class="nav-sub-header">
@@ -40,12 +55,12 @@
       </li>
       <li ng-class="{active:$state.includes('app.setting.banner')}">
         <a ui-sref="app.setting.banner.add">
-          <span>banner</span>
+          <span>轮播图</span>
         </a>
       </li>
       <li ng-class="{active:$state.includes('app.setting.friends')}">
         <a ui-sref="app.setting.friends.add">
-          <span>friend</span>
+          <span>友链管理</span>
         </a>
       </li>
     </ul>

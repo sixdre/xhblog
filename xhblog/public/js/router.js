@@ -58,7 +58,8 @@ app.run(
 				.state('app.article', {
 					abstract: true,
 					url: '/article',
-					templateUrl: '/tpl/admin_tpl/article/article.html',
+					/*templateUrl: '/tpl/admin_tpl/article/article.html',*/		//之前的
+					template: '<div ui-view class="fade-in-up"></div>',			//new
 					controller: 'articleCtrl',
 					resolve: {
 	                      deps: ['$ocLazyLoad',
@@ -74,6 +75,17 @@ app.run(
 	                      }]
 	                  }					
 				})
+				.state('app.article.publish', {					//new
+					url: '/publish',
+					templateUrl: '/tpl/admin_tpl/article/publish.html'
+				})
+				.state('app.article.main', {					//new
+					url: '/main/:page',
+					templateUrl: '/tpl/admin_tpl/article/main.html',
+					controller:"articleListCtrl"
+				})
+				
+				
 				.state('app.article.editor', {
 					url: '/editor',
 					templateUrl: '/tpl/admin_tpl/article/editor.html'

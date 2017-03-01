@@ -55,14 +55,14 @@ app.controller('articleCtrl',
 	                funcSaveCompanyInfoFormData();
 	            }*/
 			
-			var uploader = $scope.uploader = new FileUploader({
+			/*var uploader = $scope.uploader = new FileUploader({
 		        url: '/admin/article/testUpload',
 		        
-		    });
+		    });*/
 
 		    // CALLBACKS
 
-		    uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+		   /* uploader.onWhenAddingFileFailed = function(item, filter, options) {
 		        console.info('onWhenAddingFileFailed', item, filter, options);
 		        console.log(1);
 		    };
@@ -101,7 +101,7 @@ app.controller('articleCtrl',
 		        console.info('onCompleteAll');
 		    };
 
-		    console.info('uploader', uploader);
+		    console.info('uploader', uploader);*/
 			
 			
 			
@@ -225,7 +225,7 @@ app.controller('articleCtrl',
 	$scope.format=function(arg){			//时间格式化，可用angular自带的$filter格式化时间
 		return moment(arg).format('YYYY-MM-DD HH:mm:ss');
 	};
-	$scope.remove=function(item){				//图标点击删除
+	$scope.remove=function(item){				//图标点击删除 单个删除
 		var id = item.bId;
 		var modalInstance = $modal.open({
 	          templateUrl: 'confirm.html',
@@ -346,7 +346,7 @@ app.controller('editorCtrl',['$scope',function($scope){
 
 
 app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
-	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page);
+	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page?$stateParams.page:1);
 	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
 }]);
 
