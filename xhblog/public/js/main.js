@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl',['$scope','$translate','$localStorage','$window',"$http","$state" ,
-    function($scope,$translate,$localStorage,$window,$http,$state ) {
+  .controller('AppCtrl',['$rootScope','$scope','$translate','$localStorage','$window',"$http","$state" ,
+    function($rootScope,$scope,$translate,$localStorage,$window,$http,$state ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -14,10 +14,10 @@ angular.module('app')
     	  method:"GET",
     	  url:"/admin/loadData"
       }).then(function(res){
-		  $scope.articleTotal=res.data.total;
-		  $scope.lm=res.data.lmdoc;
-		  $scope.manager=res.data.manager;
-		  if(!$scope.manager){
+    	  $rootScope.articleTotal=res.data.total;
+    	  $rootScope.lm=res.data.lmdoc;
+    	  $rootScope.manager=res.data.manager;
+		  if(!$rootScope.manager){
 			  /*$state.go("access.signin");*/
 		  }
 	  }).catch(function(err){

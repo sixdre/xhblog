@@ -130,12 +130,13 @@ exports.addFriend=function(req,res){
 			logo:req.body.logo,
 			sort:req.body.sort
 		});
-		friend.save(function(err){
+		friend.save(function(err,doc){
 			if(err){
 				return console.log('添加失败 err：'+err);
 			}
 			res.json({
-				code:1
+				code:1,
+				friend:doc
 			});
 		});
 	}else{						//更新

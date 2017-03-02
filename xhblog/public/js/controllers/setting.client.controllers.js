@@ -10,7 +10,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					content:"添加成功！"
 				});
 			}
-		},function(err){
+		}).catch(function(err){
 			
 		})
 	};
@@ -24,7 +24,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	$scope.loadfriend=function(){
 		settingServices.loadFriend().then(function(res){
 			$scope.friends=res.data.doc;
-		},function(err){
+		}).catch(function(err){
 			
 		})
 	};
@@ -41,11 +41,12 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					content:"添加成功！",
 					callback:function(){
 						$scope.friend={};
+						obj._id=data.friend._id;
 						$scope.friends.push(obj);
 					}
 				});
 			}
-		},function(err){
+		}).catch(function(err){
 			
 		})
 		return false;
@@ -54,6 +55,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	 * delfriend 删除链接
 	 * */
 	$scope.delfriend=function(id){
+		console.log(id);
 		settingServices.delFriend(id).then(function(res){
 			if(res.data.code==1){
 				defPopService.defPop({
@@ -61,10 +63,11 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					content:"删除成功！",
 					callback:function(){
 						$scope.friends.splice($.inArray(id, $scope.array), 1);
+						console.log($scope.friends);
 					}
 				});
 			}
-		},function(err){
+		}).catch(function(err){
 			
 		})
 	}
@@ -87,7 +90,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					}
 				});
 			}
-		},function(err){
+		}).catch(function(err){
 			
 		})
 	}

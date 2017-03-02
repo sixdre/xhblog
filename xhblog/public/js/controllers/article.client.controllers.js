@@ -1,8 +1,8 @@
 "use strict";
 var uetrue=null;
 app.controller('articleCtrl',
-		['$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleServices',"defPopService",
-		 function($scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleServices,defPopService){
+		['$rootScope','$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleServices',"defPopService",
+		 function($rootScope,$scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleServices,defPopService){
 			
 	  var uploader = $scope.uploader = new FileUploader({
           url:"/admin/article/testUpload",
@@ -74,7 +74,7 @@ app.controller('articleCtrl',
     		 $scope.articlelist=res.data.page;
     		 $scope.pageConfig.bigTotalItems =res.data.total;
     		
-    	 },function(err){
+    	 }).catch(function(err){
     		 defPopService.defPop({
 					status:0,
 					content:"出错了！"
@@ -141,6 +141,7 @@ app.controller('articleCtrl',
 						status:1,
 						content:"删除成功!",
 						callback:function(){
+							$rootScope.articleTotal=($rootScope.articleTotal)-($scope.checkedIds.length)
 							$scope.pageChanged();
 						}
 					 });
@@ -148,7 +149,7 @@ app.controller('articleCtrl',
 			 }).catch(function(err){
 				console.log(err)
 			 })
-       }, function () {
+       }).catch( function () {
           $log.info('Modal dismissed at: ' + new Date());
        });
 	}
@@ -159,7 +160,7 @@ app.controller('articleCtrl',
 	$scope.loadlist=function(){
 		articleServices.list('').then(function(res){
 			$scope.pageConfig.bigTotalItems =res.data.article.length;
-		},function(err){
+		}).catch(function(err){
 			 defPopService.defPop({
 					status:1,
 					content:"出错了！"
@@ -198,13 +199,13 @@ app.controller('articleCtrl',
 						}
 					 });
 				}
-			},function(err){
+			}).catch(function(err){
 				 defPopService.defPop({
 						status:0,
 						content:"出错了！"
 				 });
 			});
-         }, function () {
+         }).catch(function () {
             $log.info('Modal dismissed at: ' + new Date());
          });
 	
@@ -221,7 +222,7 @@ app.controller('articleCtrl',
 					content:"发表成功!"
 				 });
 			}
-		},function(err){
+		}).catch(function(err){
 			 defPopService.defPop({
 					status:0,
 					content:"出错了！"
@@ -269,7 +270,7 @@ app.controller('articleCtrl',
 			var data=res.data.results;
 			$scope.searchResult=data;
 			$scope.number=res.data.number;
-		},function(err){
+		}).catch(function(err){
 			defPopService.defPop({
 				status:0,
 				content:"服务器出错了！"
@@ -330,7 +331,7 @@ app.controller('ModalInstanceCtrl',
 			    	// editor准备好之后才可以使用
 			    	upUe.setContent($scope.up_item.tagcontent);
 		        });
-			},function(err){
+			}).catch(function(err){
 				defPopService.defPop({
 					status:0,
 					content:"服务器出错了！"
@@ -351,7 +352,7 @@ app.controller('ModalInstanceCtrl',
 	    				content:"更新成功！"
 	    		    });
 	    		}
-	    	},function(err){
+	    	}).catch(function(err){
 	    		defPopService.defPop({
     				status:0,
     				content:"更新失败！"
