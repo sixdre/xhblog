@@ -1,3 +1,4 @@
+<!--友情链接管理-->
 <div class="bg-light lter b-b wrapper-md">
    <h1 class="m-n font-thin h3">友链管理</h1>
 </div>
@@ -30,31 +31,33 @@
 	    </div>
         <div class="col-md-12" style="padding: 20px;">
             <div class="panel">
-                <div class="panel-heading"><h3 class="panel-title" ng-if="isNewHandle">保存友链</h3><h3 class="panel-title" ng-if="!isNewHandle">更新友链</h3></div>
+                <div class="panel-heading">
+                	<h3 class="panel-title" ng-if="isNewHandle">保存友链</h3>
+                	<h3 class="panel-title" ng-if="!isNewHandle">更新友链</h3>
+                </div>
                 <div class="panel-body">
-
-                    <form id="linkForm" class="form-inline" role="form" novalidate="novalidate">
+                    <form class="form-inline" name="form" role="form">
                         <div class="form-group">
                             <label class="sr-only">链接标题</label>
-                            <input type="text" id="title" name="title" ng-model="friend.title" class="form-control valid" placeholder="请输入链接标题" required="required" aria-required="true" aria-invalid="false">
+                            <input type="text" name="title" ng-model="friend.title" class="form-control valid" placeholder="请输入链接标题" required="required" aria-required="true" aria-invalid="false">
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only">链接URL</label>
-                            <input type="url" id="url" name="url" ng-model="friend.url" class="form-control" placeholder="请输入链接地址" required="required" aria-required="true">
+                            <input type="url" name="url" ng-model="friend.url" class="form-control" placeholder="请输入链接地址" required="required" aria-required="true">
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only">链接LOGO</label>
-                            <input type="url" id="logo" name="logo" ng-model="friend.logo" class="form-control" placeholder="请输入链接LOGO，没有则不输入">
+                            <input type="url" name="logo" ng-model="friend.logo" class="form-control" placeholder="请输入链接LOGO，没有则不输入">
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only">链接排序</label>
-                            <input type="number" id="sort" name="sort" ng-model="friend.sort" class="form-control" value="0">
+                            <input type="number" name="sort" ng-model="friend.sort" class="form-control" value="0">
                         </div>
 
-                        <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend(friend)">保存链接</button>
+                        <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend(friend)" ng-disabled='form.$invalid'>保存链接</button>
                         <button ng-if="!isNewHandle" type="submit" class="btn btn-success" ng-click="updatefriend(friend)">更新链接</button>
                         
                     </form>

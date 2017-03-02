@@ -4,7 +4,7 @@ angular.module('app')
       restrict: 'AC',
       link: function(scope, ele, attr) {
       	ele.hover(function(){
-      		$(this).css({
+      		ele.css({
       			"cursor":"pointer"
       		})
       	})

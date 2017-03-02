@@ -94,6 +94,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		}
 	],function(err,banner,total,article,newart,hot,types,friends){
+		app.locals.friends=friends;
 		res.render('www/', {
 			user:req.session["userSession"],
 			title: '个人博客首页',
@@ -105,7 +106,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize,			//列表数
 			types:types,			//不同类型文章类型的数量,
-			friends:friends			//友情链接
+			friends:app.locals.friends			//友情链接
 		});
 	});
 }
