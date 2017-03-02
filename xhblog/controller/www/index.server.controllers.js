@@ -81,23 +81,19 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},
 		function(banner,total,doc,newart,hot,callback){
-			Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
+			Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
 				if(err){
 					return console.dir(err);
 				}
-				var typeNums=[];
-				for(var i=0;i<result.length;i++){
-					typeNums.push(result[i].total);
-				}
-				callback(null,banner,total,doc,newart,hot,result);
+				callback(null,banner,total,doc,newart,hot,types);
 			})
 		},
-		function(banner,total,doc,newart,hot,result,callback){		//友情链接
-			Friend.findAll(function(friend){
-				callback(null,banner,total,doc,newart,hot,result,friend);
+		function(banner,total,doc,newart,hot,types,callback){		//友情链接
+			Friend.findAll(function(friends){
+				callback(null,banner,total,doc,newart,hot,types,friends);
 			})
 		}
-	],function(err,banner,total,article,newart,hot,result,friend){
+	],function(err,banner,total,article,newart,hot,types,friends){
 		res.render('www/', {
 			user:req.session["userSession"],
 			title: '个人博客首页',
@@ -108,8 +104,8 @@ var Indexs=function(req,res,currentPage,pageSize){
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize,			//列表数
-			typeNums:result,			//不同类型文章类型的数量,
-			friend:friend			//友情链接
+			types:types,			//不同类型文章类型的数量,
+			friends:friends			//友情链接
 		});
 	});
 }
@@ -193,18 +189,19 @@ module.exports={
 				});
 			},
 			function(doc,hot,nextArticle,prevArticle,callback){
-				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
+				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
 					if(err){
 						return console.dir(err);
 					}
-					var typeNums=[];
-					for(var i=0;i<result.length;i++){
-						typeNums.push(result[i].total);
-					}
-					callback(null,doc,hot,nextArticle,prevArticle,result);
+					callback(null,doc,hot,nextArticle,prevArticle,types);
+				})
+			},
+			function(doc,hot,nextArticle,prevArticle,types,callback){		//友情链接
+				Friend.findAll(function(friends){
+					callback(null,doc,hot,nextArticle,prevArticle,types,friends);
 				})
 			}
-		],function(err,doc,hot,nextArticle,prevArticle,result){
+		],function(err,doc,hot,nextArticle,prevArticle,types,friends){
 			res.render("www/detial",{
 				user:req.session["userSession"],
 				article:doc,
@@ -212,7 +209,8 @@ module.exports={
 				title:doc.title,
 				nextArticle:nextArticle,
 				prevArticle:prevArticle,
-				typeNums:result			//不同类型文章类型的数量
+				types:types,			//不同类型文章类型的数量
+				friends:friends
 			});
 		})
 		

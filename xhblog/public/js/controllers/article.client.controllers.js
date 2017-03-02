@@ -265,8 +265,24 @@ app.controller('articleCtrl',
 	
 	};
 	//发布文章
-	$scope.save=function(){
-		var formData = new FormData($("#Article_form")[0]);
+	$scope.publish=function(){
+		$scope.article.tagcontent=UE.getEditor('editor').getContent();
+		$scope.article.content=UE.getEditor('editor').getContentTxt();
+		articleServices.publish($scope.article).then(function(res){
+			var data=res.data;
+			if(data.code>0){
+				defPopService.defPop({
+					status:1,
+					content:"发表成功!"
+				 });
+			}
+		},function(err){
+			 defPopService.defPop({
+					status:0,
+					content:"出错了！"
+			 });
+		});
+		/*var formData = new FormData($("#Article_form")[0]);
 		formData.append('author',$('#manager_name').text().trim());
 		formData.append('content',UE.getEditor('editor').getContentTxt());
 		formData.append('tagcontent',UE.getEditor('editor').getContent());
@@ -284,7 +300,7 @@ app.controller('articleCtrl',
 					status:0,
 					content:"出错了！"
 			 });
-		});
+		});*/
 	};
 	
 	//搜索文章

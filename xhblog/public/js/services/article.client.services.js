@@ -52,6 +52,9 @@ angular.module('app').factory('articleServices',['$http','$q',function($http,$q)
 			return ss();
 			
 		},
+		publish:function(data){
+			return handelRequest("POST",'/admin/article/publish',data);
+		},
 		search:function(title){
 			return handelRequest("POST",'/admin/article/search',{title:title});
 		},

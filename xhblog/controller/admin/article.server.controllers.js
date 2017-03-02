@@ -47,7 +47,7 @@ module.exports={
 				});
 				return ;
 			}
-			var article = Article({
+			var article =new Article({
 				author: "xuhao",
 				title:req.body.article_title,
 				type: req.body.article_type,
@@ -88,6 +88,23 @@ module.exports={
 			});
 	    }*/
 
+	},
+	publish:function(req,res){					//新的发布文章接口
+		var article =new Article({
+			author: req.session["manager"]||'xuhao',
+			title:req.body.title,
+			type: req.body.type.value,
+			content:req.body.content,
+			tagcontent:req.body.tagcontent
+		});
+		article.save(function(err){
+			if(err){
+				return console.log(err)
+			}
+			res.json({
+				code:1
+			});
+		});
 	},
 	//文章列表
 	list:function(req, res) {
