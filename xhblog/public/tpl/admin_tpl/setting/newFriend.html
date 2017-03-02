@@ -16,14 +16,14 @@
 	            </tr>
 	            </thead>
 	            <tbody>
-	            <tr ng-repeat="friend in friends">
+	            <tr ng-repeat="friend in friends | orderBy:'update_time':true">
 	                <td>{{friend.title}}</td>
 	                <td><a href="{{friend.url}}" target="_blank">{{friend.url}}</a></td>
 	                <td>{{friend.logo}}</td>
 	                <td>{{friend.sort}}</td>
 	                <td>
 	                    <a href="javascript:void(0)" ng-click="editfriend(friend);" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> <span>编辑</span></a>
-	                    <a href="javascript:void(0)" ng-click="delfriend(friend._id);" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> <span>删除</span></a>
+	                    <a href="javascript:void(0)" ng-click="delfriend(friend);" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> <span>删除</span></a>
 	                </td>
 	            </tr>
 	            </tbody>
