@@ -2,6 +2,8 @@
 var mongoose=require('mongoose');
 var Article = mongoose.model('Article');			//文章
 var Manager = mongoose.model('Manager');			//管理员
+var multiparty =require("connect-multiparty")
+
 
 
 var formidable = require('formidable');
@@ -23,6 +25,7 @@ var storage = multer.diskStorage({
     //TODO:文件区分目录存放
     //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
     filename: function (req, file, cb) {
+    	console.log(file);
         var fileFormat =(file.originalname).split(".");
         cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
     }
@@ -33,7 +36,7 @@ var upload = multer({
     storage: storage,
     //其他设置请参考multer的limits
     //limits:{}
-}).single('resource');
+}).single("img");
 
 module.exports={
 	sub:function(req,res){
@@ -90,21 +93,22 @@ module.exports={
 
 	},
 	publish:function(req,res){					//新的发布文章接口
-		var article =new Article({
-			author: req.session["manager"]||'xuhao',
-			title:req.body.title,
-			type: req.body.type.value,
-			content:req.body.content,
-			tagcontent:req.body.tagcontent
-		});
-		article.save(function(err){
-			if(err){
-				return console.log(err)
-			}
-			res.json({
-				code:1
+			var article =new Article({
+				author: req.session["manager"]||'xuhao',
+				title:req.body.title,
+				type: req.body.type.value,
+				content:req.body.content,
+				tagcontent:req.body.tagcontent
 			});
-		});
+			article.save(function(err){
+				if(err){
+					return console.log(err)
+				}
+				res.json({
+					code:1
+				});
+			});
+		
 	},
 	//文章列表
 	list:function(req, res) {
@@ -223,7 +227,12 @@ module.exports={
 	    })
 	},
 	testUpload:function(req,res){
-		console.log(1);
+		/*console.log(req.files);
+		console.log(req.files.file.path);
+		var newPath = "public/upload/"+moment(Date.now()).format('YYYY-MM') ;
+		console.log(newPath);
+		fs.renameSync(req.files.file.path, newPath+"/"+req.files.file.name);*/
+
 	}
 
 

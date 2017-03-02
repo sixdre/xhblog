@@ -68,6 +68,12 @@ angular.module('app')
                   ]
               },
               {
+                  name:'ngFileUpload',
+                  files: [
+                    '/libs/ng-file-upload/ng-file-upload.min.js'
+                  ]
+              },
+              {
                   name:'ui.calendar',
                   files: ['/vendor/modules/angular-ui-calendar/calendar.js']
               },

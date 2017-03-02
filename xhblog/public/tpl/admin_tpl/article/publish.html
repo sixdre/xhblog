@@ -3,7 +3,7 @@
 </div>
 <div class="wrapper-md">
 	<div class="">
-		<form action="" class="clearfix" method="post" id="Article_form" enctype='multipart/form-data'>
+		<form class="clearfix" id="Article_form" uploader="uploader" enctype='multipart/form-data'>
 			<div class="form-group col-md-6">
                 <input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required" aria-required="true">
             </div>
@@ -19,7 +19,14 @@
 		        </ui-select>
             </div>
             <div class="form-group col-md-6">
-				<input type="file" id="resource" name="resource">
+            	<!--<input type="file" nv-file-select="" uploader="uploader" name="img">
+            	<div ng-repeat="item in uploader.queue">
+            		<div><strong>{{ item.file.name }}</strong></div>
+            		<div class="progress progress-sm m-b-none m-t-xs">
+	                  	<div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+	                </div>
+            	</div>-->
+				<!--<input type="file" name="img">-->
 			</div>
             <div class="form-group col-md-12">
             	<script id="editor" type="text/plain"></script>
@@ -28,7 +35,7 @@
             	<button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">
                    	存为草稿
                 </button>
-                <button type="button" class="btn btn-primary waves-effect waves-light" ng-click="publish()">
+                <button type="button" class="btn btn-primary waves-effect waves-light"  ng-click="publish()">
                                         发表文章
                 </button>
             </div>

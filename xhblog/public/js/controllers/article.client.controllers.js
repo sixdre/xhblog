@@ -1,113 +1,58 @@
 "use strict";
 var uetrue=null;
 app.controller('articleCtrl',
-		['$scope','$http',"$stateParams",'$window','$log','$modal',"FileUploader",'toaster','articleServices',"defPopService",
+		['$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleServices',"defPopService",
 		 function($scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleServices,defPopService){
 			
-			
-			/* var uploaderPhotos = $scope.uploaderPhotos = new FileUploader({
-	                url: "/HandlerApi.GetApiJson.tclywork?ApiPath=Test/Get"
-	            });
-	            $scope.uploaderPhotos.AllowAdd = true;//自己添加的，用于限制上传数量
-	            $scope.uploaderPhotos.onAfterAddingFile = function (fileItem) {
-	                while (this.queue.length > 5) {
-	                    this.removeFromQueue(0);
-	                }
-	                this.AllowAdd = (this.queue.length < 5);
-	                console.log(this);
-	            };
-	            //自己添加的，用于在移除图片时，重新计算
-	            $scope.uploaderPhotos.funcRemoveItem = function (fileItem) {
-	                fileItem.remove();
-	                this.AllowAdd = (this.queue.length < 5);
-	                console.log(this);
-	            };
-	            //保存图片
-	            $scope.funcSaveCompanyInfo = function () {
-	                //先判断是否有未上传完成的图片，若有先传图片，否则直接上传表单数据
-	                if (uploaderPhotos.getNotUploadedItems().length > 0) {
+	  var uploader = $scope.uploader = new FileUploader({
+          url:"/admin/article/testUpload",
+          queueLimit: 1,     //文件个数
+          removeAfterUpload: true,   //上传后删除文件
+        });
+	  uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+          console.info('onWhenAddingFileFailed', item, filter, options);
+      };
+      uploader.onAfterAddingFile = function(fileItem) {
+          console.info('onAfterAddingFile', fileItem);
+      };
+      uploader.onAfterAddingAll = function(addedFileItems) {
+          console.info('onAfterAddingAll', addedFileItems);
+      };
+      uploader.onBeforeUploadItem = function(item) {
+          console.info('onBeforeUploadItem', item);
+      };
+      uploader.onProgressItem = function(fileItem, progress) {
+          console.info('onProgressItem', fileItem, progress);
+      };
+      uploader.onProgressAll = function(progress) {
+          console.info('onProgressAll', progress);
+      };
+      uploader.onSuccessItem = function(fileItem, response, status, headers) {
+          console.info('onSuccessItem', fileItem, response, status, headers);
+      };
+      uploader.onErrorItem = function(fileItem, response, status, headers) {
+          console.info('onErrorItem', fileItem, response, status, headers);
+      };
+      uploader.onCancelItem = function(fileItem, response, status, headers) {
+          console.info('onCancelItem', fileItem, response, status, headers);
+      };
+      uploader.onCompleteItem = function(fileItem, response, status, headers) {
+          console.info('onCompleteItem', fileItem, response, status, headers);
+      };
+      uploader.onCompleteAll = function() {
+          console.info('onCompleteAll');
+      };
 
-	                    uploaderPhotos.uploadAll();
-	                }
-	                else {
-	      
-	                }
-	            }
-	            //上传控件：回调响应：
-	            $scope.uploaderPhotos.onBeforeUploadItem = function (item) {
-	                item.formData = [{ Desc: item.file.Desc }];//上传前，添加描述文本
-	                console.log("onBeforeUploadItem：");
-	                console.log(item.formData);
-	            }
-	            //上传控件：回调响应：
-	            $scope.uploaderPhotos.onCompleteItem = function (item,response,status,headers) {
-
-	                console.log("onCompleteItem " + JSON.stringify(response));
-	                //
-	                if (response.code == "200") {
-	                    $scope.modelPosition.Images += response.data.id;
-	                }
-	                console.log($scope.modelPosition.Images);
-	            };
-	            //上传控件：回调响应：
-	            $scope.uploaderPhotos.onCompleteAll = function () {
-	                console.log("CompleteAll");
-	                funcSaveCompanyInfoFormData();
-	            }*/
-			
-			/*var uploader = $scope.uploader = new FileUploader({
-		        url: '/admin/article/testUpload',
-		        
-		    });*/
-
-		    // CALLBACKS
-
-		   /* uploader.onWhenAddingFileFailed = function(item, filter, options) {
-		        console.info('onWhenAddingFileFailed', item, filter, options);
-		        console.log(1);
-		    };
-		    uploader.onAfterAddingFile = function(fileItem) {
-		        console.info('onAfterAddingFile', fileItem);
-		        console.log(2);
-		    };
-		    uploader.onAfterAddingAll = function(addedFileItems) {
-		        console.info('onAfterAddingAll', addedFileItems);
-		        console.log(3);
-		    };
-		    uploader.onBeforeUploadItem = function(item) {
-		        console.info('onBeforeUploadItem', item);
-		        console.log(4);
-		    };
-		    uploader.onProgressItem = function(fileItem, progress) {
-		        console.info('onProgressItem', fileItem, progress);
-		        console.log(5);
-		    };
-		    uploader.onProgressAll = function(progress) {
-		        console.info('onProgressAll', progress);
-		    };
-		    uploader.onSuccessItem = function(fileItem, response, status, headers) {
-		        console.info('onSuccessItem', fileItem, response, status, headers);
-		    };
-		    uploader.onErrorItem = function(fileItem, response, status, headers) {
-		        console.info('onErrorItem', fileItem, response, status, headers);
-		    };
-		    uploader.onCancelItem = function(fileItem, response, status, headers) {
-		        console.info('onCancelItem', fileItem, response, status, headers);
-		    };
-		    uploader.onCompleteItem = function(fileItem, response, status, headers) {
-		        console.info('onCompleteItem', fileItem, response, status, headers);
-		    };
-		    uploader.onCompleteAll = function() {
-		        console.info('onCompleteAll');
-		    };
-
-		    console.info('uploader', uploader);*/
+      console.info('uploader', uploader);		
 			
 			
-			
-			
-			
-			
+      $scope.upload=function(){
+    	  uploader.uploadAll();
+      }
+      
+      
+      
+      
 	//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,
