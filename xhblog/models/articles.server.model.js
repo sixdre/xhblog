@@ -11,7 +11,10 @@ const ArticleSchema=new Schema({
         required:true 		//作者非空
     },
     title:String,
-    type:String,
+    type:{
+    	type:String,
+    	//enum:['','']  //只能是
+    },
 /*    category:{
 	    type: mongoose.Schema.Types.ObjectId,
 	    ref: 'category'

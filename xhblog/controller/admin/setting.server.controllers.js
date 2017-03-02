@@ -130,15 +130,23 @@ exports.addFriend=function(req,res){
 			logo:req.body.logo,
 			sort:req.body.sort
 		});
-		friend.save(function(err,doc){
+		Friend.findByTitle(title,function(err){
 			if(err){
-				return console.log('添加失败 err：'+err);
+				return res.json({
+					code:-1
+				});
 			}
-			res.json({
-				code:1,
-				friend:doc
+			friend.save(function(err,doc){
+				if(err){
+					return console.log('添加失败 err：'+err);
+				}
+				res.json({
+					code:1,
+					friend:doc
+				});
 			});
-		});
+		})
+		
 	}else{						//更新
 		console.log(1);
 		Friend.update({_id:id},{

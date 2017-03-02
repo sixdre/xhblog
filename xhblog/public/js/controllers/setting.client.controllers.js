@@ -45,6 +45,11 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 						$scope.friends.push(obj);
 					}
 				});
+			}else if(data.code==-1){
+				defPopService.defPop({
+					status:0,
+					content:"此用户已经添加过了！"
+				});
 			}
 		}).catch(function(err){
 			
@@ -62,7 +67,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					status:1,
 					content:"删除成功！",
 					callback:function(){
-						$scope.friends.splice($.inArray(id, $scope.array), 1);
+						$scope.friends.splice($.inArray(id, $scope.friends), 1);
 						console.log($scope.friends);
 					}
 				});
