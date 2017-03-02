@@ -31,9 +31,9 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	/*
 	 * addfriend 添加友情链接
 	 * */
-	$scope.addfriend=function(data){
+	$scope.addfriend=function(obj){
 
-		settingServices.addFriend(data).then(function(res){
+		settingServices.addFriend(obj).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -41,7 +41,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 					content:"添加成功！",
 					callback:function(){
 						$scope.friend={};
-						$scope.friends.push(data);
+						$scope.friends.push(obj);
 					}
 				});
 			}
