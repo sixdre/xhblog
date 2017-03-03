@@ -141,7 +141,8 @@ app.controller('articleCtrl',
 						status:1,
 						content:"删除成功!",
 						callback:function(){
-							$rootScope.articleTotal=($rootScope.articleTotal)-($scope.checkedIds.length)
+							var total=($rootScope.articleTotal)-($scope.checkedIds.length);
+							$rootScope.articleTotal=total<0?0:total;
 							$scope.pageChanged();
 						}
 					 });
@@ -195,6 +196,7 @@ app.controller('articleCtrl',
 						status:1,
 						content:"删除成功!",
 						callback:function(){
+							$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1)
 							$scope.pageChanged();
 						}
 					 });

@@ -136,14 +136,13 @@ exports.addFriend=function(req,res){
 					code:-1
 				});
 			}
-			friend.save(function(err,doc){
-				if(err){
-					return console.log('添加失败 err：'+err);
-				}
+			friend.save().then(function(doc){
 				res.json({
 					code:1,
 					friend:doc
 				});
+			}).catch(function(err){
+				return console.log('添加失败 err：'+err);
 			});
 		})
 		
@@ -155,14 +154,13 @@ exports.addFriend=function(req,res){
 			logo:logo,
 			sort:sort,
 			update_time:Date.now()
-			},function(err){
-			if(err){
-				return console.log('update err :'+err)
-			}
-			res.json({
-				code:1
+			}).then(function(){
+				res.json({
+					code:1
+				});
+			}).catch(function(err){
+				return console.log('update err :'+err);
 			});
-		})
 	}
 	
 }
@@ -194,14 +192,14 @@ exports.updateFriend=function(req,res){
 		logo:logo,
 		sort:sort,
 		update_time:Date.now()
-		},function(err){
-		if(err){
-			return console.log('update err :'+err)
-		}
-		res.json({
-			code:1
+		}).then(function(){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			return console.log('update err :'+err);
 		});
-	})
+	
 }
 
 

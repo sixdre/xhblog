@@ -58,7 +58,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	/*
 	 * delfriend 删除链接
 	 * */
-	$scope.delfriend=function(item){
+	$scope.delfriend=function(item){	
 		settingServices.delFriend(item._id).then(function(res){
 			if(res.data.code==1){
 				defPopService.defPop({

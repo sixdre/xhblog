@@ -82,9 +82,9 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},
 		function(banner,total,doc,newart,hot,callback){
-			/*Article.find({}).populate('category').exec(function(err,ddc){
+			Article.find({}).populate('category').exec(function(err,ddc){
 				console.log(ddc);
-			})*/
+			});
 			
 			/*Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
 				if(err){

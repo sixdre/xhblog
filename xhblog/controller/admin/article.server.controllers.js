@@ -107,19 +107,40 @@ module.exports={
 					name:req.body.type.value,
 					articles:[artDoc._id]
 				});
-				category.save(function(err,catDoc){
+				
+				Category.findByName(req.body.type.value,function(err,cate){	//由于文章类型唯一，首先要判断类型模型中有没有当前类型
 					if(err){
-						return console.log(err);
+						return console.log(err)
 					}
-					artDoc.category=catDoc._id;
-					artDoc.save(function(err){
-						if(err){
-							return console.log(err);
-						}
-						res.json({
-							code:1
+					else if(cate){					//有的话就将当前文章添加到类型中
+						cate.articles.push(artDoc._id);
+						artDoc.category=cate._id;
+						cate.save(function(err){
+							artDoc.save(function(err){
+								if(err){
+									return console.log(err);
+								}
+								res.json({
+									code:1
+								});
+							});
 						});
-					})
+					}else{
+						category.save(function(err,catDoc){
+							if(err){
+								return console.log(err);
+							}
+							artDoc.category=catDoc._id;
+							artDoc.save(function(err){
+								if(err){
+									return console.log(err);
+								}
+								res.json({
+									code:1
+								});
+							});
+						});
+					}
 				});
 			});
 	},
@@ -193,8 +214,25 @@ module.exports={
 	remove:function(req, res) {
 		const id=req.body.id;
 		console.log(id);
-		Article.remove({bId:id},function(err,docs){
-			
+		Article.findById(id,function(doc1){
+			console.log(doc1.category);
+			Category.findOne({_id:doc1.category},function(err,doc2){
+				var len=doc2.articles.indexOf(doc1._id);
+				doc2.articles.splice(len,1);
+				console.log(doc2);
+				doc2.save(function(){
+					Article.remove({bId:id},function(err){
+						if(err){
+							return console.log(err);
+						}
+						res.json({
+							code:1
+						});
+					});
+				});
+			});
+		});
+		/*Article.remove({bId:id},function(err){
 			if(err){
 				return console.log(err)
 			}else{
@@ -202,12 +240,11 @@ module.exports={
 					code:1
 				})
 			}
-		})
+		})*/
 	},
 	//编辑文章搜寻
 	find:function(req,res){
 		const id=req.body.id;
-		console.log(id);
 		Article.findById(id,function(doc){
 			res.json({
 				article:doc
