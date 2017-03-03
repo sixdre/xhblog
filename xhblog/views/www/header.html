@@ -37,9 +37,9 @@
 			<li>
 				<a href="news.htm">新闻</a>
 				<ul>
-					<%types.forEach(function(v,i){%>
+					<%categorys.forEach(function(v,i){%>
 					<li>
-						<a href="/type/<%=v._id%>"><%=v._id%> <span><%=v.total%></span></a>
+						<a href="/category/<%=v.name%>"><%=v.name%> <span><%=v.articles.length%></span></a>
 					</li>
 					<%})%>
 				</ul>

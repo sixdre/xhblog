@@ -82,38 +82,32 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},
 		function(banner,total,doc,newart,hot,callback){
-			Article.find({}).populate('category').exec(function(err,ddc){
+			/*Article.find({}).populate('category').exec(function(err,ddc){
 				console.log(ddc);
-			})
-			/*Article.aggregate([
-               {
-                    $group: {
-                        _id: "$category",
-                        count: {$sum: 1}
-                    }
-                }
-            ],function(err,agg){
-				agg.forEach(function(v,i){
-					Category.findOne({_id:v._id}).exec(function(err,dd1){
-						console.log(dd1);
-					})
-					console.log(1);
-				})
-			});*/
-			Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
-				if(err){
-					return console.dir(err);
-				}
-				callback(null,banner,total,doc,newart,hot,types);
-			})
+			})*/
 			
+			/*Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
+				if(err){
+					return console.dir(err);		
+				}
+				callback(null,banner,total,doc,newart,hot,types);*/
+				/*前台页面导航
+				<%types.forEach(function(v,i){%>
+				<li>
+					<a href="/type/<%=v._id%>"><%=v._id%> <span><%=v.total%></span></a>
+				</li>
+				<%})%>*/
+			/*})*/
+			Category.find({}).exec(function(err,categorys){
+				callback(null,banner,total,doc,newart,hot,categorys);
+			})
 		},
-		function(banner,total,doc,newart,hot,types,callback){		//友情链接
+		function(banner,total,doc,newart,hot,categorys,callback){		//友情链接
 			Friend.findAll(function(friends){
-				callback(null,banner,total,doc,newart,hot,types,friends);
+				callback(null,banner,total,doc,newart,hot,categorys,friends);
 			})
 		}
-	],function(err,banner,total,article,newart,hot,types,friends){
+	],function(err,banner,total,article,newart,hot,categorys,friends){
 		app.locals.friends=friends;
 		res.render('www/', {
 			user:req.session["userSession"],
@@ -125,7 +119,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize,			//列表数
-			types:types,			//不同类型文章类型的数量,
+			categorys:categorys,			//文章类型
 			friends:app.locals.friends			//友情链接
 		});
 	});
@@ -159,18 +153,6 @@ module.exports={
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,1);
-		
-		/*Article.find({}).exec(function(err,doc){
-			if(err){
-				return console.dir(err);
-			}
-			for(var i=0;i<doc.length;i++){
-				console.log(doc[i].type);
-				if(doc[i].type="IT技术"){
-					console.log(1);
-				}
-			}
-		})*/
 	},
 	
 	/*showIndex:function(req,res){
@@ -210,19 +192,16 @@ module.exports={
 				});
 			},
 			function(doc,hot,nextArticle,prevArticle,callback){
-				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
-					if(err){
-						return console.dir(err);
-					}
-					callback(null,doc,hot,nextArticle,prevArticle,types);
+				Category.find({}).exec(function(err,categorys){
+					callback(null,doc,hot,nextArticle,prevArticle,categorys);
 				})
 			},
-			function(doc,hot,nextArticle,prevArticle,types,callback){		//友情链接
+			function(doc,hot,nextArticle,prevArticle,categorys,callback){		//友情链接
 				Friend.findAll(function(friends){
-					callback(null,doc,hot,nextArticle,prevArticle,types,friends);
+					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends);
 				})
 			}
-		],function(err,doc,hot,nextArticle,prevArticle,types,friends){
+		],function(err,doc,hot,nextArticle,prevArticle,categorys,friends){
 			res.render("www/detial",{
 				user:req.session["userSession"],
 				article:doc,
@@ -230,7 +209,7 @@ module.exports={
 				title:doc.title,
 				nextArticle:nextArticle,
 				prevArticle:prevArticle,
-				types:types,			//不同类型文章类型的数量
+				categorys:categorys,			//文章类型
 				friends:friends
 			});
 		})
