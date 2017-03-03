@@ -8,6 +8,7 @@ module.exports=function(){
 	db.once('open',function(callback){
 	  console.log('MongoDB连接成功！！');
 	});
+	require('../models/category.server.model.js');
     require('../models/articles.server.model.js');
     require('../models/manager.server.model.js');
     require('../models/banners.server.model.js');

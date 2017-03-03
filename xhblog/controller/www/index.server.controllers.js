@@ -2,6 +2,7 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
+const Category=mongoose.model("Category");
 const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
 const Lm = mongoose.model('Lm');				//留言
@@ -81,12 +82,31 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},
 		function(banner,total,doc,newart,hot,callback){
+			Article.find({}).populate('category').exec(function(err,ddc){
+				console.log(ddc);
+			})
+			/*Article.aggregate([
+               {
+                    $group: {
+                        _id: "$category",
+                        count: {$sum: 1}
+                    }
+                }
+            ],function(err,agg){
+				agg.forEach(function(v,i){
+					Category.findOne({_id:v._id}).exec(function(err,dd1){
+						console.log(dd1);
+					})
+					console.log(1);
+				})
+			});*/
 			Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
 				if(err){
 					return console.dir(err);
 				}
 				callback(null,banner,total,doc,newart,hot,types);
 			})
+			
 		},
 		function(banner,total,doc,newart,hot,types,callback){		//友情链接
 			Friend.findAll(function(friends){

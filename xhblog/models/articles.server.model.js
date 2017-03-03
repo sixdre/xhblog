@@ -15,10 +15,10 @@ const ArticleSchema=new Schema({
     	type:String,
     	//enum:['','']  //只能是
     },
-/*    category:{
+    category:{
 	    type: mongoose.Schema.Types.ObjectId,
-	    ref: 'category'
-	},*/
+	    ref: 'Category'
+	},
     content:String,
     tagcontent:String,
     imgurl:String,
@@ -185,7 +185,7 @@ ArticleSchema.plugin(autoIncrement.plugin, {
     model: 'Article',   //数据模块，需要跟同名 x.model("Books", BooksSchema);
     field: 'bId',     //字段名
     startAt: 1,    //开始位置，自定义
-    incrementBy: 1    //每次自增数量
+    incrementBy:1    //每次自增数量
 });
 ArticleSchema.pre('save', function(next) {
 	if(this.isNew) {

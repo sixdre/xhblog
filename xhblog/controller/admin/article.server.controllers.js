@@ -1,6 +1,7 @@
 //引入数据模型  
 var mongoose=require('mongoose');
 var Article = mongoose.model('Article');			//文章
+var Category=mongoose.model("Category");
 var Manager = mongoose.model('Manager');			//管理员
 var multiparty =require("connect-multiparty")
 
@@ -66,8 +67,6 @@ module.exports={
 					code:1
 				})
 			});
-			
-			
 		});
 		
 		
@@ -100,15 +99,29 @@ module.exports={
 				content:req.body.content,
 				tagcontent:req.body.tagcontent
 			});
-			article.save(function(err){
+			article.save(function(err,artDoc) {
 				if(err){
-					return console.log(err)
+					return console.log(err);
 				}
-				res.json({
-					code:1
+				var category=new Category({
+					name:req.body.type.value,
+					articles:[artDoc._id]
+				});
+				category.save(function(err,catDoc){
+					if(err){
+						return console.log(err);
+					}
+					artDoc.category=catDoc._id;
+					artDoc.save(function(err){
+						if(err){
+							return console.log(err);
+						}
+						res.json({
+							code:1
+						});
+					})
 				});
 			});
-		
 	},
 	//文章列表
 	list:function(req, res) {
