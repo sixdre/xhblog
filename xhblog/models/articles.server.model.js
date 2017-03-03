@@ -37,6 +37,7 @@ const ArticleSchema=new Schema({
 }*/
 //Schema.method( 'say', function(){console.log('hello');} ) 	//这样Model和Entity的实例就能使用这个方法了
  
+
  
 //查找所有
 ArticleSchema.statics.findAll = function(callback) {

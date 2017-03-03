@@ -99,7 +99,36 @@ module.exports={
 				content:req.body.content,
 				tagcontent:req.body.tagcontent
 			});
-			article.save(function(err,artDoc) {
+			article.save().then(function(artDoc){
+				console.log(artDoc);
+				var category=new Category({
+					name:req.body.type.value,
+					articles:[artDoc._id]
+				});
+				Category.findByName(req.body.type.value,function(err,cate){
+					if(err){
+						return console.log(err)
+					}
+					else if(cate){	
+						console.log(cate);
+						Category.update({'name':req.body.type.value}, {'$addToSet':{"articles":artDoc._id} },function(){
+							res.json({
+								code:1
+							});
+						});
+					}else{
+						category.save(function(){
+							res.json({
+								code:1
+							});
+						});
+					}
+				});
+			}).catch(function(err){
+				console.log('文章发布出错'+err);
+			});
+
+			/*article.save(function(err,artDoc) {
 				if(err){
 					return console.log(err);
 				}
@@ -142,7 +171,7 @@ module.exports={
 						});
 					}
 				});
-			});
+			});*/
 	},
 	//文章列表
 	list:function(req, res) {
@@ -164,7 +193,7 @@ module.exports={
 		var current=parseInt(req.body.current)-1;
 		var textCount=parseInt(req.body.textCount);
 		var query = Article.find({}).sort({
-			"time": -1
+			"create_time": -1
 		}).skip(textCount*current).limit(textCount);
 		Article.count({},function(err,total){
 			query.find(function(err, docs) {
@@ -216,7 +245,35 @@ module.exports={
 		console.log(id);
 		Article.findById(id,function(doc1){
 			console.log(doc1.category);
-			Category.findOne({_id:doc1.category},function(err,doc2){
+			Category.update({_id:doc1.category},{
+				$pull:{"articles": doc1._id}
+			}).then(function(raw){
+				Article.remove({bId:id}).exec(function(err){
+					if(err){
+						return console.log(err);
+					}
+					res.json({
+						code:1
+					});
+				});
+			}).catch(function(err){
+				console.log(err);
+			});
+			/*.then(function(doc){
+				console.log(doc);
+				Article.remove({bId:id}).exec(function(err){
+					if(err){
+						return console.log(err);
+					}
+					res.json({
+						code:1
+					});
+				});
+			}).catch(function(err){
+				console.log(err);
+			});*/
+			
+			/*Category.findOne({_id:doc1.category},function(err,doc2){
 				var len=doc2.articles.indexOf(doc1._id);
 				doc2.articles.splice(len,1);
 				console.log(doc2);
@@ -230,17 +287,8 @@ module.exports={
 						});
 					});
 				});
-			});
+			});*/
 		});
-		/*Article.remove({bId:id},function(err){
-			if(err){
-				return console.log(err)
-			}else{
-				res.json({
-					code:1
-				})
-			}
-		})*/
 	},
 	//编辑文章搜寻
 	find:function(req,res){
