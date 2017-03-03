@@ -99,6 +99,7 @@ module.exports={
 				content:req.body.content,
 				tagcontent:req.body.tagcontent
 			});
+			
 			article.save().then(function(artDoc){
 				console.log(artDoc);
 				var category=new Category({
@@ -110,16 +111,21 @@ module.exports={
 						return console.log(err)
 					}
 					else if(cate){	
-						console.log(cate);
 						Category.update({'name':req.body.type.value}, {'$addToSet':{"articles":artDoc._id} },function(){
-							res.json({
-								code:1
+							artDoc.category=cate._id;
+							artDoc.save(function(){
+								res.json({
+									code:1
+								});
 							});
 						});
 					}else{
-						category.save(function(){
-							res.json({
-								code:1
+						category.save(function(err,category){
+							artDoc.category=category._id;
+							artDoc.save(function(){
+								res.json({
+									code:1
+								});
 							});
 						});
 					}
@@ -319,10 +325,34 @@ module.exports={
 	
 	del:function(req,res){
 		console.log(req.body.ids);
-		Article.remove({bId:{$in:req.body.ids}})
+		Article.find({bId:{$in:req.body.ids}}).then(function(doc){
+			console.log(doc);
+			doc.forEach(function(v,i){
+				console.log(v);
+				Category.update({_id:v.category},{
+					$pull:{"articles": v._id}
+				}).then(function(raw){
+					console.log(123);
+					Article.remove({bId:v.bId}).exec(function(err){
+						if(err){
+							return console.log(err);
+						}
+					});
+				}).catch(function(err){
+					console.log(err);
+				});
+			});
+			console.log(123455);
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log('查询出错'+err);
+		});
+		/*Article.remove({bId:{$in:req.body.ids}})
 	    .then(function(){
 	        res.json({code:1})
-	    })
+	    })*/
 	},
 	testUpload:function(req,res){
 		/*console.log(req.files);
