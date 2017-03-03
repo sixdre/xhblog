@@ -10,6 +10,7 @@ module.exports=function(){
 	});
 	require('../models/category.server.model.js');
     require('../models/articles.server.model.js');
+    require('../models/comment.server.model.js');
     require('../models/manager.server.model.js');
     require('../models/banners.server.model.js');
     require('../models/leave_message.server.model.js');
