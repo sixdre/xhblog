@@ -13,6 +13,21 @@
 			#SOHUCS #SOHU_MAIN .section-title-w .title-user-w .user-wrap-w {
 				display: none;
 			}
+			.comment_item{
+				margin-bottom: 20px;
+			}
+			.userHead{
+				float: left;
+				width: 30px;
+				height: 30px;
+				background-color: #ddd;
+				cursor: pointer;
+			}
+			.usercommitContent{
+				float: left;
+				padding-left: 20px;
+				
+			}
 		</style>
 		
 	</head>
@@ -72,9 +87,26 @@
 				
 				<ul>
 					<%comments.forEach(function(v,i){%>
-						<li>
-							<span><%=v.content%></span>
-							<span><%=v.from.username%></span>
+						<li class="clearfix comment_item">
+							<div class="comment_user userHead" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">
+				
+							</div>
+							<div class="usercommitContent">
+								<h4><%=v.from.username%></h4>
+								<p><%=v.content%></p>
+								
+								<%if(v.reply&&v.reply.length>0){%>
+									<%v.reply.forEach(function(reply,i){%>
+									<div class="clearfix comment_list">
+										<div class="comment_user userHead"></div>
+										<div class="usercommitContent">
+											<h4><%=reply.from.username%></h4>
+											<p><%=reply.content%></p>
+										</div>
+									</div>	
+									<%})%>
+								<%}%>
+							</div>
 						</li>
 					<%})%>
 					

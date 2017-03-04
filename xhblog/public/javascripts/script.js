@@ -100,4 +100,25 @@ $(function() {
 		});
 	});
 	
+	
+	//
+	$('.comment_user').on('click',function(){
+		var cId=$(this).data('cid');		//当前评论的数据模型id
+		var toId=$(this).data('tid');		//评论用户的id
+		$('<input>').attr({
+			type:'hidden',
+			name:'toId',
+			value:toId
+		}).appendTo('#comment_form');
+		$('<input>').attr({
+			type:'hidden',
+			name:'cId',
+			value:cId
+		}).appendTo('#comment_form');
+	})
+	
+	
+	
+	
+	
 })

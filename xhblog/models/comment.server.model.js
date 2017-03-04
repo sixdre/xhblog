@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 const CommentSchema = new Schema({
 	  article:{type: ObjectId, ref: 'Article'},
 	  from:{type: ObjectId, ref: 'User'},		//谁评论
-	  to: {type: ObjectId, ref: 'User'},		//评论给谁
 	  reply:[{			
 		    from: {type: ObjectId, ref: 'User'},
 		    to: {type: ObjectId, ref: 'User'},

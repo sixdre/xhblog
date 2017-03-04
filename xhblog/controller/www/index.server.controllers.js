@@ -211,7 +211,7 @@ module.exports={
 				})
 			},
 			function(doc,hot,nextArticle,prevArticle,categorys,friends,callback){
-				Comment.find({article:doc._id}).populate('from','username').exec(function(err,comments){
+				Comment.find({article:doc._id}).populate('from','username').populate('reply.from reply.to','username').exec(function(err,comments){
 					console.log(comments);
 					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends,comments);
 				})
@@ -394,7 +394,32 @@ module.exports={
 		var _comment=req.body;
 		_comment.from=req.session["userSession"];
 		console.log(_comment);
-		var articleId=_comment.article;
+		if(_comment.cId){
+			Comment.findOne({_id:_comment.cId},function(err,comment){
+				var replay={
+					from:_comment.from,
+					to:_comment.toId,
+					content:_comment.content
+				};
+				comment.reply.push(replay);
+				comment.save(function(err,comment){
+					res.json({
+						code:1
+					});
+				})
+				
+			})
+		}else{
+			var comment=new Comment(_comment);
+			comment.save().then(function(comment){
+				res.json({
+					code:1
+				});
+			}).catch(function(err){
+				console.log('评论报错出错:'+err);
+			});
+		}
+		/*var articleId=_comment.article;
 		var comment=new Comment(_comment);
 		comment.save().then(function(comment){
 			res.json({
@@ -402,7 +427,7 @@ module.exports={
 			});
 		}).catch(function(err){
 			console.log('评论报错出错:'+err);
-		});
+		});*/
 	},
 	showWord:function(req,res){
 		checkUserStatus(req,res,function(){
