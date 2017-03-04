@@ -82,7 +82,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 				callback(null,banner,total,doc,newart,hot);
 			})
 		},
-		function(banner,total,doc,newart,hot,callback){
+		/*function(banner,total,doc,newart,hot,callback){
 			/*Article.find({}).populate('category').exec(function(err,ddc){
 				console.log(ddc);
 			});*/
@@ -99,16 +99,11 @@ var Indexs=function(req,res,currentPage,pageSize){
 				</li>
 				<%})%>*/
 			/*})*/
-			Category.find({}).exec(function(err,categorys){
+			/*Category.find({}).exec(function(err,categorys){
 				callback(null,banner,total,doc,newart,hot,categorys);
 			})
-		},
-		function(banner,total,doc,newart,hot,categorys,callback){		//友情链接
-			Friend.findAll(function(friends){
-				callback(null,banner,total,doc,newart,hot,categorys,friends);
-			})
-		}
-	],function(err,banner,total,article,newart,hot,categorys,friends){
+		},*/
+	],function(err,banner,total,article,newart,hot){
 		console.log(app.locals.user);
 		res.render('www/', {
 			title: '个人博客首页',
@@ -118,9 +113,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			newart:newart[0],	//最新文章
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
-			pagesize:pageSize,			//列表数
-			categorys:categorys,			//文章类型
-			friends:friends			//友情链接
+			pagesize:pageSize			//列表数
 		});
 	});
 }
@@ -151,7 +144,13 @@ function checkUserStatus(req,res,next){
 app.use(function(req,res,next){
 	var _user=req.session['userSession'];
 	app.locals.user=_user;
-	return next();
+	Category.find({}).exec(function(err,categorys){
+		Friend.find({},function(err,friends){
+			app.locals.friends=friends;
+			app.locals.categorys=categorys;
+		});
+	});
+	next();
 })
 
 
@@ -207,32 +206,18 @@ module.exports={
 				});
 			},
 			function(doc,hot,nextArticle,prevArticle,callback){
-				Category.find({}).exec(function(err,categorys){
-					callback(null,doc,hot,nextArticle,prevArticle,categorys);
-				})
-			},
-			function(doc,hot,nextArticle,prevArticle,categorys,callback){		//友情链接
-				Friend.findAll(function(friends){
-					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends);
-				})
-			},
-			function(doc,hot,nextArticle,prevArticle,categorys,friends,callback){
 				Comment.find({article:doc._id}).populate('from','username').populate('reply.from reply.to','username').exec(function(err,comments){
-					console.log(comments);
-					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends,comments);
+					callback(null,doc,hot,nextArticle,prevArticle,comments);
 				})
 			}
 			
-		],function(err,doc,hot,nextArticle,prevArticle,categorys,friends,comments){
+		],function(err,doc,hot,nextArticle,prevArticle,comments){
 			res.render("www/detial",{
-				user:req.session["userSession"],
 				article:doc,
 				hot:hot,
 				title:doc.title,
 				nextArticle:nextArticle,
 				prevArticle:prevArticle,
-				categorys:categorys,			//文章类型
-				friends:friends,
 				comments:comments			//评论
 			});
 		})
