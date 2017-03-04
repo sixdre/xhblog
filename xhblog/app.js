@@ -1,5 +1,6 @@
 var express = require('express');
 var session=require('express-session');
+var mongoStroe=require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 var formidable = require('formidable');
 var fs = require('fs'); 							//node.js核心的文件处理模块
@@ -30,8 +31,11 @@ app.use(session({
   //name: 'name',			//设置 cookie 中，保存 session 的字段名称，默认为 connect.sid 。
   cookie: {maxAge: 1000 * 60 * 60 * 24 * 30}, //超时时间
   saveUninitialized: true,
-  resave: true
-//store:new MongoStore({url: 'mongodb://localhost/runoob'})
+  resave: false,
+  store:new mongoStroe({
+	  url: 'mongodb://localhost/blog',
+	  collection:'sessions'
+  })
 }));
 
 //设置模板引擎
