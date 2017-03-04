@@ -11,6 +11,7 @@ module.exports = function(app) {
 	app.get('/doLogin', IndexCtrl.doLogin);						//登录
 	app.post('/doRegist', IndexCtrl.doRegist);					//注册
 	
+	app.post('/comment',IndexCtrl.checkLogin,IndexCtrl.postComment);			//评论
 	app.get('/word',IndexCtrl.showWord);		//留言
 	app.post('/word',IndexCtrl.postWord);						//提交留言
 	

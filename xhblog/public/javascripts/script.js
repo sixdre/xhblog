@@ -76,8 +76,28 @@ $(function() {
 			}
 		});
 	});
+	//评论
 	
-	
-	
+	$('#comment_submit').on('click',function(){
+		$.ajax({
+			type:"POST",
+			url:"/comment",
+			async:true,
+			data:$("#comment_form").serialize(), 
+			success:function(res){
+				if(res.code==-2){		//用户未登录请先登陆
+					alert('请先登陆');
+					window.location.href="/login";
+				}else if(res.code==1){
+					alert('评论成功');
+					window.location.reload();
+				}
+				console.log(res);
+			},
+			error:function(err){
+				
+			}
+		});
+	});
 	
 })

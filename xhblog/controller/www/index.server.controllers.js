@@ -7,6 +7,7 @@ const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
 const Lm = mongoose.model('Lm');				//留言
 const Friend=mongoose.model("Friend");
+const Comment=mongoose.model('Comment');
 const async = require('async');
 //var shoppingModel = global.dbHandle.getModel('shopping');
 
@@ -150,6 +151,14 @@ function checkUserStatus(req,res,next){
 
 
 module.exports={
+	checkLogin:function(req,res,next){
+		if(!req.session["userSession"]){
+	       return res.json({
+	    	   code:-2
+	       });
+	    }
+		next();
+	},
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,1);
@@ -200,8 +209,15 @@ module.exports={
 				Friend.findAll(function(friends){
 					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends);
 				})
+			},
+			function(doc,hot,nextArticle,prevArticle,categorys,friends,callback){
+				Comment.find({article:doc._id}).populate('from','username').exec(function(err,comments){
+					console.log(comments);
+					callback(null,doc,hot,nextArticle,prevArticle,categorys,friends,comments);
+				})
 			}
-		],function(err,doc,hot,nextArticle,prevArticle,categorys,friends){
+			
+		],function(err,doc,hot,nextArticle,prevArticle,categorys,friends,comments){
 			res.render("www/detial",{
 				user:req.session["userSession"],
 				article:doc,
@@ -210,7 +226,8 @@ module.exports={
 				nextArticle:nextArticle,
 				prevArticle:prevArticle,
 				categorys:categorys,			//文章类型
-				friends:friends
+				friends:friends,
+				comments:comments			//评论
 			});
 		})
 		
@@ -372,6 +389,20 @@ module.exports={
 				}
 			});
 		}
+	},
+	postComment:function(req,res){
+		var _comment=req.body;
+		_comment.from=req.session["userSession"];
+		console.log(_comment);
+		var articleId=_comment.article;
+		var comment=new Comment(_comment);
+		comment.save().then(function(comment){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log('评论报错出错:'+err);
+		});
 	},
 	showWord:function(req,res){
 		checkUserStatus(req,res,function(){

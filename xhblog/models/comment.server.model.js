@@ -3,13 +3,13 @@ const mongoose = require('mongoose')
     , ObjectId = Schema.Types.ObjectId;  
 const CommentSchema = new Schema({
 	  article:{type: ObjectId, ref: 'Article'},
-	  from:{type: ObjectId, ref: 'User'},
-	  reply:[{
+	  from:{type: ObjectId, ref: 'User'},		//谁评论
+	  to: {type: ObjectId, ref: 'User'},		//评论给谁
+	  reply:[{			
 		    from: {type: ObjectId, ref: 'User'},
 		    to: {type: ObjectId, ref: 'User'},
 		    content: String
 	  }],
-	  to: {type: ObjectId, ref: 'User'},
 	  content: String,
 	  create_time:{
 		  type: Date,
