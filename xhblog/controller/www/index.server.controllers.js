@@ -249,11 +249,11 @@ module.exports={
 		var title=req.query.wd;
 		async.waterfall([
 			function(callback){
-				Article.findByTitle(title,function(doc){
-					callback(null,doc);
+				Article.findByTitle(title,function(articles){
+					callback(null,articles);
 				});
 			},
-			function(doc,callback){
+			/*function(doc,callback){
 				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
 					if(err){
 						return console.dir(err);
@@ -264,12 +264,10 @@ module.exports={
 					}
 					callback(null,doc,result);
 				})
-			}
-		],function(err,article,typeNums){
+			}*/
+		],function(err,articles){
 			res.render("www/search_results",{
-				user:req.session["userSession"],
-				article:article,
-				typeNums:typeNums,
+				articles:articles,
 				title:'搜索结果'
 			});
 		});
