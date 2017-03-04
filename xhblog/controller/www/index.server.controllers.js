@@ -109,6 +109,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		}
 	],function(err,banner,total,article,newart,hot,categorys,friends){
+		console.log(app.locals.user);
 		res.render('www/', {
 			title: '个人博客首页',
 			banner:banner,
@@ -149,9 +150,7 @@ function checkUserStatus(req,res,next){
 
 app.use(function(req,res,next){
 	var _user=req.session['userSession'];
-	if(_user){
-		app.locals.user=_user;
-	}
+	app.locals.user=_user;
 	return next();
 })
 
@@ -300,6 +299,11 @@ module.exports={
 		res.render("www/regist",{
 			title:"用户注册"
 		})
+	},
+	logout:function(req,res){
+		delete req.session['userSession'];
+		delete app.locals.user;
+		res.redirect('/');
 	},
 	doLogin:function(req,res){
 		const username=req.query.username,

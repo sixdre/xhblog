@@ -7,7 +7,7 @@ module.exports = function(app) {
 	app.get('/search', IndexCtrl.showSearchResults);			//搜索文章
 	app.get('/login', IndexCtrl.showLogin);
 	app.get('/regist',IndexCtrl.showRegist);
-	
+	app.get('/logout',IndexCtrl.logout);
 	app.get('/doLogin', IndexCtrl.doLogin);						//登录
 	app.post('/doRegist', IndexCtrl.doRegist);					//注册
 	

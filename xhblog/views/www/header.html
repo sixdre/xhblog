@@ -2,7 +2,7 @@
 	<a href="/"><img src="/images/logo1.png" width="198" height="79"></a>
 	<div class="f-r header-relo">
 		<%if(user){%>
-			<p>欢迎您<%=user.username%></p>
+			<p>欢迎您<%=user.username%> | <a href="/logout">退出</a></p>
 		<%}else{%>
 			<span id="ihmlogin"><a href="/login" class="login_regist1_tmp">登录</a></span>｜ <span id="ihmreg"><a href="/regist"  >注册</a></span>
 		<%}%>
