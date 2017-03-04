@@ -29,7 +29,7 @@ app.use(cookieParser("xhtest"));
 app.use(session({
   secret: 'xhtest',
   //name: 'name',			//设置 cookie 中，保存 session 的字段名称，默认为 connect.sid 。
-  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30}, //超时时间
+  cookie: {maxAge: 1000 * 60 * 60 * 24}, //超时时间
   saveUninitialized: true,
   resave: false,
   store:new mongoStroe({
@@ -85,6 +85,9 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
         res.redirect('/ueditor/nodejs/config.json');
     }
 }));
+
+
+
 
 //根据浏览器地址来给后台左侧菜单添加选中状态
 

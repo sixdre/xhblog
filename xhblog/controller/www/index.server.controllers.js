@@ -83,9 +83,9 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},
 		function(banner,total,doc,newart,hot,callback){
-			Article.find({}).populate('category').exec(function(err,ddc){
+			/*Article.find({}).populate('category').exec(function(err,ddc){
 				console.log(ddc);
-			});
+			});*/
 			
 			/*Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
 				if(err){
@@ -109,9 +109,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		}
 	],function(err,banner,total,article,newart,hot,categorys,friends){
-		app.locals.friends=friends;
 		res.render('www/', {
-			user:req.session["userSession"],
 			title: '个人博客首页',
 			banner:banner,
 			total:total,
@@ -121,7 +119,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize,			//列表数
 			categorys:categorys,			//文章类型
-			friends:app.locals.friends			//友情链接
+			friends:friends			//友情链接
 		});
 	});
 }
@@ -148,6 +146,15 @@ function checkUserStatus(req,res,next){
     }
 	next();
 }
+
+app.use(function(req,res,next){
+	var _user=req.session['userSession'];
+	if(_user){
+		app.locals.user=_user;
+	}
+	return next();
+})
+
 
 
 module.exports={
