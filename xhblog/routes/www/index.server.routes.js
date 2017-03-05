@@ -1,19 +1,19 @@
 var IndexCtrl = require('../../controller/www/index.server.controllers');
 
 module.exports = function(app) {
-	app.get('/', IndexCtrl.showIndex);
+	app.get('/',IndexCtrl.common,IndexCtrl.showIndex);
 	app.get('/page/:page', IndexCtrl.showIndex);
-	app.get('/detial/:bid', IndexCtrl.showDetial);
-	app.get('/search', IndexCtrl.showSearchResults);			//搜索文章
+	app.get('/detial/:bid',IndexCtrl.common,IndexCtrl.showDetial);
+	app.get('/search',IndexCtrl.common,IndexCtrl.showSearchResults);			//搜索文章
 	app.get('/login', IndexCtrl.showLogin);
 	app.get('/regist',IndexCtrl.showRegist);
 	app.get('/logout',IndexCtrl.logout);
-	app.get('/doLogin', IndexCtrl.doLogin);						//登录
+	app.post('/doLogin', IndexCtrl.doLogin);						//登录
 	app.post('/doRegist', IndexCtrl.doRegist);					//注册
 	
 	app.post('/comment',IndexCtrl.checkLogin,IndexCtrl.postComment);			//评论
-	app.get('/word',IndexCtrl.showWord);		//留言
-	app.post('/word',IndexCtrl.postWord);						//提交留言
+	app.get('/word',IndexCtrl.common,IndexCtrl.showWord);		//留言
+	app.post('/word',IndexCtrl.checkLogin,IndexCtrl.postWord);						//提交留言
 	
 	app.get('/about',IndexCtrl.about);		//关于我
 	

@@ -18,7 +18,7 @@ $(function() {
 	//登录提交
 	$('#login_submit').on('click',function(){
 		$.ajax({
-			type:"GET",
+			type:"POST",
 			url:"/doLogin",
 			async:true,
 			data:$("#loginForm").serialize(), 
@@ -65,10 +65,11 @@ $(function() {
 			async:true,
 			data:$("#word_form").serialize(), 
 			success:function(res){
-				if(res.code>0){
-					alert(res.message);
-				}else{
-					alert(res.message)
+				if(res.code==-2){
+					alert('请先登陆');
+					window.location.href="/login";
+				}else if(res.code==1){
+					alert('留言成功');
 				}
 			},
 			error:function(err){

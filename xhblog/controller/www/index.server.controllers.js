@@ -9,39 +9,7 @@ const Lm = mongoose.model('Lm');				//留言
 const Friend=mongoose.model("Friend");
 const Comment=mongoose.model('Comment');
 const async = require('async');
-//var shoppingModel = global.dbHandle.getModel('shopping');
 
-/*var events = require('events');
-
-var cartsshop = [];
-var obj;
-var j = 0;
-var myEventEmitter = new events.EventEmitter();
-myEventEmitter.on('next', addResult);
-
-
-var carts=[1,'dwsd',5]*/
-/*function addResult() {
-	cartsshop.push(obj);
-	j++;
-	if(j == carts.length) {
-		console.log(cartsshop);
-		res.json(cartsshop);
-	}
-}
-for(var i = 0; i < carts.length; i++) {
-	var ii = i;
-	Article.findOne({
-		title: carts[ii]
-	}, function(err, shops) {
-		if(err) {
-			return next(err);
-		} else {
-			obj = shops;
-			myEventEmitter.emit('next');
-		}
-	});
-}*/
 /*Words.aggregate([{$match: {last:{$in:['a','e','i','o','u']}}},{$group:{_id:"$first", largest:{$max:"$size"}, smallest: {$min:"$size"}}}, {$sort:{_id: -1}}], function(err, results){
         console.log("\nLargest aned samllest word sizes for words beginning with a vowel: ");
         console.log(results);
@@ -144,12 +112,13 @@ function checkUserStatus(req,res,next){
 app.use(function(req,res,next){
 	var _user=req.session['userSession'];
 	app.locals.user=_user;
-	Category.find({}).exec(function(err,categorys){
+	/*Category.find({}).exec(function(err,categorys){
 		Friend.find({},function(err,friends){
 			app.locals.friends=friends;
 			app.locals.categorys=categorys;
 		});
 	});
+	next();*/
 	next();
 })
 
@@ -162,6 +131,15 @@ module.exports={
 	    	   code:-2
 	       });
 	    }
+		next();
+	},
+	common:function(req,res,next){
+		Category.find({}).exec(function(err,categorys){
+			Friend.find({},function(err,friends){
+				app.locals.friends=friends;
+				app.locals.categorys=categorys;
+			});
+		});
 		next();
 	},
 	showIndex:function(req, res) {
@@ -289,9 +267,10 @@ module.exports={
 		res.redirect('/');
 	},
 	doLogin:function(req,res){
-		const username=req.query.username,
-		  password=req.query.password;
+		const username=req.body.username,
+		  password=req.body.password;
 
+		console.log(username);
 		if(validator.isEmpty(username)){
 			res.json({
 				code:-2,
@@ -431,7 +410,21 @@ module.exports={
 		})
 	},
 	postWord:function(req,res){
-		checkSession(req.session["userSession"],function(status){
+		var lm=new Lm({
+			message:req.body.content,
+			username:req.session["userSession"].username,
+			userid:req.session["userSession"]._id
+		});
+		lm.save(function(err){
+			if(err){
+				return console.dir("留言失败:"+err)
+			}
+			res.json({
+				code:1
+			});
+		});
+
+		/*checkSession(req.session["userSession"],function(status){
 			if(status){
 				console.log(status)
 				res.json({
@@ -454,7 +447,7 @@ module.exports={
 					message:"留言成功"
 				});
 			})
-		});
+		});*/
 	},
 	about:function(req,res){
 		res.render("www/about",{
