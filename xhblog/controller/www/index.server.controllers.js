@@ -10,14 +10,6 @@ const Friend=mongoose.model("Friend");
 const Comment=mongoose.model('Comment');
 const async = require('async');
 
-/*Words.aggregate([{$match: {last:{$in:['a','e','i','o','u']}}},{$group:{_id:"$first", largest:{$max:"$size"}, smallest: {$min:"$size"}}}, {$sort:{_id: -1}}], function(err, results){
-        console.log("\nLargest aned samllest word sizes for words beginning with a vowel: ");
-        console.log(results);
-    }); 
-    
-db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : 1}}}]) */  
-
-
 /*
  	Object Indexs() 主页面访问
  * @params currentPage当前页面
@@ -146,12 +138,6 @@ module.exports={
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,1);
 	},
-	
-	/*showIndex:function(req,res){
-		auth(req,res,function(){
-			
-		})
-	},*/
 	showDetial:function(req,res){
 		const bid=req.params["bid"];
 		async.waterfall([
@@ -199,29 +185,6 @@ module.exports={
 				comments:comments			//评论
 			});
 		})
-		
-	/*	Article.count({'type':{$in:['0','1','2']}},function(err,doc){
-			if(err){
-				console.log(err)
-			}else{
-				
-				console.log(doc)
-			}
-		})*/
-		
-		/*Article.aggregate([{$group : {_id : "$type",total : {$sum : 1},url : {$push: "$url"}}}], function(err, results){
-//	      	callback(null,results);
-			results.forEach(function(v,i){
-				if(v._id=="0"){
-//					arr.id=
-					arr.push(v.total);
-				}else{
-					arr.push(v.total);
-				}
-			})
-		
-	       console.log(arr);
-	    });*/
 	},
 	showSearchResults:function(req,res){
 		var title=req.query.wd;
