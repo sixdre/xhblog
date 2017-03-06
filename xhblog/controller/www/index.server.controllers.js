@@ -2,12 +2,12 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
-const Category=mongoose.model("Category");
+const Category=mongoose.model("Category");			//类型
 const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
 const Lm = mongoose.model('Lm');				//留言
-const Friend=mongoose.model("Friend");
-const Comment=mongoose.model('Comment');
+const Friend=mongoose.model("Friend");			//友链
+const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
 
 /*
@@ -33,13 +33,13 @@ var Indexs=function(req,res,currentPage,pageSize){
 			});
 		},
 		function(banner,total,doc,callback){		//最新文章
-			Article.findNew(1,function(newart){
-				callback(null,banner,total,doc,newart);
+			Article.findNew(1,function(newArticle){
+				callback(null,banner,total,doc,newArticle);
 			});
 		},
-		function(banner,total,doc,newart,callback){		//热门文章
+		function(banner,total,doc,newArticle,callback){		//热门文章
 			Article.findByHot(3,function(hot){
-				callback(null,banner,total,doc,newart,hot);
+				callback(null,banner,total,doc,newArticle,hot);
 			})
 		},
 		/*function(banner,total,doc,newart,hot,callback){
@@ -63,14 +63,14 @@ var Indexs=function(req,res,currentPage,pageSize){
 				callback(null,banner,total,doc,newart,hot,categorys);
 			})
 		},*/
-	],function(err,banner,total,article,newart,hot){
+	],function(err,banner,total,article,newArticle,hot){
 		console.log(app.locals.user);
 		res.render('www/', {
 			title: '个人博客首页',
 			banner:banner,
 			total:total,
 			article:article,	//所有文章
-			newart:newart[0],	//最新文章
+			newArticle:newArticle[0],	//最新文章
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize			//列表数
@@ -143,6 +143,9 @@ module.exports={
 		async.waterfall([
 			function(callback){
 				Article.findById(bid,function(doc){
+					if(!doc){			//没有找到文章就发送一个404
+						return res.send(404, "Oops! We didn't find it");
+					}
 					Article.findByIdUpdate(bid,function(){
 						callback(null,doc);
 					})
@@ -227,13 +230,17 @@ module.exports={
 	logout:function(req,res){
 		delete req.session['userSession'];
 		delete app.locals.user;
-		res.redirect('/');
+		res.json({
+			code:1
+		});
 	},
 	doLogin:function(req,res){
 		const username=req.body.username,
-		  password=req.body.password;
-
-		console.log(username);
+		  password=req.body.password,
+		  ref=req.query.ref,
+		  articleId=req.query.articleId;
+		console.log(articleId);
+		
 		if(validator.isEmpty(username)){
 			res.json({
 				code:-2,
@@ -262,7 +269,9 @@ module.exports={
 					req.session["userSession"] = user;
 					res.json({
 						code:1,
-						message:"登录成功！"
+						message:"登录成功！",
+						ref:ref,
+						articleId:articleId
 					});
 					
 				}
@@ -372,15 +381,6 @@ module.exports={
 				console.log('评论报错出错:'+err);
 			});
 		}
-		/*var articleId=_comment.article;
-		var comment=new Comment(_comment);
-		comment.save().then(function(comment){
-			res.json({
-				code:1
-			});
-		}).catch(function(err){
-			console.log('评论报错出错:'+err);
-		});*/
 	},
 	showWord:function(req,res){
 		checkUserStatus(req,res,function(){

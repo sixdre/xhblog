@@ -49,7 +49,7 @@
 				<h1 class="f34 mt-50" style="height:auto"><%=article.title%></h1>
 				<div class="clearfix mt-25 pb-15 article-details-info">
 					<div class="article-details-user clearfix mr-15"> <span class="f13">作者：<%=article.author%></span> </div>
-					<span class="new-article-time"></span> <span class="mr-15"><%=article.create_time.toLocaleDateString()%></span>
+					<span class="new-article-time"></span> <span class="mr-15"><%=moment(article.create_time).format('YYYY-MM-DD')%></span>
 					<label><!--<span>来源：</span><span class="article-iheima">DOTA2</span>--><i class="fa fa-eye"></i> <%=article.views%></label>
 					<div class="article-my-review f-r clearfix"> <span class="article-review-icon"></span> <span>(<a href="#SOHUCS" id="changyan_count_unit"></a>)</span> </div>
 				</div>
@@ -94,48 +94,55 @@
 				<div style="width:25px;height:20px;position:relative;bottom:32px;left:845px;background-color:#FFF;"></div>-->
 				<!--搜狐畅言 ends-->
 				
-				<ul>
-					<%comments.forEach(function(v,i){%>
-						<li class="clearfix comment_item">
-							<div class="comment_user avatar">
-				
-							</div>
-							<div class="comment-main">
-								<h4 class="comment-header">
-									<span class="username"><%=v.from.username%></span>
-								</h4>
-								<p class="comment-content"><%=v.content%></p>
-								<div class="comment-footer">
-									<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
-									<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
-								</div>
-								<%if(v.reply&&v.reply.length>0){%>
-									<%v.reply.forEach(function(reply,i){%>
-									<div class="clearfix reply_list">
-										<div class="comment_user avatar">
-				
-										</div>
-										<div class="comment-main">
-											<h4 class="comment-header">
-												<span class="username"><%=reply.from.username%></span> 
-												回复
-												<span class="username"><%=reply.to.username%></span>
-											</h4>
-											<p class="comment-content"><%=reply.content%></p>
-											<div class="comment-footer">
-												<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
-												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-fromid="<%=user._id%>"  data-tid="<%=reply.from._id%>">回复</a>
-											</div>
-										</div>
-									</div>	
-									<%})%>
-								<%}%>
-							</div>
-						</li>
-					<%})%>
+				<div class="comment-wrapper">
+					<%if(!user){%>
+						<div class="guest_link">
+							您还没有登录,请<a href="/login?ref=detial&&articleId=<%=article.bId%>">[登录]</a>或
+							<a href="/regist">[注册]</a>
+						</div>
+					<%}%>
+					<ul>
+						<%comments.forEach(function(v,i){%>
+							<li class="clearfix comment_item">
+								<div class="comment_user avatar">
 					
-				</ul>
-				
+								</div>
+								<div class="comment-main">
+									<h4 class="comment-header">
+										<span class="username"><%=v.from.username%></span>
+									</h4>
+									<p class="comment-content"><%=v.content%></p>
+									<div class="comment-footer">
+										<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
+										<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+									</div>
+									<%if(v.reply&&v.reply.length>0){%>
+										<%v.reply.forEach(function(reply,i){%>
+										<div class="clearfix reply_list">
+											<div class="comment_user avatar">
+					
+											</div>
+											<div class="comment-main">
+												<h4 class="comment-header">
+													<span class="username"><%=reply.from.username%></span> 
+													回复
+													<span class="username"><%=reply.to.username%></span>
+												</h4>
+												<p class="comment-content"><%=reply.content%></p>
+												<div class="comment-footer">
+													<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
+													<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+												</div>
+											</div>
+										</div>	
+										<%})%>
+									<%}%>
+								</div>
+							</li>
+						<%})%>
+						
+					</ul>
+				</div>
 				<form id="comment_form" onsubmit="return false;">
 					<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
 					<textarea name="content" rows="" cols=""></textarea>

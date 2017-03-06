@@ -27,7 +27,7 @@
 								<a href="<%=value.url%>"><img src="<%=value.imgAdress%>"></a>
 								<div class="hd-introword f-l pos-r">
 									<h2><a href="" ><%=value.dec%></a></h2>
-									<div class="pos-a"> <span class="f-l"><%=value.create_time.toLocaleDateString()%></span> </div>
+									<div class="pos-a"> <span class="f-l"><%=moment(value.create_time).format('YYYY-MM-DD')%></span> </div>
 								</div>
 							</div>
 						</li>
@@ -96,7 +96,7 @@
 							<h3 class="f20"><a href="/detial/<%=value.bId%>"><%=value.title%></a></h3>
 							<div class="new-user-info mt-5">
 								<div class="new-user-name mr-40"> <span>作者：<a href="/detial/<%=value.bId%>" ><%=value.author%></a></span> </div>
-								<span class="new-article-time"></span> <span><%=value.create_time.toLocaleDateString()%></span> </div>
+								<span class="new-article-time"></span> <span><%=moment(value.create_time).format('YYYY-MM-DD')%></span> </div>
 							<div class="new-article-intro f14  mt-20">
 								<p><%-value.content.substring(0,100)%>...</p>
 							</div>
@@ -131,13 +131,13 @@
 			<div class="col-r-extra f-r w-300">
 				<div class="new-mag clearfix">
 					<h2 class="f22"><span>最新</span>文章</h2>
-					<%if(newart){%>
+					<%if(newArticle){%>
 						<div class="new-mag-info mt-20">
-							<a href="/detial/<%=newart.bId%>"><img src="/images/ss1.jpg"></a>
+							<a href="/detial/<%=newArticle.bId%>"><img src="/images/ss1.jpg"></a>
 							<div class="new-mag-intro f12 p1-14">
-								<h6 class="mt-6"><%=newart.title%></h6>
-								<h6 class="mt-5">发布时间：<span><%=newart.create_time.toLocaleDateString()%></span></h6>
-								<a href="/detial/<%=newart.bId%>" class="new-mag-online f14 mt-15" target='_blank'>查看详情</a>
+								<h6 class="mt-6"><%=newArticle.title%></h6>
+								<h6 class="mt-5">发布时间：<span><%=moment(newArticle.create_time).format('YYYY-MM-DD')%></span></h6>
+								<a href="/detial/<%=newArticle.bId%>" class="new-mag-online f14 mt-15" target='_blank'>查看详情</a>
 							</div>
 						</div>
 					<%}%>
@@ -153,7 +153,7 @@
 							</div>
 							<div class="f-l text_right">
 								<h3 class="f14"><a href="/detial/<%=value.bId%>" ><%=value.title%></a></h3>
-								<span class="hot-article-time f-l f13"><%=value.create_time.toLocaleDateString()%></span>
+								<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
 							</div>
 						</li>
 						<%})%>

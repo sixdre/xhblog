@@ -1,5 +1,34 @@
 $(function() {
 	
+	//获取地址栏参数
+	function GetQueryString(name){
+	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	     var r = window.location.search.substr(1).match(reg);
+	     if(r!=null)return  unescape(r[2]); return null;
+	}
+	
+	function logout(){
+		$.ajax({
+			type:"GET",
+			url:"/logout",
+			async:true,
+			success:function(res){
+				if(res.code>0){
+					window.location.reload();
+				}else{
+					alert('出错了');
+				}
+			},
+			error:function(err){
+				
+			}
+		})
+	}
+	
+	$('#logout').on('click',function(){
+		logout();
+		return false;
+	})
 	//首页顶部轮播
 	$("#demo1").slide({ mainCell:".bd ul",effect:"topLoop",autoPlay:true,triggerTime:0 });
 	//滚动到顶部
@@ -17,15 +46,21 @@ $(function() {
 	
 	//登录提交
 	$('#login_submit').on('click',function(){
+		var ref=GetQueryString('ref');
+		var articleId=GetQueryString('articleId');
 		$.ajax({
 			type:"POST",
-			url:"/doLogin",
+			url:"/doLogin?ref="+ref+'&articleId='+articleId,
 			async:true,
 			data:$("#loginForm").serialize(), 
 			success:function(res){
 				if(res.code>0){
 					alert(res.message);
-					window.location.href="/";
+					if(res.ref=="detial"){
+						window.location.href="/detial/"+res.articleId;
+					}else{
+						window.location.href="/";
+					} 
 				}else{
 					alert(res.message)
 				}
@@ -92,31 +127,43 @@ $(function() {
 			'</div>'+
 		'</form>';
 	
+	//评论
+	function Comment(formId){
+		var content=$(formId).find('textarea[name="content"]').val().trim();
+		if(content.length>0){
+			$.ajax({
+				type:"POST",
+				url:"/comment",
+				async:true,
+				data:$(formId).serialize(),
+				success:function(res){
+					if(res.code==-2){		//用户未登录请先登陆
+						alert('请先登陆');
+						window.location.href="/login";
+					}else if(res.code==1){
+						alert('评论成功');
+						window.location.reload();
+					}
+					console.log(res);
+				},
+				error:function(err){
+					
+				}
+			});
+		}else{
+			alert('请输入评论内容!');
+		}
+		
+	}
+	
+	
+	
 	
 	$('#comment_submit').on('click',function(){
-		$.ajax({
-			type:"POST",
-			url:"/comment",
-			async:true,
-			data:$("#comment_form").serialize(),
-			success:function(res){
-				if(res.code==-2){		//用户未登录请先登陆
-					alert('请先登陆');
-					window.location.href="/login";
-				}else if(res.code==1){
-					alert('评论成功');
-					window.location.reload();
-				}
-				console.log(res);
-			},
-			error:function(err){
-				
-			}
-		});
+		Comment('#comment_form');
 	});
 	
 	$('.reply_a').on('click',function(){
-		var fromId=$(this).data('fromid');
 		var cId=$(this).data('cid');		//当前评论的数据模型id
 		var toId=$(this).data('tid');		//评论用户的id
 		$('#reply_form').remove();
@@ -129,29 +176,7 @@ $(function() {
 	
 	
 	$('body').delegate('#replay_submit',"click",function(){
-		var content=$('#reply_form textarea[name="content"]').val().trim();
-		if(content.length>0){
-			$.ajax({
-				type:"POST",
-				url:"/comment",
-				async:true,
-				data:$("#reply_form").serialize(),
-				success:function(res){
-					if(res.code==-2){		//用户未登录请先登陆
-						alert('请先登陆');
-						window.location.href="/login";
-					}else if(res.code==1){
-						alert('评论成功');
-						window.location.reload();
-					}
-				},
-				error:function(err){
-					
-				}
-			});
-		}else{
-			alert('请输入评论内容!');
-		}
+		Comment('#reply_form');
 	});
 	
 	
