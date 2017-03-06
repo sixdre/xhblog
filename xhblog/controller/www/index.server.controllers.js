@@ -10,6 +10,24 @@ const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
 
+
+/*
+ * app.use 可以在多个页面获取用户session
+ */
+app.use(function(req,res,next){
+	var _user=req.session['User'];
+	app.locals.user=_user;
+	/*Category.find({}).exec(function(err,categorys){
+		Friend.find({},function(err,friends){
+			app.locals.friends=friends;
+			app.locals.categorys=categorys;
+		});
+	});
+	next();*/
+	next();
+});
+
+
 /*
  	Object Indexs() 主页面访问
  * @params currentPage当前页面
@@ -18,28 +36,28 @@ const async = require('async');
 var Indexs=function(req,res,currentPage,pageSize){
 	async.waterfall([
 		function(callback){
-			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banner){
+			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
 				if(err){
 					return console.log("banner find err:",err)
 				}
-				callback(null,banner);
+				callback(null,banners);
 			})
 		},
-		function(banner,callback){
+		function(banners,callback){
 			Article.count({},function(err,total){	//所有文章
-				Article.find({}).skip((currentPage-1)*pageSize).limit(pageSize).exec(function(err,doc){
-					callback(null,banner,total,doc);
+				Article.find({}).skip((currentPage-1)*pageSize).limit(pageSize).populate('category','name').exec(function(err,articles){
+					callback(null,banners,total,articles);
 				})
 			});
 		},
-		function(banner,total,doc,callback){		//最新文章
+		function(banners,total,articles,callback){		//最新文章
 			Article.findNew(1,function(newArticle){
-				callback(null,banner,total,doc,newArticle);
+				callback(null,banners,total,articles,newArticle);
 			});
 		},
-		function(banner,total,doc,newArticle,callback){		//热门文章
+		function(banners,total,articles,newArticle,callback){		//热门文章
 			Article.findByHot(3,function(hot){
-				callback(null,banner,total,doc,newArticle,hot);
+				callback(null,banners,total,articles,newArticle,hot);
 			})
 		},
 		/*function(banner,total,doc,newart,hot,callback){
@@ -63,13 +81,13 @@ var Indexs=function(req,res,currentPage,pageSize){
 				callback(null,banner,total,doc,newart,hot,categorys);
 			})
 		},*/
-	],function(err,banner,total,article,newArticle,hot){
+	],function(err,banners,total,articles,newArticle,hot){
 		console.log(app.locals.user);
 		res.render('www/', {
 			title: '个人博客首页',
-			banner:banner,
+			banners:banners,
 			total:total,
-			article:article,	//所有文章
+			articles:articles,	//所有文章
 			newArticle:newArticle[0],	//最新文章
 			hot:hot,				//热门文章
 			currentpage:currentPage,	//当前页码
@@ -77,43 +95,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 		});
 	});
 }
-  
-
-/*
- * checkSession 检测session
- * 
- * */
-function checkSession(ss,callback){
-	if(ss){
-		return callback(null);
-	}else{
-		return callback("err");
-	}
-}
-
-/*
- * checkUserStatus 检查用户是否登陆
- * */
-function checkUserStatus(req,res,next){
-	if(!req.session["User"]){
-        res.redirect('login');		//res.redirect会终端ajax请求
-    }
-	next();
-}
-
-app.use(function(req,res,next){
-	var _user=req.session['User'];
-	app.locals.user=_user;
-	/*Category.find({}).exec(function(err,categorys){
-		Friend.find({},function(err,friends){
-			app.locals.friends=friends;
-			app.locals.categorys=categorys;
-		});
-	});
-	next();*/
-	next();
-})
-
 
 
 module.exports={
@@ -133,7 +114,7 @@ module.exports={
 	},
 	common:function(req,res,next){
 		Category.find({}).exec(function(err,categorys){
-			Friend.find({},function(err,friends){
+			Friend.find({}).exec(function(err,friends){
 				app.locals.friends=friends;
 				app.locals.categorys=categorys;
 			});
@@ -142,7 +123,7 @@ module.exports={
 	},
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
-		Indexs(req,res,pageNum,1);
+		Indexs(req,res,pageNum,3);
 	},
 	showDetial:function(req,res){
 		const bid=req.params["bid"];
@@ -167,7 +148,7 @@ module.exports={
 			function(doc,callback){
 				Article.findByHot(2,function(hot){
 					callback(null,doc,hot);
-				})
+				});
 			},
 			function(doc,hot,callback){
 				Article.findOne({bId:{'$gt':bid}},function(err,nextArticle){
@@ -188,7 +169,7 @@ module.exports={
 			function(doc,hot,nextArticle,prevArticle,callback){
 				Comment.find({article:doc._id}).populate('from','username').populate('reply.from reply.to','username').exec(function(err,comments){
 					callback(null,doc,hot,nextArticle,prevArticle,comments);
-				})
+				});
 			}
 			
 		],function(err,doc,hot,nextArticle,prevArticle,comments){
@@ -200,7 +181,7 @@ module.exports={
 				prevArticle:prevArticle,
 				comments:comments			//评论
 			});
-		})
+		});
 	},
 	showSearchResults:function(req,res){
 		var title=req.query.wd;
@@ -220,19 +201,11 @@ module.exports={
 	showLogin:function(req,res){
 		res.render("www/login",{
 			title:"用户登录"
-		})
+		});
 	},
 	showRegist:function(req,res){
-		
 		res.render("www/regist",{
 			title:"用户注册"
-		})
-	},
-	logout:function(req,res){
-		delete req.session['User'];
-		delete app.locals.user;
-		res.json({
-			code:1
 		});
 	},
 	doLogin:function(req,res){
@@ -240,8 +213,6 @@ module.exports={
 		  password=req.body.password,
 		  ref=req.query.ref,
 		  articleId=req.query.articleId;
-		console.log(articleId);
-		
 		if(validator.isEmpty(username)){
 			res.json({
 				code:-2,
@@ -336,6 +307,13 @@ module.exports={
 			});
 		}
 	},
+	logout:function(req,res){
+		delete req.session['User'];
+		delete app.locals.user;
+		res.json({
+			code:1
+		});
+	},
 	postComment:function(req,res){
 		var _comment=req.body;
 		_comment.from=req.session["User"];
@@ -362,8 +340,6 @@ module.exports={
 					content:_comment.content,
 					create_time:Date.now()
 				};
-				
-				
 				comment.reply.push(reply);
 				comment.save(function(err,comment){
 					res.json({
@@ -386,13 +362,7 @@ module.exports={
 	showWord:function(req,res){
 		res.render("www/word",{
 			title:'留言'
-		})
-		
-		/*checkUserStatus(req,res,function(){
-			res.render("www/word",{
-				title:'留言'
-			})
-		})*/
+		});
 	},
 	postWord:function(req,res){
 		var lm=new Lm({
@@ -408,31 +378,6 @@ module.exports={
 				code:1
 			});
 		});
-
-		/*checkSession(req.session["User"],function(status){
-			if(status){
-				console.log(status)
-				res.json({
-					code:-1,
-					message:"请先登录"
-				});
-			}
-			var lm=new Lm({
-				message:req.body.content,
-				username:req.session["User"].username,
-				userid:req.session["User"]._id
-			});
-			lm.save(function(err){
-				if(err){
-					return console.dir("err:"+err)
-				}
-				console.dir("留言成功");
-				res.json({
-					code:1,
-					message:"留言成功"
-				});
-			})
-		});*/
 	},
 	about:function(req,res){
 		res.render("www/about",{

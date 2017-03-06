@@ -21,7 +21,7 @@
 		<div id="demo1" class="picBtnTop center">
 			<div class="hd">
 				<ul>
-					<%banner.forEach(function(value,i){%>
+					<%banners.forEach(function(value,i){%>
 						<li class="hd-intro1">
 							<div>
 								<a href="<%=value.url%>"><img src="<%=value.imgAdress%>"></a>
@@ -36,44 +36,17 @@
 			</div>
 			<div class="bd">
 				<ul>
-					<%banner.forEach(function(value,i){%>
+					<%banners.forEach(function(value,i){%>
 						<li>
 							<div class="bg"></div>
 							<div class="pic">
 								<a href="<%=value.url%>"> <img src="<%=value.imgAdress%>" /></a>
 							</div>
 							<div class="title">
-								<a href="<%=value.url%>"><%=value.dec%></a>
+								<a href="<%=value.url%>"><%=banners.dec%></a>
 							</div>
 						</li>
 					<%})%>
-					<!--<li>
-						<div class="bg"></div>
-						<div class="pic">
-							<a href=""> <img src="/images/hd2.jpg" /></a>
-						</div>
-						<div class="title">
-							<a href="">2015年秋季赛互动指南</a>
-						</div>
-					</li>
-					<li>
-						<div class="bg"></div>
-						<div class="pic">
-							<a href=""> <img src="/images/hd3.jpg" /></a>
-						</div>
-						<div class="title">
-							<a href="">联想杯DOTA 2完美世界全国高校联赛</a>
-						</div>
-					</li>
-					<li>
-						<div class="bg"></div>
-						<div class="pic">
-							<a href=""> <img src="/images/hd1.jpg" /></a>
-						</div>
-						<div class="title">
-							<a href="">MLG线下赛总决赛：Secret战胜EG获冠军</a>
-						</div>
-					</li>-->
 				</ul>
 			</div>
 		</div>
@@ -81,13 +54,13 @@
 			<div class="col-l-main f-l list_item">
 				<h2><span>推荐</span>文章</h2>
 				<ul class="clearfix article_list" id="article_list">
-					<%article.forEach(function(value,i){%>
+					<%articles.forEach(function(value,i){%>
 					<li class="clearfix">
 						<div class="new-img-list pos-r f-l mr-18 clearfix">
 							<a href="/detial/<%=value.bId%>"> <img src="/images/hd3.jpg" />
 								<a href="/detial/<%=value.bId%>" target="_blank"> 
 								
-									<span class="pos-a f14"><%=value.type%></span> 
+									<span class="pos-a f14"><%=value.category.name%></span> 
 								
 								</a>
 							</a>
