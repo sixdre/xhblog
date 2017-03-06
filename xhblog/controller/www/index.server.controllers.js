@@ -379,6 +379,20 @@ module.exports={
 			});
 		});
 	},
+	category:function(req,res){
+		let category_name=req.params.val;
+		Category.findOne({name:category_name}).then(function(category){
+			Article.find({category:category._id}).populate('category','name').then(function(articles){
+				console.log(articles);
+				res.render('www/category',{
+					articles:articles,
+					title:category_name+'——徐浩的个人博客'
+				});
+			});
+		}).catch(function(){
+			
+		});
+	},
 	about:function(req,res){
 		res.render("www/about",{
 			title:'关于我'

@@ -105,6 +105,7 @@ $(function() {
 					window.location.href="/login";
 				}else if(res.code==1){
 					alert('留言成功');
+					window.location.reload();
 				}
 			},
 			error:function(err){
