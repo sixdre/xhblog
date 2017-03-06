@@ -84,15 +84,11 @@ $(function() {
 			'<input type="hidden" name="toId" value="">'+
 			'<input type="hidden" name="cId" value="">'+
 			'<input type="hidden" name="article" value="">'+
-			'<div class="ds-textarea-wrapper ds-rounded-top">'+
+			'<div>'+
 				'<textarea name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea>'+
-				'<pre class="ds-hidden-text"></pre>'+
 			'</div>'+
-			'<div class="ds-post-toolbar">'+
-				'<div class="ds-post-options ds-gradient-bg">'+
-					'<span class="ds-sync"></span>'+
-				'</div>'+
-				'<button id="replay_submit" class="ds-post-button" type="submit">发布</button>'+
+			'<div>'+
+				'<button id="replay_submit" type="submit">发布</button>'+
 			'</div>'+
 		'</form>';
 	
@@ -119,11 +115,11 @@ $(function() {
 		});
 	});
 	
-	$('.comment_user').on('click',function(){
+	$('.reply_a').on('click',function(){
 		var cId=$(this).data('cid');		//当前评论的数据模型id
 		var toId=$(this).data('tid');		//评论用户的id
 		$('#reply_form').remove();
-		$(this).parents('.comment_item').append(replyForm);
+		$(this).parent().parent().append(replyForm);
 		$('#reply_form input[name="toId"]').val(toId);
 		$('#reply_form input[name="cId"]').val(cId);
 		$('#reply_form input[name="article"]').val($('#articleId').val());

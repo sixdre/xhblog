@@ -16,17 +16,26 @@
 			.comment_item{
 				margin-bottom: 20px;
 			}
-			.userHead{
+			.comment_item .username{
+				color:#d32 ;
+			}
+			.comment_item .avatar{
 				float: left;
-				width: 30px;
-				height: 30px;
+				width: 50px;
+				height: 50px;
 				background-color: #ddd;
 				cursor: pointer;
 			}
-			.usercommitContent{
-				float: left;
-				padding-left: 20px;
-				
+			.comment_item .comment-main{
+				padding-left: 60px;
+			}
+			.comment_item .comment-main .comment-content{
+				word-wrap: break-word;
+				margin: 2px 0;
+				font-size: 14px;
+			}
+			.comment_item .comment-footer{
+				margin-bottom: 10px;
 			}
 		</style>
 		
@@ -88,20 +97,35 @@
 				<ul>
 					<%comments.forEach(function(v,i){%>
 						<li class="clearfix comment_item">
-							<div class="comment_user userHead" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">
+							<div class="comment_user avatar">
 				
 							</div>
-							<div class="usercommitContent">
-								<h4><%=v.from.username%></h4>
-								<p><%=v.content%></p>
-								
+							<div class="comment-main">
+								<h4 class="comment-header">
+									<span class="username"><%=v.from.username%></span>
+								</h4>
+								<p class="comment-content"><%=v.content%></p>
+								<div class="comment-footer">
+									<span class="comment-time"></span>
+									<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+								</div>
 								<%if(v.reply&&v.reply.length>0){%>
 									<%v.reply.forEach(function(reply,i){%>
-									<div class="clearfix comment_list">
-										<div class="comment_user userHead" data-cid="<%=v._id%>" data-tid="<%=reply.from._id%>"></div>
-										<div class="usercommitContent">
-											<h4><%=reply.from.username%> 回复 <%=reply.to.username%></h4>
-											<p><%=reply.content%></p>
+									<div class="clearfix reply_list">
+										<div class="comment_user avatar">
+				
+										</div>
+										<div class="comment-main">
+											<h4 class="comment-header">
+												<span class="username"><%=reply.from.username%></span> 
+												回复
+												<span class="username"><%=reply.to.username%></span>
+											</h4>
+											<p class="comment-content"><%=reply.content%></p>
+											<div class="comment-footer">
+												<span class="comment-time"></span>
+												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=reply.from._id%>">回复</a>
+											</div>
 										</div>
 									</div>	
 									<%})%>
