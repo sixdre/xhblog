@@ -16,7 +16,7 @@ module.exports=function(){
 			var newPath=path+'/'+file;
 			var stat=fs.statSync(newPath);
 			if(stat.isFile()){
-				if(/(.*)\js/.test(file)){
+				if(/(.*)\.(js)/.test(file)){
 					require(newPath)
 				}
 			}else if(stat.isDirectory()){
