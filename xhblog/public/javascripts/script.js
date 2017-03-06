@@ -79,12 +79,30 @@ $(function() {
 	});
 	//评论
 	
+	
+	var replyForm='<form id="reply_form" method="post" onsubmit="return false;">'+
+			'<input type="hidden" name="toId" value="">'+
+			'<input type="hidden" name="cId" value="">'+
+			'<input type="hidden" name="article" value="">'+
+			'<div class="ds-textarea-wrapper ds-rounded-top">'+
+				'<textarea name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea>'+
+				'<pre class="ds-hidden-text"></pre>'+
+			'</div>'+
+			'<div class="ds-post-toolbar">'+
+				'<div class="ds-post-options ds-gradient-bg">'+
+					'<span class="ds-sync"></span>'+
+				'</div>'+
+				'<button id="replay_submit" class="ds-post-button" type="submit">发布</button>'+
+			'</div>'+
+		'</form>';
+	
+	
 	$('#comment_submit').on('click',function(){
 		$.ajax({
 			type:"POST",
 			url:"/comment",
 			async:true,
-			data:$("#comment_form").serialize(), 
+			data:$("#comment_form").serialize(),
 			success:function(res){
 				if(res.code==-2){		//用户未登录请先登陆
 					alert('请先登陆');
@@ -101,9 +119,47 @@ $(function() {
 		});
 	});
 	
+	$('.comment_user').on('click',function(){
+		var cId=$(this).data('cid');		//当前评论的数据模型id
+		var toId=$(this).data('tid');		//评论用户的id
+		$('#reply_form').remove();
+		$(this).parents('.comment_item').append(replyForm);
+		$('#reply_form input[name="toId"]').val(toId);
+		$('#reply_form input[name="cId"]').val(cId);
+		$('#reply_form input[name="article"]').val($('#articleId').val());
+	});
+	
+	
+	
+	$('body').delegate('#replay_submit',"click",function(){
+		var content=$('#reply_form textarea[name="content"]').val().trim();
+		if(content.length>0){
+			$.ajax({
+				type:"POST",
+				url:"/comment",
+				async:true,
+				data:$("#reply_form").serialize(),
+				success:function(res){
+					if(res.code==-2){		//用户未登录请先登陆
+						alert('请先登陆');
+						window.location.href="/login";
+					}else if(res.code==1){
+						alert('评论成功');
+						window.location.reload();
+					}
+				},
+				error:function(err){
+					
+				}
+			});
+		}else{
+			alert('请输入评论内容!');
+		}
+	});
+	
 	
 	//
-	$('.comment_user').on('click',function(){
+	/*$('.comment_user').on('click',function(){
 		var cId=$(this).data('cid');		//当前评论的数据模型id
 		var toId=$(this).data('tid');		//评论用户的id
 		
@@ -130,7 +186,7 @@ $(function() {
 		}
 		
 		
-	})
+	})*/
 	
 	
 	
