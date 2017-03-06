@@ -15,6 +15,9 @@ module.exports = function(app) {
 	app.get('/word',IndexCtrl.checkLoginByNative,IndexCtrl.common,IndexCtrl.showWord);		//留言
 	app.post('/word',IndexCtrl.checkLoginByAjax,IndexCtrl.postWord);						//提交留言
 	
+	app.get('/category/:val',IndexCtrl.common,IndexCtrl.category);						//提交留言
+	
+	
 	app.get('/about',IndexCtrl.about);		//关于我
 	
 	

@@ -18,7 +18,7 @@ angular.module('app')
     	  $rootScope.lm=res.data.lmdoc;
     	  $rootScope.manager=res.data.manager;
 		  if(!$rootScope.manager){
-			  /*$state.go("access.signin");*/
+			  $state.go("access.signin");
 		  }
 	  }).catch(function(err){
 		 console.log(err)
