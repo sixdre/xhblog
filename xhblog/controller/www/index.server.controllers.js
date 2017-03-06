@@ -95,14 +95,14 @@ function checkSession(ss,callback){
  * checkUserStatus 检查用户是否登陆
  * */
 function checkUserStatus(req,res,next){
-	if(!req.session["userSession"]){
+	if(!req.session["User"]){
         res.redirect('login');		//res.redirect会终端ajax请求
     }
 	next();
 }
 
 app.use(function(req,res,next){
-	var _user=req.session['userSession'];
+	var _user=req.session['User'];
 	app.locals.user=_user;
 	/*Category.find({}).exec(function(err,categorys){
 		Friend.find({},function(err,friends){
@@ -117,12 +117,18 @@ app.use(function(req,res,next){
 
 
 module.exports={
-	checkLogin:function(req,res,next){
-		if(!req.session["userSession"]){
+	checkLoginByAjax:function(req,res,next){		//对ajax请求来进行用户状态判断
+		if(!req.session["User"]){
 	       return res.json({
 	    	   code:-2
 	       });
 	    }
+		next();
+	},
+	checkLoginByNative:function(req,res,next){		//对链接跳转请求来进行用户状态判断
+		if(!req.session["User"]){
+			return res.redirect('login');
+		}
 		next();
 	},
 	common:function(req,res,next){
@@ -142,13 +148,20 @@ module.exports={
 		const bid=req.params["bid"];
 		async.waterfall([
 			function(callback){
-				Article.findById(bid,function(doc){
-					if(!doc){			//没有找到文章就发送一个404
+				Article.findById(bid,function(article){
+					if(!article){			//没找到就发送一个404
 						return res.send(404, "Oops! We didn't find it");
 					}
-					Article.findByIdUpdate(bid,function(){
-						callback(null,doc);
-					})
+					var opts = [{
+			            path   : 'category',
+			            select : 'name'
+			        }];
+					article.populate(opts,function(err,doc){
+						console.log(doc);
+						Article.findByIdUpdate(bid,function(){
+							callback(null,doc);
+						});
+					});
 				});
 			},
 			function(doc,callback){
@@ -197,18 +210,6 @@ module.exports={
 					callback(null,articles);
 				});
 			},
-			/*function(doc,callback){
-				Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,result){
-					if(err){
-						return console.dir(err);
-					}
-					var typeNums=[];
-					for(var i=0;i<result.length;i++){
-						typeNums.push(result[i].total);
-					}
-					callback(null,doc,result);
-				})
-			}*/
 		],function(err,articles){
 			res.render("www/search_results",{
 				articles:articles,
@@ -228,7 +229,7 @@ module.exports={
 		})
 	},
 	logout:function(req,res){
-		delete req.session['userSession'];
+		delete req.session['User'];
 		delete app.locals.user;
 		res.json({
 			code:1
@@ -266,7 +267,7 @@ module.exports={
 						message:"用户密码不正确！"
 					})
 				}else{
-					req.session["userSession"] = user;
+					req.session["User"] = user;
 					res.json({
 						code:1,
 						message:"登录成功！",
@@ -337,7 +338,7 @@ module.exports={
 	},
 	postComment:function(req,res){
 		var _comment=req.body;
-		_comment.from=req.session["userSession"];
+		_comment.from=req.session["User"];
 		if(_comment.cId){
 			var reply={
 				from:_comment.from._id,
@@ -383,17 +384,21 @@ module.exports={
 		}
 	},
 	showWord:function(req,res){
-		checkUserStatus(req,res,function(){
+		res.render("www/word",{
+			title:'留言'
+		})
+		
+		/*checkUserStatus(req,res,function(){
 			res.render("www/word",{
 				title:'留言'
 			})
-		})
+		})*/
 	},
 	postWord:function(req,res){
 		var lm=new Lm({
 			message:req.body.content,
-			username:req.session["userSession"].username,
-			userid:req.session["userSession"]._id
+			username:req.session["User"].username,
+			userid:req.session["User"]._id
 		});
 		lm.save(function(err){
 			if(err){
@@ -404,7 +409,7 @@ module.exports={
 			});
 		});
 
-		/*checkSession(req.session["userSession"],function(status){
+		/*checkSession(req.session["User"],function(status){
 			if(status){
 				console.log(status)
 				res.json({
@@ -414,8 +419,8 @@ module.exports={
 			}
 			var lm=new Lm({
 				message:req.body.content,
-				username:req.session["userSession"].username,
-				userid:req.session["userSession"]._id
+				username:req.session["User"].username,
+				userid:req.session["User"]._id
 			});
 			lm.save(function(err){
 				if(err){

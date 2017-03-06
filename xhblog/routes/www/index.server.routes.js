@@ -11,9 +11,9 @@ module.exports = function(app) {
 	app.post('/doLogin', IndexCtrl.doLogin);						//登录
 	app.post('/doRegist', IndexCtrl.doRegist);					//注册
 	
-	app.post('/comment',IndexCtrl.checkLogin,IndexCtrl.postComment);			//评论
-	app.get('/word',IndexCtrl.common,IndexCtrl.showWord);		//留言
-	app.post('/word',IndexCtrl.checkLogin,IndexCtrl.postWord);						//提交留言
+	app.post('/comment',IndexCtrl.checkLoginByAjax,IndexCtrl.postComment);			//评论
+	app.get('/word',IndexCtrl.checkLoginByNative,IndexCtrl.common,IndexCtrl.showWord);		//留言
+	app.post('/word',IndexCtrl.checkLoginByAjax,IndexCtrl.postWord);						//提交留言
 	
 	app.get('/about',IndexCtrl.about);		//关于我
 	

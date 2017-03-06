@@ -44,7 +44,7 @@
 	<body>
 		<%include header.html%>
 		<div class="column w-1200 center mt-20 clearfix pb-60">
-			<div class="article-details-crumb clearfix w-per100 f12"> <span><a href="/" >首页</a></span>&gt;<span><a href="../../index.htm" >浏览</a></span>&gt;<span><a href="javascript:void(0);"><%=article.title%></a></span> </div>
+			<div class="article-details-crumb clearfix w-per100 f12"> <span><a href="/" >首页</a></span>&gt;<span><a href="" ><%=article.category.name%></a></span>&gt;<span><a href="javascript:void(0);"><%=article.title%></a></span> </div>
 			<div class="col-l-main f-l w-870">
 				<h1 class="f34 mt-50" style="height:auto"><%=article.title%></h1>
 				<div class="clearfix mt-25 pb-15 article-details-info">
@@ -105,7 +105,7 @@
 						<%comments.forEach(function(v,i){%>
 							<li class="clearfix comment_item">
 								<div class="comment_user avatar">
-					
+									<img src="/images/noavatar_default.png" alt="" />
 								</div>
 								<div class="comment-main">
 									<h4 class="comment-header">
@@ -120,7 +120,7 @@
 										<%v.reply.forEach(function(reply,i){%>
 										<div class="clearfix reply_list">
 											<div class="comment_user avatar">
-					
+												<img src="/images/noavatar_default.png" alt="" />
 											</div>
 											<div class="comment-main">
 												<h4 class="comment-header">
@@ -162,7 +162,7 @@
 							</div>
 							<div class="f-l text_right">
 								<h3 class="f14"><a href="/detial/<%=value.bId%>" ><%=value.title%></a></h3>
-								<span class="hot-article-time f-l f13"><%=value.create_time.toLocaleDateString()%></span>
+								<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
 							</div>
 						</li>
 						<%})%>

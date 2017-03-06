@@ -19,10 +19,13 @@ const ArticleSchema=new Schema({
 	    type: mongoose.Schema.Types.ObjectId,
 	    ref: 'Category'
 	},
+	tag:{
+		type: mongoose.Schema.Types.ObjectId,
+	    ref: 'Tag'
+	},
     content:String,
     tagcontent:String,
     imgurl:String,
-    time:{type: Date, default: Date.now },
     create_time: { type: Date, default: Date.now },        //创建时间
     update_time: { type: Date, default: Date.now },
     likes:{type: Number, default: 0 },		//点赞数
