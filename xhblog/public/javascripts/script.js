@@ -116,6 +116,7 @@ $(function() {
 	});
 	
 	$('.reply_a').on('click',function(){
+		var fromId=$(this).data('fromid');
 		var cId=$(this).data('cid');		//当前评论的数据模型id
 		var toId=$(this).data('tid');		//评论用户的id
 		$('#reply_form').remove();

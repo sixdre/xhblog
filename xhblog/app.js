@@ -23,7 +23,7 @@ var db=mongoose();
 
 var app = global.app= express();
 
-
+app.locals.moment=moment;
 app.use(cookieParser("xhtest"));
 //设置session
 app.use(session({

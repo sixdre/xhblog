@@ -7,6 +7,10 @@ const CommentSchema = new Schema({
 	  reply:[{			
 		    from: {type: ObjectId, ref: 'User'},
 		    to: {type: ObjectId, ref: 'User'},
+		    create_time:{
+		    	 type: Date,
+	      	  	 default: Date.now()
+		    },
 		    content: String
 	  }],
 	  content: String,

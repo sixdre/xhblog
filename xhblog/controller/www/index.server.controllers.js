@@ -329,22 +329,39 @@ module.exports={
 	postComment:function(req,res){
 		var _comment=req.body;
 		_comment.from=req.session["userSession"];
-		console.log(_comment);
 		if(_comment.cId){
-			Comment.findOne({_id:_comment.cId},function(err,comment){
-				var replay={
+			var reply={
+				from:_comment.from._id,
+				to:_comment.toId,
+				content:_comment.content
+			};
+			Comment.update({_id:_comment.cId},{
+				$addToSet:{"reply": reply}
+			}).then(function(){
+				res.json({
+					code:1
+				});
+			}).catch(function(err){
+				console.log(err);
+			});
+			
+			/*Comment.findOne({_id:_comment.cId},function(err,comment){
+				var reply={
 					from:_comment.from,
 					to:_comment.toId,
-					content:_comment.content
+					content:_comment.content,
+					create_time:Date.now()
 				};
-				comment.reply.push(replay);
+				
+				
+				comment.reply.push(reply);
 				comment.save(function(err,comment){
 					res.json({
 						code:1
 					});
 				})
 				
-			})
+			})*/
 		}else{
 			var comment=new Comment(_comment);
 			comment.save().then(function(comment){

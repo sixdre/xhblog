@@ -106,7 +106,7 @@
 								</h4>
 								<p class="comment-content"><%=v.content%></p>
 								<div class="comment-footer">
-									<span class="comment-time"></span>
+									<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
 									<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
 								</div>
 								<%if(v.reply&&v.reply.length>0){%>
@@ -123,8 +123,8 @@
 											</h4>
 											<p class="comment-content"><%=reply.content%></p>
 											<div class="comment-footer">
-												<span class="comment-time"></span>
-												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=reply.from._id%>">回复</a>
+												<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
+												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-fromid="<%=user._id%>"  data-tid="<%=reply.from._id%>">回复</a>
 											</div>
 										</div>
 									</div>	
