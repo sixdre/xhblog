@@ -1,5 +1,5 @@
 //网站设置控制器
-var settingCtrl = require('../../controller/admin/setting.server.controllers');
+const settingCtrl = require('../../controller/admin/setting.server.controllers');
 
 
 

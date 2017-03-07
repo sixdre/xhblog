@@ -1,4 +1,4 @@
-var adminCtrl = require('../../controller/admin/admin.server.controllers');
+const adminCtrl = require('../../controller/admin/admin.server.controllers');
 
 module.exports = function(app) {
 	app.get('/admin', adminCtrl.showadmin);

@@ -1,7 +1,7 @@
 //文章控制器
-var articleCtrl = require('../../controller/admin/article.server.controllers');
-var multipart =require("connect-multiparty")
-var multipartMiddleware = multipart();
+const articleCtrl = require('../../controller/admin/article.server.controllers');
+const multipart =require("connect-multiparty")
+const multipartMiddleware = multipart();
 
 module.exports = function(app) {
 	app.get('/admin/article/list', articleCtrl.list);

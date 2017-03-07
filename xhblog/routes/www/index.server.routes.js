@@ -1,4 +1,4 @@
-var IndexCtrl = require('../../controller/www/index.server.controllers');
+const IndexCtrl = require('../../controller/www/index.server.controllers');
 
 module.exports = function(app) {
 	app.get('/',IndexCtrl.common,IndexCtrl.showIndex);

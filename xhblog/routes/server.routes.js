@@ -1,10 +1,10 @@
 //后台
-var adminRouter=require('./admin/admin.server.routes');
-var articleRouter=require('./admin/article.server.routes');
-var settingRouter=require('./admin/setting.server.routes');
+const adminRouter=require('./admin/admin.server.routes');
+const articleRouter=require('./admin/article.server.routes');
+const settingRouter=require('./admin/setting.server.routes');
 
 //网站
-var IndexRouter=require('./www/index.server.routes')
+const IndexRouter=require('./www/index.server.routes')
 
 module.exports=function(app){
 	adminRouter(app);		//后台
