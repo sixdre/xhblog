@@ -42,7 +42,6 @@ app.run(
 									['/vendor/jquery/fullcalendar/fullcalendar.css',
 										'/vendor/jquery/fullcalendar/theme.css',
 										'/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
-										'/vendor/libs/moment.min.js',
 										'/vendor/jquery/fullcalendar/fullcalendar.min.js',
 										'/js/app/calendar/calendar.js'
 									]

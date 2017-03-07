@@ -3,7 +3,9 @@
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");
+
 const Manager = mongoose.model('Manager');			//管理员
+
 const multiparty =require("connect-multiparty")
 
 
@@ -93,14 +95,16 @@ module.exports={
 
 	},
 	publish:function(req,res){					//新的发布文章接口
+			let tags=[req.body.tag1,req.body.tag2];
 			let article =new Article({
 				author: req.session["manager"]||'xuhao',
 				title:req.body.title,
 				type: req.body.type.value,
 				content:req.body.content,
-				tagcontent:req.body.tagcontent
+				tagcontent:req.body.tagcontent,
+				tags:tags
 			});
-			
+			console.log(tags);
 			article.save().then(function(artDoc){
 				console.log(artDoc);
 				let category=new Category({

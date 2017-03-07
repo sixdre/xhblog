@@ -56,10 +56,13 @@ app.controller('articleCtrl',
 	//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,
-		limit:2,		//每页显示的文章数
+		limit:5,		//每页显示的文章数
 	    bigTotalItems:0,	//文章总数
         bigCurrentPage:1
     };
+	
+	
+	
 	$scope.article = {};
 	$scope.ArticleType = [					//文章类型
 	      { name: '网络热点', value:"网络热点" },	
@@ -73,6 +76,10 @@ app.controller('articleCtrl',
     	 articleServices.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     		 $scope.pageConfig.bigTotalItems =res.data.total;
+    		 
+    		 $scope.listStart=($scope.pageConfig.bigCurrentPage-1)*$scope.pageConfig.limit+1;
+    		 var listEnd=$scope.pageConfig.bigCurrentPage*$scope.pageConfig.limit;
+    		 $scope.listEnd=listEnd<$rootScope.articleTotal?listEnd:$rootScope.articleTotal;
     		
     	 }).catch(function(err){
     		 defPopService.defPop({

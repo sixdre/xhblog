@@ -17,13 +17,10 @@ const ArticleSchema=new Schema({
     	//enum:['','']  //只能是
     },
     category:{
-	    type: mongoose.Schema.Types.ObjectId,
+	    type: ObjectId,
 	    ref: 'Category'
 	},
-	tag:{
-		type: mongoose.Schema.Types.ObjectId,
-	    ref: 'Tag'
-	},
+	tags:[],
     content:String,
     tagcontent:String,
     imgurl:String,
