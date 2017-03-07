@@ -2,6 +2,8 @@
 const mongoose=require('mongoose');
 const config=require('./db_url.js');
 const fs=require('fs');
+const path=require('path');
+
 module.exports=function(){
     mongoose.connect(config.mongodb);
     const db = mongoose.connection;
@@ -9,15 +11,14 @@ module.exports=function(){
 	db.once('open',function(callback){
 	  console.log('MongoDB连接成功！！');
 	});
-
-	var models_path=__dirname.substring(0,__dirname.length-7)+'/models';
-	var walk=function(path){
+	const models_path=path.join(__dirname,'../')+'models';
+	let walk=function(path){
 		fs.readdirSync(path).forEach(function(file){
-			var newPath=path+'/'+file;
-			var stat=fs.statSync(newPath);
+			let newPath=path+'/'+file;
+			let stat=fs.statSync(newPath);
 			if(stat.isFile()){
 				if(/(.*)\.(js)/.test(file)){
-					require(newPath)
+					require(newPath);
 				}
 			}else if(stat.isDirectory()){
 				walk(newPath);
