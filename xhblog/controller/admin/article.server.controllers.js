@@ -1,22 +1,23 @@
+"use strict";
 //引入数据模型  
-var mongoose=require('mongoose');
-var Article = mongoose.model('Article');			//文章
-var Category=mongoose.model("Category");
-var Manager = mongoose.model('Manager');			//管理员
-var multiparty =require("connect-multiparty")
+const mongoose=require('mongoose');
+const Article = mongoose.model('Article');			//文章
+const Category=mongoose.model("Category");
+const Manager = mongoose.model('Manager');			//管理员
+const multiparty =require("connect-multiparty")
 
 
 
-var formidable = require('formidable');
-var fs = require('fs'); 							//node.js核心的文件处理模块
+const formidable = require('formidable');
+const fs = require('fs'); 							//node.js核心的文件处理模块
 
-var multer = require ('multer');  //上传文件中间件 multer
-var md5 = require('md5');
+const multer = require ('multer');  //上传文件中间件 multer
+const md5 = require('md5');
 //设置上传的目录，  
 //这里指定了一个临时目录（上传后的文件均保存到该目录下），  
 //真正开发是一般加入path模块后使用path.join(__dirname,'temp');  
 //var upload = multer({ dest:  "public/upload" });  
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
     //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
     //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
     destination: "public/upload/"+moment(Date.now()).format('YYYY-MM'),
@@ -27,13 +28,13 @@ var storage = multer.diskStorage({
     //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
     filename: function (req, file, cb) {
     	console.log(file);
-        var fileFormat =(file.originalname).split(".");
+        let fileFormat =(file.originalname).split(".");
         cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
     }
 });
 
 //添加配置文件到muler对象。
-var upload = multer({
+const upload = multer({
     storage: storage,
     //其他设置请参考multer的limits
     //limits:{}
@@ -51,7 +52,7 @@ module.exports={
 				});
 				return ;
 			}
-			var article =new Article({
+			let article =new Article({
 				author: "xuhao",
 				title:req.body.article_title,
 				type: req.body.article_type,
@@ -72,7 +73,7 @@ module.exports={
 		
 		
 		/*if (req.file) {
-			var article = Article({
+			let article = Article({
 				author: "xuhao",
 				title:req.body.article_title,
 				type: req.body.article_type,
@@ -92,7 +93,7 @@ module.exports={
 
 	},
 	publish:function(req,res){					//新的发布文章接口
-			var article =new Article({
+			let article =new Article({
 				author: req.session["manager"]||'xuhao',
 				title:req.body.title,
 				type: req.body.type.value,
@@ -102,7 +103,7 @@ module.exports={
 			
 			article.save().then(function(artDoc){
 				console.log(artDoc);
-				var category=new Category({
+				let category=new Category({
 					name:req.body.type.value,
 					articles:[artDoc._id]
 				});
@@ -181,7 +182,7 @@ module.exports={
 	},
 	//文章列表
 	list:function(req, res) {
-		var query = Article.find({}).sort({"time": -1});
+		let query = Article.find({}).sort({"time": -1});
 		Article.count({},function(err,c){
 			query.find({},function(err,article){
 				if(err){
@@ -196,9 +197,9 @@ module.exports={
 	},
 	//文章分页显示
 	page:function(req, res) {
-		var current=parseInt(req.body.current)-1;
-		var textCount=parseInt(req.body.textCount);
-		var query = Article.find({}).sort({
+		let current=parseInt(req.body.current)-1;
+		let textCount=parseInt(req.body.textCount);
+		let query = Article.find({}).sort({
 			"create_time": -1
 		}).skip(textCount*current).limit(textCount);
 		Article.count({},function(err,total){
@@ -225,7 +226,7 @@ module.exports={
 	 搜索文章
 	 * */
 	doSearch:function(req, res) {
-		var title=req.body.title;
+		let title=req.body.title;
 		Article.find({title:{$regex:''+title+''}},function(err,docs){		//模糊搜索
 			if(err){
 				return console.log(err)
@@ -247,7 +248,7 @@ module.exports={
 	 * 文章删除
 	 * */
 	remove:function(req, res) {
-		const id=req.body.id;
+		let id=req.body.id;
 		console.log(id);
 		Article.findById(id,function(doc1){
 			console.log(doc1.category);
@@ -298,7 +299,7 @@ module.exports={
 	},
 	//编辑文章搜寻
 	find:function(req,res){
-		const id=req.body.id;
+		let id=req.body.id;
 		Article.findById(id,function(doc){
 			res.json({
 				article:doc
@@ -306,9 +307,9 @@ module.exports={
 		})
 	},
 	update:function(req,res){
-		const id=req.body.id;
-		const content=req.body.content;
-		const tagcontent=req.body.tagcontent;
+		let id=req.body.id;
+		let content=req.body.content;
+		let tagcontent=req.body.tagcontent;
 		Article.update({bId:id},{
 			tagcontent:tagcontent,
 			content:content,

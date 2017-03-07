@@ -1,9 +1,10 @@
+"use strict";
 //引入数据模型  
-var mongoose=require('mongoose');
-var Article = mongoose.model('Article');				//文章
-var Manager = mongoose.model('Manager');				//管理员
-var Banner = mongoose.model('Banner');					//banner图
-var Friend = mongoose.model('Friend');					//友情链接
+const mongoose=require('mongoose');
+const Article = mongoose.model('Article');				//文章
+const Manager = mongoose.model('Manager');				//管理员
+const Banner = mongoose.model('Banner');					//banner图
+const Friend = mongoose.model('Friend');					//友情链接
 
 //检查是否为链接
 function checkURL(URL) {
@@ -27,10 +28,10 @@ function contain(arr,val){
     }  
     return false;  
 }
-var multer = require ('multer');  //上传文件中间件 multer
-var md5 = require('md5');
+const multer = require ('multer');  //上传文件中间件 multer
+const md5 = require('md5');
 
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
     //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
     //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
     destination: "public/upload/banner/"+moment(Date.now()).format('YYYY-MM'),
@@ -46,7 +47,7 @@ var storage = multer.diskStorage({
 });
 
 //添加配置文件到muler对象。
-var upload = multer({
+const upload = multer({
     storage: storage,
     //其他设置请参考multer的limits
     //limits:{}
@@ -68,17 +69,17 @@ exports.post_banner=function(req,res){
 			});
 			return ;
 		}
-		var banner = Banner({
+		let banner = Banner({
 			dec:req.body.dec,
 			url: req.body.link,
 			weight:req.body.weight,
 			imgAdress:req.file.destination.substring(6)+"/"+req.file.filename
 		});
 		
-		var nameArray=req.file.originalname.split('.')
-		var type=nameArray[nameArray.length-1];
+		let nameArray=req.file.originalname.split('.')
+		let type=nameArray[nameArray.length-1];
 		
-		var typeArray=["jpg","png","gif","jpeg"];
+		let typeArray=["jpg","png","gif","jpeg"];
 
 		if(contain(typeArray,"jpg")&&checkURL(req.body.link)&&req.body.dec.length){
 		
@@ -118,13 +119,13 @@ exports.loadFriend=function(req,res){
  * 友情链接添加
  * */
 exports.addFriend=function(req,res){
-	const id=req.body._id,
+	let id=req.body._id,
 	title=req.body.title,
 	url=req.body.url,
 	logo=req.body.logo,
 	sort=req.body.sort;
 	if(id==undefined){			//说明是新增
-		var friend=new Friend({
+		let friend=new Friend({
 			title:req.body.title,
 			url:req.body.url,
 			logo:req.body.logo,
@@ -181,7 +182,7 @@ exports.delFriend=function(req,res){
  * 友情链接更新
  * */
 exports.updateFriend=function(req,res){
-	const id=req.body._id,
+	let id=req.body._id,
 	title=req.body.title,
 	url=req.body.url,
 	logo=req.body.logo,

@@ -1,14 +1,15 @@
-var express = require('express');
-var session=require('express-session');
-var mongoStroe=require('connect-mongo')(session);
-var cookieParser = require('cookie-parser');
-var formidable = require('formidable');
-var fs = require('fs'); 							//node.js核心的文件处理模块
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var ueditor = require("ueditor");			//编辑器
+"use strict";
+const express = require('express');
+const session=require('express-session');
+const mongoStroe=require('connect-mongo')(session);	//connect-mongo用来在数据库存储session的模块
+const cookieParser = require('cookie-parser');
+const formidable = require('formidable');
+const fs = require('fs'); 							//node.js核心的文件处理模块
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const ueditor = require("ueditor");			//编辑器
 global.moment = require('moment'); 			//时间格式化
 global.md5=require("md5");					//md5加密
 global.validator = require('validator');	//表单验证
@@ -18,10 +19,10 @@ global.validator = require('validator');	//表单验证
 
 
 //数据库连接
-var mongoose=require('./config/mongoose.js');
-var db=mongoose();
+const mongoose=require('./config/mongoose.js');
+const db=mongoose();
 
-var app = global.app= express();
+const app = global.app= express();
 
 app.locals.moment=moment;
 app.use(cookieParser("xhtest"));
@@ -114,7 +115,7 @@ app.use(function(req,res,next){
 
 
 //页面路由控制
-var routes = require('./routes/server.routes.js');				
+const routes = require('./routes/server.routes.js');				
 routes(app);			
 
 
@@ -127,7 +128,7 @@ routes(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

@@ -1,9 +1,10 @@
-var mongoose = require('mongoose')  
+'use strict';
+const mongoose = require('mongoose')  
     , Schema = mongoose.Schema  
     , ObjectId = Schema.ObjectId;  
     
 //管理员
-var ManagerSchema = new Schema({  
+const ManagerSchema = new Schema({  
       name: String 
     , email:String
     , password: String

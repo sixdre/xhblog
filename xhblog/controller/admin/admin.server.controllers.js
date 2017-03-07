@@ -1,11 +1,12 @@
+"use strict";
 //引入数据模型  
-var mongoose=require('mongoose');
-var Article = mongoose.model('Article');			//文章
-var Manager = mongoose.model('Manager');			//管理员
-var Lm=mongoose.model("Lm");						//留言
+const mongoose=require('mongoose');
+const Article = mongoose.model('Article');			//文章
+const Manager = mongoose.model('Manager');			//管理员
+const Lm=mongoose.model("Lm");						//留言
 
-var formidable = require('formidable');
-var fs = require('fs'); 							//node.js核心的文件处理模块
+const formidable = require('formidable');
+const fs = require('fs'); 							//node.js核心的文件处理模块
 const async = require('async');
 
 /*var multer = require ('multer');   
@@ -13,7 +14,7 @@ var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		var manager = req.session["manager"];
+		let manager = req.session["manager"];
 		Article.count({},function(err,c){
 			res.render('admin/admin', 
 				{
@@ -25,7 +26,7 @@ module.exports={
 	},
 	//前台请求主数据接口
 	loadData:function(req,res){
-		var manager = req.session["manager"];
+		let manager = req.session["manager"];
 		async.waterfall([function(callback){
 			Lm.find({status:0}).exec(function(err,lmdoc){
 				if(err){
@@ -53,11 +54,11 @@ module.exports={
 		delete req.session["manager"];
 		res.json({
 			code : 1
-		})
+		});
 	},
 	//注册提交
 	doRegist:function(req, res) {
-		var manger = new Manager({
+		let manger = new Manager({
 			name: req.body.name,
 			email:req.body.email,
 			password: md5(req.body.password)
@@ -86,8 +87,8 @@ module.exports={
 	},
 	//登录提交验证
 	doLogin:function(req, res) {
-		var email=req.body.email;
-		var password=req.body.password;
+		let email=req.body.email;
+		let password=req.body.password;
 		Manager.findOne({email:email},function(err,manager){
 			if(err){return console.dir(err)}
 			if(!manager){

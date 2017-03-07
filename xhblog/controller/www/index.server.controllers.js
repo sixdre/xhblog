@@ -15,7 +15,7 @@ const async = require('async');
  * app.use 可以在多个页面获取用户session
  */
 app.use(function(req,res,next){
-	var _user=req.session['User'];
+	let _user=req.session['User'];
 	app.locals.user=_user;
 	/*Category.find({}).exec(function(err,categorys){
 		Friend.find({},function(err,friends){
@@ -133,7 +133,7 @@ module.exports={
 					if(!article){			//没找到就发送一个404
 						return res.send(404, "Oops! We didn't find it");
 					}
-					var opts = [{
+					let opts = [{
 			            path   : 'category',
 			            select : 'name'
 			        }];
@@ -184,7 +184,7 @@ module.exports={
 		});
 	},
 	showSearchResults:function(req,res){
-		var title=req.query.wd;
+		let title=req.query.wd;
 		async.waterfall([
 			function(callback){
 				Article.findByTitle(title,function(articles){
@@ -209,7 +209,7 @@ module.exports={
 		});
 	},
 	doLogin:function(req,res){
-		const username=req.body.username,
+		let username=req.body.username,
 		  password=req.body.password,
 		  ref=req.query.ref,
 		  articleId=req.query.articleId;
@@ -251,10 +251,10 @@ module.exports={
 		}
 	},
 	doRegist:function(req,res){
-		const username=req.body.username,
+		let username=req.body.username,
 			  password=req.body.password,
 			  email=req.body.email;
-		const user=new User({
+		let user=new User({
 			username:username,
 			password:md5(password),
 			email:req.body.email
@@ -315,10 +315,10 @@ module.exports={
 		});
 	},
 	postComment:function(req,res){
-		var _comment=req.body;
+		let _comment=req.body;
 		_comment.from=req.session["User"];
 		if(_comment.cId){
-			var reply={
+			let reply={
 				from:_comment.from._id,
 				to:_comment.toId,
 				content:_comment.content
@@ -334,7 +334,7 @@ module.exports={
 			});
 			
 			/*Comment.findOne({_id:_comment.cId},function(err,comment){
-				var reply={
+				let reply={
 					from:_comment.from,
 					to:_comment.toId,
 					content:_comment.content,
@@ -349,7 +349,7 @@ module.exports={
 				
 			})*/
 		}else{
-			var comment=new Comment(_comment);
+			let comment=new Comment(_comment);
 			comment.save().then(function(comment){
 				res.json({
 					code:1
@@ -365,7 +365,7 @@ module.exports={
 		});
 	},
 	postWord:function(req,res){
-		var lm=new Lm({
+		let lm=new Lm({
 			message:req.body.content,
 			username:req.session["User"].username,
 			userid:req.session["User"]._id
