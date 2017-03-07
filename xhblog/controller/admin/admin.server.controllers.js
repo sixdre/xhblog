@@ -28,7 +28,8 @@ module.exports={
 	loadData:function(req,res){
 		let manager = req.session["manager"];
 		async.waterfall([function(callback){
-			Lm.find({status:0}).exec(function(err,lmdoc){
+			Lm.find({isRead:0}).populate('user','username').exec(function(err,lmdoc){
+				console.log(lmdoc);
 				if(err){
 					return console.log("err");
 				}

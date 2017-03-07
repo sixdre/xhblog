@@ -27,7 +27,7 @@ const ArticleSchema=new Schema({
     create_time: { type: Date, default: Date.now },        //创建时间
     update_time: { type: Date, default: Date.now },
     likes:{type: Number, default: 0 },		//点赞数
-    views:{type: Number, default: 0 },		//浏览量
+    pv:{type: Number, default: 0 },		//浏览量
     comments:{type: Number, default: 0 },	//评论数
     top: { type: Boolean, default: false }, // 置顶文章
     good: { type: Boolean, default: false } // 精华文章
@@ -145,7 +145,7 @@ ArticleSchema.statics.findByTitle = function(title,callback) {
 //根据文章文章id进行更新
 ArticleSchema.statics.findByIdUpdate = function(id,callback) {
 	return this.model('Article')
-        .update({bId:id},{'$inc':{views: 1}})
+        .update({bId:id},{'$inc':{pv: 1}})
         .exec(function (error) {
             if (error) {
                 console.log(error);

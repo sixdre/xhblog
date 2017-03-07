@@ -51,7 +51,7 @@
                       <img src="/img/a0.jpg" alt="..." class="img-circle">
                     </span>
                     <span class="media-body block m-b-none">
-                      {{item.message|limitTo:10}}<br>
+                      {{item.message|limitTo:10}} --来自{{item.user.username}}<br>
                       <small class="text-muted"> {{item.post_time|fromNow}}</small>
                     </span>
                   </a>

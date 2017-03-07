@@ -367,8 +367,7 @@ module.exports={
 	postWord:function(req,res){
 		let lm=new Lm({
 			message:req.body.content,
-			username:req.session["User"].username,
-			userid:req.session["User"]._id
+			user:req.session["User"]._id
 		});
 		lm.save(function(err){
 			if(err){
