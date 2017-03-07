@@ -45,7 +45,7 @@ module.exports={
 		}],function(err,lmdoc,total){
 			res.json({
 				manager: manager,	//管理员
-				total:total,	//文章总数
+				total:total,		//文章总数
 				lmdoc:lmdoc		//留言
 			});
 		})
@@ -76,7 +76,7 @@ module.exports={
 			}else{
 				manger.save(function(err, manger) {
 					if(err){
-						return console.log(err)
+						return console.log(err);
 					}
 					res.json({
 						code:1,

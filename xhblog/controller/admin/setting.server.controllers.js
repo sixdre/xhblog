@@ -60,7 +60,7 @@ const upload = multer({
 exports.post_banner=function(req,res){
 	upload(req, res, function (err) {
 		if(err){
-			return console.log("upload err:",err)
+			return console.log("upload err:",err);
 		}
 		console.log(req.file)
 		if(!req.file){
