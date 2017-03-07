@@ -1,6 +1,6 @@
 {
   "name": "xhblog",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -26,5 +26,9 @@
     "ueditor": "^1.2.0",
     "util": "^0.10.3",
     "validator": "^6.2.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^4.0.1"
   }
 }
