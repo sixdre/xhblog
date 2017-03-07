@@ -1,3 +1,4 @@
+"use strict";
 const adminCtrl = require('../../controller/admin/admin.server.controllers');
 
 module.exports = function(app) {

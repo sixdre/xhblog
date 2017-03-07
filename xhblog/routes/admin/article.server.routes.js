@@ -1,3 +1,4 @@
+"use strict";
 //文章控制器
 const articleCtrl = require('../../controller/admin/article.server.controllers');
 const multipart =require("connect-multiparty")

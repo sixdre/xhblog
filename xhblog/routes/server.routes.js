@@ -1,3 +1,4 @@
+"use strict";
 //后台
 const adminRouter=require('./admin/admin.server.routes');
 const articleRouter=require('./admin/article.server.routes');

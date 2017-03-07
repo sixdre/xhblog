@@ -1,3 +1,4 @@
+"use strict";
 const IndexCtrl = require('../../controller/www/index.server.controllers');
 
 module.exports = function(app) {

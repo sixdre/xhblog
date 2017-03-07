@@ -1,3 +1,4 @@
+"use strict";
 //网站设置控制器
 const settingCtrl = require('../../controller/admin/setting.server.controllers');
 
