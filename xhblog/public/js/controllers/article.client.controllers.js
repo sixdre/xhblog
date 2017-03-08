@@ -237,6 +237,10 @@ app.controller('articleCtrl',
 					content:"出错了！"
 			 });
 		});
+		
+		
+		
+		
 		/*var formData = new FormData($("#Article_form")[0]);
 		formData.append('author',$('#manager_name').text().trim());
 		formData.append('content',UE.getEditor('editor').getContentTxt());

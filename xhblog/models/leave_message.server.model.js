@@ -11,9 +11,18 @@ const LMSchema=new Schema({
 	message:{
 		type:"String"
 	},
-	isRead:{
-		type:Number,
-		default: 0			//0表示未读  1表示已读
+	reply:{
+		type:"String"
+	},
+	meta:{
+		isRead:{
+			type:Boolean,
+			default:false			//false表示未读  true表示已读
+		},
+		isReply:{
+			type:Boolean,
+			default:false			//false表示未回复  true表示已回复
+		},
 	},
 	post_time:{
 		type:Date,
