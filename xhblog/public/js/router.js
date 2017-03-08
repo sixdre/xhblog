@@ -67,7 +67,7 @@ app.run(
 	                              function(){
 	                                  return $ocLazyLoad.load([
 											'/js/services/article.client.services.js',
-											'/js/controllers/article.client.controllers.js'
+											'/js/controllers/article.client.controller.js'
 	                                  ]);
 	                              }
 	                          );
@@ -114,7 +114,7 @@ app.run(
 	                        function( uiLoad){
 	                          return uiLoad.load([
 	                                '/js/services/setting.client.services.js',
-	                                '/js/controllers/setting.client.controllers.js'
+	                                '/js/controllers/setting.client.controller.js'
 	                          ]);
 	                      }]
 		            }
@@ -140,7 +140,7 @@ app.run(
 	                        function( uiLoad){
 	                          return uiLoad.load([
 	                                '/js/services/setting.client.services.js',
-	                                '/js/controllers/setting.client.controllers.js'
+	                                '/js/controllers/setting.client.controller.js'
 	                          ]);
 	                      }]
 		                },

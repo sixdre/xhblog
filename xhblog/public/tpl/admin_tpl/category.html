@@ -10,24 +10,31 @@
 	                <h1 class="panel-title">分类列表</h1>
 	            </div>
 	            <div class="panel-body">
-	                <div class="btn-group m-b-10">
-	                    <button type="button" class="btn btn-warning waves-effect waves-light">默认分类
-	                        (1)
-	                    </button>
-	                </div>
-	                <div class="btn-group m-b-10">
-	                    <button type="button" class="btn btn-primary dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">谔谔 (0) <span class="caret"></span></button>
-	                    <ul class="dropdown-menu" role="menu">
-	                        <li><a href="javascript:void(0)" mid="7" cname="谔谔" class="edit-category">修改</a>
-	                        </li>
-	                        <li><a href="javascript:void(0)" mid="7" class="del-category">删除</a></li>
-	                    </ul>
-	                </div>
+	               <div class="btn-group dropdown open" dropdown="">
+			          <button class="btn btn-success" dropdown-toggle="" aria-haspopup="true" aria-expanded="true">
+			          	HTML<span class="caret"></span>
+			          </button>
+			          <ul class="dropdown-menu">
+			            <li><a href="">修改</a></li>
+			            <li><a href="">删除</a></li>
+			          </ul>
+			        </div>
 	            </div>
 	        </div>
 	    </div>
         <div class="col-md-12" style="padding: 20px;">
-           
+            <div class="panel panel-default">
+	            <div class="panel-body">
+	                <form id="cform" class="form-inline" role="form">
+	                    <input type="hidden" id="mid">
+	                    <div class="form-group">
+	                        <input type="text" class="form-control" id="cname" placeholder="请输入分类名称">
+	                    </div>
+	                    <button id="save-category-btn" type="button" class="btn btn-success waves-effect waves-light m-l-10">保存分类
+	                    </button>
+	                </form>
+	            </div>
+	        </div>
         </div>
 	</div>
 </div>
