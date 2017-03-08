@@ -138,7 +138,6 @@ module.exports={
 			            select : 'name'
 			        }];
 					article.populate(opts,function(err,doc){
-						console.log(doc);
 						Article.findByIdUpdate(bid,function(){
 							callback(null,doc);
 						});

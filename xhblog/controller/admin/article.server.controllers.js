@@ -98,7 +98,6 @@ module.exports={
 			let article =new Article({
 				author: req.session["manager"]||'xuhao',
 				title:req.body.title,
-				type: req.body.type.value,
 				content:req.body.content,
 				tagcontent:req.body.tagcontent,
 				tags:tags

@@ -119,6 +119,14 @@ app.run(
 	                      }]
 		            }
 				})
+				.state("app.category",{
+					url:"/category",
+					templateUrl:'/tpl/admin_tpl/category.html'
+				})
+				.state("app.users",{
+					url:"/users",
+					templateUrl:'/tpl/admin_tpl/users.html'
+				})
 				.state('app.article.search', {
 					url: '/search',
 					templateUrl: '/tpl/admin_tpl/article/search.html'
