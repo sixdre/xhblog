@@ -1,4 +1,4 @@
-angular.module('app').factory('articleServices',['$http','$q',function($http,$q){
+angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 
 	function handelRequest(method,url,data){
 		var deferred=$q.defer();

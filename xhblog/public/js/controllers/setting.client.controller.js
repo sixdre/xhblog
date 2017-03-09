@@ -1,8 +1,8 @@
-angular.module('app').controller('settingCtrl',['$scope','$http','$window','defPopService','settingServices',function($scope,$http,$window,defPopService,settingServices){
+angular.module('app').controller('settingCtrl',['$scope','$http','$window','defPopService','settingService',function($scope,$http,$window,defPopService,settingService){
 
 	$scope.addbanner=function(){
 		var formData = new FormData($("#banner_form")[0]);
-		settingServices.post_banner(formData).then(function(res){
+		settingService.post_banner(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -22,7 +22,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	 * loadfriend 加载友情链接
 	 * */
 	$scope.loadfriend=function(){
-		settingServices.loadFriend().then(function(res){
+		settingService.loadFriend().then(function(res){
 			$scope.friends=res.data.doc;
 		}).catch(function(err){
 			
@@ -33,7 +33,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	 * */
 	$scope.addfriend=function(obj){
 
-		settingServices.addFriend(obj).then(function(res){
+		settingService.addFriend(obj).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -59,7 +59,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 	 * delfriend 删除链接
 	 * */
 	$scope.delfriend=function(item){	
-		settingServices.delFriend(item._id).then(function(res){
+		settingService.delFriend(item._id).then(function(res){
 			if(res.data.code==1){
 				defPopService.defPop({
 					status:1,
@@ -83,7 +83,7 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 		$scope.friend=item;
 	}
 	$scope.updatefriend=function(item){
-		settingServices.addFriend(item).then(function(res){
+		settingService.addFriend(item).then(function(res){
 			if(res.data.code==1){
 				defPopService.defPop({
 					status:1,

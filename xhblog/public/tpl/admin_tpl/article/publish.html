@@ -20,7 +20,7 @@
             <div class="form-group col-md-6">
                 <ui-select ng-model="article.type" theme="bootstrap" >
 		            <ui-select-match placeholder="请选择文章的类型">{{$select.selected.name}}</ui-select-match>
-		            <ui-select-choices repeat="item in ArticleType">
+		            <ui-select-choices repeat="item in categorys">
 		              <div ng-bind-html="item.name"></div>
 		            </ui-select-choices>
 		        </ui-select>

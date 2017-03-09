@@ -1,8 +1,8 @@
 "use strict";
 var uetrue=null;
 app.controller('articleCtrl',
-		['$rootScope','$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleServices',"defPopService",
-		 function($rootScope,$scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleServices,defPopService){
+		['$rootScope','$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleService',"defPopService",
+		 function($rootScope,$scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleService,defPopService){
 			
 	  var uploader = $scope.uploader = new FileUploader({
           url:"/admin/article/testUpload",
@@ -73,7 +73,7 @@ app.controller('articleCtrl',
 	
       //分页显示
 	 $scope.pageChanged = function(cp,limit) {
-    	 articleServices.page({current:cp,textCount:limit}).then(function(res){
+    	 articleService.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.page;
     		 $scope.pageConfig.bigTotalItems =res.data.total;
     		 
@@ -166,7 +166,7 @@ app.controller('articleCtrl',
 
 	//列表显示  
 	$scope.loadlist=function(){
-		articleServices.list('').then(function(res){
+		articleService.list('').then(function(res){
 			$scope.pageConfig.bigTotalItems =res.data.article.length;
 		}).catch(function(err){
 			 defPopService.defPop({
@@ -196,7 +196,7 @@ app.controller('articleCtrl',
 	          }
         });
 		 modalInstance.result.then(function () {
-			articleServices.remove(id).then(function(res){
+			articleService.remove(id).then(function(res){
 				var data=res.data;
 				if(data.code>0){
 					 defPopService.defPop({
@@ -223,7 +223,7 @@ app.controller('articleCtrl',
 	$scope.publish=function(){
 		$scope.article.tagcontent=UE.getEditor('editor').getContent();
 		$scope.article.content=UE.getEditor('editor').getContentTxt();
-		articleServices.publish($scope.article).then(function(res){
+		articleService.publish($scope.article).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -246,7 +246,7 @@ app.controller('articleCtrl',
 		formData.append('content',UE.getEditor('editor').getContentTxt());
 		formData.append('tagcontent',UE.getEditor('editor').getContent());
 		formData.append("article_type",$scope.article.type.name);	//类型
-		articleServices.save(formData).then(function(res){
+		articleService.save(formData).then(function(res){
 			var data=res.data;
 			if(data.code>0){
 				defPopService.defPop({
@@ -271,7 +271,7 @@ app.controller('articleCtrl',
 			 });
 			
 		}
-		articleServices.search(title).then(function(res){
+		articleService.search(title).then(function(res){
 			if(res.data.code<0){
 				return defPopService.defPop({
 					status:0,
@@ -329,11 +329,11 @@ app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$state
 
 
 app.controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"data","articleServices","defPopService",
-	 function($scope,$modalInstance,data,articleServices,defPopService){
+	['$scope', '$modalInstance',"data","articleService","defPopService",
+	 function($scope,$modalInstance,data,articleService,defPopService){
 		var id=data.id;
 		if(data.handle==1){				//
-			articleServices.find(id).then(function(res){
+			articleService.find(id).then(function(res){
 				$scope.up_item=res.data.article;
 				$scope.ArticleType=data.ArticleType;
 				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
@@ -357,7 +357,7 @@ app.controller('ModalInstanceCtrl',
 	    		tagcontent:UE.getEditor('up_editor').getContent(),
 	    		content:UE.getEditor('up_editor').getContentTxt()
 	    	};
-	    	articleServices.update(arg).then(function(res){
+	    	articleService.update(arg).then(function(res){
 	    		var data=res.data;
 	    		if(data.code>0){
 	    			defPopService.defPop({

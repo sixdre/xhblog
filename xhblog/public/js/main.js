@@ -17,6 +17,7 @@ angular.module('app')
     	  $rootScope.articleTotal=res.data.total;
     	  $rootScope.lm=res.data.lmdoc;
     	  $rootScope.manager=res.data.manager;
+    	  $rootScope.categorys=res.data.categorys;
 		  if(!$rootScope.manager){
 			  $state.go("access.signin");
 		  }

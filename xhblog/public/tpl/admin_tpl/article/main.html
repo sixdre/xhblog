@@ -59,7 +59,7 @@
 							<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 							<td><a ng-click="edit(item);" class="text-success">{{item.title |limitTo:10}}</a></td>
 							<td ng-bind="item.time|date:'yyyy-MM-dd HH:mm:ss'"></td>
-							<td>{{item.type}}</td>
+							<td>{{item.category.name}}</td>
 							<td>{{item.pv}}</td>
 							<td>
 								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">

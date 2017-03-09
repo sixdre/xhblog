@@ -10,13 +10,13 @@
 	                <h1 class="panel-title">分类列表</h1>
 	            </div>
 	            <div class="panel-body">
-	               <div class="btn-group dropdown open" dropdown="">
+	               <div class="btn-group dropdown open" dropdown="" ng-repeat="item in categorys" style="margin-right: 10px;">
 			          <button class="btn btn-success" dropdown-toggle="" aria-haspopup="true" aria-expanded="true">
-			          	HTML<span class="caret"></span>
+			          	{{item.name}}<span class="caret"></span>
 			          </button>
 			          <ul class="dropdown-menu">
-			            <li><a href="">修改</a></li>
-			            <li><a href="">删除</a></li>
+			            <li><a href="javascript:void(0);" ng-click="revise(item)">修改</a></li>
+			            <li><a href="javascript:void(0);" ng-click="remove(item._id);">删除</a></li>
 			          </ul>
 			        </div>
 	            </div>
@@ -25,12 +25,14 @@
         <div class="col-md-12" style="padding: 20px;">
             <div class="panel panel-default">
 	            <div class="panel-body">
-	                <form id="cform" class="form-inline" role="form">
+	                <form id="cform" name="cform" class="form-inline" role="form">
 	                    <input type="hidden" id="mid">
 	                    <div class="form-group">
-	                        <input type="text" class="form-control" id="cname" placeholder="请输入分类名称">
+	                        <input type="text" class="form-control" ng-model="category.name" placeholder="请输入分类名称" required="required">
 	                    </div>
-	                    <button id="save-category-btn" type="button" class="btn btn-success waves-effect waves-light m-l-10">保存分类
+	                    <button ng-if="isNew" type="button" class="btn btn-success" ng-disabled="cform.$invalid" ng-click="add();">保存分类
+	                    </button>
+	                    <button ng-if="!isNew" type="button" class="btn btn-success">更新分类
 	                    </button>
 	                </form>
 	            </div>

@@ -121,7 +121,17 @@ app.run(
 				})
 				.state("app.category",{
 					url:"/category",
-					templateUrl:'/tpl/admin_tpl/category.html'
+					templateUrl:'/tpl/admin_tpl/category.html',
+					controller:'categoryCtrl',
+					resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad){
+                          return uiLoad.load([
+                                '/js/services/category.client.service.js',
+                                '/js/controllers/category.client.controller.js'
+                          ]);
+                      }]
+	                },
 				})
 				.state("app.users",{
 					url:"/users",

@@ -209,5 +209,3 @@ exports.updateFriend=function(req,res){
 
 
 
-
-
