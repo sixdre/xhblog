@@ -30,6 +30,7 @@
   "devDependencies": {
     "browser-sync": "^2.18.8",
     "gulp": "^3.9.1",
+    "gulp-less": "^3.3.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-mocha": "^4.0.1"
   }

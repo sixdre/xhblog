@@ -66,7 +66,7 @@ app.run(
 	                          return $ocLazyLoad.load(['ui.select','angularFileUpload']).then(
 	                              function(){
 	                                  return $ocLazyLoad.load([
-											'/js/services/article.client.services.js',
+											'/js/services/article.client.service.js',
 											'/js/controllers/article.client.controller.js'
 	                                  ]);
 	                              }
@@ -113,7 +113,7 @@ app.run(
 	                      deps: ['uiLoad',
 	                        function( uiLoad){
 	                          return uiLoad.load([
-	                                '/js/services/setting.client.services.js',
+	                                '/js/services/setting.client.service.js',
 	                                '/js/controllers/setting.client.controller.js'
 	                          ]);
 	                      }]
@@ -139,7 +139,7 @@ app.run(
 	                      deps: ['uiLoad',
 	                        function( uiLoad){
 	                          return uiLoad.load([
-	                                '/js/services/setting.client.services.js',
+	                                '/js/services/setting.client.service.js',
 	                                '/js/controllers/setting.client.controller.js'
 	                          ]);
 	                      }]

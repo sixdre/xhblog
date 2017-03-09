@@ -1,5 +1,5 @@
 "use strict";
-const IndexCtrl = require('../../controller/www/index.server.controllers');
+const IndexCtrl = require('../../controller/www/index.server.controller');
 
 module.exports = function(app) {
 	app.get('/',IndexCtrl.common,IndexCtrl.showIndex);

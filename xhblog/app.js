@@ -115,7 +115,7 @@ app.use(function(req,res,next){
 
 
 //页面路由控制
-const routes = require('./routes/server.routes.js');				
+const routes = require('./routes/server.route.js');				
 routes(app);			
 
 

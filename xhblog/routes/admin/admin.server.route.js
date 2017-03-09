@@ -1,5 +1,5 @@
 "use strict";
-const adminCtrl = require('../../controller/admin/admin.server.controllers');
+const adminCtrl = require('../../controller/admin/admin.server.controller');
 
 module.exports = function(app) {
 	app.get('/admin', adminCtrl.showadmin);
