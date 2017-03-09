@@ -54,6 +54,15 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 						$scope.category={};
 					}
 				});
+			}else if(res.data.code==2){
+				defPopService.defPop({
+					status:1,
+					content:"修改成功",
+					callback:function(){
+						$scope.isNew=true;
+						$scope.category={};
+					}
+				});
 			}
 		}).catch(function(){
 			

@@ -370,30 +370,40 @@ module.exports={
 	},
 	/*
 	 * 
-	 * 文章分类添加
+	 * 文章分类添加或更新
 	 */
 	categoryAdd:function(req,res){
-		let category=req.body.category;
-		let _category=new Category(req.body.category);
-		
-		Category.findOne({name:category.name}).exec(function(err,category){
-			if(category){
+		let category=req.body.category,
+			id=category._id,
+			name=category.name;
+		if(id){						//类型更新
+			Category.update({_id:id},{name:name}).exec(function(err,category){
 				res.json({
-					code:-1,
-					message:'已有此类型'
+					code:2,
+					message:'修改成功',
+					category:category
 				});
-			}else{
-				_category.save(function(err,doc){
-					if(err){
-						return console.log('文章分类添加失败:'+err);
-					}
+			});
+		}else{					//新添加
+			Category.findOne({name:category.name}).exec(function(err,category){
+				if(category){
 					res.json({
-						code:1,
-						category:doc
-					})
-				});
-			}
-		});
+						code:-1,
+						message:'已有此类型'
+					});
+				}else{
+					_category.save(function(err,doc){
+						if(err){
+							return console.log('文章分类添加失败:'+err);
+						}
+						res.json({
+							code:1,
+							category:doc
+						})
+					});
+				}
+			});
+		}
 	},
 	/*
 	 * 
