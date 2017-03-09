@@ -25,10 +25,11 @@ angular.module('app').factory('categoryService',['$http','$q',function($http,$q)
 		list:function(){
 			return handelRequest("GET",'/admin/article/category');
 		},
-		remove:function(id){
-			return handelRequest("POST",'',{id:id});
+		remove:function(data){
+			return handelRequest("POST",'/admin/article/category/remove',data);
 		},
 		add:function(data){
+			console.log(data);
 			return handelRequest("POST",'/admin/article/category',data);
 		}
 		

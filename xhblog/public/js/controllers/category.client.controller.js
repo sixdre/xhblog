@@ -21,13 +21,40 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 	
 	
 	
-	$scope.remove=function(){			//删除分类
-		alert('remove');
+	$scope.remove=function(item){			//删除分类
+		categoryService.remove({category:item}).then(function(res){
+			if(res.data.code==1){
+				defPopService.defPop({
+					status:1,
+					content:"删除成功!",
+					callback:function(){
+						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
+					}
+				});
+			}
+		}).catch(function(){
+			
+		});
 	}
 	$scope.add=function(){				//保存分类
 		console.log($scope.category);
 		categoryService.add({category:$scope.category}).then(function(res){
 			console.log(res.data);
+			if(res.data.code==-1){
+				defPopService.defPop({
+					status:0,
+					content:"已有此类型，不可重复添加"
+				});
+			}else if(res.data.code==1){
+				defPopService.defPop({
+					status:1,
+					content:"添加成功",
+					callback:function(){
+						$rootScope.categorys.push(res.data.category);
+						$scope.category={};
+					}
+				});
+			}
 		}).catch(function(){
 			
 		});

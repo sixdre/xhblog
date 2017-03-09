@@ -373,19 +373,40 @@ module.exports={
 	 * 文章分类添加
 	 */
 	categoryAdd:function(req,res){
-		console.log(req.body.category);
-		let category=new Category(req.body.category);
-		category.save().exec(function(err,doc){
-			if(err){
-				return console.log('文章分类添加失败:'+err);
+		let category=req.body.category;
+		let _category=new Category(req.body.category);
+		
+		Category.findOne({name:category.name}).exec(function(err,category){
+			if(category){
+				res.json({
+					code:-1,
+					message:'已有此类型'
+				});
+			}else{
+				_category.save(function(err,doc){
+					if(err){
+						return console.log('文章分类添加失败:'+err);
+					}
+					res.json({
+						code:1,
+						category:doc
+					})
+				});
 			}
+		});
+	},
+	/*
+	 * 
+	 * 文章分类删除
+	 */
+	categoryRemove:function(req,res){
+		let id=req.body.category._id;
+		Category.remove({_id:id}).exec(function(err){
 			res.json({
-				code:1,
-				category:doc
+				code:1
 			});
 		});
 	},
-
 	testUpload:function(req,res){
 		/*console.log(req.files);
 		console.log(req.files.file.path);
