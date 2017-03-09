@@ -8,7 +8,7 @@ const fs = require('fs'); 							//node.js核心的文件处理模块
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');			//用来处理请求数据
 const ueditor = require("ueditor");			//编辑器
 global.moment = require('moment'); 			//时间格式化
 global.md5=require("md5");					//md5加密
@@ -49,7 +49,7 @@ app.set('view engine', 'html');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));		//extended为false时，键值对中的值就为'String'或'Array'形式,为true,则可为任何类型
 app.use(express.static(path.join(__dirname, 'public')));
 /*app.use(bodyParser({ uploadDir: "./public/upload" }));*/  
 
