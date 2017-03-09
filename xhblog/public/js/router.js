@@ -8,7 +8,7 @@ app.run(
 	.config(
 		function($stateProvider, $urlRouterProvider) {
 			$urlRouterProvider
-				.otherwise('/app/calendar');
+				.otherwise('/access/404');
 			$stateProvider
 				.state('app', {
 					abstract: true,
