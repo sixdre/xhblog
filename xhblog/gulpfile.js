@@ -1,5 +1,15 @@
-var gulp=require('gulp');
+var gulp=require('gulp'),
+plugins = require('gulp-load-plugins')(),
+nodemon = require('gulp-nodemon');
 
-gulp.task('default',function(){
-	console.log(1);
+
+
+//实时监听入口文件
+gulp.task('nodemon',function() {
+  nodemon({ script: 'bin/www',
+    ignore: ['README.md', 'node_modules/**', '.DS_Store']
+  });
 });
+
+
+gulp.task('default',['nodemon']);
