@@ -376,6 +376,7 @@ module.exports={
 		let category=req.body.category,
 			id=category._id,
 			name=category.name;
+		var _category=new Category(category);
 		if(id){						//类型更新
 			Category.update({_id:id},{name:name}).exec(function(err,category){
 				res.json({
