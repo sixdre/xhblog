@@ -3,6 +3,7 @@
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");
+const Tag=mongoose.model('Tag');
 const Manager = mongoose.model('Manager');				//管理员
 
 const multiparty =require("connect-multiparty")
@@ -62,11 +63,11 @@ module.exports={
 			});
 			article.save(function(err, article) {
 				if(err){
-					return console.log(err)
+					return console.log(err);
 				}
 				res.json({
 					code:1
-				})
+				});
 			});
 		});
 		
@@ -411,6 +412,53 @@ module.exports={
 			});
 		});
 	},
+	/*
+	 * 文章标签查询
+	 * 
+	 */
+	tagList:function(req,res){
+		
+	},
+	/*
+	 * 标签添加
+	 */
+	tagAdd:function(req,res){
+		let tag=req.body.tag,
+		id=tag._id,
+		name=tag.name;
+		var _tag=new _Tag(_tag);
+		if(id){						//类型更新
+			Tag.update({_id:id},{name:name}).exec(function(err,tag){
+				res.json({
+					code:2,
+					message:'修改成功',
+					tag:tag
+				});
+			});
+		}else{					//新添加
+			Tag.findOne({name:tag.name}).exec(function(err,tag){
+				if(tag){
+					res.json({
+						code:-1,
+						message:'已有此类型'
+					});
+				}else{
+					_tag.save(function(err,doc){
+						if(err){
+							return console.log('文章分类添加失败:'+err);
+						}
+						res.json({
+							code:1,
+							tag:doc
+						})
+					});
+				}
+			});
+		}
+	},
+	
+	
+	
 	testUpload:function(req,res){
 		/*console.log(req.files);
 		console.log(req.files.file.path);

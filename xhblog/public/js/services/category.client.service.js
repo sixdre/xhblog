@@ -21,18 +21,32 @@ angular.module('app').factory('categoryService',['$http','$q',function($http,$q)
 		return deferred.promise;
 	}
 
-	return {
-		list:function(){
-			return handelRequest("GET",'/admin/article/category');
+	var api={
+		category:{
+			list:function(){
+				return handelRequest("GET",'/admin/article/category');
+			},
+			remove:function(data){
+				return handelRequest("POST",'/admin/article/category/remove',data);
+			},
+			add:function(data){
+				console.log(data);
+				return handelRequest("POST",'/admin/article/category',data);
+			}
 		},
-		remove:function(data){
-			return handelRequest("POST",'/admin/article/category/remove',data);
-		},
-		add:function(data){
-			console.log(data);
-			return handelRequest("POST",'/admin/article/category',data);
+		tag:{
+			list:function(){
+				return handelRequest("GET",'/admin/article/tag');
+			},
+			remove:function(data){
+				return handelRequest("POST",'/admin/article/tag/remove',data);
+			},
+			add:function(data){
+				return handelRequest("POST",'/admin/tag',data);
+			}
 		}
-		
 	}
+	
+	return api;
 	
 }])

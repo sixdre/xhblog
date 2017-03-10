@@ -40,6 +40,8 @@ module.exports = function(app) {
 	article.post('/category',articleCtrl.categoryAdd);			//文章添加
 	article.post('/category/remove',articleCtrl.categoryRemove);			//文章添加
 	
+	article.post('/tag',articleCtrl.tagAdd);
+	
 	/*
 	 * 设置
 	 */
