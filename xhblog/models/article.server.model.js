@@ -72,7 +72,7 @@ ArticleSchema.statics.findNew = function(limit,callback) {
 
 
 //通过id来查找
-ArticleSchema.statics.findById = function(id,callback) {
+ArticleSchema.statics.findByBId = function(id,callback) {
 	return this.model('Article').findOne({bId:id}, function (error, doc) {
         if (error) {
             console.log(error);

@@ -129,7 +129,7 @@ module.exports={
 		const bid=req.params["bid"];
 		async.waterfall([
 			function(callback){
-				Article.findById(bid,function(article){
+				Article.findByBId(bid,function(article){
 					if(!article){			//没找到就发送一个404
 						return res.send(404, "Oops! We didn't find it");
 					}

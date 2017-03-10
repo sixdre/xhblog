@@ -8,7 +8,6 @@ const Manager = mongoose.model('Manager');				//管理员
 const multiparty =require("connect-multiparty")
 
 
-
 const formidable = require('formidable');
 const fs = require('fs'); 							//node.js核心的文件处理模块
 
@@ -251,9 +250,7 @@ module.exports={
 	 * */
 	remove:function(req, res) {
 		let id=req.body.id;
-		console.log(id);
-		Article.findById(id,function(doc1){
-			console.log(doc1.category);
+		Article.findByBId(id,function(doc1){
 			Category.update({_id:doc1.category},{
 				$pull:{"articles": doc1._id}
 			}).then(function(raw){
@@ -302,7 +299,7 @@ module.exports={
 	//编辑文章搜寻
 	find:function(req,res){
 		let id=req.body.id;
-		Article.findById(id,function(doc){
+		Article.findByBId(id,function(doc){
 			res.json({
 				article:doc
 			})
@@ -329,13 +326,11 @@ module.exports={
 	del:function(req,res){
 		console.log(req.body.ids);
 		Article.find({bId:{$in:req.body.ids}}).then(function(doc){
-			console.log(doc);
 			doc.forEach(function(v,i){
 				console.log(v);
 				Category.update({_id:v.category},{
 					$pull:{"articles": v._id}
 				}).then(function(raw){
-					console.log(123);
 					Article.remove({bId:v.bId}).exec(function(err){
 						if(err){
 							return console.log(err);
@@ -345,7 +340,6 @@ module.exports={
 					console.log(err);
 				});
 			});
-			console.log(123455);
 			res.json({
 				code:1
 			});
@@ -362,7 +356,6 @@ module.exports={
 	 */
 	categoryList:function(req,res){
 		Category.find({}).exec(function(err,categorys){
-			console.log(categorys);
 			res.json({
 				categorys:categorys
 			});
