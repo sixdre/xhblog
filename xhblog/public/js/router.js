@@ -7,6 +7,7 @@ app.run(
 	)
 	.config(
 		function($stateProvider, $urlRouterProvider) {
+			$urlRouterProvider.when("", "app/calendar");
 			$urlRouterProvider
 				.otherwise('/access/404');
 			$stateProvider
@@ -127,8 +128,8 @@ app.run(
                       deps: ['uiLoad',
                         function( uiLoad){
                           return uiLoad.load([
-                                '/js/services/category.client.service.js',
-                                '/js/controllers/category.client.controller.js'
+                                '/js/services/cate_tag.client.service.js',
+                                '/js/controllers/cate_tag.client.controller.js'
                           ]);
                       }]
 	                },

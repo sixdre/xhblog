@@ -42,7 +42,7 @@ angular.module('app').factory('categoryService',['$http','$q',function($http,$q)
 				return handelRequest("POST",'/admin/article/tag/remove',data);
 			},
 			add:function(data){
-				return handelRequest("POST",'/admin/tag',data);
+				return handelRequest("POST",'/admin/article/tag',data);
 			}
 		}
 	}

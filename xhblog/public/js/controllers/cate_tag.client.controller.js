@@ -45,7 +45,20 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 			
 			
 		}else if(type="tag"){
-			alert('tag');
+			console.log(item);
+			categoryService.tag.remove({tag:item}).then(function(res){
+				if(res.data.code==1){
+					defPopService.defPop({
+						status:1,
+						content:"删除成功!",
+						callback:function(){
+							$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
+						}
+					});
+				}
+			}).catch(function(){
+				
+			});
 		}					
 	}
 	$scope.add=function(type){				//保存分类
@@ -113,10 +126,6 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 			});
 		}
 	}	
-	$scope.update=function(){			//更新分类
-		alert('update');
-	}
-	
-	
+
 	
 }]);

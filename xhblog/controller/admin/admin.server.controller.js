@@ -5,6 +5,7 @@ const Article = mongoose.model('Article');			//文章
 const Manager = mongoose.model('Manager');			//管理员
 const Lm=mongoose.model("Lm");						//留言
 const Category=mongoose.model("Category");			//文章分类
+const Tag=mongoose.model("Tag");					//文章标签
 const formidable = require('formidable');
 const fs = require('fs'); 							//node.js核心的文件处理模块
 const async = require('async');
@@ -49,13 +50,21 @@ module.exports={
 				}
 				callback(null,lmdoc,total,categorys);
 			})
+		},function(lmdoc,total,categorys,callback){
+			Tag.find({}).exec(function(err,tags){
+				if(err){
+					return console.log("err");
+				}
+				callback(null,lmdoc,total,categorys,tags);
+			})
 		}
-		],function(err,lmdoc,total,categorys){
+		],function(err,lmdoc,total,categorys,tags){
 			res.json({
 				manager: manager,	//管理员
 				total:total,		//文章总数
 				lmdoc:lmdoc,		//留言
-				categorys:categorys	//文章分类
+				categorys:categorys,	//文章分类
+				tags:tags			//文章标签
 			});
 		})
 	},

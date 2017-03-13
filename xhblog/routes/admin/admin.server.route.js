@@ -36,20 +36,21 @@ module.exports = function(app) {
 	article.post('/del', articleCtrl.del);
 	article.post('/testUpload',articleCtrl.testUpload);
 	article.post('/publish',articleCtrl.publish);			//新的发布路由
-	article.get('/category',articleCtrl.categoryList);			//文章分类
-	article.post('/category',articleCtrl.categoryAdd);			//文章添加
-	article.post('/category/remove',articleCtrl.categoryRemove);			//文章添加
+	article.get('/category',articleCtrl.categoryList);			//分类列表
+	article.post('/category',articleCtrl.categoryAdd);			//分类添加
+	article.post('/category/remove',articleCtrl.categoryRemove);			//分类删除
 	
-	article.post('/tag',articleCtrl.tagAdd);
-	
+	article.get('/tag',articleCtrl.tagList);				//标签列表
+	article.post('/tag',articleCtrl.tagAdd);				//标签添加
+	article.post('/tag/remove',articleCtrl.tagRemove);		//标签删除
 	/*
 	 * 设置
 	 */
-	setting.post('/post_banner',settingCtrl.post_banner);			//首页轮播图
-	setting.post('/addFriend',settingCtrl.addFriend);	//友情链接
-	setting.get('/loadFriend',settingCtrl.loadFriend);	//友情链接
-	setting.post('/delFriend',settingCtrl.delFriend);	//友情链接
-	setting.post('/updateFriend',settingCtrl.updateFriend);	//友情链接
+	setting.post('/post_banner',settingCtrl.post_banner);			//首页轮播图添加
+	setting.post('/addFriend',settingCtrl.addFriend);	//友情链接添加
+	setting.get('/loadFriend',settingCtrl.loadFriend);	//友情链接列表
+	setting.post('/delFriend',settingCtrl.delFriend);	//友情链接删除
+	setting.post('/updateFriend',settingCtrl.updateFriend);	//友情链接更新
 	
 	
 	app.use('/admin',admin);

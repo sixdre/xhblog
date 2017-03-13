@@ -417,16 +417,21 @@ module.exports={
 	 * 
 	 */
 	tagList:function(req,res){
-		
+		Tag.find({}).exec(function(err,tags){
+			res.json({
+				tags:tags
+			});
+		});
 	},
 	/*
 	 * 标签添加
 	 */
 	tagAdd:function(req,res){
+		console.log(req.body.tag);
 		let tag=req.body.tag,
 		id=tag._id,
 		name=tag.name;
-		var _tag=new _Tag(_tag);
+		var _tag=new Tag(tag);
 		if(id){						//类型更新
 			Tag.update({_id:id},{name:name}).exec(function(err,tag){
 				res.json({
@@ -456,7 +461,14 @@ module.exports={
 			});
 		}
 	},
-	
+	tagRemove:function(req,res){
+		let id=req.body.tag._id;
+		Tag.remove({_id:id}).exec(function(err){
+			res.json({
+				code:1
+			});
+		});
+	},
 	
 	
 	testUpload:function(req,res){
