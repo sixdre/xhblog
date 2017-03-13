@@ -58,7 +58,6 @@ app.run(
 				.state('app.article', {
 					abstract: true,
 					url: '/article',
-					/*templateUrl: '/tpl/admin_tpl/article/article.html',*/		//之前的
 					template: '<div ui-view class="fade-in-up"></div>',			//new
 					controller: 'articleCtrl',
 					resolve: {
@@ -84,28 +83,6 @@ app.run(
 					templateUrl: '/tpl/admin_tpl/article/main.html',
 					controller:"articleListCtrl"
 				})
-				
-				
-				.state('app.article.editor', {
-					url: '/editor',
-					templateUrl: '/tpl/admin_tpl/article/editor.html'
-				})
-				.state('app.article.list', {
-					url: '/list/:page',
-					templateUrl: '/tpl/admin_tpl/article/list.html',
-					controller:"articleListCtrl"
-					/*controller:function($stateParams){
-						console.log($stateParams.page)
-					}*/
-					/*deps: ['uiLoad',
-                        function( uiLoad){
-                          return uiLoad.load([
-                             '/vendor/jquery/datatables/dataTables.bootstrap.css'
-                         ]);
-                     }]*/
-					/*templateUrl: '/tpl/admin_tpl/article/table_list.html',*/
-					
-				})
 				.state("app.friend",{
 					url:"/friend",
 					templateUrl:'/tpl/admin_tpl/setting/newFriend.html',
@@ -122,7 +99,7 @@ app.run(
 				})
 				.state("app.category",{
 					url:"/category",
-					templateUrl:'/tpl/admin_tpl/category.html',
+					templateUrl:'/tpl/admin_tpl/cate_tag.html',
 					controller:'categoryCtrl',
 					resolve: {
                       deps: ['uiLoad',
@@ -167,19 +144,6 @@ app.run(
 				.state('app.setting.banner.list', {
 					url: '/banner_list',
 					templateUrl: '/tpl/admin_tpl/setting/banner_list.html'
-				})
-				.state('app.setting.friends', {
-					url: '/friends',
-					templateUrl: '/tpl/admin_tpl/setting/friends.html'
-				})
-				.state('app.setting.friends.add', {
-					url: '/friends_add',
-					templateUrl: '/tpl/admin_tpl/setting/friends_add.html',
-					controller: 'settingCtrl'
-				})
-				.state('app.setting.friends.list', {
-					url: '/friends_list',
-					templateUrl: '/tpl/admin_tpl/setting/friends_list.html'
 				})
 				.state('access', {
 	                  url: '/access',
