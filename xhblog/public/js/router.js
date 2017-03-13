@@ -78,9 +78,9 @@ app.run(
 					url: '/publish',
 					templateUrl: '/tpl/admin_tpl/article/publish.html'
 				})
-				.state('app.article.main', {					//new
-					url: '/main/:page',
-					templateUrl: '/tpl/admin_tpl/article/main.html',
+				.state('app.article.list', {					//new
+					url: '/list/:page',
+					templateUrl: '/tpl/admin_tpl/article/list.html',
 					controller:"articleListCtrl"
 				})
 				.state("app.friend",{
