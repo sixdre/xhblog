@@ -84,6 +84,11 @@ app.run(
 					templateUrl: '/tpl/admin_tpl/article/list.html',
 					controller:"articleListCtrl"
 				})
+				.state('app.article.search', {
+					url: '/search',
+					templateUrl: '/tpl/admin_tpl/article/search.html',
+					controller:'articleSearchCtrl'
+				})
 				.state("app.friend",{
 					url:"/friend",
 					templateUrl:'/tpl/admin_tpl/setting/newFriend.html',
@@ -115,10 +120,6 @@ app.run(
 				.state("app.users",{
 					url:"/users",
 					templateUrl:'/tpl/admin_tpl/users.html'
-				})
-				.state('app.article.search', {
-					url: '/search',
-					templateUrl: '/tpl/admin_tpl/article/search.html'
 				})
 				.state('app.setting', {
 					abstract: true,

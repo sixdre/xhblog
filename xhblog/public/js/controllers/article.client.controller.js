@@ -250,10 +250,68 @@ app.controller('articleSearchCtrl',
 }])
 
 
+/*
+ * 模态框
+ */
+app.controller('ModalInstanceCtrl',
+	['$scope', '$modalInstance',"data","articleService","defPopService",
+	 function($scope,$modalInstance,data,articleService,defPopService){
+		var id=data.id;
+		if(data.handle==1){				//
+			articleService.find(id).then(function(res){
+				$scope.up_item=res.data.article;
+				$scope.ArticleType=data.ArticleType;
+				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
+				var upUe=UE.getEditor('up_editor',{
+			        initialFrameHeight:200		//高度设置
+			    });  
+			    upUe.addListener("ready", function () {
+			    	// editor准备好之后才可以使用
+			    	upUe.setContent($scope.up_item.tagcontent);
+		        });
+			}).catch(function(err){
+				defPopService.defPop({
+					status:0,
+					content:"服务器出错了！"
+			    });
+			});
+		}
+	    $scope.update = function (id) {
+	    	var arg={
+	    		id:id,
+	    		tagcontent:UE.getEditor('up_editor').getContent(),
+	    		content:UE.getEditor('up_editor').getContentTxt()
+	    	};
+	    	articleService.update(arg).then(function(res){
+	    		var data=res.data;
+	    		if(data.code>0){
+	    			defPopService.defPop({
+	    				status:1,
+	    				content:"更新成功！"
+	    		    });
+	    		}
+	    	}).catch(function(err){
+	    		defPopService.defPop({
+    				status:0,
+    				content:"更新失败！"
+    		    });
+	    	});
+	    };
+
+	    $scope.cancel = function () {
+	       $modalInstance.dismiss('cancel');
+	    };
+	    
+	    $scope.confirm=function(){
+	        $modalInstance.close({			//里面的参数为向 modalInstance.result.then(function (e) {})中传递一个数据
+	        	code:1						
+	        });
+	    }
+}])
 
 
 
-app.controller('articleCtrl',
+/*app.controller('articleCtrl',
 		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
 		 function($rootScope,$scope,$stateParams,$log,$modal,articleService,defPopService){
       
@@ -409,9 +467,9 @@ app.controller('articleCtrl',
             $log.info('Modal dismissed at: ' + new Date());
          });
 	
-	};
+	};*/
 	//发布文章
-	$scope.publish=function(){
+	/*$scope.publish=function(){
 		$scope.article.tagcontent=UE.getEditor('editor').getContent();
 		$scope.article.content=UE.getEditor('editor').getContentTxt();
 		articleService.publish($scope.article).then(function(res){
@@ -427,10 +485,7 @@ app.controller('articleCtrl',
 					status:0,
 					content:"出错了！"
 			 });
-		});
-		
-		
-		
+		});*/
 		
 		/*var formData = new FormData($("#Article_form")[0]);
 		formData.append('author',$('#manager_name').text().trim());
@@ -451,7 +506,7 @@ app.controller('articleCtrl',
 					content:"出错了！"
 			 });
 		});*/
-	};
+	/*};
 	
 	//搜索文章
 	$scope.search=function(title){
@@ -501,81 +556,9 @@ app.controller('articleCtrl',
              }
         });
 	};
-}]);
-
-app.controller('editorCtrl',['$scope',function($scope){
-	if (uetrue) {
-		uetrue.destroy();
-	}
-	uetrue=UE.getEditor('editor',{
-        initialFrameHeight:300		//高度设置
-    });
-}]);
-
-
-/*app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
-	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page?$stateParams.page:1);
-	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
 }]);*/
 
 
-app.controller('ModalInstanceCtrl',
-	['$scope', '$modalInstance',"data","articleService","defPopService",
-	 function($scope,$modalInstance,data,articleService,defPopService){
-		var id=data.id;
-		if(data.handle==1){				//
-			articleService.find(id).then(function(res){
-				$scope.up_item=res.data.article;
-				$scope.ArticleType=data.ArticleType;
-				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
-				var upUe=UE.getEditor('up_editor',{
-			        initialFrameHeight:200		//高度设置
-			    });  
-			    upUe.addListener("ready", function () {
-			    	// editor准备好之后才可以使用
-			    	upUe.setContent($scope.up_item.tagcontent);
-		        });
-			}).catch(function(err){
-				defPopService.defPop({
-					status:0,
-					content:"服务器出错了！"
-			    });
-			});
-		}
-	    $scope.update = function (id) {
-	    	var arg={
-	    		id:id,
-	    		tagcontent:UE.getEditor('up_editor').getContent(),
-	    		content:UE.getEditor('up_editor').getContentTxt()
-	    	};
-	    	articleService.update(arg).then(function(res){
-	    		var data=res.data;
-	    		if(data.code>0){
-	    			defPopService.defPop({
-	    				status:1,
-	    				content:"更新成功！"
-	    		    });
-	    		}
-	    	}).catch(function(err){
-	    		defPopService.defPop({
-    				status:0,
-    				content:"更新失败！"
-    		    });
-	    	});
-	    };
-
-	    $scope.cancel = function () {
-	       $modalInstance.dismiss('cancel');
-	    };
-	    
-	    $scope.confirm=function(){
-	        $modalInstance.close({			//里面的参数为向 modalInstance.result.then(function (e) {})中传递一个数据
-	        	code:1						
-	        });
-	    }
-	    
-	    
-}])
 
 
 
