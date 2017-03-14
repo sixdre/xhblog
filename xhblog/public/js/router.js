@@ -59,7 +59,7 @@ app.run(
 					abstract: true,
 					url: '/article',
 					template: '<div ui-view class="fade-in-up"></div>',			//new
-					controller: 'articleCtrl',
+					/*controller:'articleCtrl',*/
 					resolve: {
 	                      deps: ['$ocLazyLoad',
 	                        function( $ocLazyLoad ){
@@ -76,7 +76,8 @@ app.run(
 				})
 				.state('app.article.publish', {					//new
 					url: '/publish',
-					templateUrl: '/tpl/admin_tpl/article/publish.html'
+					templateUrl: '/tpl/admin_tpl/article/publish.html',
+					controller:'articlePublishCtrl',
 				})
 				.state('app.article.list', {					//new
 					url: '/list/:page',

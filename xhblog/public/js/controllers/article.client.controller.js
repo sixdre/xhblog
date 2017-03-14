@@ -1,57 +1,261 @@
 "use strict";
 var uetrue=null;
-app.controller('articleCtrl',
-		['$rootScope','$scope','$http',"$stateParams",'$window','$log','$modal','FileUploader','toaster','articleService',"defPopService",
-		 function($rootScope,$scope,$http,$stateParams,$window,$log,$modal,FileUploader,toaster,articleService,defPopService){
-			
-	  var uploader = $scope.uploader = new FileUploader({
-          url:"/admin/article/testUpload",
-          queueLimit: 1,     //文件个数
-          removeAfterUpload: true,   //上传后删除文件
-        });
-	  uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
-          console.info('onWhenAddingFileFailed', item, filter, options);
-      };
-      uploader.onAfterAddingFile = function(fileItem) {
-          console.info('onAfterAddingFile', fileItem);
-      };
-      uploader.onAfterAddingAll = function(addedFileItems) {
-          console.info('onAfterAddingAll', addedFileItems);
-      };
-      uploader.onBeforeUploadItem = function(item) {
-          console.info('onBeforeUploadItem', item);
-      };
-      uploader.onProgressItem = function(fileItem, progress) {
-          console.info('onProgressItem', fileItem, progress);
-      };
-      uploader.onProgressAll = function(progress) {
-          console.info('onProgressAll', progress);
-      };
-      uploader.onSuccessItem = function(fileItem, response, status, headers) {
-          console.info('onSuccessItem', fileItem, response, status, headers);
-      };
-      uploader.onErrorItem = function(fileItem, response, status, headers) {
-          console.info('onErrorItem', fileItem, response, status, headers);
-      };
-      uploader.onCancelItem = function(fileItem, response, status, headers) {
-          console.info('onCancelItem', fileItem, response, status, headers);
-      };
-      uploader.onCompleteItem = function(fileItem, response, status, headers) {
-          console.info('onCompleteItem', fileItem, response, status, headers);
-      };
-      uploader.onCompleteAll = function() {
-          console.info('onCompleteAll');
-      };
+/*
+ * 文章发布控制器
+ */
+app.controller('articlePublishCtrl',
+		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
+		 function($rootScope,$scope,$stateParams,articleService,defPopService){
+			$scope.publish=function(){
+				$scope.article.tagcontent=UE.getEditor('editor').getContent();
+				$scope.article.content=UE.getEditor('editor').getContentTxt();
+				articleService.publish($scope.article).then(function(res){
+					var data=res.data;
+					if(data.code>0){
+						defPopService.defPop({
+							status:1,
+							content:"发表成功!"
+						 });
+					}
+				}).catch(function(err){
+					 defPopService.defPop({
+							status:0,
+							content:"出错了！"
+					 });
+				});
 
-      console.info('uploader', uploader);		
+				/*var formData = new FormData($("#Article_form")[0]);
+				formData.append('author',$('#manager_name').text().trim());
+				formData.append('content',UE.getEditor('editor').getContentTxt());
+				formData.append('tagcontent',UE.getEditor('editor').getContent());
+				formData.append("article_type",$scope.article.type.name);	//类型
+				articleService.save(formData).then(function(res){
+					var data=res.data;
+					if(data.code>0){
+						defPopService.defPop({
+							status:1,
+							content:"发表成功!"
+						 });
+					}
+				},function(err){
+					 defPopService.defPop({
+							status:0,
+							content:"出错了！"
+					 });
+				});*/
+			};
+}])
+
+/*
+ * 文章列表管理控制器
+ */
+app.controller('articleListCtrl',
+		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
+		 function($rootScope,$scope,$stateParams,$log,$modal,articleService,defPopService){
+			//分页配置参数
+			$scope.pageConfig = {
+				maxSize:5,
+				limit:5,		//每页显示的文章数
+			    bigTotalItems:0,	//文章总数
+		        bigCurrentPage:1
+		    };
+			$scope.checkedIds = [];		//id组
+			  //分页显示
+			 $scope.pageChanged = function(cp,limit) {
+		    	 articleService.page({current:cp,textCount:limit}).then(function(res){
+		    		 $scope.articlelist=res.data.page;
+		    		 $scope.pageConfig.bigTotalItems =res.data.total;
+		    		 
+		    		 $scope.listStart=($scope.pageConfig.bigCurrentPage-1)*$scope.pageConfig.limit+1;
+		    		 var listEnd=$scope.pageConfig.bigCurrentPage*$scope.pageConfig.limit;
+		    		 $scope.listEnd=listEnd<$rootScope.articleTotal?listEnd:$rootScope.articleTotal;
+		    		
+		    	 }).catch(function(err){
+		    		 defPopService.defPop({
+							status:0,
+							content:"出错了！"
+					 });
+		 		 })
+			 };	
+			//文章全选操作
+			$scope.selectAll=function(allCheck){
+				if(allCheck==true){
+					angular.forEach($scope.articlelist,function (v) {
+						if($scope.checkedIds.indexOf(v.bId)<0){
+							$scope.checkedIds.push(v.bId);
+						}
+		            });
+				}else{
+					 angular.forEach($scope.articlelist,function (v) {
+						$scope.checkedIds=[];
+			         });
+				}
+			}
+			//单选
+			$scope.selectOne = function (id) {
+				var index = $scope.checkedIds.indexOf(id);
+				if(index === -1) {					//如果没有那就添加到数组中
+					 $scope.checkedIds.push(id);				
+		        } else if (index !== -1){			//否则就删除掉
+		            $scope.checkedIds.splice(index, 1);
+		        };
+		    }
+		    
+			$scope.del=function(){				//多选或单选删除
+				if($scope.checkedIds.length==0){
+					return defPopService.defPop({
+							status:0,
+							content:"请选择要删除的文章！"
+					 });
+				}
+			    var modalInstance = $modal.open({
+			          templateUrl: 'confirm.html',
+			          size:"sm",
+			          controller: 'ModalInstanceCtrl',
+			          resolve: {
+			        	  data:function(){		//注入到ModalInstanceCtrl 里的data
+			        		  var obj={
+			        			  id:$scope.id,
+			        			  handle:0
+			        		  }
+			        		  return obj;
+			        	  }
+			          }
+		      });
+			  modalInstance.result.then(function () {
+					$http({
+						method:"POST",
+						url:"/admin/article/del",
+						data:{ids:$scope.checkedIds}
+					 }).then(function(res){
+						var data=res.data;
+						if(data.code>0){
+							defPopService.defPop({
+								status:1,
+								content:"删除成功!",
+								callback:function(){
+									var total=($rootScope.articleTotal)-($scope.checkedIds.length);
+									$rootScope.articleTotal=total<0?0:total;
+									$scope.pageChanged();
+								}
+							 });
+						}
+					 }).catch(function(err){
+						console.log(err)
+					 })
+		       }).catch( function () {
+		          $log.info('Modal dismissed at: ' + new Date());
+		       });
+			}
+			
+			$scope.remove=function(item){				//图标点击删除 单个删除
+				var id = item.bId;
+				var modalInstance = $modal.open({
+			          templateUrl: 'confirm.html',
+			          size:"sm",
+			          controller: 'ModalInstanceCtrl',
+			          resolve: {
+			        	  data:function(){		//注入到ModalInstanceCtrl 里的data
+			        		  var obj={
+			        			  id:$scope.id,
+			        			  handle:0
+			        		  }
+			        		  return obj;
+			        	  }
+			          }
+		        });
+				 modalInstance.result.then(function () {
+					articleService.remove(id).then(function(res){
+						var data=res.data;
+						if(data.code>0){
+							 defPopService.defPop({
+								status:1,
+								content:"删除成功!",
+								callback:function(){
+									$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1)
+									$scope.pageChanged();
+								}
+							 });
+						}
+					}).catch(function(err){
+						 defPopService.defPop({
+								status:0,
+								content:"出错了！"
+						 });
+					});
+		         }).catch(function () {
+		            $log.info('Modal dismissed at: ' + new Date());
+		         });
+			
+			};
 			
 			
-      $scope.upload=function(){
-    	  uploader.uploadAll();
-      }
-      
-      
-      
+			//编辑文章
+			$scope.edit=function(item){
+				$scope.id=item.bId;
+		        var modalInstance = $modal.open({
+		            templateUrl: '/tpl/admin_tpl/article/editor_modal.html',
+		            controller: 'ModalInstanceCtrl',
+		            resolve: {
+		        	    data:function(){		//注入到ModalInstanceCtrl 里的data
+		        		    var obj={
+		        			    id:$scope.id,
+		        			    handle:1,
+		        			    ArticleType:$scope.ArticleType
+		        			    
+		        		    }
+		        		  return obj;
+		        	    },
+		             }
+		        });
+			};
+			
+			$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page?$stateParams.page:1);
+			$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
+}])
+
+/*
+ * 文章搜索控制器
+ */
+app.controller('articleSearchCtrl',
+		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
+		 function($rootScope,$scope,$stateParams,articleService,defPopService){
+		$scope.search=function(title){
+			if(!title){
+				return defPopService.defPop({
+						status:0,
+						content:"请输入要搜索文章的标题！"
+				 });
+				
+			}
+			articleService.search(title).then(function(res){
+				if(res.data.code<0){
+					return defPopService.defPop({
+						status:0,
+						title:"搜索结果",
+						content:"没有找到相关文章！"
+				    });
+					
+				}
+				var data=res.data.results;
+				$scope.searchResult=data;
+				$scope.number=res.data.number;
+			}).catch(function(err){
+				defPopService.defPop({
+					status:0,
+					content:"服务器出错了！"
+			    });
+			});
+		};
+}])
+
+
+
+
+
+app.controller('articleCtrl',
+		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
+		 function($rootScope,$scope,$stateParams,$log,$modal,articleService,defPopService){
       
 	//分页配置参数
 	$scope.pageConfig = {
@@ -162,19 +366,6 @@ app.controller('articleCtrl',
        });
 	}
 	
-	 
-
-	//列表显示  
-	$scope.loadlist=function(){
-		articleService.list('').then(function(res){
-			$scope.pageConfig.bigTotalItems =res.data.article.length;
-		}).catch(function(err){
-			 defPopService.defPop({
-					status:1,
-					content:"出错了！"
-			 });
-		})
-	}
 	
 	$scope.format=function(arg){			//时间格式化，可用angular自带的$filter格式化时间
 		return moment(arg).format('YYYY-MM-DD HH:mm:ss');
@@ -322,10 +513,10 @@ app.controller('editorCtrl',['$scope',function($scope){
 }]);
 
 
-app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
+/*app.controller("articleListCtrl",["$scope","$stateParams",function($scope,$stateParams){
 	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page?$stateParams.page:1);
 	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
-}]);
+}]);*/
 
 
 app.controller('ModalInstanceCtrl',
