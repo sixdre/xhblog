@@ -46,7 +46,7 @@
                 </div>
                 <div class="list-group" ui-jq="slimScroll" ui-options="{height:'150px', size:'5px'}">
                 	
-                	 <a ng-repeat="item in lm" class="media list-group-item">
+                	 <a ng-repeat="item in lm |orderBy:'create_time':true" class="media list-group-item">
                     <span class="pull-left thumb-sm">
                       <img src="/img/a0.jpg" alt="..." class="img-circle">
                     </span>

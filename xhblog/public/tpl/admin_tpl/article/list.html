@@ -55,7 +55,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in articlelist | orderBy:'time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">
+						<tr ng-repeat="item in articlelist | orderBy:'post_time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">
 							<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
 							<td><a ng-click="edit(item);" class="text-success">{{item.title |limitTo:10}}</a></td>
 							<td ng-bind="item.create_time|date:'yyyy-MM-dd HH:mm:ss'"></td>

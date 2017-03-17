@@ -300,7 +300,7 @@ module.exports={
 	//编辑文章搜寻
 	find:function(req,res){
 		let id=req.body.id;
-		Article.findByBId(id,function(doc){
+		Article.findOne({bId:id}).populate('category','name').exec(function(err,doc){
 			res.json({
 				article:doc
 			})
