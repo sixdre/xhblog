@@ -4,7 +4,7 @@ var uetrue=null;
  * 文章发布控制器
  */
 app.controller('articlePublishCtrl',
-		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
+		['$rootScope','$scope',"$stateParams",'articleService',"defPopService",
 		 function($rootScope,$scope,$stateParams,articleService,defPopService){
 			$scope.publish=function(){
 				$scope.article.tagcontent=UE.getEditor('editor').getContent();
