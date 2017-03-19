@@ -102,7 +102,7 @@
 					<div class="comment-area">
 						<div class="comment-tab">
 							<ul class="comment-tab-left">
-								<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(285)</em></li>
+								<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=comments.length%>)</em></li>
 							</ul>
 						</div>
 						<div class="comment-pager-haeder">
@@ -118,40 +118,43 @@
 									<div class="comment_user avatar">
 										<img src="/images/noavatar_default.png" alt="" />
 									</div>
-									<div class="comment-main">
-										<h4 class="comment-header">
-											<span class="username"><%=v.from.username%></span>
-										</h4>
-										<p class="comment-content"><%=v.content%></p>
-										<div class="comment-footer">
-											<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
-											<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
-										</div>
-										<%if(v.reply&&v.reply.length>0){%>
-											<%v.reply.forEach(function(reply,i){%>
-											<div class="clearfix reply_list">
-												<div class="comment_user avatar">
-													<img src="/images/noavatar_default.png" alt="" />
-												</div>
-												<div class="comment-main">
-													<h4 class="comment-header">
-														<span class="username"><%=reply.from.username%></span> 
-														回复
-														<span class="username"><%=reply.to.username%></span>
-													</h4>
-													<p class="comment-content"><%=reply.content%></p>
-													<div class="comment-footer">
-														<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
-														<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+									<%if(v.from){%>
+										<div class="comment-main">
+											<h4 class="comment-header">
+												<span class="username">
+													<%=v.from.username%>
+												</span>
+											</h4>
+											<p class="comment-content"><%=v.content%></p>
+											<div class="comment-footer">
+												<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
+												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+											</div>
+											<%if(v.reply&&v.reply.length>0){%>
+												<%v.reply.forEach(function(reply,i){%>
+												<div class="clearfix reply_list">
+													<div class="comment_user avatar">
+														<img src="/images/noavatar_default.png" alt="" />
 													</div>
-												</div>
-											</div>	
-											<%})%>
-										<%}%>
-									</div>
+													<div class="comment-main">
+														<h4 class="comment-header">
+															<span class="username"><%=reply.from.username%></span> 
+															回复
+															<span class="username"><%=reply.to.username%></span>
+														</h4>
+														<p class="comment-content"><%=reply.content%></p>
+														<div class="comment-footer">
+															<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
+															<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+														</div>
+													</div>
+												</div>	
+												<%})%>
+											<%}%>
+										</div>
+									<%}%>
 								</li>
 							<%})%>
-							
 						</ul>
 					</div>
 				</div>
