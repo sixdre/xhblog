@@ -59,7 +59,7 @@
 
                         <button ng-if="isNewHandle" type="submit" class="btn btn-success" ng-click="addfriend(friend)" ng-disabled='form.$invalid'>保存链接</button>
                         <button ng-if="!isNewHandle" type="submit" class="btn btn-success" ng-click="updatefriend(friend)">更新链接</button>
-                        
+                        <a ng-if="!isNewHandle" class="btn btn-warning" ng-click="cancel()">取消</a>
                     </form>
                 </div> <!-- panel-body -->
             </div> <!-- panel -->

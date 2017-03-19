@@ -4,7 +4,7 @@ const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");
 const Tag=mongoose.model('Tag');
-const Manager = mongoose.model('Manager');				//管理员
+//const Manager = mongoose.model('Manager');				//管理员
 
 const multiparty =require("connect-multiparty")
 

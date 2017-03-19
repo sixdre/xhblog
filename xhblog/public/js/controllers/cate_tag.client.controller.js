@@ -12,7 +12,6 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 			
 		});
 	}*/
-	
 	$scope.revise=function(type,data){
 		if(type=="category"){
 			$scope.category=data;
@@ -116,7 +115,7 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 						status:1,
 						content:"修改成功",
 						callback:function(){
-							$scope.iscNew=true;
+							$scope.istNew=true;
 							$scope.tag={};
 						}
 					});
@@ -127,5 +126,19 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 		}
 	}	
 
+	
+	$scope.cancel=function(type){
+		if(type=="category"){
+			$scope.iscNew=true;
+			$scope.category={};
+		}else if(type=="tag"){
+			$scope.istNew=true;
+			$scope.tag={};
+		}
+	}
+	
+	
+	
+	
 	
 }]);

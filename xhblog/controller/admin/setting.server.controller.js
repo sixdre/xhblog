@@ -2,7 +2,7 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');				//文章
-const Manager = mongoose.model('Manager');				//管理员
+//const Manager = mongoose.model('Manager');				//管理员
 const Banner = mongoose.model('Banner');					//banner图
 const Friend = mongoose.model('Friend');					//友情链接
 

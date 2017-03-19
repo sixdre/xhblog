@@ -99,6 +99,11 @@ angular.module('app').controller('settingCtrl',['$scope','$http','$window','defP
 		})
 	}
 	
+	$scope.cancel=function(){		//取消更新修改
+		$scope.friend={};
+		$scope.isNewHandle=true;
+	}
+	
 	$scope.loadfriend();
 	
 	

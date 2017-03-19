@@ -32,6 +32,7 @@
 	                    </button>
 	                    <button ng-if="!iscNew" type="button" class="btn btn-success" ng-click="add('category');">更新分类
 	                    </button>
+	                    <a ng-if="!iscNew" class="btn btn-warning" ng-click="cancel('category')">取消</a>
 	                </form>
 	            </div>
 	        </div>
@@ -64,6 +65,7 @@
 	                    </button>
 	                    <button ng-if="!istNew" type="button" class="btn btn-success" ng-click="add('tag');">更新标签
 	                    </button>
+	                    <a ng-if="!istNew" class="btn btn-warning" ng-click="cancel('tag')">取消</a>
 	                </form>
 	            </div>
 	        </div>
