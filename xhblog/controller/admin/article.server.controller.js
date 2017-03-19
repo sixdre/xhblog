@@ -96,7 +96,7 @@ module.exports={
 	publish:function(req,res){					//新的发布文章接口
 			let tags=[req.body.tag1,req.body.tag2];
 			let article =new Article({
-				author: req.session["manager"]||'xuhao',
+				author: req.session["manger"]||'xuhao',
 				title:req.body.title,
 				content:req.body.content,
 				tagcontent:req.body.tagcontent,

@@ -16,10 +16,10 @@ angular.module('app')
       }).then(function(res){
     	  $rootScope.articleTotal=res.data.total;
     	  $rootScope.lm=res.data.lmdoc;
-    	  $rootScope.manager=res.data.manager;
+    	  $rootScope.manger=res.data.manger;
     	  $rootScope.categorys=res.data.categorys;
     	  $rootScope.tags=res.data.tags;
-		  if(!$rootScope.manager){
+		  if(!$rootScope.manger){
 			  $state.go("access.signin");
 		  }
 	  }).catch(function(err){

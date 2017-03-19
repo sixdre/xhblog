@@ -16,19 +16,19 @@ var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		let manager = req.session["manger"];
+		let manger = req.session["manger"];
 		Article.count({},function(err,c){
 			res.render('admin/admin', 
 				{
 					title: '个人博客后台管理系统',
-					manager: manager||{},
+					manger: manger||{},
 					total:c,
 				});
 		});
 	},
 	//前台请求主数据接口
 	loadData:function(req,res){
-		let manager = req.session["manger"];
+		let manger = req.session["manger"];
 		async.waterfall([function(callback){
 			Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
 				console.log(lmdoc);
@@ -61,7 +61,7 @@ module.exports={
 		}
 		],function(err,lmdoc,total,categorys,tags){
 			res.json({
-				manager: manager,	//管理员
+				manger: manger,	//管理员
 				total:total,		//文章总数
 				lmdoc:lmdoc,		//留言
 				categorys:categorys,	//文章分类
