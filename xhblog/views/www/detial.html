@@ -81,7 +81,11 @@
 							<img src="/images/noavatar_default.png" alt="" />
 						</div>
 						<div class="form-ceil form-content">
-							<div class="form-user-info"><%=user.username%></div>
+							<div class="form-user-info">
+								<%if(user){%>
+									<%=user.username%>
+								<%}%>
+							</div>
 							<div class="form-wordlimit">0/300</div>
 							<div class="form-textarea">
 								<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>

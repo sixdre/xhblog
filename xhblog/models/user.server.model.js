@@ -12,6 +12,7 @@ const UserSchema=new Schema({
     password:String,
     email:String,
     create_time: { type: Date, default: Date.now },        //创建时间
+    isAdmin:{ type: Boolean, default: false },
 })
 
  

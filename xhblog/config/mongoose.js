@@ -30,7 +30,7 @@ module.exports=function(){
 	/*require('../models/category.server.model.js');
     require('../models/article.server.model.js');
     require('../models/comment.server.model.js');
-    require('../models/manager.server.model.js');
+    require('../models/manger.server.model.js');
     require('../models/banner.server.model.js');
     require('../models/leave_message.server.model.js');
     require('../models/friend.service.model.js');

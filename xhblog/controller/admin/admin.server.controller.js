@@ -2,7 +2,8 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
-const Manager = mongoose.model('Manager');			//管理员
+/*const Manager = mongoose.model('Manager');			//管理员*/
+const User = mongoose.model('User');			//管理员
 const Lm=mongoose.model("Lm");						//留言
 const Category=mongoose.model("Category");			//文章分类
 const Tag=mongoose.model("Tag");					//文章标签
@@ -15,7 +16,7 @@ var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		let manager = req.session["manager"];
+		let manager = req.session["manger"];
 		Article.count({},function(err,c){
 			res.render('admin/admin', 
 				{
@@ -27,7 +28,7 @@ module.exports={
 	},
 	//前台请求主数据接口
 	loadData:function(req,res){
-		let manager = req.session["manager"];
+		let manager = req.session["manger"];
 		async.waterfall([function(callback){
 			Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
 				console.log(lmdoc);
@@ -70,22 +71,22 @@ module.exports={
 	},
 	//后台退出
 	logout:function(req, res) {
-		delete req.session["manager"];
+		delete req.session["manger"];
 		res.json({
 			code : 1
 		});
 	},
 	//注册提交
 	doRegist:function(req, res) {
-		let manger = new Manager({
+		let manger = new User({
 			name: req.body.name,
 			email:req.body.email,
 			password: md5(req.body.password)
 		});
-		Manager.findOne({power:1},function(err,manager1){
+		User.findOne({isAdmin:true},function(err,user_Admin){
 			if(err){
 				return console.log(err);
-			}else if(manager1){
+			}else if(user_Admin){
 				res.json({
 					code:-1,
 					message:'已有超级管理员，不可重复创建'
@@ -108,13 +109,13 @@ module.exports={
 	doLogin:function(req, res) {
 		let email=req.body.email;
 		let password=req.body.password;
-		Manager.findOne({email:email},function(err,manager){
+		User.findOne({email:email},function(err,manger){
 			if(err){return console.dir(err)}
-			if(!manager){
+			if(!manger||manger.isAdmin==false){
 				res.json({code:-1});
 			}else{
-				if(manager.password == md5(password)){
-					req.session["manager"] = manager;
+				if(manger.password == md5(password)){
+					req.session["manger"] = manger;
 					res.json({code : 1});
 				}else{
 					res.json({code : -2});
