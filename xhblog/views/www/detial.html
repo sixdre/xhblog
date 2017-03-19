@@ -10,33 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/stylesheets/module.css">
 		<link rel="stylesheet" type="text/css" href="/stylesheets/new-index.css">
 		<style type="text/css">
-			#SOHUCS #SOHU_MAIN .section-title-w .title-user-w .user-wrap-w {
-				display: none;
-			}
-			.comment_item{
-				margin-bottom: 20px;
-			}
-			.comment_item .username{
-				color:#d32 ;
-			}
-			.comment_item .avatar{
-				float: left;
-				width: 50px;
-				height: 50px;
-				background-color: #ddd;
-				cursor: pointer;
-			}
-			.comment_item .comment-main{
-				padding-left: 60px;
-			}
-			.comment_item .comment-main .comment-content{
-				word-wrap: break-word;
-				margin: 2px 0;
-				font-size: 14px;
-			}
-			.comment_item .comment-footer{
-				margin-bottom: 10px;
-			}
+			
 		</style>
 		
 	</head>
@@ -101,54 +75,82 @@
 							<a href="/regist">[注册]</a>
 						</div>
 					<%}%>
-					<ul>
-						<%comments.forEach(function(v,i){%>
-							<li class="clearfix comment_item">
-								<div class="comment_user avatar">
-									<img src="/images/noavatar_default.png" alt="" />
+					<form id="comment_form" onsubmit="return false;">
+						<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
+						<div class="form-ceil form-user-avatar">
+							<img src="/images/noavatar_default.png" alt="" />
+						</div>
+						<div class="form-ceil form-content">
+							<div class="form-user-info"><%=user.username%></div>
+							<div class="form-wordlimit">0/300</div>
+							<div class="form-textarea">
+								<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
+							</div>
+							<div class="form-toolbars">
+								<div class="form-action">
+									<input type="submit" value="提交" id="comment_submit"/>
 								</div>
-								<div class="comment-main">
-									<h4 class="comment-header">
-										<span class="username"><%=v.from.username%></span>
-									</h4>
-									<p class="comment-content"><%=v.content%></p>
-									<div class="comment-footer">
-										<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
-										<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
-									</div>
-									<%if(v.reply&&v.reply.length>0){%>
-										<%v.reply.forEach(function(reply,i){%>
-										<div class="clearfix reply_list">
-											<div class="comment_user avatar">
-												<img src="/images/noavatar_default.png" alt="" />
-											</div>
-											<div class="comment-main">
-												<h4 class="comment-header">
-													<span class="username"><%=reply.from.username%></span> 
-													回复
-													<span class="username"><%=reply.to.username%></span>
-												</h4>
-												<p class="comment-content"><%=reply.content%></p>
-												<div class="comment-footer">
-													<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
-													<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
-												</div>
-											</div>
-										</div>	
-										<%})%>
-									<%}%>
-								</div>
-							</li>
-						<%})%>
+							</div>
+						</div>
 						
-					</ul>
+					</form>
+					
+					<div class="comment-area">
+						<div class="comment-tab">
+							<ul class="comment-tab-left">
+								<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(285)</em></li>
+							</ul>
+						</div>
+						<div class="comment-pager-haeder">
+							<div class="comment-pager fix">
+								<div class="comment-pager-state">
+									第<span>1</span>页/共<span>10</span>页
+								</div>
+							</div>
+						</div>
+						<ul>
+							<%comments.forEach(function(v,i){%>
+								<li class="clearfix comment_item">
+									<div class="comment_user avatar">
+										<img src="/images/noavatar_default.png" alt="" />
+									</div>
+									<div class="comment-main">
+										<h4 class="comment-header">
+											<span class="username"><%=v.from.username%></span>
+										</h4>
+										<p class="comment-content"><%=v.content%></p>
+										<div class="comment-footer">
+											<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
+											<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+										</div>
+										<%if(v.reply&&v.reply.length>0){%>
+											<%v.reply.forEach(function(reply,i){%>
+											<div class="clearfix reply_list">
+												<div class="comment_user avatar">
+													<img src="/images/noavatar_default.png" alt="" />
+												</div>
+												<div class="comment-main">
+													<h4 class="comment-header">
+														<span class="username"><%=reply.from.username%></span> 
+														回复
+														<span class="username"><%=reply.to.username%></span>
+													</h4>
+													<p class="comment-content"><%=reply.content%></p>
+													<div class="comment-footer">
+														<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
+														<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+													</div>
+												</div>
+											</div>	
+											<%})%>
+										<%}%>
+									</div>
+								</li>
+							<%})%>
+							
+						</ul>
+					</div>
 				</div>
-				<form id="comment_form" onsubmit="return false;">
-					<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
-					<textarea name="content" rows="" cols=""></textarea>
-					<input type="submit" value="提交" id="comment_submit"/>
-				</form>
-				
 			</div>
 
 			<div class="col-r-extra f-r w-300">

@@ -45,7 +45,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 		},
 		function(banners,callback){
 			Article.count({},function(err,total){	//所有文章
-				Article.find({}).skip((currentPage-1)*pageSize).limit(pageSize).populate('category','name').exec(function(err,articles){
+				Article.find({}).skip((currentPage-1)*pageSize).limit(pageSize).sort({create_time:-1}).populate('category','name').exec(function(err,articles){
 					callback(null,banners,total,articles);
 				})
 			});

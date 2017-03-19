@@ -243,6 +243,115 @@
 	text-decoration: underline;
 }
 
+/*评论*/
+#SOHUCS #SOHU_MAIN .section-title-w .title-user-w .user-wrap-w {
+	display: none;
+}
+.comment-wrapper{
+	margin-top: 30px;
+}
+#comment_form {
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+.form-ceil {
+    display: table-cell;
+    vertical-align: top;
+}
+.form-user-avatar {
+    float: left;
+    margin-right: 10px;
+}
+.form-wordlimit {
+    float: right;
+    color: #909090;
+}
+.form-content{
+	width: 100%;
+}
+.form-user-info {
+    display: inline-block;
+}
+.form-wordlimit {
+    float: right;
+    color: #909090;
+}
+.form-toolbars {
+    margin-top: 0;
+    position: relative;
+    z-index: 102;
+    zoom: 1;
+    padding: 0;
+    background: 0;
+    border: 0;
+    box-shadow: none;
+}
+.form-toolbars .form-action {
+    float: right;
+    margin-top: 8px;
+}
+
+.comment-area{
+    position: relative;
+    padding-top: 50px;
+}
+.comment-area .comment-tab {
+    height: 48px;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+    position: absolute;
+    top: 0;
+}
+.comment-area .comment-tab .comment-tab-left {
+    float: left;
+}
+.comment-area .comment-tab li {
+    height: 48px;
+    margin-left: 0;
+    padding: 0 15px;
+    position: relative;
+    line-height: 58px;
+    border-bottom: 1px solid #2fb3ff;
+    font-size: 16px;
+    color: #2fb3ff;
+    vertical-align: middle;
+    cursor: pointer;
+}
+/*.comment-area  .comment-tab .comment-tab-left li {
+    color: #2fb3ff;
+    border-color: #2fb3ff;
+    background: #fff;
+    font-weight: 700;
+    outline: 0;
+    cursor: default;
+}*/
+.comment_item{
+	margin-bottom: 20px;
+}
+.comment_item .username{
+	color:#d32 ;
+}
+.comment_item .avatar{
+	float: left;
+	width: 50px;
+	height: 50px;
+	background-color: #ddd;
+	cursor: pointer;
+}
+.comment_item .comment-main{
+	padding-left: 60px;
+}
+.comment_item .comment-main .comment-content{
+	word-wrap: break-word;
+	margin: 2px 0;
+	font-size: 14px;
+}
+.comment_item .comment-footer{
+	margin-bottom: 10px;
+}
 
 
 

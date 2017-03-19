@@ -44,7 +44,7 @@ const ArticleSchema=new Schema({
 ArticleSchema.statics.findAll = function(callback) {
     return this.model('Article')
         .find({})
-        .sort({ time: -1 })
+        .sort({ create_time: -1 })
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
@@ -58,7 +58,7 @@ ArticleSchema.statics.findAll = function(callback) {
 ArticleSchema.statics.findNew = function(limit,callback) {
     return this.model('Article')
         .find({})
-        .sort({ time: -1 })
+        .sort({ create_time: -1 })
         .limit(limit)
         .exec(function (error, doc) {
             if (error) {
@@ -88,7 +88,7 @@ ArticleSchema.statics.findByBId = function(id,callback) {
 ArticleSchema.statics.findByLimit = function(num,callback) {
 	return this.model('Article')
         .find({})
-        .sort({ time: -1 }).skip(0).limit(num)
+        .sort({ create_time: -1 }).skip(0).limit(num)
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
@@ -101,7 +101,7 @@ ArticleSchema.statics.findByLimit = function(num,callback) {
 //根据时间来查找
 ArticleSchema.statics.findByTime = function(time,callback) {
 	return this.model('Article')
-        .find({time:{"$gt":time}})
+        .find({create_time:time})
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
@@ -132,7 +132,7 @@ ArticleSchema.statics.findByHot = function(limit,callback) {
 ArticleSchema.statics.findByTitle = function(title,callback) {
 	return this.model('Article')
         .find({title:{$regex:''+title+''}})
-        .sort({time:-1})
+        .sort({create_time:-1})
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
