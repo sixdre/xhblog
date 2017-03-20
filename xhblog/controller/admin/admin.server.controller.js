@@ -79,20 +79,20 @@ module.exports={
 	//注册提交
 	doRegist:function(req, res) {
 		let manger = new User({
-			name: req.body.name,
+			username: req.body.name,
 			email:req.body.email,
 			password: md5(req.body.password)
 		});
-		User.findOne({isAdmin:true},function(err,user_Admin){
+		User.findOne({email:req.body.email},function(err,user){
 			if(err){
 				return console.log(err);
-			}else if(user_Admin){
-				res.json({
+			}else if(user){
+				return res.json({
 					code:-1,
-					message:'已有超级管理员，不可重复创建'
+					message:'该邮箱已被注册'
 				})
-				return;
 			}else{
+				manger.isAdmin=true;
 				manger.save(function(err, manger) {
 					if(err){
 						return console.log(err);

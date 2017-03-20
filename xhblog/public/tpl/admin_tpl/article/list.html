@@ -56,7 +56,12 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="item in articlelist | orderBy:'create_time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">
-							<td><label class="i-checks m-b-none"><input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)"><i></i></label></td>
+							<td>
+								<label class="i-checks m-b-none">
+									<input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)">
+									<i></i>
+								</label>
+							</td>
 							<td><a ng-click="edit(item);" class="text-success">{{item.title |limitTo:10}}</a></td>
 							<td ng-bind="item.create_time|date:'yyyy-MM-dd HH:mm:ss'"></td>
 							<td>{{item.category.name}}</td>
@@ -85,7 +90,17 @@
 						<small class="text-muted inline m-t-sm m-b-sm">showing {{listStart}}-{{listEnd}} of {{articleTotal}} items</small>
 					</div>
 					<div class="col-sm-8 text-right text-center-xs">
-						<pagination ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)" items-per-page="pageConfig.limit" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm m-t-none m-b" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+						<pagination 
+							ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)" 
+							items-per-page="pageConfig.limit" 
+							total-items="pageConfig.bigTotalItems" 
+							ng-model="pageConfig.bigCurrentPage" 
+							max-size="pageConfig.maxSize" 
+							class="pagination-sm m-t-none m-b" 
+							boundary-links="true" 
+							rotate="false" 
+							num-pages="numPages">
+						</pagination>
 					</div>
 				</div>
 			</footer>

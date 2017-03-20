@@ -7,7 +7,8 @@ app.controller('articlePublishCtrl',
 		['$rootScope','$scope',"$stateParams",'articleService',"defPopService",
 		 function($rootScope,$scope,$stateParams,articleService,defPopService){
 			$scope.publish=function(){
-				$scope.article.tagcontent=UE.getEditor('editor').getContent();
+				console.log($scope.article);
+				/*$scope.article.tagcontent=UE.getEditor('editor').getContent();
 				$scope.article.content=UE.getEditor('editor').getContentTxt();
 				articleService.publish($scope.article).then(function(res){
 					var data=res.data;
@@ -22,7 +23,7 @@ app.controller('articlePublishCtrl',
 							status:0,
 							content:"出错了！"
 					 });
-				});
+				});*/
 
 				/*var formData = new FormData($("#Article_form")[0]);
 				formData.append('author',$('#manager_name').text().trim());
