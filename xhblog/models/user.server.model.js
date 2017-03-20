@@ -9,8 +9,15 @@ const UserSchema=new Schema({
         type:'String',
         required:true 		
     },
-    password:String,
-    email:String,
+    password:{
+        type:'String',
+        required:true 		
+    },
+    email:{					//邮箱唯一
+        type:'String',
+        required:true,
+        unique: true
+    },
     create_time: { type: Date, default: Date.now },        //创建时间
     isAdmin:{ type: Boolean, default: false },
 })

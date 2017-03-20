@@ -13,6 +13,8 @@ app.controller('SignupFormController', ['$scope', '$http', '$state', function($s
     	  var message=response.data.message;
     	  if(code==-1){
     		  alert(message)
+    	  }else if(code==-2){
+    		  alert(message);
     	  }else if(code==1){
     		  alert(message);
     		  $state.go('access.signin');

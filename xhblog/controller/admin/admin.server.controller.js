@@ -83,15 +83,46 @@ module.exports={
 			email:req.body.email,
 			password: md5(req.body.password)
 		});
-		User.findOne({email:req.body.email},function(err,user){
+		User.findOne({isAdmin:true}).then(function(user1){
+			if(user1){
+				return res.json({
+					code:-1,
+					message:'已有超级管理员，不可重复创建'
+				});
+			}
+			User.findOne({email:req.body.email}).then(function(user2){
+				if(user2){
+					return res.json({
+						code:-2,
+						message:'该邮箱已被注册'
+					});
+				}
+				manger.isAdmin=true;
+				manger.save(function(err, manger) {
+					if(err){
+						return console.log(err);
+					}
+					res.json({
+						code:1,
+						message:'成功创建超级管理员！'
+					})
+				});
+			})
+			
+		})
+		
+		
+		
+		/*User.findOne({isAdmin:true},function(err,user){
 			if(err){
 				return console.log(err);
 			}else if(user){
 				return res.json({
 					code:-1,
-					message:'该邮箱已被注册'
+					message:'已有超级管理员，不可重复创建'
 				})
 			}else{
+				User.findOne({})
 				manger.isAdmin=true;
 				manger.save(function(err, manger) {
 					if(err){
@@ -103,7 +134,7 @@ module.exports={
 					})
 				});
 			}
-		})
+		})*/
 	},
 	//登录提交验证
 	doLogin:function(req, res) {
