@@ -2,8 +2,7 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
-/*const Manager = mongoose.model('Manager');			//管理员*/
-const User = mongoose.model('User');			//管理员
+const User = mongoose.model('User');				//用户
 const Lm=mongoose.model("Lm");						//留言
 const Category=mongoose.model("Category");			//文章分类
 const Tag=mongoose.model("Tag");					//文章标签
@@ -108,33 +107,7 @@ module.exports={
 					})
 				});
 			})
-			
 		})
-		
-		
-		
-		/*User.findOne({isAdmin:true},function(err,user){
-			if(err){
-				return console.log(err);
-			}else if(user){
-				return res.json({
-					code:-1,
-					message:'已有超级管理员，不可重复创建'
-				})
-			}else{
-				User.findOne({})
-				manger.isAdmin=true;
-				manger.save(function(err, manger) {
-					if(err){
-						return console.log(err);
-					}
-					res.json({
-						code:1,
-						message:'成功创建超级管理员！'
-					})
-				});
-			}
-		})*/
 	},
 	//登录提交验证
 	doLogin:function(req, res) {

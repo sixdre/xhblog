@@ -2,7 +2,6 @@
 //引入数据模型  
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');				//文章
-//const Manager = mongoose.model('Manager');				//管理员
 const Banner = mongoose.model('Banner');					//banner图
 const Friend = mongoose.model('Friend');					//友情链接
 
@@ -148,7 +147,6 @@ exports.addFriend=function(req,res){
 		})
 		
 	}else{						//更新
-		console.log(1);
 		Friend.update({_id:id},{
 			title:title,
 			url:url,
@@ -183,10 +181,10 @@ exports.delFriend=function(req,res){
  * */
 exports.updateFriend=function(req,res){
 	let id=req.body._id,
-	title=req.body.title,
-	url=req.body.url,
-	logo=req.body.logo,
-	sort=req.body.sort;
+		title=req.body.title,
+		url=req.body.url,
+		logo=req.body.logo,
+		sort=req.body.sort;
 	Friend.update({_id:id},{
 		title:title,
 		url:url,
