@@ -20,7 +20,7 @@ const ArticleSchema=new Schema({
 	    type: ObjectId,
 	    ref: 'Category'
 	},
-	tags:[],
+	tags:[{type: ObjectId, ref: 'Tag'}],
     content:String,
     tagcontent:String,
     imgurl:String,
