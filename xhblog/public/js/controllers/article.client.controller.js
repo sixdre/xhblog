@@ -10,7 +10,6 @@ app.controller('articlePublishCtrl',
 			$scope.publish=function(){
 				var tagArr=[];
 				angular.forEach($scope.taged,function(v){
-					console.log(1);
 					if(v){
 						tagArr.push(v);
 					}

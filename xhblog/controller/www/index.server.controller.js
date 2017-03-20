@@ -56,6 +56,25 @@ var Indexs=function(req,res,currentPage,pageSize){
 			});
 		},
 		function(banners,total,articles,newArticle,callback){		//热门文章
+			
+			
+			/*Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}],function(err,types){
+				if(err){
+					return console.dir(err);		
+				}
+				types.forEach(function(rst,i){
+					Category.findOne({_id:v._id}).exec(function(err,cate){
+						if (cate !== null) {
+							rst.name = cate.name;
+		                }else {
+		                	rst.name = 'not found';
+		                }
+		                //db.resultSummary.insert(rst);
+					})
+				})
+			})*/
+			
+			
 			Article.findByHot(3,function(hot){
 				callback(null,banners,total,articles,newArticle,hot);
 			})
@@ -82,7 +101,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})
 		},*/
 	],function(err,banners,total,articles,newArticle,hot){
-		console.log(app.locals.user);
 		res.render('www/', {
 			title: '个人博客首页',
 			banners:banners,
