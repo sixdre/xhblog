@@ -9,7 +9,7 @@ const Lm = mongoose.model('Lm');				//留言
 const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
-
+var events = require('events');				//事件处理模块
 
 /*
  * app.use 可以在多个页面获取用户session
@@ -56,25 +56,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 			});
 		},
 		function(banners,total,articles,newArticle,callback){		//热门文章
-			
-			
-			/*Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}],function(err,types){
-				if(err){
-					return console.dir(err);		
-				}
-				types.forEach(function(rst,i){
-					Category.findOne({_id:v._id}).exec(function(err,cate){
-						if (cate !== null) {
-							rst.name = cate.name;
-		                }else {
-		                	rst.name = 'not found';
-		                }
-		                //db.resultSummary.insert(rst);
-					})
-				})
-			})*/
-			
-			
 			Article.findByHot(3,function(hot){
 				callback(null,banners,total,articles,newArticle,hot);
 			})
@@ -131,6 +112,37 @@ module.exports={
 		next();
 	},
 	common:function(req,res,next){
+		//查询不同类型文章的数量
+		/*Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}],function(err,types){
+			var cartshop = [];
+			var obj ;
+			var j = 0;
+			var myEventEmitter = new events.EventEmitter();
+			myEventEmitter.on('next',addResult);
+			function addResult() {
+			    cartshop.push(obj);
+			    j++;
+			    if(j==types.length){
+			    	console.log(1);
+			        console.log(cartshop);		//查询到了
+			    }
+			}
+			if(err){
+				return console.dir(err);		
+			}
+			types.forEach(function(rst,i){
+				Category.findOne({_id:rst._id}).exec(function(err,cate){
+					 if(err){
+				        return next(err);
+				    }else{
+				    	rst.name=cate.name;
+				        obj = rst;
+				        myEventEmitter.emit('next');
+				    }
+				})
+			})
+		})*/
+		
 		Category.find({}).exec(function(err,categorys){
 			Friend.find({}).exec(function(err,friends){
 				app.locals.friends=friends;
