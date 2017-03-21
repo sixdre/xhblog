@@ -69,9 +69,37 @@ ArticleSchema.statics.findNew = function(limit,callback) {
             }
         });
 }
+//查找上一篇
+ArticleSchema.statics.findPrev = function(bid,callback) {
+    return this.model('Article')
+      	.findOne({bId:{'$lt':bid}})
+        .exec(function (error, doc) {
+            if (error) {
+                console.log(error);
+                callback([]);
+            } else {
+                callback(doc);
+            }
+        });
+}
+
+//查找下一篇
+ArticleSchema.statics.findNext = function(bid,callback) {
+    return this.model('Article')
+        .findOne({bId:{'$gt':bid}})
+        .exec(function (error, doc) {
+            if (error) {
+                console.log(error);
+                callback([]);
+            } else {
+                callback(doc);
+            }
+        });
+}
 
 
-//通过id来查找
+
+//通过自增id来查找
 ArticleSchema.statics.findByBId = function(id,callback) {
 	return this.model('Article').findOne({bId:id}, function (error, doc) {
         if (error) {
@@ -112,7 +140,7 @@ ArticleSchema.statics.findByTime = function(time,callback) {
         });
 }
 
-//根据文章浏览数来排序
+//查询热门文章 (根据浏览数来排序)
 ArticleSchema.statics.findByHot = function(limit,callback) {
 	return this.model('Article')
         .find({})
@@ -142,7 +170,7 @@ ArticleSchema.statics.findByTitle = function(title,callback) {
             }
         });
 }
-//根据文章文章id进行更新
+//根据文章文章id进行更新阅读浏览数
 ArticleSchema.statics.findByIdUpdate = function(id,callback) {
 	return this.model('Article')
         .update({bId:id},{'$inc':{pv: 1}})

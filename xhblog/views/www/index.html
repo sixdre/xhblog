@@ -59,7 +59,7 @@
 						<div class="new-img-list pos-r f-l mr-18 clearfix">
 							<a href="/detial/<%=value.bId%>"> <img src="/images/hd3.jpg" />
 								<a href="/detial/<%=value.bId%>" target="_blank"> 
-								
+									
 									<span class="pos-a f14"><%=value.category.name%></span> 
 								
 								</a>
@@ -77,9 +77,13 @@
 								<div class="new-article-tag f-l">
 									<span></span>
 									<span class="mr-20">
-										<a href="">
-											<%=value.category.name%>
-										</a>
+										<%if(value.tags.length>0){%>
+											<%value.tags.forEach(function(tag){%>
+												<a href="">
+													<%=tag.name%>
+												</a>
+											<%})%>			
+										<%}%>					
 									</span>
 									<span class="mr-20"><i class="fa fa-thumbs-o-up"></i> <%=value.likes%></span>
 									<span class="mr-20"><i class="fa fa-eye"></i> <%=value.pv%></span> 

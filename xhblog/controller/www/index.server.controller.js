@@ -9,7 +9,7 @@ const Lm = mongoose.model('Lm');				//留言
 const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
-var events = require('events');				//事件处理模块
+const events = require('events');				//事件处理模块
 
 /*
  * app.use 可以在多个页面获取用户session
@@ -22,8 +22,7 @@ app.use(function(req,res,next){
 			app.locals.friends=friends;
 			app.locals.categorys=categorys;
 		});
-	});
-	next();*/
+	});*/
 	next();
 });
 
@@ -45,7 +44,10 @@ var Indexs=function(req,res,currentPage,pageSize){
 		},
 		function(banners,callback){
 			Article.count({},function(err,total){	//所有文章
-				Article.find({}).skip((currentPage-1)*pageSize).limit(pageSize).sort({create_time:-1}).populate('category','name').exec(function(err,articles){
+				Article.find({}).skip((currentPage-1)*pageSize)
+				.limit(pageSize).sort({create_time:-1})
+				.populate('category','name')
+				.populate('tags').exec(function(err,articles){
 					callback(null,banners,total,articles);
 				})
 			});
@@ -60,27 +62,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 				callback(null,banners,total,articles,newArticle,hot);
 			})
 		},
-		/*function(banner,total,doc,newart,hot,callback){
-			/*Article.find({}).populate('category').exec(function(err,ddc){
-				console.log(ddc);
-			});*/
-			
-			/*Article.aggregate([{$group : {_id:"$type", total : {$sum : 1}}}],function(err,types){
-				if(err){
-					return console.dir(err);		
-				}
-				callback(null,banner,total,doc,newart,hot,types);*/
-				/*前台页面导航
-				<%types.forEach(function(v,i){%>
-				<li>
-					<a href="/type/<%=v._id%>"><%=v._id%> <span><%=v.total%></span></a>
-				</li>
-				<%})%>*/
-			/*})*/
-			/*Category.find({}).exec(function(err,categorys){
-				callback(null,banner,total,doc,newart,hot,categorys);
-			})
-		},*/
 	],function(err,banners,total,articles,newArticle,hot){
 		res.render('www/', {
 			title: '个人博客首页',
@@ -112,43 +93,74 @@ module.exports={
 		next();
 	},
 	common:function(req,res,next){
-		//查询不同类型文章的数量
-		/*Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}],function(err,types){
-			var cartshop = [];
-			var obj ;
-			var j = 0;
-			var myEventEmitter = new events.EventEmitter();
-			myEventEmitter.on('next',addResult);
-			function addResult() {
-			    cartshop.push(obj);
-			    j++;
-			    if(j==types.length){
-			    	console.log(1);
-			        console.log(cartshop);		//查询到了
-			    }
-			}
-			if(err){
-				return console.dir(err);		
-			}
-			types.forEach(function(rst,i){
-				Category.findOne({_id:rst._id}).exec(function(err,cate){
-					 if(err){
-				        return next(err);
-				    }else{
-				    	rst.name=cate.name;
+		//查询不同类型文章的数量new
+		let categorys = [];
+		let obj ;
+		let j = 0;
+		let myEventEmitter = new events.EventEmitter();
+		async.waterfall([
+			  function(cb){
+				  Friend.find({}).exec(function(err,friends){
+					  cb(null,friends)
+				  });
+			  },function(friends,cb){
+				  Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).exec(function(err,types){
+					  cb(null,friends,types);
+				  });
+			  },function(friends,types,cb){
+				  myEventEmitter.on('next',addResult);
+				  function addResult() {
+					   categorys.push(obj);
+					    j++;
+					    if(j==types.length){
+					    	cb(null,friends,categorys);
+					    }
+				  }
+				  types.forEach(function(rst,i){
+						Category.findOne({_id:rst._id}).exec(function(err,cate){
+							rst.name=cate.name;
+					        obj = rst;
+					        myEventEmitter.emit('next');
+						});
+				   });
+				  
+			  }
+		  ],function(err,friends,categorys){
+			 app.locals.friends=friends;		//友链
+			 app.locals.categorys=categorys;	//根据文章类型同计数量
+		});
+		/*Friend.find({}).then(function(friends){
+			Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).then(function(types){
+				myEventEmitter.on('next',addResult);
+				function addResult() {
+				    categorys.push(obj);
+				    j++;
+				    if(j==types.length){
+				        app.locals.friends=friends;	//友链
+						app.locals.categorys=categorys;	//根据文章类型同计数量
+				    }
+				}
+				types.forEach(function(rst,i){
+					Category.findOne({_id:rst._id}).then(function(cate){
+						rst.name=cate.name;
 				        obj = rst;
 				        myEventEmitter.emit('next');
-				    }
-				})
-			})
+					}).catch(function(err){
+						console.log(err);
+					});
+				});
+			}).catch(function(err){
+				console.log(err);
+			});
+		}).then(function(){
+			console.log(1);
 		})*/
-		
-		Category.find({}).exec(function(err,categorys){
+		/*Category.find({}).exec(function(err,categorys){		//old
 			Friend.find({}).exec(function(err,friends){
 				app.locals.friends=friends;
 				app.locals.categorys=categorys;
 			});
-		});
+		});*/
 		next();
 	},
 	showIndex:function(req, res) {
@@ -180,23 +192,19 @@ module.exports={
 				});
 			},
 			function(doc,hot,callback){
-				Article.findOne({bId:{'$gt':bid}},function(err,nextArticle){
-					if(err){
-						console.log(err)
-					}
+				Article.findNext(bid,function(nextArticle){		//下一篇
 					callback(null,doc,hot,nextArticle);
 				});
 			},
 			function(doc,hot,nextArticle,callback){
-				Article.findOne({bId:{'$lt':bid}},function(err,prevArticle){
-					if(err){
-						console.log(err)
-					}
+				Article.findPrev(bid,function(prevArticle){		//上一篇
 					callback(null,doc,hot,nextArticle,prevArticle);
 				});
 			},
 			function(doc,hot,nextArticle,prevArticle,callback){
-				Comment.find({article:doc._id}).populate('from','username').populate('reply.from reply.to','username').exec(function(err,comments){
+				Comment.find({article:doc._id})
+				.populate('from','username')
+				.populate('reply.from reply.to','username').exec(function(err,comments){
 					callback(null,doc,hot,nextArticle,prevArticle,comments);
 				});
 			}
@@ -409,17 +417,22 @@ module.exports={
 	},
 	category:function(req,res){
 		let category_name=req.params.val;
-		Category.findOne({name:category_name}).then(function(category){
-			Article.find({category:category._id}).populate('category','name').then(function(articles){
-				console.log(articles);
+		async.waterfall([
+		       function(cb){
+		    	   Category.findOne({name:category_name}).exec(function(err,category){
+		    		   cb(null,category);
+		    	   })
+		       },function(category,cb){
+		    	   Article.find({category:category._id}).populate('category','name').then(function(articles){
+		    		   cb(null,category,articles);
+					});
+		       }
+		  ],function(err,category,articles){
 				res.render('www/category',{
 					articles:articles,
 					title:category_name+'——徐浩的个人博客'
 				});
-			});
-		}).catch(function(){
-			
-		});
+		})
 	},
 	about:function(req,res){
 		res.render("www/about",{
