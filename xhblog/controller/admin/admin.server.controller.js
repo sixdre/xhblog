@@ -10,19 +10,15 @@ const formidable = require('formidable');
 const fs = require('fs'); 							//node.js核心的文件处理模块
 const async = require('async');
 
+
+
 /*var multer = require ('multer');   
 var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		let manger = req.session["manger"];
-		Article.count({},function(err,c){
-			res.render('admin/admin', 
-				{
-					title: '个人博客后台管理系统',
-					manger: manger||{},
-					total:c,
-				});
+		res.render('admin/admin', {
+			title: '个人博客后台管理系统',
 		});
 	},
 	//前台请求主数据接口
@@ -30,30 +26,30 @@ module.exports={
 		let manger = req.session["manger"];
 		async.waterfall([function(callback){
 			Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
-				console.log(lmdoc);
 				if(err){
-					return console.log("err");
+					callback(err);
 				}
 				callback(null,lmdoc);
 			})
 		},function(lmdoc,callback){
+			
 			Article.count({}).exec(function(err,total){
 				if(err){
-					return console.log("err");
+					callback(err);
 				}
 				callback(null,lmdoc,total);
 			})
 		},function(lmdoc,total,callback){
 			Category.find({}).exec(function(err,categorys){
 				if(err){
-					return console.log("err");
+					callback(err);
 				}
 				callback(null,lmdoc,total,categorys);
 			})
 		},function(lmdoc,total,categorys,callback){
 			Tag.find({}).exec(function(err,tags){
 				if(err){
-					return console.log("err");
+					callback(err);
 				}
 				callback(null,lmdoc,total,categorys,tags);
 			})
@@ -89,6 +85,8 @@ module.exports={
 					message:'已有超级管理员，不可重复创建'
 				});
 			}
+			return user1
+		}).then(function(user1){
 			User.findOne({email:req.body.email}).then(function(user2){
 				if(user2){
 					return res.json({
@@ -107,14 +105,15 @@ module.exports={
 					})
 				});
 			})
-		})
+		}).catch(function(err){
+			console.log('注册失败:'+err)
+		});
 	},
 	//登录提交验证
 	doLogin:function(req, res) {
 		let email=req.body.email;
 		let password=req.body.password;
-		User.findOne({email:email},function(err,manger){
-			if(err){return console.dir(err)}
+		User.findOne({email:email}).then(function(manger){
 			if(!manger||manger.isAdmin==false){
 				res.json({code:-1});
 			}else{
@@ -125,6 +124,8 @@ module.exports={
 					res.json({code : -2});
 				}
 			}
+		}).catch(function(err){
+			console.log('登陆出错:'+err)
 		})
 	}
 }

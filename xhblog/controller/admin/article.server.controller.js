@@ -4,13 +4,9 @@ const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");
 const Tag=mongoose.model('Tag');
-
 const multiparty =require("connect-multiparty")
-
-
 const formidable = require('formidable');
 const fs = require('fs'); 							//node.js核心的文件处理模块
-
 const multer = require ('multer');  //上传文件中间件 multer
 const md5 = require('md5');
 //设置上传的目录，  
@@ -69,121 +65,61 @@ module.exports={
 				});
 			});
 		});
-		
-		
-		
-		/*if (req.file) {
-			let article = Article({
-				author: "xuhao",
-				title:req.body.article_title,
-				type: req.body.article_type,
-				content:req.body.content,
-				tagcontent:req.body.tagcontent,
-				imgurl:req.file.destination.substring(6)+"/"+req.file.filename
-			});
-			article.save(function(err, article) {
-				if(err){
-					return console.log(err)
-				}
-				res.json({
-					code:1
-				})
-			});
-	    }*/
-
 	},
 	publish:function(req,res){					//新的发布文章接口
-			
-			let article =new Article({
-				author: req.session["manger"]||'xuhao',
-				title:req.body.title,
-				content:req.body.content,
-				tagcontent:req.body.tagcontent,
-				tags:req.body.tags
+		let article =new Article({
+			author: req.session["manger"]||'xuhao',
+			title:req.body.title,
+			content:req.body.content,
+			tagcontent:req.body.tagcontent,
+			tags:req.body.tags
+		});
+		//promise 解决多个数据传志，可以定义一个空对象然后将数据传入到空对象中，再返回前台
+		article.save().then(function(artDoc){
+			return artDoc;
+		}).then(function(artDoc){
+			let category=new Category({
+				name:req.body.type.name,
+				articles:[artDoc._id]
 			});
-			console.log(req.body.type);
-			article.save().then(function(artDoc){
-				console.log(artDoc);
-				let category=new Category({
-					name:req.body.type.name,
-					articles:[artDoc._id]
-				});
-				Category.findByName(req.body.type.name,function(err,cate){
-					if(err){
-						return console.log(err)
-					}
-					else if(cate){	
-						Category.update({'name':req.body.type.name}, {'$addToSet':{"articles":artDoc._id} },function(){
-							artDoc.category=cate._id;
-							artDoc.save(function(){
-								res.json({
-									code:1
-								});
-							});
-						});
-					}else{
-						category.save(function(err,category){
-							artDoc.category=category._id;
-							artDoc.save(function(){
-								res.json({
-									code:1
-								});
-							});
-						});
-					}
-				});
-			}).catch(function(err){
-				console.log('文章发布出错'+err);
-			});
-
-			/*article.save(function(err,artDoc) {
-				if(err){
-					return console.log(err);
-				}
-				var category=new Category({
-					name:req.body.type.value,
-					articles:[artDoc._id]
-				});
-				
-				Category.findByName(req.body.type.value,function(err,cate){	//由于文章类型唯一，首先要判断类型模型中有没有当前类型
-					if(err){
-						return console.log(err)
-					}
-					else if(cate){					//有的话就将当前文章添加到类型中
-						cate.articles.push(artDoc._id);
+			Category.findOne({name:req.body.type.name}).then(function(cate){
+				if(cate){	
+					Category.update({'name':req.body.type.name}, {'$addToSet':{"articles":artDoc._id} },function(){
 						artDoc.category=cate._id;
-						cate.save(function(err){
-							artDoc.save(function(err){
-								if(err){
-									return console.log(err);
-								}
-								res.json({
-									code:1
-								});
+						artDoc.save(function(){
+							res.json({
+								code:1
 							});
 						});
-					}else{
-						category.save(function(err,catDoc){
-							if(err){
-								return console.log(err);
-							}
-							artDoc.category=catDoc._id;
-							artDoc.save(function(err){
-								if(err){
-									return console.log(err);
-								}
-								res.json({
-									code:1
-								});
+					});
+				}else{
+					category.save(function(err,category){
+						artDoc.category=category._id;
+						artDoc.save(function(){
+							res.json({
+								code:1
 							});
 						});
-					}
-				});
-			});*/
+					});
+				}
+			})
+		}).catch(function(err){
+			console.log('文章发布出错'+err);
+		});
 	},
 	//文章列表
 	list:function(req, res) {
 		let query = Article.find({}).sort({"time": -1});
+		
+		/*Article.count({}).then(function(c){
+			
+		}).then(function(){
+			query.find({},function(err,article){
+		}).catch(function(err){
+			console.log('查询文章列表出错:'+err)
+		})*/
+		
+		
 		Article.count({},function(err,c){
 			query.find({},function(err,article){
 				if(err){
@@ -194,7 +130,6 @@ module.exports={
 				})
 			})
 		})
-		
 	},
 	//文章分页显示
 	page:function(req, res) {
@@ -221,7 +156,6 @@ module.exports={
 				}
 			})
 		})
-		
 	},
 	/*
 	 搜索文章

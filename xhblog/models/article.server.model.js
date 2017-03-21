@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')  
     , Schema = mongoose.Schema  
     , ObjectId = Schema.ObjectId;  
-    
+
 const autoIncrement = require('mongoose-auto-increment');   //自增ID 模块		http://www.pinterspace.com/2015/mongoose-定义自增字段.html
 autoIncrement.initialize(mongoose.connection);
 //文章
@@ -54,6 +54,16 @@ ArticleSchema.statics.findAll = function(callback) {
             }
         });
 }
+
+//查找
+ArticleSchema.statics.findNeeee = function(limit){
+    return this.model('Article')
+        .find({})
+        .sort({ create_time: -1 })
+        .limit(limit).exec()
+       
+}
+
 //查找最新的
 ArticleSchema.statics.findNew = function(limit,callback) {
     return this.model('Article')

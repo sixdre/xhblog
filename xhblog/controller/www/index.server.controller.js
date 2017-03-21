@@ -35,6 +35,11 @@ app.use(function(req,res,next){
 var Indexs=function(req,res,currentPage,pageSize){
 	async.waterfall([
 		function(callback){
+			/*Article.findNeeee(3).then(function(d){
+				return d;
+			}).then(function(d){
+				console.log(d);
+			})*/
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
 				if(err){
 					return console.log("banner find err:",err)
