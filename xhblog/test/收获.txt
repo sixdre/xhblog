@@ -2,3 +2,5 @@ yield可以直接处理mongoose查询的值例如:
 var user = yield User.findById(id).exec();
 网站：http://mongorito.com/
 https://github.com/vadimdemedes/mongorito
+promise
+http://liubin.org/promises-book/#ch2-promise-all
