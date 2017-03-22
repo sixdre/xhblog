@@ -257,33 +257,26 @@ module.exports={
 		})
 	},
 	
-	del:function(req,res){
+	del:function(req,res){			//多项删除
 		console.log(req.body.ids);
-		Article.find({bId:{$in:req.body.ids}}).then(function(doc){
-			doc.forEach(function(v,i){
-				console.log(v);
-				Category.update({_id:v.category},{
-					$pull:{"articles": v._id}
-				}).then(function(raw){
-					Article.remove({bId:v.bId}).exec(function(err){
-						if(err){
-							return console.log(err);
-						}
-					});
-				}).catch(function(err){
-					console.log(err);
+		Article.find({bId:{$in:req.body.ids}}).then(function(docs){
+			return Promise.all(docs.map(function(doc){
+				return Category.update({_id:doc.category},{
+					$pull:{"articles": doc._id}
+				}).then(function(){
+					return Article.remove({_id:doc._id}).then(function(){
+						return 1;
+					});		//返回promise对象
 				});
-			});
+			}));
+		}).then(function(dd){
+			//console.log(dd);		//1
 			res.json({
 				code:1
 			});
 		}).catch(function(err){
-			console.log('查询出错'+err);
-		});
-		/*Article.remove({bId:{$in:req.body.ids}})
-	    .then(function(){
-	        res.json({code:1})
-	    })*/
+			console.log('文章批量删除失败:'+err);
+		})
 	},
 	/*
 	 * 文章分类加载

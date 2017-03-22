@@ -58,8 +58,8 @@ app.controller('articlePublishCtrl',
  * 文章列表管理控制器
  */
 app.controller('articleListCtrl',
-		['$rootScope','$scope',"$stateParams",'$log','$modal','articleService',"defPopService",
-		 function($rootScope,$scope,$stateParams,$log,$modal,articleService,defPopService){
+		['$rootScope','$scope',"$stateParams","$http",'$log','$modal','articleService',"defPopService",
+		 function($rootScope,$scope,$stateParams,$http,$log,$modal,articleService,defPopService){
 			//分页配置参数
 			$scope.pageConfig = {
 				maxSize:5,

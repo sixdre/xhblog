@@ -2,9 +2,9 @@ yield可以直接处理mongoose查询的值例如:
 var user = yield User.findById(id).exec();
 网站：http://mongorito.com/
 https://github.com/vadimdemedes/mongorito
-promise
+关于promise介绍
 http://liubin.org/promises-book/#ch2-promise-all
-
+http://efe.baidu.com/blog/promises-anti-pattern/
 
 关于async的介绍 http://blog.csdn.net/qqhjqs/article/details/51913942
 async.waterfall 串行有关联(多个函数或方法执行，每一步执行时都需要上一步执行的结果当参数)

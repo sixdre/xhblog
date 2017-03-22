@@ -58,7 +58,6 @@ module.exports={
 				})
 			}
 		},function(err,results){
-			console.log(results);
 			res.json({
 				manager:manager,	//管理员
 				total:results.total,		//文章总数
