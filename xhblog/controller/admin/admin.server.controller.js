@@ -24,45 +24,49 @@ module.exports={
 	//前台请求主数据接口
 	loadData:function(req,res){
 		let manger = req.session["manger"];
-		async.waterfall([function(callback){
-			Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
-				if(err){
-					callback(err);
-				}
-				callback(null,lmdoc);
-			})
-		},function(lmdoc,callback){
-			
-			Article.count({}).exec(function(err,total){
-				if(err){
-					callback(err);
-				}
-				callback(null,lmdoc,total);
-			})
-		},function(lmdoc,total,callback){
-			Category.find({}).exec(function(err,categorys){
-				if(err){
-					callback(err);
-				}
-				callback(null,lmdoc,total,categorys);
-			})
-		},function(lmdoc,total,categorys,callback){
-			Tag.find({}).exec(function(err,tags){
-				if(err){
-					callback(err);
-				}
-				callback(null,lmdoc,total,categorys,tags);
-			})
-		}
-		],function(err,lmdoc,total,categorys,tags){
+		async.parallel({
+			lmdoc:function(callback){
+				Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
+					if(err){
+						callback(err);
+					}
+					callback(null,lmdoc);
+				})
+			},
+			total:function(callback){
+				Article.count({}).exec(function(err,total){
+					if(err){
+						callback(err);
+					}
+					callback(null,total);
+				})
+			},
+			categorys:function(callback){
+				Category.find({}).exec(function(err,categorys){
+					if(err){
+						callback(err);
+					}
+					callback(null,categorys);
+				})
+			},
+			tags:function(callback){
+				Tag.find({}).exec(function(err,tags){
+					if(err){
+						callback(err);
+					}
+					callback(null,tags);
+				})
+			}
+		},function(err,results){
+			console.log(results);
 			res.json({
-				manger: manger,	//管理员
-				total:total,		//文章总数
-				lmdoc:lmdoc,		//留言
-				categorys:categorys,	//文章分类
-				tags:tags			//文章标签
+				manger:manger,	//管理员
+				total:results.total,		//文章总数
+				lmdoc:results.lmdoc,		//留言
+				categorys:results.categorys,	//文章分类
+				tags:results.tags			//文章标签
 			});
-		})
+		});
 	},
 	//后台退出
 	logout:function(req, res) {

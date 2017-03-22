@@ -4,3 +4,11 @@ var user = yield User.findById(id).exec();
 https://github.com/vadimdemedes/mongorito
 promise
 http://liubin.org/promises-book/#ch2-promise-all
+
+
+关于async的介绍 http://blog.csdn.net/qqhjqs/article/details/51913942
+async.waterfall 串行有关联(多个函数或方法执行，每一步执行时都需要上一步执行的结果当参数)
+async.parallel 并行无关联(多个函数执行，之间没有任何的关系，也就是说谁执行都行，为了节约时间就可以使用并行流程来解决)
+async.series   串行无关联(多个函数或方法要依次执行，但是他们之间并没有什么联系，只有先后的顺序，比如我要写一个文件，
+				写完之后像用户发送邮件，这两者之间没有必然的联系，但是发邮件必须在写文件完成之后。) 
+async.auto  智能控制(当一个场景里，需要使用串行也需要使用并行的时候)

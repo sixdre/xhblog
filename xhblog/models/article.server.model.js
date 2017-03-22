@@ -181,7 +181,7 @@ ArticleSchema.statics.findByTitle = function(title,callback) {
         });
 }
 //根据文章文章id进行更新阅读浏览数
-ArticleSchema.statics.findByIdUpdate = function(id,callback) {
+ArticleSchema.statics.findBybIdUpdate = function(id,callback) {
 	return this.model('Article')
         .update({bId:id},{'$inc':{pv: 1}})
         .exec(function (error) {

@@ -228,7 +228,58 @@ module.exports={
 	},
 	showDetial:function(req,res){
 		const bid=req.params["bid"];
-		async.waterfall([
+		async.auto({			//智能控制
+			doc:function(callback){
+				Article.findByBId(bid,function(article){
+					if(!article){			//没找到就发送一个404
+						return res.send(404, "Oops! We didn't find it");
+					}
+					let opts = [{
+			            path   : 'category',
+			            select : 'name'
+			        }];
+					article.populate(opts,function(err,doc){
+						Article.findBybIdUpdate(bid,function(){
+							callback(null,doc);
+						});
+					});
+				});
+			},
+			hot:function(callback){
+				Article.findByHot(2,function(hot){
+					callback(null,hot);
+				});
+			},
+			nextArticle:function(callback){
+				Article.findNext(bid,function(nextArticle){		//下一篇
+					callback(null,nextArticle);
+				});
+			},
+			prevArticle:function(callback){
+				Article.findPrev(bid,function(prevArticle){		//上一篇
+					callback(null,prevArticle);
+				});
+			},
+			comments:["doc",function(results,callback){
+				let articleId=results.doc._id;
+				Comment.find({article:articleId})
+				.populate('from','username')
+				.populate('reply.from reply.to','username').exec(function(err,comments){
+					callback(null,comments);
+				});
+			}]
+			
+		},function(err,results){
+			res.render("www/detial",{
+				article:results.doc,
+				hot:results.hot,
+				title:results.doc.title,
+				nextArticle:results.nextArticle,
+				prevArticle:results.prevArticle,
+				comments:results.comments			//评论
+			});
+		});
+		/*async.waterfall([
 			function(callback){
 				Article.findByBId(bid,function(article){
 					if(!article){			//没找到就发送一个404
@@ -277,7 +328,7 @@ module.exports={
 				prevArticle:prevArticle,
 				comments:comments			//评论
 			});
-		});
+		});*/
 	},
 	showSearchResults:function(req,res){
 		let title=req.query.wd;
