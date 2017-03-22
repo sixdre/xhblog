@@ -23,7 +23,7 @@ module.exports={
 	},
 	//前台请求主数据接口
 	loadData:function(req,res){
-		let manger = req.session["manger"];
+		let manager = req.session["manager"];
 		async.parallel({
 			lmdoc:function(callback){
 				Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
@@ -60,7 +60,7 @@ module.exports={
 		},function(err,results){
 			console.log(results);
 			res.json({
-				manger:manger,	//管理员
+				manager:manager,	//管理员
 				total:results.total,		//文章总数
 				lmdoc:results.lmdoc,		//留言
 				categorys:results.categorys,	//文章分类
@@ -70,14 +70,14 @@ module.exports={
 	},
 	//后台退出
 	logout:function(req, res) {
-		delete req.session["manger"];
+		delete req.session["manager"];
 		res.json({
 			code : 1
 		});
 	},
 	//注册提交
 	doRegist:function(req, res) {
-		let manger = new User({
+		let manager = new User({
 			username: req.body.name,
 			email:req.body.email,
 			password: md5(req.body.password)
@@ -98,8 +98,8 @@ module.exports={
 						message:'该邮箱已被注册'
 					});
 				}
-				manger.isAdmin=true;
-				manger.save(function(err, manger) {
+				manager.isAdmin=true;
+				manager.save(function(err, manager) {
 					if(err){
 						return console.log(err);
 					}
@@ -117,12 +117,12 @@ module.exports={
 	doLogin:function(req, res) {
 		let email=req.body.email;
 		let password=req.body.password;
-		User.findOne({email:email}).then(function(manger){
-			if(!manger||manger.isAdmin==false){
+		User.findOne({email:email}).then(function(manager){
+			if(!manager||manager.isAdmin==false){
 				res.json({code:-1});
 			}else{
-				if(manger.password == md5(password)){
-					req.session["manger"] = manger;
+				if(manager.password == md5(password)){
+					req.session["manager"] = manager;
 					res.json({code : 1});
 				}else{
 					res.json({code : -2});

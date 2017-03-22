@@ -68,7 +68,7 @@ module.exports={
 	},
 	publish:function(req,res){					//新的发布文章接口
 		let article =new Article({
-			author: req.session["manger"]||'xuhao',
+			author: req.session["manager"]||'xuhao',
 			title:req.body.title,
 			content:req.body.content,
 			tagcontent:req.body.tagcontent,
