@@ -30,7 +30,7 @@ angular.module('app').factory('settingService',['$http','$q',function($http,$q){
 				var deferred=$q.defer();
 				var config={
 					method:"POST",
-					url:'/admin/setting/post_banner',
+					url:'/admin/banner',
 					data:data,
 					headers: {'Content-Type':undefined},
               		transformRequest:angular.identity   
@@ -45,16 +45,16 @@ angular.module('app').factory('settingService',['$http','$q',function($http,$q){
 			return ss();
 		},
 		loadFriend:function(){
-			return handelRequest("GET","/admin/setting/loadFriend");
+			return handelRequest("GET","/admin/friend");
 		},
 		addFriend:function(data){
-			return handelRequest("POST","/admin/setting/addFriend",data);
+			return handelRequest("POST","/admin/friend",data);
 		},
 		delFriend:function(id){
-			return handelRequest("POST","/admin/setting/delFriend",{id:id});
+			return handelRequest("POST","/admin/friend/remove",{id:id});
 		},
 		updateFriend:function(data){
-			return handelRequest("POST","/admin/setting/updateFriend",data);
+			return handelRequest("POST","/admin/friend/update",data);
 		}
 	}
 	

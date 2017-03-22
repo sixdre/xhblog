@@ -1,54 +1,87 @@
 "use strict";
 //后台管理主页面控制器
-const adminCtrl = require('../controller/admin/admin.server.controller');
+const adminCtrl = require('../controller/admin.js');
 //后台文章管理控制器
-const articleCtrl = require('../controller/admin/article.server.controller');
-//后台网站设置控制器
-const settingCtrl = require('../controller/admin/setting.server.controller');
+const articleCtrl = require('../controller/admin.article.js');
+//友链控制器
+const friendCtrl = require('../controller/admin.friend.js');
+//banner控制器
+const bannerCtrl=require('../controller/admin.banner.js');
+
+//tag控制器
+const tagCtrl=require('../controller/admin.tag.js');
+//category控制器
+const categoryCtrl=require('../controller/admin.category.js');
+
 const express=require('express');
-const admin=express.Router();			//后台
-const article=express.Router();			//文章
-const setting=express.Router();			//设置
+const adminRouter=express.Router();			
+const articleRouter=express.Router();		
+const friendRouter=express.Router();	
+const bannerRouter=express.Router();
+const tagRouter=express.Router();			
+const categoryRouter=express.Router();			
+
 
 module.exports = function(app) {
-	admin.get('/', adminCtrl.showadmin);
-	admin.post('/logout', adminCtrl.logout);
-	admin.post('/doRegist', adminCtrl.doRegist);
-	admin.post('/doLogin', adminCtrl.doLogin);
-	admin.get('/loadData', adminCtrl.loadData);
+	/*
+	 * admin
+	 */
+	adminRouter.get('/', adminCtrl.showadmin);
+	adminRouter.post('/logout', adminCtrl.logout);
+	adminRouter.post('/doRegist', adminCtrl.doRegist);
+	adminRouter.post('/doLogin', adminCtrl.doLogin);
+	adminRouter.get('/loadData', adminCtrl.loadData);
 	
 	/*
-	 * 文章
+	 * article
 	 */
-	article.get('/list', articleCtrl.list);
-	article.post('/page', articleCtrl.page);
-	article.post('/search', articleCtrl.doSearch);
-	article.post('/remove', articleCtrl.remove);
-	article.post('/sub',articleCtrl.sub);
-	article.post('/find', articleCtrl.find);
-	article.post('/update', articleCtrl.update);
-	article.post('/del', articleCtrl.del);
-	article.post('/testUpload',articleCtrl.testUpload);
-	article.post('/publish',articleCtrl.publish);			//新的发布路由
-	article.get('/category',articleCtrl.categoryList);			//分类列表
-	article.post('/category',articleCtrl.categoryAdd);			//分类添加
-	article.post('/category/remove',articleCtrl.categoryRemove);			//分类删除
+	articleRouter.get('/article/list', articleCtrl.list);
+	articleRouter.post('/article/page', articleCtrl.page);
+	articleRouter.post('/article/search', articleCtrl.search);
+	articleRouter.post('/article/remove', articleCtrl.remove);
+	articleRouter.post('/article/find', articleCtrl.find);
+	articleRouter.post('/article/update', articleCtrl.update);
+	articleRouter.post('/article/del', articleCtrl.del);
+	articleRouter.post('/article/publish',articleCtrl.publish);			//新的发布路由
 	
-	article.get('/tag',articleCtrl.tagList);				//标签列表
-	article.post('/tag',articleCtrl.tagAdd);				//标签添加
-	article.post('/tag/remove',articleCtrl.tagRemove);		//标签删除
 	/*
-	 * 设置
+	 * friend 友链
 	 */
-	setting.post('/post_banner',settingCtrl.post_banner);			//首页轮播图添加
-	setting.post('/addFriend',settingCtrl.addFriend);	//友情链接添加
-	setting.get('/loadFriend',settingCtrl.loadFriend);	//友情链接列表
-	setting.post('/delFriend',settingCtrl.delFriend);	//友情链接删除
-	setting.post('/updateFriend',settingCtrl.updateFriend);	//友情链接更新
+	friendRouter.get('/friend',friendCtrl.getFriends);
+	friendRouter.post('/friend',friendCtrl.postFriend);
+	friendRouter.post('/friend/remove',friendCtrl.removeFriend);
+	friendRouter.post('/friend/update',friendCtrl.updateFriend);
+	
+	/*
+	 * banner 
+	 */
+	bannerRouter.post('/banner',bannerCtrl.postBanner);
+	
+	/*
+	 * category
+	 */
+	categoryRouter.get("/category",categoryCtrl.getCategory);
+	categoryRouter.post("/category",categoryCtrl.postCategory);
+	categoryRouter.post('/category/remove',categoryCtrl.removeCategory);			//分类删除
 	
 	
-	app.use('/admin',admin);
-	app.use('/admin/article',article);
-	app.use('/admin/setting',setting);
+	/*
+	 * tag
+	 */
+	tagRouter.get('/tag',tagCtrl.getTags);
+	tagRouter.post('/tag',tagCtrl.postTag);
+	tagRouter.post('/tag/remove',tagCtrl.deleteTag)
+	
+	
+	app.use('/admin',adminRouter);
+	app.use('/admin',articleRouter);
+	app.use('/admin',friendRouter);
+	app.use('/admin',bannerRouter);
+	app.use('/admin',categoryRouter);
+	app.use('/admin',tagRouter);
+	
+	
+	
+	
 }
 

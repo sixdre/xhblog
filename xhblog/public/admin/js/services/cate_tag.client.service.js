@@ -24,25 +24,25 @@ angular.module('app').factory('categoryService',['$http','$q',function($http,$q)
 	var api={
 		category:{
 			list:function(){
-				return handelRequest("GET",'/admin/article/category');
+				return handelRequest("GET",'/admin/category');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/admin/article/category/remove',data);
+				return handelRequest("POST",'/admin/category/remove',data);
 			},
 			add:function(data){
 				console.log(data);
-				return handelRequest("POST",'/admin/article/category',data);
+				return handelRequest("POST",'/admin/category',data);
 			}
 		},
 		tag:{
 			list:function(){
-				return handelRequest("GET",'/admin/article/tag');
+				return handelRequest("GET",'/admin/tag');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/admin/article/tag/remove',data);
+				return handelRequest("POST",'/admin/tag/remove',data);
 			},
 			add:function(data){
-				return handelRequest("POST",'/admin/article/tag',data);
+				return handelRequest("POST",'/admin/tag',data);
 			}
 		}
 	}

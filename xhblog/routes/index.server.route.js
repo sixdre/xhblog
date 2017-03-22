@@ -1,9 +1,9 @@
 "use strict";
-const IndexCtrl = require('../controller/www/index.server.controller');
-const CommonCtrl=require('../controller/www/common.js');		//公用
-const AuthCtrl=require('../controller/www/auth.js');		//用户登陆注册
-const CommentCtrl=require('../controller/www/comment.js');	//评论controller
-const WordCtrl=require('../controller/www/word.js');	//留言controller
+const IndexCtrl = require('../controller/index');
+const CommonCtrl=require('../controller/common.js');		//公用
+const AuthCtrl=require('../controller/auth.js');		//用户登陆注册
+const CommentCtrl=require('../controller/comment.js');	//评论controller
+const WordCtrl=require('../controller/word.js');	//留言controller
 
 const express=require('express');
 const commentRouter=express.Router();			//评论路由
