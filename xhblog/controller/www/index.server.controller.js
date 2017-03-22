@@ -33,6 +33,7 @@ app.use(function(req,res,next){
  * @params pagesize要显示的列表个数
  * */
 var Indexs=function(req,res,currentPage,pageSize){
+	let results={};
 	async.waterfall([
 		function(callback){
 			/*Article.findNeeee(3).then(function(d){
@@ -42,39 +43,44 @@ var Indexs=function(req,res,currentPage,pageSize){
 			})*/
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
 				if(err){
-					return console.log("banner find err:",err)
+					callback(err);
 				}
-				callback(null,banners);
+				results.banners=banners;
+				callback(null,results);
 			})
 		},
-		function(banners,callback){
+		function(results,callback){
 			Article.count({},function(err,total){	//所有文章
 				Article.find({}).skip((currentPage-1)*pageSize)
 				.limit(pageSize).sort({create_time:-1})
 				.populate('category','name')
 				.populate('tags').exec(function(err,articles){
-					callback(null,banners,total,articles);
+					results.articles=articles;
+					results.total=total;
+					callback(null,results);
 				})
 			});
 		},
-		function(banners,total,articles,callback){		//最新文章
+		function(results,callback){		//最新文章
 			Article.findNew(1,function(newArticle){
-				callback(null,banners,total,articles,newArticle);
+				results.newArticle=newArticle;
+				callback(null,results);
 			});
 		},
-		function(banners,total,articles,newArticle,callback){		//热门文章
+		function(results,callback){		//热门文章
 			Article.findByHot(3,function(hot){
-				callback(null,banners,total,articles,newArticle,hot);
+				results.hot=hot;
+				callback(null,results);
 			})
 		},
-	],function(err,banners,total,articles,newArticle,hot){
+	],function(err,results){
 		res.render('www/', {
 			title: '个人博客首页',
-			banners:banners,
-			total:total,
-			articles:articles,	//所有文章
-			newArticle:newArticle[0],	//最新文章
-			hot:hot,				//热门文章
+			banners:results.banners,
+			total:results.total,
+			articles:results.articles,	//所有文章
+			newArticle:results.newArticle[0],	//最新文章
+			hot:results.hot,				//热门文章
 			currentpage:currentPage,	//当前页码
 			pagesize:pageSize			//列表数
 		});

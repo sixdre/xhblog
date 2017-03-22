@@ -79,9 +79,11 @@
 									<span class="mr-20">
 										<%if(value.tags.length>0){%>
 											<%value.tags.forEach(function(tag){%>
-												<a href="">
-													<%=tag.name%>
-												</a>
+												<%if(tag){%>
+													<a href="">
+														<%=tag.name%>
+													</a>
+												<%}%>
 											<%})%>			
 										<%}%>					
 									</span>
