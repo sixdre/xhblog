@@ -13,10 +13,6 @@ const ueditor = require("ueditor");			//编辑器
 global.moment = require('moment'); 			//时间格式化
 global.md5=require("md5");					//md5加密
 global.validator = require('validator');	//表单验证
-//var common = require('./common');			//公用
-
-
-
 
 //数据库连接
 const mongoose=require('./config/mongoose.js');
@@ -25,6 +21,7 @@ const db=mongoose();
 const app = global.app= express();
 
 app.locals.moment=moment;
+
 app.use(cookieParser("xhtest"));
 //设置session
 app.use(session({
@@ -89,40 +86,9 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
 
 
 
-
-//根据浏览器地址来给后台左侧菜单添加选中状态
-
-app.use(function(req,res,next){
-	res.locals.activeNav = function (nav){
-    var result = '';
-    if(nav==req.path){
-    	result = 'active';
-    }
-    /*  if(nav == '/admin'){
-        if(req.path == '/admin'){
-          result = 'active';
-        }
-      }else{
-      	console.log(req.path)
-        if(req.path.indexOf(nav) == 0){
-          result = 'active';
-        }
-      }*/
-    return result;
-  };
-  next();
-})
-
-
 //页面路由控制
 const routes = require('./routes/server.route.js');				
 routes(app);			
-
-
-//app.use(common.sundry);				//根据浏览器地址来给后台左侧菜单添加选中状态
-//console.log(common.sundry())
-
-
 
 
 
