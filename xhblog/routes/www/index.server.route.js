@@ -22,7 +22,7 @@ module.exports = function(app) {
 	app.get('/about',IndexCtrl.about);		//关于我
 	
 	
-	app.get('*', function (req, res) {					//其它未被注册的接口都跳转到404	可以被解析匹配的请求路径在各自对应的中间件中被一一处理并返回了结果，剩下所有能够到达最底层的请求则是无法被已有路由解析的，于是返回404。										
-	    res.send(404, "Oops! We didn't find it");
+	app.get('*', function (req, res,next) {					//其它未被注册的接口都跳转到404	可以被解析匹配的请求路径在各自对应的中间件中被一一处理并返回了结果，剩下所有能够到达最底层的请求则是无法被已有路由解析的，于是返回404。										
+	    next('404');
 	});
 }

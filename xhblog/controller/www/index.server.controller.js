@@ -68,7 +68,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 		}
 		
 	},function(err,results){
-		console.log(results);
 		res.render('www/', {
 			title: '个人博客首页',
 			banners:results.banners,
@@ -104,76 +103,52 @@ module.exports={
 		let obj ;
 		let j = 0;
 		let myEventEmitter = new events.EventEmitter();
-		async.waterfall([
-			  function(cb){
-				  Friend.find({}).exec(function(err,friends){
+		async.auto({
+			friends:function(cb){
+				 Friend.find({}).exec(function(err,friends){
 					  cb(null,friends)
-				  });
-			  },function(friends,cb){
-				  Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).exec(function(err,types){
-					  cb(null,friends,types);
-				  });
-			  },function(friends,types,cb){
-				  myEventEmitter.on('next',addResult);
+				 });
+			},
+			types:function(cb){
+				 Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).exec(function(err,types){
+					  cb(null,types);
+				 });
+			},
+			categorys:["types",function(tt,cb){
+				 myEventEmitter.on('next',addResult);
 				  function addResult() {
 					   categorys.push(obj);
 					    j++;
-					    if(j==types.length){
-					    	cb(null,friends,categorys);
+					    if(j==tt.types.length){
+					    	cb(null,categorys);
 					    }
 				  }
-				  types.forEach(function(rst,i){
+				  tt.types.forEach(function(rst,i){
 						Category.findOne({_id:rst._id}).exec(function(err,cate){
 							rst.name=cate.name;
 					        obj = rst;
 					        myEventEmitter.emit('next');
 						});
 				   });
-				  
-			  }
-		  ],function(err,friends,categorys){
-			 app.locals.friends=friends;		//友链
-			 app.locals.categorys=categorys;	//根据文章类型同计数量
-		});
-		/*Friend.find({}).then(function(friends){
-			Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).then(function(types){
-				myEventEmitter.on('next',addResult);
-				function addResult() {
-				    categorys.push(obj);
-				    j++;
-				    if(j==types.length){
-				        app.locals.friends=friends;	//友链
-						app.locals.categorys=categorys;	//根据文章类型同计数量
-				    }
-				}
-				types.forEach(function(rst,i){
-					Category.findOne({_id:rst._id}).then(function(cate){
-						rst.name=cate.name;
-				        obj = rst;
-				        myEventEmitter.emit('next');
-					}).catch(function(err){
-						console.log(err);
-					});
-				});
-			}).catch(function(err){
-				console.log(err);
-			});
-		}).then(function(){
-			console.log(1);
-		})*/
+			}]
+		},function(err,results){
+			 app.locals.friends=results.friends;		//友链
+			 app.locals.categorys=results.categorys;	//根据文章类型同计数量
+		})
 		next();
 	},
 	showIndex:function(req, res) {
 		const pageNum=req.params["page"]?req.params["page"]:1;
 		Indexs(req,res,pageNum,3);
 	},
-	showDetial:function(req,res){
+	showDetial:function(req,res,next){
 		const bid=req.params["bid"];
 		async.auto({			//智能控制
 			doc:function(callback){
 				Article.findByBId(bid,function(article){
 					if(!article){			//没找到就发送一个404
-						return res.send(404, "Oops! We didn't find it");
+						//return res.send(404, "Oops! We didn't find it");
+						return next('404');
 					}
 					let opts = [{
 			            path   : 'category',
