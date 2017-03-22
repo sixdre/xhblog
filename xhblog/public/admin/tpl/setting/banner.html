@@ -1,0 +1,68 @@
+<!--<div class="bg-light lter b-b wrapper-md">
+   <h1 class="m-n font-thin h3">Banner</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+		<form class="form-horizontal col-md-5" id="banner_form" role="form" enctype="multipart/form-data">
+		
+			<div class="form-group">
+				<label class="col-sm-2 control-label">图片</label>
+				<div class="input-group col-sm-10">
+					<span class="input-group-addon"><i class="fa fa-image"></i></span>
+					<input type="file" class="form-control" name="banner" required="required">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">链接</label>
+				<div class="input-group col-sm-10">
+					<span class="input-group-addon"><i class="fa fa-undo"></i></span>
+					<input type="url" class="form-control" name="link" required="required">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">描述</label>
+				<div class="input-group col-sm-10">
+					<span class="input-group-addon"><i class="fa fa-edit"></i></span>
+					<input type="txt" class="form-control" name="dec" required="required">
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<label class="col-sm-2 control-label">权重</label>
+				<div class="input-group col-sm-10">
+					<select class="form-control" name="weight">
+						<option>0</option>
+						<option>1</option>
+						<option>2</option>
+					</select>
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<div class="col-lg-offset-2 col-lg-10">
+					<button type="submit" class="btn btn-info" ng-click="addbanner()">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>-->
+	
+<div class="bg-light lter b-b wrapper-md">
+   <h1 class="m-n font-thin h3">Banner</h1>
+</div>
+<div class="wrapper-md">
+	<div ng-controller="settingCtrl">
+		<div class="row">
+			<div class="col-md-2">
+				<ul class="list-group list-group-sp">
+					<li class="list-group-item poin-ter" ui-sref="app.setting.banner.add" ui-sref-active="active">添加</li>
+					<li class="list-group-item poin-ter" ui-sref="app.setting.banner.list" ui-sref-active="active">列表</li>
+				</ul>
+			</div>
+			<div class="col-md-10"  ui-view="">
+																
+																
+			</div>
+		</div>
+	</div>
+</div>

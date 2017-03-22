@@ -1,0 +1,66 @@
+<div class="bg-light lter b-b wrapper-md">
+   <h1 class="m-n font-thin h3">发布文章</h1>
+</div>
+<div class="wrapper-md">
+	<div class="">
+		<form name="article_form" class="clearfix" id="Article_form" uploader="uploader" enctype='multipart/form-data'>
+			<div class="form-group col-md-6">
+                <input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required" aria-required="true">
+            </div>
+ 			<div class="form-group col-md-6">
+             	<div class="row">
+	             	<div class="form-group col-md-6">
+	             		<!--<input type="text" class="form-control" ng-model="article.tag1" name="article_tag1" placeholder="请输入文章标签" required="required">-->
+	             		<label class="checkbox-inline" ng-repeat="tag in tags">
+			                <input type="checkbox" ng-true-value="'{{tag._id}}'" ng-model="taged[$index]"> {{tag.name}}
+			            </label>
+	             	</div>
+	            	<!--<div class="form-group col-md-6">
+	            		<input type="text" class="form-control" ng-model="article.tag2" name="article_tag2" placeholder="请输入文章标签" required="required">
+	            	</div>-->
+             	</div>
+			</div>
+            <div class="form-group col-md-6">
+                <ui-select ng-model="article.type" theme="bootstrap" >
+		            <ui-select-match placeholder="请选择文章的类型">{{$select.selected.name}}</ui-select-match>
+		            <ui-select-choices repeat="item in categorys">
+		              <div ng-bind-html="item.name"></div>
+		            </ui-select-choices>
+		        </ui-select>
+            </div>
+             <div class="form-group col-md-6">
+         
+			</div>
+            <div class="form-group col-md-6">
+            	<!--<input type="file" nv-file-select="" uploader="uploader" name="img">
+            	<div ng-repeat="item in uploader.queue">
+            		<div><strong>{{ item.file.name }}</strong></div>
+            		<div class="progress progress-sm m-b-none m-t-xs">
+	                  	<div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+	                </div>
+            	</div>-->
+				<!--<input type="file" name="img">-->
+			</div>
+            <div class="form-group col-md-12">
+            	<script id="editor" type="text/plain"></script>
+            </div>
+            <div class="text-right form-group col-md-12">
+            	<button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">
+                   	存为草稿
+                </button>
+                <button type="button" class="btn btn-primary waves-effect waves-light"  ng-click="publish()" ng-disabled='article_form.$invalid'>
+                                        发表文章
+                </button>
+            </div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	if (uetrue) {
+		uetrue.destroy();
+	}
+	uetrue=UE.getEditor('editor',{
+        initialFrameHeight:300		//高度设置
+    });
+</script>

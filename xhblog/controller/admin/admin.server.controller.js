@@ -17,7 +17,7 @@ var upload = multer({ dest:  "public/upload" });  */
 
 module.exports={
 	showadmin:function(req,res){
-		res.render('admin/admin', {
+		res.render('admin', {
 			title: '个人博客后台管理系统',
 		});
 	},

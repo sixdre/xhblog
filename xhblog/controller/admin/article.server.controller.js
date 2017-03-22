@@ -110,16 +110,6 @@ module.exports={
 	//文章列表
 	list:function(req, res) {
 		let query = Article.find({}).sort({"time": -1});
-		
-		/*Article.count({}).then(function(c){
-			
-		}).then(function(){
-			query.find({},function(err,article){
-		}).catch(function(err){
-			console.log('查询文章列表出错:'+err)
-		})*/
-		
-		
 		Article.count({},function(err,c){
 			query.find({},function(err,article){
 				if(err){

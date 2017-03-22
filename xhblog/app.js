@@ -62,7 +62,7 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
      var ActionType = req.query.action;
      console.log(ActionType)
     if (ActionType === 'uploadimage' || ActionType === 'uploadfile' || ActionType === 'uploadvideo') {
-        var file_url = '/img/ueditor/';//默认图片上传地址
+        var file_url = '/upload/ueditor/';//默认图片上传地址
         /*其他上传格式的地址*/
         if (ActionType === 'uploadfile') {
             file_url = '/file/ueditor/'; //附件
