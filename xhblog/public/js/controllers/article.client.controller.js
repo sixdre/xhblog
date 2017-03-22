@@ -63,7 +63,7 @@ app.controller('articleListCtrl',
 			//分页配置参数
 			$scope.pageConfig = {
 				maxSize:5,
-				limit:5,		//每页显示的文章数
+				limit:1,		//每页显示的文章数
 			    bigTotalItems:0,	//文章总数
 		        bigCurrentPage:1
 		    };

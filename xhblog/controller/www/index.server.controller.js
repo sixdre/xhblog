@@ -80,59 +80,6 @@ var Indexs=function(req,res,currentPage,pageSize){
 			pagesize:pageSize			//列表数
 		});
 	})
-	/*let results={};
-	 * async.waterfall([
-		function(callback){*/
-			/*Article.findNeeee(3).then(function(d){
-				return d;
-			}).then(function(d){
-				console.log(d);
-			})*/
-	/*Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
-				if(err){
-					callback(err);
-				}
-				results.banners=banners;
-				callback(null,results);
-			})
-		},
-		function(results,callback){
-			Article.count({},function(err,total){	//所有文章
-				Article.find({}).skip((currentPage-1)*pageSize)
-				.limit(pageSize).sort({create_time:-1})
-				.populate('category','name')
-				.populate('tags').exec(function(err,articles){
-					results.articles=articles;
-					results.total=total;
-					callback(null,results);
-				})
-			});
-		},
-		function(results,callback){		//最新文章
-			Article.findNew(1,function(newArticle){
-				results.newArticle=newArticle;
-				callback(null,results);
-			});
-		},
-		function(results,callback){		//热门文章
-			Article.findByHot(3,function(hot){
-				results.hot=hot;
-				callback(null,results);
-			})
-		},
-	],function(err,results){
-		console.log(results);
-		res.render('www/', {
-			title: '个人博客首页',
-			banners:results.banners,
-			total:results.total,
-			articles:results.articles,	//所有文章
-			newArticle:results.newArticle[0],	//最新文章
-			hot:results.hot,				//热门文章
-			currentpage:currentPage,	//当前页码
-			pagesize:pageSize			//列表数
-		});
-	});*/
 }
 
 
@@ -214,12 +161,6 @@ module.exports={
 		}).then(function(){
 			console.log(1);
 		})*/
-		/*Category.find({}).exec(function(err,categorys){		//old
-			Friend.find({}).exec(function(err,friends){
-				app.locals.friends=friends;
-				app.locals.categorys=categorys;
-			});
-		});*/
 		next();
 	},
 	showIndex:function(req, res) {
@@ -279,56 +220,6 @@ module.exports={
 				comments:results.comments			//评论
 			});
 		});
-		/*async.waterfall([
-			function(callback){
-				Article.findByBId(bid,function(article){
-					if(!article){			//没找到就发送一个404
-						return res.send(404, "Oops! We didn't find it");
-					}
-					let opts = [{
-			            path   : 'category',
-			            select : 'name'
-			        }];
-					article.populate(opts,function(err,doc){
-						Article.findByIdUpdate(bid,function(){
-							callback(null,doc);
-						});
-					});
-				});
-			},
-			function(doc,callback){
-				Article.findByHot(2,function(hot){
-					callback(null,doc,hot);
-				});
-			},
-			function(doc,hot,callback){
-				Article.findNext(bid,function(nextArticle){		//下一篇
-					callback(null,doc,hot,nextArticle);
-				});
-			},
-			function(doc,hot,nextArticle,callback){
-				Article.findPrev(bid,function(prevArticle){		//上一篇
-					callback(null,doc,hot,nextArticle,prevArticle);
-				});
-			},
-			function(doc,hot,nextArticle,prevArticle,callback){
-				Comment.find({article:doc._id})
-				.populate('from','username')
-				.populate('reply.from reply.to','username').exec(function(err,comments){
-					callback(null,doc,hot,nextArticle,prevArticle,comments);
-				});
-			}
-			
-		],function(err,doc,hot,nextArticle,prevArticle,comments){
-			res.render("www/detial",{
-				article:doc,
-				hot:hot,
-				title:doc.title,
-				nextArticle:nextArticle,
-				prevArticle:prevArticle,
-				comments:comments			//评论
-			});
-		});*/
 	},
 	showSearchResults:function(req,res){
 		let title=req.query.wd;

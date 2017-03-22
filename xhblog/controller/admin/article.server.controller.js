@@ -138,23 +138,24 @@ module.exports={
 		let query = Article.find({}).sort({
 			"create_time": -1
 		}).skip(textCount*current).limit(textCount);
-		Article.count({},function(err,total){
-			query.find({}).populate('category','name').exec(function(err, docs) {
-				if(!err){
-					if(docs != '') {
-						res.json({
-							page:docs,
-							total:total
-						});
-					}else{
-						res.json({
-							code:-1
-						});
-					}
-				}else{
-					console.log("Something happend.");
-				}
-			})
+		
+		let total;			//文章数量
+		Article.count({}).then(function(len){
+			total=len;
+			return query.find({}).populate('category','name').exec()
+		}).then(function(results){
+			if(results.length>0){		//找到文章
+				return res.json({
+					page:results,
+					total:total
+				});
+			}
+			res.json({		//没有更多文章
+				code:-1
+			});
+			
+		}).catch(function(err){
+			console.log('文章分页查询出错:'+err);
 		})
 	},
 	/*
@@ -199,35 +200,6 @@ module.exports={
 			}).catch(function(err){
 				console.log(err);
 			});
-			/*.then(function(doc){
-				console.log(doc);
-				Article.remove({bId:id}).exec(function(err){
-					if(err){
-						return console.log(err);
-					}
-					res.json({
-						code:1
-					});
-				});
-			}).catch(function(err){
-				console.log(err);
-			});*/
-			
-			/*Category.findOne({_id:doc1.category},function(err,doc2){
-				var len=doc2.articles.indexOf(doc1._id);
-				doc2.articles.splice(len,1);
-				console.log(doc2);
-				doc2.save(function(){
-					Article.remove({bId:id},function(err){
-						if(err){
-							return console.log(err);
-						}
-						res.json({
-							code:1
-						});
-					});
-				});
-			});*/
 		});
 	},
 	//编辑文章搜寻
