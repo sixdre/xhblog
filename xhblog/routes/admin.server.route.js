@@ -11,12 +11,6 @@ const article=express.Router();			//文章
 const setting=express.Router();			//设置
 
 module.exports = function(app) {
-	/*app.get('/admin', adminCtrl.showadmin);
-	app.post('/admin/logout', adminCtrl.logout);
-	app.post('/admin/doRegist', adminCtrl.doRegist);
-	app.post('/admin/doLogin', adminCtrl.doLogin);
-	app.get('/admin/loadData', adminCtrl.loadData);*/
-	
 	admin.get('/', adminCtrl.showadmin);
 	admin.post('/logout', adminCtrl.logout);
 	admin.post('/doRegist', adminCtrl.doRegist);
