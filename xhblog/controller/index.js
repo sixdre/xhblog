@@ -89,7 +89,7 @@ exports.showIndex=function(req,res,next){
 			newArticle:results.newArticle[0],	//最新文章
 			hot:results.hot,				//热门文章
 			currentpage:currentPage,	//当前页码
-			pagesize:results.settings.pageSize			//列表数
+			pagesize:results.settings.PageSize			//列表数
 		});
 	})
 }
