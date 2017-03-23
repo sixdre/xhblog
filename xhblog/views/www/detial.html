@@ -83,6 +83,9 @@
 						<div class="form-ceil form-content">
 							<div class="form-user-info">
 								<%if(user){%>
+									<%if(user.isAdmin){%>
+										<span>您好管理员</span>
+									<%}%>
 									<%=user.username%>
 								<%}%>
 							</div>
