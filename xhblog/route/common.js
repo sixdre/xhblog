@@ -63,14 +63,19 @@ exports.loadCommonData=function(req,res,next){
 				    }
 			  }
 			  tt.types.forEach(function(rst,i){
-					Category.findOne({_id:rst._id}).exec(function(err,cate){
-						rst.name=cate.name;
+				  Category.findOne({_id:rst._id}).exec(function(err,cate){
+					  	if(cate){
+					  		rst.name=cate.name;
+					  	}else{
+					  		rst.name="null";
+					  	}
 				        obj = rst;
 				        myEventEmitter.emit('next');
-					});
+				  });
 			   });
 		}]
 	},function(err,results){
+		console.log(results.categorys);
 		 app.locals.friends=results.friends;		//友链
 		 app.locals.categorys=results.categorys;	//根据文章类型同计数量
 	})

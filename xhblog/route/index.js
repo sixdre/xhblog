@@ -24,7 +24,6 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 	let currentPage=req.params["page"]?req.params["page"]:1;
 	async.auto({
 		banners:function(callback){
-			console.log(123);
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
 				if(err){
 					callback(err);
@@ -42,7 +41,6 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 		        if (err) {
 		        	callback(err);
 		        } else {
-		        	console.log(settings);
 		        	callback(null,settings); 
 		        }
 		    });
@@ -68,7 +66,6 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 		}
 		
 	},function(err,results){
-		console.log(results);
 		res.render('www/', {
 			title: '个人博客首页',
 			banners:results.banners,

@@ -59,9 +59,9 @@
 						<div class="new-img-list pos-r f-l mr-18 clearfix">
 							<a href="/blog/<%=value.bId%>"> <img src="/images/hd3.jpg" />
 								<a href="/blog/<%=value.bId%>" target="_blank"> 
-									
-									<span class="pos-a f14"><%=value.category.name%></span> 
-								
+									<%if(value.category){%>
+										<span class="pos-a f14"><%=value.category.name%></span> 
+									<%}%>
 								</a>
 							</a>
 						</div>
