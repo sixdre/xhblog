@@ -14,3 +14,6 @@ async.series   串行无关联(多个函数或方法要依次执行，但是他�
 async.auto  智能控制(当一个场景里，需要使用串行也需要使用并行的时候)
 
 并行和串行同时使用的话，会先将并行的结果输出
+
+关于app.locals和res.locals的区别
+https://cnodejs.org/topic/579ab34af0d4b46026ba55eb

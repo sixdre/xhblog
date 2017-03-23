@@ -64,7 +64,11 @@ exports.loadCommonData=function(req,res,next){
 			  }
 			  tt.types.forEach(function(rst,i){
 					Category.findOne({_id:rst._id}).exec(function(err,cate){
-						rst.name=cate.name;
+						if(cate){
+					  		rst.name=cate.name;
+					  	}else{
+					  		rst.name="null";
+					  	}
 				        obj = rst;
 				        myEventEmitter.emit('next');
 					});
