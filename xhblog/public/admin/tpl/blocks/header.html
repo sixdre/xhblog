@@ -10,7 +10,7 @@
         <!-- brand -->
         <a href="#/" class="navbar-brand text-lt">
           <i class="fa fa-btc"></i>
-          <img src="/img/logo.png" alt="." class="hide">
+          <img src="/admin/img/logo.png" alt="." class="hide">
           <span class="hidden-folded m-l-xs">{{app.name}}</span>
         </a>
         <!-- / brand -->
@@ -48,7 +48,7 @@
                 	
                 	 <a ng-repeat="item in lm |orderBy:'create_time':true" class="media list-group-item">
                     <span class="pull-left thumb-sm">
-                      <img src="/img/a0.jpg" alt="..." class="img-circle">
+                      <img src="/admin/img/a0.jpg" alt="..." class="img-circle">
                     </span>
                     <span class="media-body block m-b-none">
                       {{item.message|limitTo:10}} --来自{{item.user.username}}<br>
@@ -67,7 +67,7 @@
           <li class="dropdown" dropdown>
             <a href class="dropdown-toggle clear" dropdown-toggle>
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="/img/a0.jpg" alt="...">
+                <img src="/admin/img/a0.jpg" alt="...">
                 <i class="on md b-white bottom"></i>
               </span>
               <span class="hidden-sm hidden-md">{{manager.username}}</span> <b class="caret"></b>
