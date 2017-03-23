@@ -10,7 +10,8 @@ const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
 const events = require('events');				//事件处理模块
-
+const path = require('path');
+const tool =require('../utility/tool');
 /*
  * app.use 可以在多个页面获取用户session
  */
@@ -32,10 +33,18 @@ app.use(function(req,res,next){
  * @params currentPage当前页面
  * @params pagesize要显示的列表个数
  * */
-var Indexs=function(req,res,currentPage,pageSize){
-	
-	async.parallel({
+
+
+
+/*
+ * showIndex  主页面和分页请求
+ */
+
+exports.showIndex=function(req,res,next){
+	let currentPage=req.params["page"]?req.params["page"]:1;
+	async.auto({
 		banners:function(callback){
+			console.log(123);
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
 				if(err){
 					callback(err);
@@ -48,14 +57,25 @@ var Indexs=function(req,res,currentPage,pageSize){
 				callback(null,total);
 			})
 		},
-		articles:function(callback){
+		settings:function(callback){
+			 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
+		        if (err) {
+		        	callback(err);
+		        } else {
+		        	console.log(settings);
+		        	callback(null,settings); 
+		        }
+		    });
+		},
+		articles:['settings',function(results,callback){
+			let pageSize=parseInt(results.settings.PageSize);
 			Article.find({}).skip((currentPage-1)*pageSize)
 			.limit(pageSize).sort({create_time:-1})
 			.populate('category','name')
 			.populate('tags').exec(function(err,articles){
 				callback(null,articles);
 			})
-		},
+		}],
 		newArticle:function(callback){
 			Article.findNew(1,function(newArticle){
 				callback(null,newArticle);
@@ -68,6 +88,7 @@ var Indexs=function(req,res,currentPage,pageSize){
 		}
 		
 	},function(err,results){
+		console.log(results);
 		res.render('www/', {
 			title: '个人博客首页',
 			banners:results.banners,
@@ -76,16 +97,75 @@ var Indexs=function(req,res,currentPage,pageSize){
 			newArticle:results.newArticle[0],	//最新文章
 			hot:results.hot,				//热门文章
 			currentpage:currentPage,	//当前页码
-			pagesize:pageSize			//列表数
+			pagesize:results.settings.pageSize			//列表数
 		});
 	})
 }
 
 
+
+
+
+
 module.exports={
-	showIndex:function(req, res) {
-		const pageNum=req.params["page"]?req.params["page"]:1;
-		Indexs(req,res,pageNum,3);
+	showIndex:function(req, res,next) {
+		let currentPage=req.params["page"]?req.params["page"]:1;
+		async.auto({
+			banners:function(callback){
+				Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
+					if(err){
+						callback(err);
+					}
+					callback(null,banners);
+				})
+			},
+			total:function(callback){
+				Article.count({},function(err,total){	//所有文章
+					callback(null,total);
+				})
+			},
+			settings:function(callback){
+				 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
+			        if (err) {
+			        	callback(err);
+			        } else {
+			        	callback(null,settings); 
+			        }
+			    });
+			},
+			articles:['settings',function(results,callback){
+				let pageSize=parseInt(results.settings.PageSize);
+				Article.find({}).skip((currentPage-1)*pageSize)
+				.limit(pageSize).sort({create_time:-1})
+				.populate('category','name')
+				.populate('tags').exec(function(err,articles){
+					callback(null,articles);
+				})
+			}],
+			newArticle:function(callback){
+				Article.findNew(1,function(newArticle){
+					callback(null,newArticle);
+				});
+			},
+			hot:function(callback){
+				Article.findByHot(3,function(hot){
+					callback(null,hot);
+				})
+			}
+			
+		},function(err,results){
+			console.log(results);
+			res.render('www/', {
+				title: '个人博客首页',
+				banners:results.banners,
+				total:results.total,
+				articles:results.articles,	//所有文章
+				newArticle:results.newArticle[0],	//最新文章
+				hot:results.hot,				//热门文章
+				currentpage:currentPage,	//当前页码
+				pagesize:results.settings.pageSize			//列表数
+			});
+		})
 	},
 	showDetial:function(req,res,next){
 		const bid=req.params["bid"];
