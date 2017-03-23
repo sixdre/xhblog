@@ -525,6 +525,8 @@ router.post('/tag/remove',function(req,res,next){
 
 
 
+module.exports = router;
+
 
 
 
