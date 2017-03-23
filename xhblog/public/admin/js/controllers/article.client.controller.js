@@ -133,7 +133,7 @@ app.controller('articleListCtrl',
 			  modalInstance.result.then(function () {
 					$http({
 						method:"POST",
-						url:"/admin/article/del",
+						url:"/admin/article/removeAll",
 						data:{ids:$scope.checkedIds}
 					 }).then(function(res){
 						var data=res.data;

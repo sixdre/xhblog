@@ -50,7 +50,7 @@ $(function() {
 		var articleId=GetQueryString('articleId');
 		$.ajax({
 			type:"POST",
-			url:"/doLogin?ref="+ref+'&articleId='+articleId,
+			url:"/login?ref="+ref+'&articleId='+articleId,
 			async:true,
 			data:$("#loginForm").serialize(), 
 			success:function(res){
@@ -75,7 +75,7 @@ $(function() {
 	$('#regist_submit').on('click',function(){
 		$.ajax({
 			type:"POST",
-			url:"/doRegist",
+			url:"/regist",
 			async:true,
 			data:$("#registForm").serialize(), 
 			success:function(res){

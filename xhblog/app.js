@@ -87,8 +87,13 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
 
 
 //页面路由控制
-const routes = require('./routes/server.route.js');				
-routes(app);			
+//const routes = require('./routes/server.route.js');				
+//routes(app);			
+
+const routes = require('./route/server.js');				
+routes(app);	
+
+
 
 
 

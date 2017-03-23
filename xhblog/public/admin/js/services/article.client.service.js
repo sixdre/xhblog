@@ -26,10 +26,10 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 	
 	return {
 		list:function(data){
-			return handelRequest("GET",'/admin/article/list',data);
+			return handelRequest("GET",'/admin/article/getArticles',data);
 		},
 		remove:function(id){
-			return handelRequest("POST",'/admin/article/remove',{id:id});
+			return handelRequest("POST",'/admin/article/romoveOne',{id:id});
 		},
 		save:function(data){
 			function ss(){
