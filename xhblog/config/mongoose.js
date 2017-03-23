@@ -4,6 +4,7 @@ const config=require('./db_url.js');
 const fs=require('fs');
 const path=require('path');
 
+
 module.exports=function(){
     mongoose.connect(config.mongodb);
     const db = mongoose.connection;

@@ -43,7 +43,7 @@ app.set('view engine', 'html');
 
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));		//extended为false时，键值对中的值就为'String'或'Array'形式,为true,则可为任何类型
@@ -62,10 +62,10 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
         var file_url = '/upload/ueditor/';//默认图片上传地址
         /*其他上传格式的地址*/
         if (ActionType === 'uploadfile') {
-            file_url = '/file/ueditor/'; //附件
+            file_url = '/upload/file/ueditor/'; //附件
         }
         if (ActionType === 'uploadvideo') {
-            file_url = '/video/ueditor/'; //视频
+            file_url = '/upload/video/ueditor/'; //视频
         }
         res.ue_up(file_url); //你只要输入要保存的地址 。保存操作交给ueditor来做
         res.setHeader('Content-Type', 'text/html');

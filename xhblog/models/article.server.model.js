@@ -1,38 +1,43 @@
 'use strict';
 const mongoose = require('mongoose')  
     , Schema = mongoose.Schema  
-    , ObjectId = Schema.ObjectId;  
+    , ObjectId = Schema.ObjectId
+    , base  =require('./base');
 
 const autoIncrement = require('mongoose-auto-increment');   //自增ID 模块		http://www.pinterspace.com/2015/mongoose-定义自增字段.html
 autoIncrement.initialize(mongoose.connection);
 //文章
-const ArticleSchema=new Schema({ 
- 	author:{
-        type:'String',
+const ArticleSchema = new Schema({
+	author:{			//作者
+        type:String,
         required:true 		//作者非空
     },
-    title:String,
-    type:{
-    	type:String,
-    	//enum:['','']  //只能是
-    },
-    category:{
-	    type: ObjectId,
+    title:String,		//标题
+    category:{			//类型
+	    type: ObjectId,	
 	    ref: 'Category'
 	},
-	tags:[{type: ObjectId, ref: 'Tag'}],
-    content:String,
-    tagcontent:String,
-    imgurl:String,
-    create_time: { type: Date, default: Date.now },        //创建时间
-    update_time: { type: Date, default: Date.now },
-    likes:{type: Number, default: 0 },		//点赞数
-    pv:{type: Number, default: 0 },		//浏览量
-    comments:{type: Number, default: 0 },	//评论数
-    top: { type: Boolean, default: false }, // 置顶文章
-    good: { type: Boolean, default: false } // 精华文章
-
+	tags:[{				//标签
+	    	  type: ObjectId, ref: 'Tag'
+	}],
+	content:String,				//内容
+    tagcontent:String,			//带格式的内容
+    imgurl:String,				//封面
+    Source: {type: String},		//文章来源(出处)
+    likes:{type: Number, default: 0 },			//点赞数
+    pv:{type: Number, default: 0 },				//浏览量
+    comments:{type: Number, default: 0 },		//评论数
+    top: { type: Boolean, default: false }, 	// 置顶文章
+    good: { type: Boolean, default: false }, 	// 精华文章
+    isDraft: {type: Boolean},					//是否草稿
+    isActive: {type: Boolean, default: true},    //是否有效
+    //创建时间
+    create_time: {type: Date, default: Date.now},
+    //更新时间或修改时间
+    update_time: {type: Date, default: Date.now }
 })
+
+
 /*const categorySchema = mongoose.Schema({
   name: String
 }*/
