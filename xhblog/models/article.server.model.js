@@ -6,6 +6,12 @@ const mongoose = require('mongoose')
 
 const autoIncrement = require('mongoose-auto-increment');   //自增ID 模块		http://www.pinterspace.com/2015/mongoose-定义自增字段.html
 autoIncrement.initialize(mongoose.connection);
+
+const BaseQuery=require('../models/dbHelper'),
+	  aQuery=BaseQuery.ArticlesQuery;
+
+
+
 //文章
 const ArticleSchema = new Schema({
 	author:{			//作者
@@ -44,24 +50,12 @@ const ArticleSchema = new Schema({
 //Schema.method( 'say', function(){console.log('hello');} ) 	//这样Model和Entity的实例就能使用这个方法了
  
 
-/**
- * 为文章数据查询构建条件对象
- * @param params 查询参数对象
- * @returns {{}}
- */
-function getArticlesQuery(params) {
-    let query = {};
-    query.isActive = true;		//有效
-    query.isDraft = false;		//不是草稿的
-    return query;
-}
-
 
 
  
 //查找所有
 ArticleSchema.statics.findAll = function(callback) {
-	let query=getArticlesQuery();
+	let query=aQuery();
 	
     return this.model('Article')
         .find(query)
