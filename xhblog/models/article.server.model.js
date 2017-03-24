@@ -29,7 +29,7 @@ const ArticleSchema = new Schema({
     comments:{type: Number, default: 0 },		//评论数
     top: { type: Boolean, default: false }, 	// 置顶文章
     good: { type: Boolean, default: false }, 	// 精华文章
-    isDraft: {type: Boolean},					//是否草稿
+    isDraft: {type: Boolean,default: false},					//是否草稿
     isActive: {type: Boolean, default: true},    //是否有效
     //创建时间
     create_time: {type: Date, default: Date.now},
@@ -44,11 +44,27 @@ const ArticleSchema = new Schema({
 //Schema.method( 'say', function(){console.log('hello');} ) 	//这样Model和Entity的实例就能使用这个方法了
  
 
+/**
+ * 为文章数据查询构建条件对象
+ * @param params 查询参数对象
+ * @returns {{}}
+ */
+function getArticlesQuery(params) {
+    let query = {};
+    query.isActive = true;		//有效
+    query.isDraft = false;		//不是草稿的
+    return query;
+}
+
+
+
  
 //查找所有
 ArticleSchema.statics.findAll = function(callback) {
+	let query=getArticlesQuery();
+	
     return this.model('Article')
-        .find({})
+        .find(query)
         .sort({ create_time: -1 })
         .exec(function (error, doc) {
             if (error) {

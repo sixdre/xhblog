@@ -16,6 +16,12 @@ const Lm = mongoose.model('Lm');
 const Comment=mongoose.model('Comment');		//评论
 
 
+
+
+
+
+
+
 //文章详情页面
 router.get('/blog/:bId',function(req,res,next){
 	const bid=req.params["bId"];
@@ -75,7 +81,7 @@ router.get('/blog/:bId',function(req,res,next){
 
 
 //列出类型下的文章
-router.get('blog/category/:name',function(req,res,next){
+router.get('/blog/category/:name',function(req,res,next){
 	let category_name=req.params.name;
 	async.waterfall([
 	       function(cb){

@@ -20,6 +20,20 @@ const Comment=mongoose.model('Comment');		//评论
 const Common=require('./common');
 
 
+/**
+ * 为文章数据查询构建条件对象
+ * @param params 查询参数对象
+ * @returns {{}}
+ */
+function getArticlesQuery(params) {
+    let query = {};
+    query.isActive = true;		//有效
+    query.isDraft = false;		//不是草稿的
+    return query;
+}
+
+
+
 router.get('/',Common.loadCommonData,function(req,res,next){
 	let currentPage=req.params["page"]?req.params["page"]:1;
 	async.auto({
@@ -47,10 +61,13 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 		},
 		articles:['settings',function(results,callback){
 			let pageSize=parseInt(results.settings.PageSize);
-			Article.find({}).skip((currentPage-1)*pageSize)
+			let query=getArticlesQuery();
+			console.log(query);
+			Article.find(query).skip((currentPage-1)*pageSize)
 			.limit(pageSize).sort({create_time:-1})
 			.populate('category','name')
 			.populate('tags').exec(function(err,articles){
+				console.log(articles);
 				callback(null,articles);
 			})
 		}],
