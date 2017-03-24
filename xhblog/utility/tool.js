@@ -96,3 +96,44 @@ exports.generateKey = function (prefix, obj) {
     }
     return key;
 };
+
+/*checkUrl  检查网址是否合法
+ * @param URL 网站
+ * @return boolean
+ */
+exports.checkUrl=function(URL){
+	var str = URL;
+	//下面的代码中应用了转义字符"\"输出一个字符"/"
+	var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+	var objExp = new RegExp(Expression);
+	if(objExp.test(str) == true) {
+		return true;
+	} else {
+		return false;
+	}
+}
+/*
+ * contain 检查一个值是否位于数组中
+ * @param arr  数组
+ * @param val  值
+ */
+exports.contain=function(arr,val){
+	var i = arr.length;  
+    while (i--) {  
+        if (arr[i] === val) {  
+            return true;  
+        }  
+    }  
+    return false;  
+}
+
+
+
+
+
+
+
+
+
+
+

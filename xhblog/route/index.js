@@ -73,7 +73,7 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 		
 	},function(err,results){
 		res.render('www/', {
-			title: '个人博客首页',
+			title: results.settings.SiteName,
 			banners:results.banners,
 			total:results.total,
 			articles:results.articles,	//所有文章

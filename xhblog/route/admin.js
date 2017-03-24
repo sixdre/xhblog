@@ -5,7 +5,10 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const async = require('async');
+const multer = require ('multer');  //上传文件中间件 multer
+const md5 = require('md5');
 const mongoose=require('mongoose');
+const tool=require('../utility/tool');
 
 //数据模型
 const Article = mongoose.model('Article');			//文章
@@ -17,10 +20,38 @@ const User = mongoose.model('User');
 const Lm = mongoose.model('Lm');
 
 
+
+const storage = multer.diskStorage({
+    //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
+    //Note:如果你传递的是一个函数，你负责创建文件夹，如果你传递的是一个字符串，multer会自动创建
+    destination: "public/upload/banner/"+moment(Date.now()).format('YYYY-MM'),
+    limits: {
+	    fileSize: 100000000
+	},
+    //TODO:文件区分目录存放
+    //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
+    filename: function (req, file, cb) {
+        var fileFormat =(file.originalname).split(".");
+        cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
+});
+
+//添加配置文件到muler对象。
+const upload = multer({
+    storage: storage,
+    //其他设置请参考multer的limits
+    //limits:{}
+}).single('banner');
+
+
+
+
+
+
 //渲染后台管理页
 router.get('/',function(req,res,next){
 	res.render('admin', {
-		title: '个人博客后台管理系统',
+		title: '博客后台管理系统',
 	});
 })
 
@@ -527,6 +558,63 @@ router.post('/tag/remove',function(req,res,next){
 		});
 	});
 })
+
+
+//首页banner图的添加
+
+//删除标签
+router.post('/banner',function(req,res,next){
+	upload(req, res, function (err) {
+		if(err){
+			return console.log("upload err:",err);
+		}
+		console.log(req.file)
+		if(!req.file){
+			res.json({
+				code:-2
+			});
+			return ;
+		}
+		let banner = Banner({
+			dec:req.body.dec,
+			url: req.body.link,
+			weight:req.body.weight,
+			imgAdress:req.file.destination.substring(6)+"/"+req.file.filename
+		});
+		
+		let nameArray=req.file.originalname.split('.')
+		let type=nameArray[nameArray.length-1];
+		
+		let typeArray=["jpg","png","gif","jpeg"];
+
+		if(tool.contain(typeArray,"jpg")&&tool.checkUrl(req.body.link)&&req.body.dec.length){
+		
+			banner.save(function(err,doc){
+				if(err){
+					return console.log("banner save err:",err);
+				}
+				res.json({
+					code:1
+				});
+			})
+		}else{
+			res.json({
+				code:-1
+			});
+		}
+	})
+})
+
+
+
+
+
+
+
+
+
+
+
 
 
 
