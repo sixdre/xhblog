@@ -17,7 +17,7 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     		  /*$rootScope.$state.isLogin = true;*/
     		  $state.go('app.calendar');
     	  }else{
-    		  alert("服务器出错了!");
+    		  alert("密码错误!");
     	  }
         /*if ( !response.data.user ) {
           $scope.authError = 'Email or Password not right';
