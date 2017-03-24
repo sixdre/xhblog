@@ -10,6 +10,7 @@ angular.module('app')
       isIE && angular.element($window.document.body).addClass('ie');
       isSmartDevice( $window ) && angular.element($window.document.body).addClass('smart');
       
+      
       $http({				//向后台请求主页面要展示的数据（文章总数，未读留言）
     	  method:"GET",
     	  url:"/admin/loadData"

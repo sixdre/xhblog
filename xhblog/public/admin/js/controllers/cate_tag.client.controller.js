@@ -1,5 +1,8 @@
-angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','$window','defPopService','categoryService',
-   function($rootScope,$scope,$http,$window,defPopService,categoryService){
+angular.module('app')
+	.controller('categoryCtrl',
+			['$rootScope','$scope','$http','$window','defPopService','alertService','categoryService',
+   function($rootScope,$scope,$http,$window,defPopService,alertService,categoryService){
+	
 	
 	$scope.iscNew=true;   //判断类型是更新还是添加
 	$scope.istNew=true;   //判断标签是更新还是添加
@@ -22,47 +25,41 @@ angular.module('app').controller('categoryCtrl',['$rootScope','$scope','$http','
 		}
 	}
 	
-	
-	
-	
-	
+	//分类和标签的删除
 	$scope.remove=function(type,item){			
 		if(type=="category"){				//删除分类
-			categoryService.category.remove({category:item}).then(function(res){
-				if(res.data.code==1){
-					defPopService.defPop({
-						status:1,
-						content:"删除成功!",
-						callback:function(){
-							$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
-						}
-					});
-				}
-			}).catch(function(){
+			alertService.confirm().then(function(){
+				categoryService.category.remove({category:item}).then(function(res){
+					if(res.data.code==1){
+						alertService.success();
+						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
+					}
+				}).catch(function(){
+					
+				});
+			},function(){
 				
-			});
-			
-			
+			})
 		}else if(type="tag"){
-			console.log(item);
-			categoryService.tag.remove({tag:item}).then(function(res){
-				if(res.data.code==1){
-					defPopService.defPop({
-						status:1,
-						content:"删除成功!",
-						callback:function(){
-							$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
-						}
-					});
-				}
-			}).catch(function(){
+			alertService.confirm().then(function(){
+				categoryService.tag.remove({tag:item}).then(function(res){
+					if(res.data.code==1){
+						alertService.success();
+						$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
+					}
+				}).catch(function(){
+					
+				});
+			},function(){
 				
-			});
+			})
 		}					
 	}
+	
+	//分类或者标签的保存
 	$scope.add=function(type){				//保存分类
 		if(type=="category"){
-			console.log($scope.category);
+
 			categoryService.category.add({category:$scope.category}).then(function(res){
 				console.log(res.data);
 				if(res.data.code==-1){

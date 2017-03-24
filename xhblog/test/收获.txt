@@ -27,3 +27,6 @@ http://www.cnblogs.com/zhongweiv/p/nodejs_events.html
 
 redis
 http://www.redis.net.cn/tutorial/3503.html
+
+sweetalert2
+https://github.com/limonte/sweetalert2

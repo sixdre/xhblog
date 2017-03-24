@@ -24,7 +24,8 @@ gulp.task('server', ["nodemon"], function() {
         'views/**/*.html',
         'views/**/*.ejs',
         'views/**/*.jade',
-        'public/**/*.*'
+        'public/**/*.*',
+        '!public/upload/'
     ];
 
     //gulp.run(["nodemon"]);

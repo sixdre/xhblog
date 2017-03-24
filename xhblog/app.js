@@ -114,7 +114,6 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(code);
-  console.log(err.status);
   res.render('www/error', {
       code: code
   });
