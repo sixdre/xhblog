@@ -17,3 +17,10 @@ async.auto  智能控制(当一个场景里，需要使用串行也需要使用�
 
 关于app.locals和res.locals的区别
 https://cnodejs.org/topic/579ab34af0d4b46026ba55eb
+
+
+一些node.js个人博客
+https://cnodejs.org/topic/51b78b9ef78196a85c767863
+
+node.js 事件详解
+http://www.cnblogs.com/zhongweiv/p/nodejs_events.html

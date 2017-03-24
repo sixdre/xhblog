@@ -1,10 +1,5 @@
 $(function() {
 	
-
-	
-	
-	
-	
 	//获取地址栏参数
 	function GetQueryString(name){
 	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
