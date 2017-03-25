@@ -256,11 +256,11 @@ router.post('/article/update',function(req,res,next){
 
 //删除文章 (单项)
 router.post('/article/romoveOne',function(req,res,next){
-	let id=req.body.id;
-	Article.findOne({bId:id}).then(function(article){
-		return Category.update({_id:article.category});
+	let bId=req.body.bId;
+	Article.findOne({bId:bId}).then(function(article){
+		return Category.update({_id:article.category},{$pull:{"articles": article._id}});
 	}).then(function(){
-		Article.remove({bId:id}).then(function(){
+		Article.remove({bId:bId}).then(function(){
 			res.json({
 				code:1
 			});

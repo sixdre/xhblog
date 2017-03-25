@@ -147,8 +147,39 @@ app.controller('articleListCtrl',
 	}
 	
 	$scope.removeOne=function(item){				//图标点击删除 单个删除
-		var id = item.bId;
-		var modalInstance = $uibModal.open({
+		var bId=item.bId;
+		alertService.confirm().then(function(){
+			articleService.removeOne(bId).then(function(res){
+				var data=res.data;
+				if(data.code>0){
+					alertService.success('删除成功');
+					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
+					$scope.pageChanged();
+				}else{
+					Promise.reject('timeout in ' + timeOut + ' seconds.');
+				}
+			}).catch(function(err){
+				console.log(1);
+			})
+		}).catch(function(){
+			$log.info('Modal dismissed at: ' + new Date());
+		})
+		
+		
+		/*.then(function(res){
+			var data=res.data;
+			if(data.code>0){
+				alertService.success('删除成功');
+				$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
+				$scope.pageChanged();
+			}
+		}).catch(function(err){
+			if(err){
+				alert(err);
+			}
+			$log.info('Modal dismissed at: ' + new Date());
+		});*/
+		/*var modalInstance = $uibModal.open({
 	          templateUrl: 'confirm.html',
 	          size:"sm",
 	          controller: 'ModalInstanceCtrl',
@@ -167,14 +198,14 @@ app.controller('articleListCtrl',
 				if(data.code>0){
 					alertService.success('删除成功');
 					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
- -					$scope.pageChanged();
+ 					$scope.pageChanged();
 				}
 			}).catch(function(err){
 				alertService.error('删除失败，服务器错误');
 			});
         }).catch(function(){
         	$log.info('Modal dismissed at: ' + new Date());
-        })
+        })*/
 	};
 	
 	
@@ -183,6 +214,7 @@ app.controller('articleListCtrl',
 		var article=item;
         $uibModal.open({
             templateUrl: '/admin/tpl/article/editor_modal.html',
+            size:'lg',
             controller: 'ModalInstanceCtrl',
             resolve: {
         	    data:function(){		//注入到ModalInstanceCtrl 里的data
