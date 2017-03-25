@@ -55,12 +55,19 @@ angular.module('app')
                   ]
               },
               {
+              name: 'ui.select',
+	              files: [
+	                  '/libs/angular-ui-select/dist/select.min.js',
+	                  '/libs/angular-ui-select/dist/select.min.css'
+	              ]
+              },
+              /*{
                   name: 'ui.select',
                   files: [
                       '/vendor/modules/angular-ui-select/select.min.js',
                       '/vendor/modules/angular-ui-select/select.min.css'
                   ]
-              },
+              },*/
               {
                   name:'angularFileUpload',
                   files: [

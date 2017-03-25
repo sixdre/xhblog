@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl',['$rootScope','$scope','$translate','$localStorage','$window',"$http","$state" ,
-    function($rootScope,$scope,$translate,$localStorage,$window,$http,$state ) {
+  .controller('AppCtrl',['$rootScope','$scope','$localStorage','$window',"$http","$state" ,
+    function($rootScope,$scope,$localStorage,$window,$http,$state ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -85,7 +85,7 @@ angular.module('app')
       }, true);
 
       // angular translate
-      $scope.lang = { isopen: false };
+     /* $scope.lang = { isopen: false };
       $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
       $scope.setLang = function(langKey, $event) {
@@ -94,7 +94,7 @@ angular.module('app')
         // You can change the language during runtime
         $translate.use(langKey);
         $scope.lang.isopen = !$scope.lang.isopen;
-      };
+      };*/
 
       function isSmartDevice( $window )
       {
