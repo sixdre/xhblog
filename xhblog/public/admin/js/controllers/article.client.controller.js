@@ -60,6 +60,7 @@ app.controller('articlePublishCtrl',
 app.controller('articleListCtrl',
 		['$rootScope','$scope',"$stateParams","$http",'$log','$uibModal','articleService',"defPopService",
 		 function($rootScope,$scope,$stateParams,$http,$log,$uibModal,articleService,defPopService){
+		
 			//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,

@@ -90,17 +90,17 @@
 						<small class="text-muted inline m-t-sm m-b-sm">showing {{listStart}}-{{listEnd}} of {{articleTotal}} items</small>
 					</div>
 					<div class="col-sm-8 text-right text-center-xs">
-						<pagination 
-							ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)" 
-							items-per-page="pageConfig.limit" 
+						<ul uib-pagination 
 							total-items="pageConfig.bigTotalItems" 
-							ng-model="pageConfig.bigCurrentPage" 
+							items-per-page="pageConfig.limit" 
 							max-size="pageConfig.maxSize" 
-							class="pagination-sm m-t-none m-b" 
 							boundary-links="true" 
-							rotate="false" 
-							num-pages="numPages">
-						</pagination>
+							rotate="true" 		
+							num-pages="numPages"
+							previous-text="上一页" 
+							next-text="下一页"
+							ng-model="pageConfig.bigCurrentPage" 
+							ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)"></ul>
 					</div>
 				</div>
 			</footer>
