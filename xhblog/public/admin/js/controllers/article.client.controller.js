@@ -4,14 +4,21 @@ var uetrue=null;
  * 文章发布控制器
  */
 app.controller('articlePublishCtrl',
-		['$rootScope','$scope',"$stateParams",'articleService',"defPopService",
-		 function($rootScope,$scope,$stateParams,articleService,defPopService){
-			$scope.taged=[];
+		['$rootScope','$scope',"$stateParams",'articleService',"defPopService","alertService",
+		 function($rootScope,$scope,$stateParams,articleService,defPopService,alertService){
+			
+			$scope.clearArticle=function(){		//注在请求中不要调用此方法,angular会自动脏数据检查
+				$scope.$apply(function(){
+					$scope.article={};
+				});
+			}
+			
+			//文章发表
 			$scope.publish=function(){
 				var tagArr=[];
-				angular.forEach($scope.taged,function(v){
-					if(v){
-						tagArr.push(v);
+				angular.forEach($scope.article.tags,function(tag){
+					if(tag){
+						tagArr.push(tag);
 					}
 				});
 				$scope.article.tags=tagArr;
@@ -19,11 +26,12 @@ app.controller('articlePublishCtrl',
 				$scope.article.content=UE.getEditor('editor').getContentTxt();
 				articleService.publish($scope.article).then(function(res){
 					var data=res.data;
+					console.log(res);
 					if(data.code>0){
-						defPopService.defPop({
-							status:1,
-							content:"发表成功!"
-						 });
+						alertService.success('发表成功!');
+						$rootScope.articleTotal++;
+						$scope.article={};
+						
 					}
 				}).catch(function(err){
 					 defPopService.defPop({
@@ -58,17 +66,22 @@ app.controller('articlePublishCtrl',
  * 文章列表管理控制器
  */
 app.controller('articleListCtrl',
-		['$rootScope','$scope',"$stateParams","$http",'$log','$uibModal','articleService',"defPopService",
-		 function($rootScope,$scope,$stateParams,$http,$log,$uibModal,articleService,defPopService){
+		['$rootScope','$scope',"$stateParams",
+		 "$http",'$log','$uibModal','articleService',
+		 "defPopService","alertService",
+		 function($rootScope,$scope,$stateParams,
+				 $http,$log,$uibModal,articleService,
+				 defPopService,alertService){
 		
 			//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,
-		limit:1,		//每页显示的文章数
+		limit:5,		//每页显示的文章数
 	    bigTotalItems:0,	//文章总数
         bigCurrentPage:1
     };
-	$scope.checkedIds = [];		//id组
+	
+	$scope.checkedIds = [];		//id组用来存放选中的文章id
 	  //分页显示
 	 $scope.pageChanged = function(cp,limit) {
     	 articleService.page({current:cp,textCount:limit}).then(function(res){
@@ -110,54 +123,30 @@ app.controller('articleListCtrl',
         };
     }
     
-	$scope.del=function(){				//多选或单选删除
+	$scope.removeMulti=function(){				//多选或单选删除
 		if($scope.checkedIds.length==0){
 			return defPopService.defPop({
 					status:0,
 					content:"请选择要删除的文章！"
 			 });
 		}
-	    var modalInstance = $uibModal.open({
-	          templateUrl: 'confirm.html',
-	          size:"sm",
-	          controller: 'ModalInstanceCtrl',
-	          resolve: {
-	        	  data:function(){		//注入到ModalInstanceCtrl 里的data
-	        		  var obj={
-	        			  id:$scope.id,
-	        			  handle:0
-	        		  }
-	        		  return obj;
-	        	  }
-	          }
-	    });
-	    modalInstance.result.then(function () {
-			$http({
-				method:"POST",
-				url:"/admin/article/removeAll",
-				data:{ids:$scope.checkedIds}
-			 }).then(function(res){
-				var data=res.data;
-				if(data.code>0){
-					defPopService.defPop({
-						status:1,
-						content:"删除成功!",
-						callback:function(){
-							var total=($rootScope.articleTotal)-($scope.checkedIds.length);
-							$rootScope.articleTotal=total<0?0:total;
-							$scope.pageChanged();
-						}
-					 });
-				}
-			 }).catch(function(err){
-				console.log(err)
-			 })
-       }).catch( function () {
-          $log.info('Modal dismissed at: ' + new Date());
-       });
+		alertService.confirm().then(function(){
+			return articleService.removeMulti({ids:$scope.checkedIds})
+		}).then(function(res){
+			var data=res.data;
+			if(data.code>0){
+				alertService.success('删除成功');
+				var total=($rootScope.articleTotal)-($scope.checkedIds.length);
+				$rootScope.articleTotal=total<0?0:total;
+				$scope.pageChanged();
+			}
+		}).catch(function(){
+			$scope.checkedIds = [];
+			$log.info('Modal dismissed at: ' + new Date());
+		});
 	}
 	
-	$scope.remove=function(item){				//图标点击删除 单个删除
+	$scope.removeOne=function(item){				//图标点击删除 单个删除
 		var id = item.bId;
 		var modalInstance = $uibModal.open({
 	          templateUrl: 'confirm.html',
@@ -173,17 +162,15 @@ app.controller('articleListCtrl',
 	        	  }
 	          }
         }).result.then(function(){
-        	articleService.remove(id).then(function(res){
+        	articleService.removeOne(id).then(function(res){
 				var data=res.data;
 				if(data.code>0){
-					i	
-					
+					alertService.success('删除成功');
+					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
+ -					$scope.pageChanged();
 				}
 			}).catch(function(err){
-				 defPopService.defPop({
-						status:0,
-						content:"出错了！"
-				 });
+				alertService.error('删除失败，服务器错误');
 			});
         }).catch(function(){
         	$log.info('Modal dismissed at: ' + new Date());
@@ -193,17 +180,14 @@ app.controller('articleListCtrl',
 	
 	//编辑文章
 	$scope.edit=function(item){
-		$scope.id=item.bId;
+		var article=item;
         $uibModal.open({
             templateUrl: '/admin/tpl/article/editor_modal.html',
             controller: 'ModalInstanceCtrl',
             resolve: {
         	    data:function(){		//注入到ModalInstanceCtrl 里的data
         		    var obj={
-        			    id:$scope.id,
-        			    handle:1,
-        			    ArticleType:$scope.ArticleType
-        			    
+        			    article:article
         		    }
         		  return obj;
         	    },
@@ -260,35 +244,26 @@ app.controller('articleSearchCtrl',
  * 模态框
  */
 app.controller('ModalInstanceCtrl',
-	['$scope', '$uibModalInstance',"data","articleService","defPopService","alertService",
-	 function($scope,$uibModalInstance,data,articleService,defPopService,alertService){
-		var id=data.id;
-		if(data.handle==1){				//
-			articleService.find(id).then(function(res){
-				$scope.up_item=res.data.article;
-				$scope.ArticleType=data.ArticleType;
-				UE.delEditor("up_editor");		//先销毁在进行创建否则会报错
-				var upUe=UE.getEditor('up_editor',{
-			        initialFrameHeight:200		//高度设置
-			    });  
-			    upUe.addListener("ready", function () {
-			    	// editor准备好之后才可以使用
-			    	upUe.setContent($scope.up_item.tagcontent);
-		        });
-			}).catch(function(err){
-				defPopService.defPop({
-					status:0,
-					content:"服务器出错了！"
-			    });
-			});
-		}
-	    $scope.update = function (id) {
-	    	var arg={
-	    		id:id,
-	    		tagcontent:UE.getEditor('up_editor').getContent(),
-	    		content:UE.getEditor('up_editor').getContentTxt()
-	    	};
-	    	articleService.update(arg).then(function(res){
+	['$scope', '$uibModalInstance',"$timeout","data","articleService","defPopService","alertService",
+	 function($scope,$uibModalInstance,$timeout,data,articleService,defPopService,alertService){
+		$scope.article=data.article;
+		$timeout(function(){					//这里要用$timeout 否则报错
+			UE.delEditor("update_modal");		//先销毁在进行创建否则会报错
+			var upUe=UE.getEditor('update_modal',{
+		        initialFrameHeight:200		//高度设置
+		    });  
+			upUe.addListener("ready", function () {
+		    	// editor准备好之后才可以使用
+		    	upUe.setContent($scope.article.tagcontent);
+	        });
+		},10);
+		
+		//文章更新
+	    $scope.update = function () {
+	    	var article=$scope.article;
+		    	article.tagcontent=UE.getEditor('update_modal').getContent();
+		    	article.content=UE.getEditor('update_modal').getContentTxt();
+	    	articleService.update(article).then(function(res){
 	    		var data=res.data;
 	    		if(data.code>0){
 	    			alertService.success('更新成功').then(function(){

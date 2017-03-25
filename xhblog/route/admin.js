@@ -7,6 +7,7 @@ const fs = require('fs');
 const async = require('async');
 const multer = require ('multer');  //上传文件中间件 multer
 const md5 = require('md5');
+const _=require('underscore');
 const mongoose=require('mongoose');
 const tool=require('../utility/tool');
 
@@ -173,46 +174,25 @@ router.post('/logout',function(req,res,next){
 
 //发布新文章
 router.post('/article/publish',function(req,res,next){
-	console.log(req.body);
-	let article =new Article({
-		author: req.session["manager"]||'xuhao',
-		title:req.body.title,
-		content:req.body.content,
-		tagcontent:req.body.tagcontent,
-		tags:req.body.tags
-	});
-	//promise 解决多个数据传志，可以定义一个空对象然后将数据传入到空对象中，再返回前台
-	article.save().then(function(artDoc){
-		return artDoc;
-	}).then(function(artDoc){
-		let category=new Category({
-			name:req.body.type.name,
-			articles:[artDoc._id]
-		});
-		Category.findOne({name:req.body.type.name}).then(function(cate){
-			if(cate){	
-				Category.update({'name':req.body.type.name}, {'$addToSet':{"articles":artDoc._id} },function(){
-					artDoc.category=cate._id;
-					artDoc.save(function(){
-						res.json({
-							code:1
-						});
-					});
-				});
-			}else{
-				category.save(function(err,category){
-					artDoc.category=category._id;
-					artDoc.save(function(){
-						res.json({
-							code:1
-						});
-					});
-				});
-			}
-		})
-	}).catch(function(err){
-		console.log('文章发布出错'+err);
-	});
+	let article=req.body;
+	article['author']=req.session["manager"]||'徐小浩';
+	let _article=new Article(article);
+	let resArticle;
+	//promise 解决多个数据传值，可以定义一个空对象然后将数据传入到空对象中，再返回前台
+	 _article.save().then(function(article){
+		 resArticle=article
+		 return article;
+	 }).then(function(rs){
+		 let categoryId=rs.category;
+		 return Category.update({_id:categoryId}, {'$addToSet':{"articles":rs._id} });
+	 }).then(function(){
+			res.json({
+				code:1,
+				article:resArticle
+			});
+	 }).catch(function(err){
+		 console.log('文章发布出错'+err);
+	 });
 })
 
 //获取文章
@@ -239,7 +219,7 @@ router.post('/article/page',function(req,res,next){
 	let total;			//文章数量
 	Article.count({}).then(function(len){
 		total=len;
-		return query.find({}).populate('category','name').exec()
+		return query.find({}).populate('category','name').exec();
 	}).then(function(results){
 		if(results.length>0){		//找到文章
 			return res.json({
@@ -257,61 +237,55 @@ router.post('/article/page',function(req,res,next){
 })
 
 
-//编辑文章
+//编辑更新文章
 router.post('/article/update',function(req,res,next){
-	let id=req.body.id;
-	let content=req.body.content;
-	let tagcontent=req.body.tagcontent;
-	Article.update({bId:id},{
-		tagcontent:tagcontent,
-		content:content,
-		update_time:Date.now()
-		},function(err){
-		if(err){
-			return console.log('update err :'+err)
-		}
+	let newArticle=req.body,
+		bId=newArticle.bId;
+	Article.findOne({bId:bId}).then(function(article){
+		let _article=_.extend(article,newArticle);
+		return _article.save();
+	}).then(function(rs){
 		res.json({
 			code:1
-		})
-	})
+		});
+	}).catch(function(err){
+		console.log('更新文章失败:'+err);
+	});
+
 })
 
 //删除文章 (单项)
 router.post('/article/romoveOne',function(req,res,next){
 	let id=req.body.id;
-	Article.findByBId(id,function(doc1){
-		Category.update({_id:doc1.category},{
-			$pull:{"articles": doc1._id}
-		}).then(function(raw){
-			Article.remove({bId:id}).exec(function(err){
-				if(err){
-					return console.log(err);
-				}
-				res.json({
-					code:1
-				});
+	Article.findOne({bId:id}).then(function(article){
+		return Category.update({_id:article.category});
+	}).then(function(){
+		Article.remove({bId:id}).then(function(){
+			res.json({
+				code:1
 			});
-		}).catch(function(err){
-			console.log(err);
 		});
+	}).catch(function(err){
+		console.log('删除文章出错'+err);
 	});
 })
 
 
 //删除文章 （多选)
-router.post('/article/removeAll',function(req,res,next){
+router.post('/article/removeMulti',function(req,res,next){
 	console.log(req.body.ids);
-	Article.find({bId:{$in:req.body.ids}}).then(function(docs){
-		return Promise.all(docs.map(function(doc){
-			return Category.update({_id:doc.category},{
-				$pull:{"articles": doc._id}
+	Article.find({bId:{$in:req.body.ids}}).then(function(articles){
+		return Promise.all(articles.map(function(article){
+			return Category.update({_id:article.category},{
+				$pull:{"articles": article._id}
 			}).then(function(){
-				return Article.remove({_id:doc._id}).then(function(){
-					return 1;
-				});		//返回promise对象
+				return Article.remove({_id:article._id}).then(function(){	//返回promise对象
+					return 1;	//返回下一个promise resolve 对象的值
+				});				
 			});
 		}));
 	}).then(function(dd){
+		console.log(dd);		//1
 		res.json({
 			code:1
 		});

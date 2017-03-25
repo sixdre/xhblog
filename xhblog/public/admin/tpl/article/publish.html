@@ -5,14 +5,14 @@
 	<div class="">
 		<form name="article_form" class="clearfix" id="Article_form" uploader="uploader" enctype='multipart/form-data'>
 			<div class="form-group col-md-6">
-                <input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required" aria-required="true">
+                <input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required">
             </div>
  			<div class="form-group col-md-6">
              	<div class="row">
 	             	<div class="form-group col-md-6">
 	             		<!--<input type="text" class="form-control" ng-model="article.tag1" name="article_tag1" placeholder="请输入文章标签" required="required">-->
 	             		<label class="checkbox-inline" ng-repeat="tag in tags">
-			                <input type="checkbox" ng-true-value="'{{tag._id}}'" ng-model="taged[$index]"> {{tag.name}}
+			                <input type="checkbox" ng-true-value="'{{tag._id}}'" ng-model="article.tags[$index]"> {{tag.name}}
 			            </label>
 	             	</div>
 	            	<!--<div class="form-group col-md-6">
@@ -21,9 +21,9 @@
              	</div>
 			</div>
             <div class="form-group col-md-6">
-                <ui-select ng-model="article.type" theme="bootstrap" >
+                <ui-select ng-model="article.category" theme="bootstrap" >
 		            <ui-select-match placeholder="请选择文章的类型">{{$select.selected.name}}</ui-select-match>
-		            <ui-select-choices repeat="item in categorys">
+		            <ui-select-choices repeat="item._id as item in categorys">
 		              <div ng-bind-html="item.name"></div>
 		            </ui-select-choices>
 		        </ui-select>

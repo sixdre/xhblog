@@ -28,8 +28,11 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		list:function(data){
 			return handelRequest("GET",'/admin/article/getArticles',data);
 		},
-		remove:function(id){
+		removeOne:function(id){
 			return handelRequest("POST",'/admin/article/romoveOne',{id:id});
+		},
+		removeMulti:function(ids){
+			return handelRequest("POST",'/admin/article/removeMulti',ids);
 		},
 		save:function(data){
 			function ss(){

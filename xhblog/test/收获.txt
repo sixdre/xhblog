@@ -30,3 +30,7 @@ http://www.redis.net.cn/tutorial/3503.html
 
 sweetalert2
 https://github.com/limonte/sweetalert2
+
+在angular中如果有异步请求就不需要调用$apply方法
+调用延时时间最好用angular 的$timeout
+注:http://blog.csdn.net/aitangyong/article/details/48972643

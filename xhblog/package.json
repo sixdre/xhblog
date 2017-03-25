@@ -26,6 +26,7 @@
     "multer": "^1.2.1",
     "serve-favicon": "~2.3.0",
     "ueditor": "^1.2.0",
+    "underscore": "^1.8.3",
     "util": "^0.10.3",
     "validator": "^6.2.1"
   },

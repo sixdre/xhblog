@@ -1,7 +1,7 @@
 {
   "name": "xhblog",
   "description": "xhblog bower",
-  "main": "public/bower_components",
+  "main": "public/libs",
   "authors": [
     "xuhao"
   ],
