@@ -6,7 +6,6 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     $scope.user = {};
     $scope.authError = null;
     $scope.login = function() {
-    	alert();
       $scope.authError = null;
       // Try to login
       $http.post('/admin/login', {email: $scope.user.email, password: $scope.user.password})
