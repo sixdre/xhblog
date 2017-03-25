@@ -79,6 +79,6 @@ exports.loadCommonData=function(req,res,next){
 		console.log(results.categorys);
 		 app.locals.friends=results.friends;		//友链
 		 app.locals.categorys=results.categorys;	//根据文章类型同计数量
+		 next();
 	})
-	next();
 }

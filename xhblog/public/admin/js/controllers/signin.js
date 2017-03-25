@@ -6,6 +6,7 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     $scope.user = {};
     $scope.authError = null;
     $scope.login = function() {
+    	alert();
       $scope.authError = null;
       // Try to login
       $http.post('/admin/login', {email: $scope.user.email, password: $scope.user.password})
@@ -15,7 +16,7 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     		  alert("账号不存在");
     	  }else if(code==1){
     		  /*$rootScope.$state.isLogin = true;*/
-    		  $state.go('app.calendar');
+    		  $state.go('app.article.publish');
     	  }else{
     		  alert("密码错误!");
     	  }

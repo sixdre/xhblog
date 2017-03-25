@@ -7,7 +7,7 @@ app.run(
 	)
 	.config(
 		function($stateProvider, $urlRouterProvider) {
-			$urlRouterProvider.when("", "app/calendar");
+			$urlRouterProvider.when("", "app/article/publish");
 			$urlRouterProvider
 				.otherwise('/access/404');
 			$stateProvider
@@ -32,38 +32,14 @@ app.run(
 		                return function(){};
 					}*/
 				})
-				.state('app.calendar', {
-					url: '/calendar',
-					templateUrl: '/admin/tpl/app_calendar.html',
-					// use resolve to load other dependences
-					resolve: {
-						deps: ['$ocLazyLoad', 'uiLoad',
-							function($ocLazyLoad, uiLoad) {
-								return uiLoad.load(
-									['/vendor/jquery/fullcalendar/fullcalendar.css',
-										'/vendor/jquery/fullcalendar/theme.css',
-										'/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
-										'/vendor/jquery/fullcalendar/fullcalendar.min.js',
-										'/admin/js/app/calendar/calendar.js'
-									]
-								).then(
-									function() {
-										return $ocLazyLoad.load('ui.calendar');
-									}
-								)
-							}
-						]
-					}
-				})
 				.state('app.article', {
 					abstract: true,
 					url: '/article',
 					template: '<div ui-view class="fade-in-up"></div>',			//new
-					/*controller:'articleCtrl',*/
 					resolve: {
 	                      deps: ['$ocLazyLoad',
 	                        function( $ocLazyLoad ){
-	                          return $ocLazyLoad.load(['ui.select','angularFileUpload']).then(
+	                          return $ocLazyLoad.load(['ui.select']).then(
 	                              function(){
 	                                  return $ocLazyLoad.load([
 											'/admin/js/services/article.client.service.js',
