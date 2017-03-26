@@ -1,12 +1,12 @@
 angular.module('app')
 	.controller('categoryCtrl',
-			['$rootScope','$scope','$http','$window','defPopService','alertService','categoryService',
-   function($rootScope,$scope,$http,$window,defPopService,alertService,categoryService){
+			['$rootScope','$scope','$timeout','$window','defPopService','alertService','categoryService',
+   function($rootScope,$scope,$timeout,$window,defPopService,alertService,categoryService){
 	
 	
 	$scope.iscNew=true;   //判断类型是更新还是添加
 	$scope.istNew=true;   //判断标签是更新还是添加
-	$scope.category={};
+	
 	/*$scope.list=function(){			//加载所有的分类
 		categoryService.list().then(function(res){
 			console.log(res.data.categorys);
@@ -126,8 +126,14 @@ angular.module('app')
 	
 	$scope.cancel=function(type){
 		if(type=="category"){
-			$scope.iscNew=true;
-			$scope.category={};
+			 $timeout(function(){  
+                $scope.iscNew = true;  
+                $scope.category={};
+                $scope.$apply();
+            },10);  
+			
+			//$scope.category={};
+	
 		}else if(type=="tag"){
 			$scope.istNew=true;
 			$scope.tag={};

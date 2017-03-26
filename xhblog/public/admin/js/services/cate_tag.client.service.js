@@ -1,7 +1,6 @@
 angular.module('app').factory('categoryService',['$http','$q',function($http,$q){
 
 	function handelRequest(method,url,data){
-		var deferred=$q.defer();
 		var config={
 			method:method,
 			url:url
@@ -11,14 +10,7 @@ angular.module('app').factory('categoryService',['$http','$q',function($http,$q)
 		}else{
 			config.params=data;
 		}
-		
-		$http(config).then(function(data){
-			deferred.resolve(data);
-		}).catch(function(data){
-			deferred.reject(data);
-		})
-		
-		return deferred.promise;
+		return $http(config);		
 	}
 
 	var api={

@@ -1,75 +1,82 @@
 <!--友情链接管理-->
 <div class="bg-light lter b-b wrapper-md">
-   <h1 class="m-n font-thin h3">分类管理</h1>
+	<h1 class="m-n font-thin h3">分类管理</h1>
 </div>
 <div class="wrapper-md">
 	<div class="clearfix">
 		<div class="col-md-6">
-	        <div class="panel panel-color panel-primary">
-	            <div class="panel-heading">
-	                <h1 class="panel-title">分类列表</h1>
-	            </div>
-	            <div class="panel-body" style="min-height:200px;">
-	               <div class="btn-group" ng-repeat="item in categorys" style="margin:0 10px 10px 0;">
-			          <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<div class="panel panel-color panel-primary">
+				<div class="panel-heading">
+					<h1 class="panel-title">分类列表</h1>
+				</div>
+				<div class="panel-body" style="min-height:200px;">
+					<div class="btn-group" ng-repeat="item in categorys" style="margin:0 10px 10px 0;">
+						<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          	{{item.name}} <span class="caret"></span>
 			          </button>
-			          <ul class="dropdown-menu">
-			            <li><a href="javascript:void(0);" ng-click="revise('category',item)">修改</a></li>
-			            <li><a href="javascript:void(0);" ng-click="remove('category',item);">删除</a></li>
-			          </ul>
-			        </div>
-	            </div>
-	        </div>
-	        <div class="panel panel-default">
-	            <div class="panel-body">
-	                <form id="cform" name="cform" class="form-inline" role="form">
-	                    <input type="hidden" id="mid">
-	                    <div class="form-group">
-	                        <input type="text" class="form-control" ng-model="category.name" placeholder="请输入分类名称" required="required">
-	                    </div>
-	                    <button ng-if="iscNew" type="button" class="btn btn-success" ng-disabled="cform.$invalid" ng-click="add('category');">保存分类
+						<ul class="dropdown-menu">
+							<li>
+								<a href="javascript:void(0);" ng-click="revise('category',item)">修改</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" ng-click="remove('category',item);">删除</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form id="cform" name="cform" class="form-inline" role="form">
+						<input type="hidden" id="mid">
+						<div class="form-group">
+							<input type="text" class="form-control" ng-model="category.name" placeholder="请输入分类名称" required="required">
+						</div>
+						<button ng-if="iscNew" type="button" class="btn btn-success" ng-disabled="cform.$invalid" ng-click="add('category');">保存分类
 	                    </button>
-	                    <button ng-if="!iscNew" type="button" class="btn btn-success" ng-click="add('category');">更新分类
+						<button ng-if="!iscNew" type="button" class="btn btn-success" ng-click="add('category');">更新分类
 	                    </button>
-	                    <a ng-if="!iscNew" class="btn btn-warning" ng-click="cancel('category')">取消</a>
-	                </form>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="col-md-6">
-	        <div class="panel panel-color panel-primary">
-	            <div class="panel-heading">
-	                <h1 class="panel-title">标签列表</h1>
-	            </div>
-	            <div class="panel-body" style="min-height: 200px;">
-	               <div class="btn-group" ng-repeat="item in tags" style="margin:0 10px 10px 0;">
-			          <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a ng-if="!iscNew" class="btn btn-warning" ng-click="cancel('category')">取消</a>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-color panel-primary">
+				<div class="panel-heading">
+					<h1 class="panel-title">标签列表</h1>
+				</div>
+				<div class="panel-body" style="min-height: 200px;">
+					<div class="btn-group" ng-repeat="item in tags" style="margin:0 10px 10px 0;">
+						<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          	{{item.name}} <span class="caret"></span>
 			          </button>
-			          <ul class="dropdown-menu">
-			            <li><a href="javascript:void(0);" ng-click="revise('tag',item)">修改</a></li>
-			            <li><a href="javascript:void(0);" ng-click="remove('tag',item);">删除</a></li>
-			          </ul>
-			        </div>
-	            </div>
-	        </div>
-	        <div class="panel panel-default">
-	            <div class="panel-body">
-	                <form id="tform" name="tform" class="form-inline" role="form">
-	                    <input type="hidden">
-	                    <div class="form-group">
-	                        <input type="text" class="form-control" ng-model="tag.name" placeholder="请输入标签名称" required="required">
-	                    </div>
-	                    <button ng-if="istNew" type="button" class="btn btn-success" ng-disabled="tform.$invalid" ng-click="add('tag');">保存标签
+						<ul class="dropdown-menu">
+							<li>
+								<a href="javascript:void(0);" ng-click="revise('tag',item)">修改</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" ng-click="remove('tag',item);">删除</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form id="tform" name="tform" class="form-inline" role="form">
+						<input type="hidden">
+						<div class="form-group">
+							<input type="text" class="form-control" ng-model="tag.name" placeholder="请输入标签名称" required="required">
+						</div>
+						<button ng-if="istNew" type="button" class="btn btn-success" ng-disabled="tform.$invalid" ng-click="add('tag');">保存标签
 	                    </button>
-	                    <button ng-if="!istNew" type="button" class="btn btn-success" ng-click="add('tag');">更新标签
+						<button ng-if="!istNew" type="button" class="btn btn-success" ng-click="add('tag');">更新标签
 	                    </button>
-	                    <a ng-if="!istNew" class="btn btn-warning" ng-click="cancel('tag')">取消</a>
-	                </form>
-	            </div>
-	        </div>
-	    </div>
+						<a ng-if="!istNew" class="btn btn-warning" ng-click="cancel('tag')">取消</a>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
-

@@ -1,27 +1,18 @@
 angular.module('app').factory('settingService',['$http','$q',function($http,$q){
-	
+
 	function handelRequest(method,url,data){
-		var deferred=$q.defer();
 		var config={
 			method:method,
 			url:url
 		};
-		
 		if(method==="POST"){
 			config.data=data;
 		}else{
 			config.params=data;
 		}
 		
-		$http(config).then(function(data){
-			deferred.resolve(data);
-		}).catch(function(data){
-			deferred.reject(data);
-		})
-		
-		return deferred.promise;
+		return $http(config);		//angular $http返回的是一个promise对象
 	}
-	
 	
 	
 	return {
