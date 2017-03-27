@@ -287,7 +287,7 @@ app.controller('ModalInstanceCtrl',
 		
 		//文章更新
 	    $scope.update = function () {
-	    	alert();
+	    	console.log($scope.article);
 	    	var article=$scope.article;
 		    	article.tagcontent=UE.getEditor('update_modal').getContent();
 		    	article.content=UE.getEditor('update_modal').getContentTxt();

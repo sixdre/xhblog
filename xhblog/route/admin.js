@@ -234,9 +234,11 @@ router.post('/article/page',function(req,res,next){
 router.post('/article/update',function(req,res,next){
 	let newArticle=req.body,
 		bId=newArticle.bId;
+	console.log(bId);
 	Article.findOne({bId:bId}).then(function(article){
 		let _article=_.extend(article,newArticle);
-		return _article.save();
+		console.log(_article);
+		return _article.save()
 	}).then(function(rs){
 		res.json({
 			code:1
