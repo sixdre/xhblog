@@ -45,7 +45,7 @@
             	<script id="editor" type="text/plain"></script>
             </div>
             <div class="text-right form-group col-md-12">
-            	<button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">
+            	<button type="button" class="btn btn-warning waves-effect waves-light" ng-click="publish('draft');">
                    	存为草稿
                 </button>
                 <button type="button" class="btn btn-primary waves-effect waves-light"  ng-click="publish()" ng-disabled='article_form.$invalid'>

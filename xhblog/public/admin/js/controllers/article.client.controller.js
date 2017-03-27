@@ -14,7 +14,10 @@ app.controller('articlePublishCtrl',
 			}
 			
 			//文章发表
-			$scope.publish=function(){
+			$scope.publish=function(data){
+				if(data=="draft"){	//存为草稿
+					$scope.article.isDraft=true;		//为草稿
+				}
 				var tagArr=[];
 				angular.forEach($scope.article.tags,function(tag){
 					if(tag){
@@ -31,7 +34,6 @@ app.controller('articlePublishCtrl',
 						alertService.success('发表成功!');
 						$rootScope.articleTotal++;
 						$scope.article={};
-						
 					}
 				}).catch(function(err){
 					 defPopService.defPop({
@@ -243,6 +245,35 @@ app.controller('ModalInstanceCtrl',
 	['$scope', '$uibModalInstance',"$timeout","data","articleService","defPopService","alertService",
 	 function($scope,$uibModalInstance,$timeout,data,articleService,defPopService,alertService){
 		$scope.article=data.article;
+	
+		$scope.isSelected=function(id){				//检查当前文章的标签，并和所有标签对应是否选中
+			return $scope.article.tags.indexOf(id)>=0;
+		}
+		var updateSelected = function(action,id){		
+	        if(action == 'add' && $scope.article.tags.indexOf(id) == -1){
+	        	$scope.article.tags.push(id);
+	            
+	        }
+	        if(action == 'remove' && $scope.article.tags.indexOf(id)!=-1){
+	            var idx = $scope.article.tags.indexOf(id);
+	            $scope.article.tags.splice(idx,1);
+	           
+	        }
+	    }
+		$scope.updateSelection=function($event,id){		//checkbox点击更新或删除文章的标签数组
+			 var checkbox = $event.target;
+		     var action = (checkbox.checked?'add':'remove');
+		     if(action == 'add' && $scope.article.tags.indexOf(id) == -1){
+	        	$scope.article.tags.push(id);
+	            
+	         }
+	         if(action == 'remove' && $scope.article.tags.indexOf(id)!=-1){
+	            var idx = $scope.article.tags.indexOf(id);
+	            $scope.article.tags.splice(idx,1);
+	           
+	         }
+		}
+		
 		$timeout(function(){					//这里要用$timeout 否则报错
 			UE.delEditor("update_modal");		//先销毁在进行创建否则会报错
 			var upUe=UE.getEditor('update_modal',{
@@ -256,6 +287,7 @@ app.controller('ModalInstanceCtrl',
 		
 		//文章更新
 	    $scope.update = function () {
+	    	alert();
 	    	var article=$scope.article;
 		    	article.tagcontent=UE.getEditor('update_modal').getContent();
 		    	article.content=UE.getEditor('update_modal').getContentTxt();

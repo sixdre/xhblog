@@ -16,6 +16,12 @@
                 <input type="text" class="form-control" readonly="readonly" ng-model="article.category.name">
             </div>
    		</div>
+   		<div class="form-group clear">
+   			<label class="col-lg-2 control-label">标签</label>
+   			<label class="checkbox-inline" ng-repeat="tag in tags">
+	            <input type="checkbox" ng-true-value="'{{tag._id}}'" ng-checked="isSelected(tag._id)" ng-click="updateSelection($event,tag._id)"> {{tag.name}}
+	        </label>
+   		</div>
    </form>
    <script id="update_modal" type="text/plain"></script>
 </div>

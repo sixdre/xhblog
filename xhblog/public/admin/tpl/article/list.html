@@ -51,11 +51,12 @@
 							</th>
 							<th>分类</th>
 							<th>浏览量</th>
+							<th ng-click="isActive=!isActive" ng-init="isActive=true">是否有效</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in articlelist | orderBy:'create_time':timesort |limitTo:pageConfig.limit" class="editable-tr-wrap">
+						<tr ng-repeat="item in articlelist | orderBy:'create_time':timesort" class="editable-tr-wrap">
 							<td>
 								<label class="i-checks m-b-none">
 									<input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)">
@@ -66,6 +67,10 @@
 							<td ng-bind="item.create_time|date:'yyyy-MM-dd HH:mm:ss'"></td>
 							<td>{{item.category.name}}</td>
 							<td>{{item.pv}}</td>
+							<td>
+								<span ng-if="item.isActive" class="label label-success">有效</span>
+								<span ng-if="!item.isActive" class="label label-danger">无效</span>
+							</td>
 							<td>
 								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
 									<span class="fa-stack">
