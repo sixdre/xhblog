@@ -215,25 +215,18 @@ router.post('/article/page',function(req,res,next){
 	let query = Article.find({}).sort({
 		"create_time": -1
 	}).skip(textCount*current).limit(textCount);
-	
-	let total;			//文章数量
-	Article.count({}).then(function(len){
-		total=len;
-		return query.find({}).populate('category','name').exec();
-	}).then(function(results){
+	query.find({}).populate('category','name').then(function(results){
 		if(results.length>0){		//找到文章
 			return res.json({
-				page:results,
-				total:total
+				results:results
 			});
 		}
 		res.json({		//没有更多文章
 			code:-1
 		});
-		
 	}).catch(function(err){
 		console.log('文章分页查询出错:'+err);
-	})
+	});
 })
 
 

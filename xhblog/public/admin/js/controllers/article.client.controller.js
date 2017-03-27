@@ -72,24 +72,31 @@ app.controller('articleListCtrl',
 		 function($rootScope,$scope,$stateParams,
 				 $http,$log,$uibModal,articleService,
 				 defPopService,alertService){
+			
+	var currentPage=$stateParams.page;
+	if(currentPage==""){
+		currentPage=1;
+	}else{
+		currentPage=parseInt(currentPage);
+	}
 		
 			//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,
 		limit:5,		//每页显示的文章数
-	    bigTotalItems:0,	//文章总数
-        bigCurrentPage:1
+	    totalItems:$rootScope.articleTotal,	//文章总数
+        currentPage:currentPage
     };
-	
 	$scope.checkedIds = [];		//id组用来存放选中的文章id
+	
 	  //分页显示
-	 $scope.pageChanged = function(cp,limit) {
+	 $scope.pageChanged = function() {
+		 var cp=$scope.pageConfig.currentPage,
+		 	limit=$scope.pageConfig.limit;
     	 articleService.page({current:cp,textCount:limit}).then(function(res){
-    		 $scope.articlelist=res.data.page;
-    		 $scope.pageConfig.bigTotalItems =res.data.total;
-    		 
-    		 $scope.listStart=($scope.pageConfig.bigCurrentPage-1)*$scope.pageConfig.limit+1;
-    		 var listEnd=$scope.pageConfig.bigCurrentPage*$scope.pageConfig.limit;
+    		 $scope.articlelist=res.data.results;
+    		 $scope.listStart=($scope.pageConfig.currentPage-1)*$scope.pageConfig.limit+1;
+    		 var listEnd=$scope.pageConfig.currentPage*$scope.pageConfig.limit;
     		 $scope.listEnd=listEnd<$rootScope.articleTotal?listEnd:$rootScope.articleTotal;
     		
     	 }).catch(function(err){
@@ -98,7 +105,10 @@ app.controller('articleListCtrl',
 					content:"出错了！"
 			 });
  		 })
-	 };	
+	};	
+	$scope.pageChanged($scope.pageConfig.currentPage,$scope.pageConfig.limit)
+	 
+	 
 	//文章全选操作
 	$scope.selectAll=function(allCheck){
 		if(allCheck==true){
@@ -154,58 +164,13 @@ app.controller('articleListCtrl',
 				if(data.code>0){
 					alertService.success('删除成功');
 					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
-					$scope.pageChanged();
-				}else{
-					Promise.reject('timeout in ' + timeOut + ' seconds.');
 				}
 			}).catch(function(err){
 				console.log(1);
 			})
 		}).catch(function(){
 			$log.info('Modal dismissed at: ' + new Date());
-		})
-		
-		
-		/*.then(function(res){
-			var data=res.data;
-			if(data.code>0){
-				alertService.success('删除成功');
-				$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
-				$scope.pageChanged();
-			}
-		}).catch(function(err){
-			if(err){
-				alert(err);
-			}
-			$log.info('Modal dismissed at: ' + new Date());
-		});*/
-		/*var modalInstance = $uibModal.open({
-	          templateUrl: 'confirm.html',
-	          size:"sm",
-	          controller: 'ModalInstanceCtrl',
-	          resolve: {
-	        	  data:function(){		//注入到ModalInstanceCtrl 里的data
-	        		  var obj={
-	        			  id:$scope.id,
-	        			  handle:0
-	        		  }
-	        		  return obj;
-	        	  }
-	          }
-        }).result.then(function(){
-        	articleService.removeOne(id).then(function(res){
-				var data=res.data;
-				if(data.code>0){
-					alertService.success('删除成功');
-					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
- 					$scope.pageChanged();
-				}
-			}).catch(function(err){
-				alertService.error('删除失败，服务器错误');
-			});
-        }).catch(function(){
-        	$log.info('Modal dismissed at: ' + new Date());
-        })*/
+		});
 	};
 	
 	
@@ -232,8 +197,7 @@ app.controller('articleListCtrl',
 
 	};
 	
-	$scope.pageConfig.bigCurrentPage=parseInt($stateParams.page?$stateParams.page:1);
-	$scope.pageChanged($scope.pageConfig.bigCurrentPage,$scope.pageConfig.limit);
+
 }])
 
 /*

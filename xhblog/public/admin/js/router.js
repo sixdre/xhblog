@@ -6,7 +6,9 @@ app.run(
 		}
 	)
 	.config(
-		function($stateProvider, $urlRouterProvider) {
+		function($stateProvider, $urlRouterProvider,$locationProvider) {
+			$locationProvider.hashPrefix('');  //处理地址栏中的!问题
+			
 			$urlRouterProvider.when("", "app/article/publish");
 			$urlRouterProvider
 				.otherwise('/access/404');

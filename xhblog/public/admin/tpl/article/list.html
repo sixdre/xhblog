@@ -91,7 +91,7 @@
 					</div>
 					<div class="col-sm-8 text-right text-center-xs">
 						<ul uib-pagination 
-							total-items="pageConfig.bigTotalItems" 
+							total-items="pageConfig.totalItems" 
 							items-per-page="pageConfig.limit" 
 							max-size="pageConfig.maxSize" 
 							boundary-links="true" 
@@ -99,8 +99,8 @@
 							num-pages="numPages"
 							previous-text="上一页" 
 							next-text="下一页"
-							ng-model="pageConfig.bigCurrentPage" 
-							ng-change="pageChanged(pageConfig.bigCurrentPage,pageConfig.limit)"></ul>
+							ng-model="pageConfig.currentPage" 
+							ng-change="pageChanged()"></ul>
 					</div>
 				</div>
 			</footer>

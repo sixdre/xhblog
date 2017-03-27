@@ -16,7 +16,7 @@ angular.module('app')
         app.value      = $provide.value;
     }
   ])
-  /*.config(['$translateProvider', function($translateProvider){
+  /*.config(['$translateProvider', function($translateProvider){		//国际化
     // Register a loader for the static files
     // So, the module will search missing translation tables under the specified urls.
     // Those urls are [prefix][langKey][suffix].
