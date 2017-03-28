@@ -166,6 +166,7 @@ app.controller('articleListCtrl',
 				if(data.code>0){
 					alertService.success('删除成功');
 					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
+					$scope.pageChanged();
 				}
 			}).catch(function(err){
 				console.log(1);
@@ -192,7 +193,7 @@ app.controller('articleListCtrl',
         	    },
              }
         }).result.then(function(){
-        	console.log(1);
+        	$scope.pageChanged();
         }).catch(function(){
         	console.log(2);
         })

@@ -8,7 +8,7 @@ app.controller('SigninFormController', ["$rootScope",'$scope', '$http', '$state'
     $scope.login = function() {
       $scope.authError = null;
       // Try to login
-      $http.post('/admin/login', {email: $scope.user.email, password: $scope.user.password})
+      $http.post('/admin/login', {username: $scope.user.username, password: $scope.user.password})
       .then(function(response) {
     	  var code=response.data.code;
     	  if(code==-1){

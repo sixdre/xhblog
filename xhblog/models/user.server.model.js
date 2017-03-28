@@ -5,9 +5,10 @@ const mongoose = require('mongoose')
 
 //用户
 const UserSchema=new Schema({ 
- 	username:{
+ 	username:{				//用户名唯一
         type:'String',
-        required:true 		
+        required:true,
+        unique: true
     },
     password:{
         type:'String',

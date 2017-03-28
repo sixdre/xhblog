@@ -105,9 +105,9 @@ router.get('/loadData',function(req,res,next){
 
 //后台登陆
 router.post('/login',function(req,res,next){
-	let email=req.body.email;
+	let username=req.body.username;
 	let password=req.body.password;
-	User.findOne({email:email}).then(function(manager){
+	User.findOne({username:username}).then(function(manager){
 		if(!manager||manager.isAdmin==false){
 			res.json({code:-1});
 		}else{
@@ -235,11 +235,14 @@ router.post('/article/update',function(req,res,next){	//有问题待修复
 	let newArticle=req.body,
 		bId=newArticle.bId;
 	Article.findOne({bId:bId}).then(function(article){
+		console.log(article);
 		let _article=_.extend(article,newArticle);
+		console.log(_article);
 		return _article.save()
 	}).then(function(rs){
 		res.json({
-			code:1
+			code:1,
+			article:rs
 		});
 	}).catch(function(err){
 		console.log('更新文章失败:'+err);
