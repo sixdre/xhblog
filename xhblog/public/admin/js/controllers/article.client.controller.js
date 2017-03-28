@@ -120,9 +120,9 @@ app.controller('articleListCtrl',
 				}
             });
 		}else{
-			 angular.forEach($scope.articlelist,function (v) {
+			 //angular.forEach($scope.articlelist,function (v) {
 				$scope.checkedIds=[];
-	         });
+	         //});
 		}
 	}
 	//单选

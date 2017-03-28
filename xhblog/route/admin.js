@@ -231,13 +231,11 @@ router.post('/article/page',function(req,res,next){
 
 
 //编辑更新文章
-router.post('/article/update',function(req,res,next){
+router.post('/article/update',function(req,res,next){	//有问题待修复
 	let newArticle=req.body,
 		bId=newArticle.bId;
-	console.log(bId);
 	Article.findOne({bId:bId}).then(function(article){
 		let _article=_.extend(article,newArticle);
-		console.log(_article);
 		return _article.save()
 	}).then(function(rs){
 		res.json({
