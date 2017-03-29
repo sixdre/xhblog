@@ -44,8 +44,8 @@ app.run(
 	                          return $ocLazyLoad.load(['ui.select']).then(
 	                              function(){
 	                                  return $ocLazyLoad.load([
-											'/admin/js/services/article.client.service.js',
-											'/admin/js/controllers/article.client.controller.js'
+											'/admin/js/services/articleService.js',
+											'/admin/js/controllers/articleCtrl.js'
 	                                  ]);
 	                              }
 	                          );
@@ -70,13 +70,13 @@ app.run(
 				.state("app.friend",{
 					url:"/friend",
 					templateUrl:'/admin/tpl/setting/newFriend.html',
-					controller:"settingCtrl",
+					controller:"friendCtrl",
 					resolve: {
 	                      deps: ['uiLoad',
 	                        function( uiLoad){
 	                          return uiLoad.load([
-	                                '/admin/js/services/setting.client.service.js',
-	                                '/admin/js/controllers/setting.client.controller.js'
+	                                '/admin/js/services/friendService.js',
+	                                '/admin/js/controllers/friendCtrl.js'
 	                          ]);
 	                      }]
 		            }
@@ -89,8 +89,8 @@ app.run(
                       deps: ['uiLoad',
                         function( uiLoad){
                           return uiLoad.load([
-                                '/admin/js/services/cate_tag.client.service.js',
-                                '/admin/js/controllers/cate_tag.client.controller.js'
+                                '/admin/js/services/cate_tagService.js',
+                                '/admin/js/controllers/cate_tagCtrl.js'
                           ]);
                       }]
 	                },
@@ -107,8 +107,8 @@ app.run(
 	                      deps: ['uiLoad',
 	                        function( uiLoad){
 	                          return uiLoad.load([
-	                                '/admin/js/services/setting.client.service.js',
-	                                '/admin/js/controllers/setting.client.controller.js'
+	                                '/admin/js/services/settingService.js',
+	                                '/admin/js/controllers/settingCtrl.js'
 	                          ]);
 	                      }]
 		                },

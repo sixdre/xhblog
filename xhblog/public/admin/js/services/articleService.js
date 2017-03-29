@@ -62,10 +62,10 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 			return handelRequest("POST",'/admin/article/publish',data);
 		},
 		search:function(title){
-			return handelRequest("POST",'/admin/article/search',{title:title});
+			return handelRequest("GET",'/admin/article/search',{title:title});
 		},
 		page:function(arg){
-			return handelRequest("POST",'/admin/article/page',arg);
+			return handelRequest("GET",'/admin/article/page',arg);
 		},
 		find:function(id){
 			return handelRequest("POST",'/admin/article/find',{id:id});

@@ -34,19 +34,8 @@ angular.module('app').factory('settingService',['$http','$q',function($http,$q){
 				return deferred.promise;
 			};
 			return ss();
-		},
-		loadFriend:function(){
-			return handelRequest("GET","/admin/friend");
-		},
-		addFriend:function(data){
-			return handelRequest("POST","/admin/friend",data);
-		},
-		delFriend:function(id){
-			return handelRequest("POST","/admin/friend/remove",{id:id});
-		},
-		updateFriend:function(data){
-			return handelRequest("POST","/admin/friend/update",data);
 		}
+		
 	}
 	
 }])

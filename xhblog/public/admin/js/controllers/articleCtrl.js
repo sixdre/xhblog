@@ -207,15 +207,14 @@ app.controller('articleListCtrl',
  * 文章搜索控制器
  */
 app.controller('articleSearchCtrl',
-		['$rootScope','$scope',"$stateParams",'$log','$uibModal','articleService',"defPopService",
-		 function($rootScope,$scope,$stateParams,articleService,defPopService){
+		['$rootScope','$scope','articleService',"defPopService",
+		 function($rootScope,$scope,articleService,defPopService){
 		$scope.search=function(title){
 			if(!title){
 				return defPopService.defPop({
 						status:0,
 						content:"请输入要搜索文章的标题！"
 				 });
-				
 			}
 			articleService.search(title).then(function(res){
 				if(res.data.code<0){
@@ -224,11 +223,10 @@ app.controller('articleSearchCtrl',
 						title:"搜索结果",
 						content:"没有找到相关文章！"
 				    });
-					
 				}
-				var data=res.data.results;
-				$scope.searchResult=data;
-				$scope.number=res.data.number;
+				var results=res.data.results;
+				$scope.results=results;
+				$scope.length=results.length;
 			}).catch(function(err){
 				defPopService.defPop({
 					status:0,

@@ -94,11 +94,11 @@ router.get('/loadData',function(req,res,next){
 		}
 	},function(err,results){
 		res.json({
-			manager:manager,	//管理员
-			total:results.total,		//文章总数
-			lmdoc:results.lmdoc,		//留言
+			manager:manager,				//管理员
+			total:results.total,			//文章总数
+			lmdoc:results.lmdoc,			//留言
 			categorys:results.categorys,	//文章分类
-			tags:results.tags			//文章标签
+			tags:results.tags				//文章标签
 		});
 	});
 });
@@ -209,9 +209,9 @@ router.get('/article/getArticles',function(req,res,next){
 })
 
 //分页展示
-router.post('/article/page',function(req,res,next){
-	let current=parseInt(req.body.current)-1;
-	let textCount=parseInt(req.body.textCount);
+router.get('/article/page',function(req,res,next){
+	let current=parseInt(req.query.current)-1;
+	let textCount=parseInt(req.query.textCount);
 	let query = Article.find({}).sort({
 		"create_time": -1
 	}).skip(textCount*current).limit(textCount);
@@ -301,16 +301,15 @@ router.post('/article/find',function(req,res,next){
 })
 
 //根据标题来搜寻文章
-router.post('/article/search',function(req,res,next){
-	let title=req.body.title;
-	Article.find({title:{$regex:''+title+''}},function(err,docs){
+router.get('/article/search',function(req,res,next){
+	let title=req.query.title;
+	Article.find({title:{$regex:''+title+''}},function(err,articles){
 		if(err){
 			return console.log(err)
-		}else if(docs.length){
+		}else if(articles.length){
 			res.json({
 				code:1,
-				results:docs,
-				number:docs.length
+				results:articles
 			});
 		}else{
 			res.json({
