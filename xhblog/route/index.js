@@ -22,9 +22,8 @@ const Common=require('./common');
 const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
 
-
-router.get('/',Common.loadCommonData,function(req,res,next){
-	let currentPage=req.params["page"]?req.params["page"]:1;
+//首页面初始化
+function init(currentPage,cb){
 	async.auto({
 		banners:function(callback){
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
@@ -72,6 +71,15 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 		}
 		
 	},function(err,results){
+		cb(results);
+	})
+}
+
+//router.use(Common.loadCommonData);
+
+router.get('/',Common.loadCommonData,function(req,res,next){
+	let currentPage=1;
+	init(currentPage,function(results){
 		res.render('www/', {
 			title: results.settings.SiteName,
 			banners:results.banners,
@@ -82,8 +90,27 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 			currentpage:currentPage,	//当前页码
 			pagesize:parseInt(results.settings.PageSize)			//列表数
 		});
-	})
+	});
 })
+
+router.get('/page/:page',Common.loadCommonData,function(req,res,next){
+	let currentPage=parseInt(req.params["page"]);
+	init(currentPage,function(results){
+		res.render('www/', {
+			title: results.settings.SiteName,
+			banners:results.banners,
+			total:results.total,
+			articles:results.articles,	//所有文章
+			newArticle:results.newArticle[0],	//最新文章
+			hot:results.hot,				//热门文章
+			currentpage:currentPage,	//当前页码
+			pagesize:parseInt(results.settings.PageSize)			//列表数
+		});
+	});
+})
+
+
+
 
 //评论
 router.post('/comment',function(req,res,next){

@@ -16,12 +16,6 @@ const Lm = mongoose.model('Lm');
 const Comment=mongoose.model('Comment');		//评论
 
 
-
-
-
-
-
-
 //文章详情页面
 router.get('/blog/:bId',function(req,res,next){
 	const bid=req.params["bId"];
