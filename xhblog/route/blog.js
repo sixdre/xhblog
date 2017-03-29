@@ -15,9 +15,11 @@ const User = mongoose.model('User');
 const Lm = mongoose.model('Lm');
 const Comment=mongoose.model('Comment');		//评论
 
+//公用数据
+const Common=require('./common');
 
 //文章详情页面
-router.get('/blog/:bId',function(req,res,next){
+router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 	const bid=req.params["bId"];
 	async.auto({			//智能控制
 		doc:function(callback){
@@ -55,8 +57,9 @@ router.get('/blog/:bId',function(req,res,next){
 		comments:["doc",function(results,callback){
 			let articleId=results.doc._id;
 			Comment.find({article:articleId})
-			.populate('from','username')
-			.populate('reply.from reply.to','username').exec(function(err,comments){
+			.populate('from')
+			.populate('reply.from reply.to').exec(function(err,comments){
+				console.log(comments);
 				callback(null,comments);
 			});
 		}]

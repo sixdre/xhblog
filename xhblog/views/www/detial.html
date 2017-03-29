@@ -125,7 +125,11 @@
 										<div class="comment-main">
 											<h4 class="comment-header">
 												<span class="username">
-													<%=v.from.username%>
+													<%if(user.isAdmin){%>
+														站主
+													<%}else{%>
+														<%=v.from.username%>
+													<%}%>
 												</span>
 											</h4>
 											<p class="comment-content"><%=v.content%></p>
@@ -141,9 +145,21 @@
 													</div>
 													<div class="comment-main">
 														<h4 class="comment-header">
-															<span class="username"><%=reply.from.username%></span> 
+															<span class="username">
+																<%if(reply.from.isAdmin){%>
+																	站主
+																<%}else{%>
+																	<%=reply.from.username%>
+																<%}%>
+															</span> 
 															回复
-															<span class="username"><%=reply.to.username%></span>
+															<span class="username">
+																<%if(reply.to.isAdmin){%>
+																	站主
+																<%}else{%>
+																	<%=reply.to.username%>
+																<%}%>
+															</span>
 														</h4>
 														<p class="comment-content"><%=reply.content%></p>
 														<div class="comment-footer">

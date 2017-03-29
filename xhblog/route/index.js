@@ -50,7 +50,6 @@ function init(currentPage,cb){
 		articles:['settings',function(results,callback){
 			let pageSize=parseInt(results.settings.PageSize);
 			let query=aQuery();
-			console.log(query);
 			Article.find(query).skip((currentPage-1)*pageSize)
 			.limit(pageSize).sort({create_time:-1})
 			.populate('category','name')
@@ -75,7 +74,7 @@ function init(currentPage,cb){
 	})
 }
 
-//router.use(Common.loadCommonData);
+//router.get("*",Common.loadCommonData);
 
 router.get('/',Common.loadCommonData,function(req,res,next){
 	let currentPage=1;
@@ -113,7 +112,7 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 
 
 //评论
-router.post('/comment',function(req,res,next){
+router.post('/comment',Common.checkLoginByAjax,function(req,res,next){
 	let _comment=req.body;
 	_comment.from=req.session["User"];
 	if(_comment.cId){

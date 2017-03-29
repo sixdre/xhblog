@@ -11,7 +11,11 @@ module.exports=function(app){
 	
 	app.use(function(req,res,next){
 		let _user=req.session['User'];
-		app.locals.user=_user;
+		if(_user){
+			app.locals.user=_user;
+		}else{
+			app.locals.user=undefined;
+		}	
 		next();
 	});
 	
