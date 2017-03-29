@@ -25,8 +25,16 @@ app.controller('articlePublishCtrl',
 					}
 				});
 				$scope.article.tags=tagArr;
-				$scope.article.tagcontent=UE.getEditor('editor').getContent();
-				$scope.article.content=UE.getEditor('editor').getContentTxt();
+				var content=UE.getEditor('editor').getContentTxt();
+				var tagcontent=UE.getEditor('editor').getContent();
+				if(content.trim().length==0){
+					return defPopService.defPop({
+						status:0,
+						content:"请输入文章内容！"
+					});
+				}
+				$scope.article.tagcontent=tagcontent;
+				$scope.article.content=content;
 				articleService.publish($scope.article).then(function(res){
 					var data=res.data;
 					console.log(res);

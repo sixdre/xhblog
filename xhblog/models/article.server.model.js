@@ -15,8 +15,7 @@ const BaseQuery=require('../models/dbHelper'),
 //文章
 const ArticleSchema = new Schema({
 	author:{			//作者
-        type:String,
-        required:true 		//作者非空
+        type:String
     },
     title:String,		//标题
     category:{			//类型

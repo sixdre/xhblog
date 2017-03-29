@@ -175,7 +175,7 @@ router.post('/logout',function(req,res,next){
 //发布新文章
 router.post('/article/publish',function(req,res,next){
 	let article=req.body;
-	article['author']=req.session["manager"]||'徐小浩';
+	article['author']=req.session["manager"].username||'徐小浩';
 	let _article=new Article(article);
 	let resArticle;
 	//promise 解决多个数据传值，可以定义一个空对象然后将数据传入到空对象中，再返回前台
