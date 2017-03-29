@@ -44,9 +44,11 @@
 		<div class="friends_link">
 			<h4 class="title">友情链接</h4>
 			<ul>
-				<%friends.forEach(function(v,i){%>
-					<li><a href="<%=v.url%>"><%=v.title%></a></li>
-				<%})%>
+				<%if(friends&&friends.length>0){%>
+					<%friends.forEach(function(v,i){%>
+						<li><a href="<%=v.url%>"><%=v.title%></a></li>
+					<%})%>
+				<%}%>
 			</ul>
 		</div>
 	</div>
