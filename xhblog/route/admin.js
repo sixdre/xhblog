@@ -108,15 +108,22 @@ router.post('/login',function(req,res,next){
 	let username=req.body.username;
 	let password=req.body.password;
 	User.findOne({username:username}).then(function(manager){
-		if(!manager||manager.isAdmin==false){
-			res.json({code:-1});
+		if(!manager|| !manager.isAdmin){
+			res.json({
+				code:-1,
+				message:'账号不存在'
+		    });
+		}else if(manager.password == md5(password)){
+			req.session["manager"] = manager;
+			res.json({
+				code : 1,
+				message:'登陆成功'	//登陆成功
+			});			
 		}else{
-			if(manager.password == md5(password)){
-				req.session["manager"] = manager;
-				res.json({code : 1});
-			}else{
-				res.json({code : -2});
-			}
+			res.json({
+				code : -2,
+				message:'密码错误'	//密码错误
+			});			
 		}
 	}).catch(function(err){
 		console.log('登陆出错:'+err)
