@@ -127,7 +127,7 @@ router.post('/login',function(req,res,next){
 //后台注册
 router.post('/regist',function(req,res,next){
 	let manager = new User({
-		username: req.body.name,
+		username: req.body.username,
 		email:req.body.email,
 		password: md5(req.body.password)
 	});
@@ -138,13 +138,12 @@ router.post('/regist',function(req,res,next){
 				message:'已有超级管理员，不可重复创建'
 			});
 		}
-		return user1;
-	}).then(function(user1){
-		User.findOne({email:req.body.email}).then(function(user2){
+	}).then(function(){
+		User.findOne({username:req.body.username}).then(function(user2){
 			if(user2){
 				return res.json({
 					code:-2,
-					message:'该邮箱已被注册'
+					message:'该用户名已被注册'
 				});
 			}
 			manager.isAdmin=true;
