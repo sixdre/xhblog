@@ -41,3 +41,7 @@ http://www.cnblogs.com/zipon/p/5825973.html
 
 
 mongodb 会自动创建_v 代表这个数据的版本号 如果save的时候_v不同就会报错
+
+
+angular-cookies介绍
+http://www.cnblogs.com/ys-ys/p/5021085.html
