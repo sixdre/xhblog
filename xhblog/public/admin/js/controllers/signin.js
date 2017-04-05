@@ -2,9 +2,13 @@
 
 /* Controllers */
 // signin controller
-app.controller('SigninFormController', ["$rootScope", '$scope', '$http', '$state', function($rootScope, $scope, $http, $state) {
+app.controller('SigninFormController', 
+["$rootScope", '$scope','$cookies', '$http', '$state','ConstantService',
+function($rootScope, $scope,$cookies,$http, $state,ConstantService) {
 	$scope.user = {};
 	$scope.authError = null; //错误信息
+	var expireDate = new Date();
+    expireDate.setMinutes(expireDate.getMinutes()+10*6);		//一小时
 	$scope.login = function() {
 		// Try to login
 		$http.post('/admin/login', { username: $scope.user.username, password: $scope.user.password })
@@ -19,6 +23,7 @@ app.controller('SigninFormController', ["$rootScope", '$scope', '$http', '$state
 						$scope.authError = message;
 						break;
 					case 1:
+						$cookies.put(ConstantService.LOGIN_USER,$scope.user.username,{'expires': expireDate})
 						$state.go('app.article.publish');
 						break;
 				}

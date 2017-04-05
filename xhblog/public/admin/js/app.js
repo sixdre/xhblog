@@ -1,6 +1,4 @@
 'use strict';
-
-
 angular.module('app', [
     'ngAnimate',
     'ngCookies',
@@ -17,4 +15,87 @@ angular.module('app', [
     //'pascalprecht.translate',
     "toaster",
    /* "textAngular"*/
-]);
+]).run(function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,ConstantService) {
+	$rootScope.$state = $state;
+	$rootScope.$stateParams = $stateParams;
+	
+	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+		//如果跳到登录页面直接放行
+		if(toState.name == 'access.signin' || toState.name == 'access.signup') {
+			return;
+		}
+		var user=$cookies.get(ConstantService.LOGIN_USER); //用户身份
+		if(!user){					//cookies 没有找到用户
+			event.preventDefault(); // 取消默认跳转行为
+			//记录被拦截的页面信息 当登录后再调至该页面
+			//失效时间
+			var expireDate = new Date();
+			expireDate.setMinutes(expireDate.getMinutes() + 10);
+			$cookies.put('rejectState', toState, { 'expires': expireDate });
+			$cookies.put('rejectParams', toParams, { 'expires': expireDate });
+			$state.go("access.signin", { w: 'notLogin' }); //跳转到登录界面
+			return;
+		}else{
+			//刷新cookie 失效时间
+			var expireDate = new Date();
+			expireDate.setMinutes(expireDate.getMinutes() + 10 * 6); //一小时
+			$cookies.put(ConstantService.LOGIN_USER, user, { 'expires': expireDate });
+		}
+	});
+
+	//state 跳转成功 将被拦截的state从cookie中移除
+	$rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+		if(to.name != 'access.signin') {
+			$cookieStore.remove('rejectState');
+			$cookieStore.remove('rejectParams');
+		}
+	});
+
+}).service('ConstantService',function(){
+	this.LOGIN_USER="LOGIN_USER";		//存储到cookie中的登录用户用户名
+})
+//请求拦截器 每当有请求发生，更新cookies失效时间
+//.factory('cookiesRefreshInterceptor', ['$q', '$cookies', '$rootScope','$state',
+//	function($q, $cookies,$rootScope,$state) {
+//		console.log(123);
+//  var cookiesRefreshInterceptor = {
+//      request: function(config) {
+//          if (config.url.indexOf('login')>-1) {
+//            return config;
+//          };
+//          //用户身份标识
+//          var uid = $cookies.get("LOGIN_USER_ID");
+//          if(uid){
+//                //刷新cookie 失效时间
+//                var expireDate = new Date();
+//                expireDate.setMinutes(expireDate.getMinutes()+10);
+//                $cookies.put('LOGIN_USER_ID' , uid,{'expires': expireDate});
+//                return config;
+//          }else{
+//            
+//            $state.go('login');
+//            return $q.reject('not login');
+//          }
+//
+//      }
+//  };
+//	console.log(cookiesRefreshInterceptor)
+//  return cookiesRefreshInterceptor;
+//}]);
+
+/*.factory('authInterceptor', function($rootScope, $cookies,ConstantService) {
+	return {
+		request: function(config) {
+			config.headers = config.headers || {};
+			var merchantID = $cookies.get(ConstantService.LOGIN_ID_KEY);
+			if(merchantID) {
+				config.headers.AUTHUID = merchantID;
+				return config;
+			}
+			return config;
+		},
+		responseError: function(response) {
+			// ...
+		}
+	};
+})*/

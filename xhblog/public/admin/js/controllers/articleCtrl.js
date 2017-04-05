@@ -78,10 +78,10 @@ app.controller('articlePublishCtrl',
 app.controller('articleListCtrl',
 		['$rootScope','$scope',"$stateParams",
 		 "$http",'$log','$uibModal','articleService',
-		 "defPopService","alertService",
+		 "defPopService","alertService","toolService",
 		 function($rootScope,$scope,$stateParams,
 				 $http,$log,$uibModal,articleService,
-				 defPopService,alertService){
+				 defPopService,alertService,toolService){
 			
 	var currentPage=$stateParams.page;
 	if(currentPage==""){
@@ -123,9 +123,10 @@ app.controller('articleListCtrl',
 	$scope.selectAll=function(allCheck){
 		if(allCheck==true){
 			angular.forEach($scope.articlelist,function (v) {
-				if($scope.checkedIds.indexOf(v.bId)<0){
-					$scope.checkedIds.push(v.bId);
-				}
+				toolService.addSelect($scope.checkedIds,v.bId);
+//				if($scope.checkedIds.indexOf(v.bId)<0){
+//					$scope.checkedIds.push(v.bId);
+//				}
             });
 		}else{
 			 //angular.forEach($scope.articlelist,function (v) {
@@ -135,12 +136,13 @@ app.controller('articleListCtrl',
 	}
 	//单选
 	$scope.selectOne = function (id) {
-		var index = $scope.checkedIds.indexOf(id);
-		if(index === -1) {					//如果没有那就添加到数组中
-			 $scope.checkedIds.push(id);				
-        } else if (index !== -1){			//否则就删除掉
-            $scope.checkedIds.splice(index, 1);
-        };
+		toolService.addSelect($scope.checkedIds,id);
+//		var index = $scope.checkedIds.indexOf(id);
+//		if(index === -1) {					//如果没有那就添加到数组中
+//			 $scope.checkedIds.push(id);				
+//      } else if (index !== -1){			//否则就删除掉
+//          $scope.checkedIds.splice(index, 1);
+//      };
     }
     
 	$scope.removeMulti=function(){				//多选或单选删除
