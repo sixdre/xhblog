@@ -108,15 +108,22 @@ router.post('/login',function(req,res,next){
 	let username=req.body.username;
 	let password=req.body.password;
 	User.findOne({username:username}).then(function(manager){
-		if(!manager||manager.isAdmin==false){
-			res.json({code:-1});
+		if(!manager|| !manager.isAdmin){
+			res.json({
+				code:-1,
+				message:'账号不存在'
+		    });
+		}else if(manager.password == md5(password)){
+			req.session["manager"] = manager;
+			res.json({
+				code : 1,
+				message:'登陆成功'	//登陆成功
+			});			
 		}else{
-			if(manager.password == md5(password)){
-				req.session["manager"] = manager;
-				res.json({code : 1});
-			}else{
-				res.json({code : -2});
-			}
+			res.json({
+				code : -2,
+				message:'密码错误'	//密码错误
+			});			
 		}
 	}).catch(function(err){
 		console.log('登陆出错:'+err)
@@ -127,7 +134,7 @@ router.post('/login',function(req,res,next){
 //后台注册
 router.post('/regist',function(req,res,next){
 	let manager = new User({
-		username: req.body.name,
+		username: req.body.username,
 		email:req.body.email,
 		password: md5(req.body.password)
 	});
@@ -138,13 +145,12 @@ router.post('/regist',function(req,res,next){
 				message:'已有超级管理员，不可重复创建'
 			});
 		}
-		return user1;
-	}).then(function(user1){
-		User.findOne({email:req.body.email}).then(function(user2){
+	}).then(function(){
+		User.findOne({username:req.body.username}).then(function(user2){
 			if(user2){
 				return res.json({
 					code:-2,
-					message:'该邮箱已被注册'
+					message:'该用户名已被注册'
 				});
 			}
 			manager.isAdmin=true;

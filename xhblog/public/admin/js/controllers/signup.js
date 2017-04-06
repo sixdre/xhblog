@@ -2,31 +2,27 @@
 
 // signup controller
 app.controller('SignupFormController', ['$scope', '$http', '$state', function($scope, $http, $state) {
-    $scope.user = {};
-    $scope.authError = null;
-    $scope.signup = function() {
-      $scope.authError = null;
-      // Try to create
-      $http.post('/admin/regist', {name: $scope.user.name, email: $scope.user.email, password: $scope.user.password})
-      .then(function(response) {
-    	  var code=response.data.code;
-    	  var message=response.data.message;
-    	  if(code==-1){
-    		  alert(message)
-    	  }else if(code==-2){
-    		  alert(message);
-    	  }else if(code==1){
-    		  alert(message);
-    		  $state.go('access.signin');
-    	  }
-       /* if ( !response.data.user ) {
-          $scope.authError = response;
-        }else{
-          $state.go('app.dashboard-v1');
-        }*/
-      }, function(x) {
-        $scope.authError = 'Server Error';
-      });
-    };
-  }])
- ;
+	$scope.user = {};
+	$scope.authError = null;
+	$scope.signup = function() {
+		// Try to create
+		$http.post('/admin/regist', { username: $scope.user.username, email: $scope.user.email, password: $scope.user.password })
+			.then(function(res) {
+				var code = res.data.code;
+				var message = res.data.message;
+				switch(code) {
+					case -1:
+						$scope.authError = message;
+						break;
+					case -2:
+						$scope.authError = message;
+						break;
+					case 1:
+						$state.go('access.signin');
+						break;
+				}
+			}, function(x) {
+				$scope.authError = 'Server Error';
+			});
+	};
+}]);

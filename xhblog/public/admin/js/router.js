@@ -1,11 +1,4 @@
-app.run(
-		function($rootScope, $state, $stateParams) {
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
-			$rootScope.$state.isLogin = false;
-		}
-	)
-	.config(
+app.config(
 		function($stateProvider, $urlRouterProvider,$locationProvider) {
 			$locationProvider.hashPrefix('');  //处理地址栏中的!问题
 			

@@ -14,13 +14,12 @@ const UserSchema=new Schema({
         type:'String',
         required:true 		
     },
-    email:{					//邮箱唯一
+    email:{					
         type:'String',
-        required:true,
-        unique: true
+        required:true
     },
-    create_time: { type: Date, default: Date.now },        //创建时间
     isAdmin:{ type: Boolean, default: false },
+    create_time: { type: Date, default: Date.now }        //创建时间
 })
 
  
