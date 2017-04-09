@@ -10,14 +10,11 @@
  			<div class="form-group col-md-6">
              	<div class="row">
 	             	<div class="form-group col-md-6">
-	             		<!--<input type="text" class="form-control" ng-model="article.tag1" name="article_tag1" placeholder="请输入文章标签" required="required">-->
+		             	文章标签
 	             		<label class="checkbox-inline" ng-repeat="tag in tags">
 			                <input type="checkbox" ng-true-value="'{{tag._id}}'" ng-model="article.tags[$index]"> {{tag.name}}
 			            </label>
 	             	</div>
-	            	<!--<div class="form-group col-md-6">
-	            		<input type="text" class="form-control" ng-model="article.tag2" name="article_tag2" placeholder="请输入文章标签" required="required">
-	            	</div>-->
              	</div>
 			</div>
             <div class="form-group col-md-6">
@@ -45,7 +42,7 @@
             	<script id="editor" type="text/plain"></script>
             </div>
             <div class="text-right form-group col-md-12">
-            	<button type="button" class="btn btn-warning waves-effect waves-light" ng-click="publish('draft');">
+            	<button type="button" class="btn btn-warning waves-effect waves-light" ng-disabled='article_form.$invalid' ng-click="publish('draft');">
                    	存为草稿
                 </button>
                 <button type="button" class="btn btn-primary waves-effect waves-light"  ng-click="publish()" ng-disabled='article_form.$invalid'>

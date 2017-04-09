@@ -116,33 +116,26 @@ app.controller('articleListCtrl',
 			 });
  		 })
 	};	
-	$scope.pageChanged($scope.pageConfig.currentPage,$scope.pageConfig.limit)
+	$scope.pageChanged()
 	 
-	 
+	 $scope.$watch('articlelist',function(newVal,oldVal){
+	 	if(newVal!==oldVal){
+	 		$scope.checkedIds = [];
+	 	}
+	 })
 	//文章全选操作
 	$scope.selectAll=function(allCheck){
-		if(allCheck==true){
+		if(allCheck==true){			//全选
 			angular.forEach($scope.articlelist,function (v) {
 				toolService.addSelect($scope.checkedIds,v.bId);
-//				if($scope.checkedIds.indexOf(v.bId)<0){
-//					$scope.checkedIds.push(v.bId);
-//				}
             });
-		}else{
-			 //angular.forEach($scope.articlelist,function (v) {
-				$scope.checkedIds=[];
-	         //});
+		}else{			//取消全选
+			$scope.checkedIds=[];
 		}
 	}
 	//单选
 	$scope.selectOne = function (id) {
 		toolService.addSelect($scope.checkedIds,id);
-//		var index = $scope.checkedIds.indexOf(id);
-//		if(index === -1) {					//如果没有那就添加到数组中
-//			 $scope.checkedIds.push(id);				
-//      } else if (index !== -1){			//否则就删除掉
-//          $scope.checkedIds.splice(index, 1);
-//      };
     }
     
 	$scope.removeMulti=function(){				//多选或单选删除

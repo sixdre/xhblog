@@ -379,7 +379,8 @@ router.post('/friend',function(req,res,next){
 			update_time:Date.now()
 			}).then(function(){
 				res.json({
-					code:1
+					code:1,
+					message:'更新成功'
 				});
 			}).catch(function(err){
 				return console.log('update err :'+err);
@@ -415,7 +416,8 @@ router.post('/friend/update',function(req,res,next){
 		update_time:Date.now()
 		}).then(function(){
 			res.json({
-				code:1
+				code:1,
+				message:'更新成功'
 			});
 		}).catch(function(err){
 			return console.log('update err :'+err);

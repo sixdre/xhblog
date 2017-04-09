@@ -1,21 +1,16 @@
 angular.module('app')
-	.controller('categoryCtrl',
+	.controller('CateTagCtrl',
 			['$rootScope','$scope','$timeout','$window','defPopService','alertService','categoryService',
    function($rootScope,$scope,$timeout,$window,defPopService,alertService,categoryService){
 	
 	
 	$scope.iscNew=true;   //判断类型是更新还是添加
 	$scope.istNew=true;   //判断标签是更新还是添加
+
 	
-	/*$scope.list=function(){			//加载所有的分类
-		categoryService.list().then(function(res){
-			console.log(res.data.categorys);
-			$scope.categorys=res.data.categorys;
-		}).catch(function(){
-			
-		});
-	}*/
+	//修改
 	$scope.revise=function(type,data){
+		var data=angular.copy(data);		//用copy可解决数据修改同时列表数据发生改变问题
 		if(type=="category"){
 			$scope.category=data;
 			$scope.iscNew=false;
@@ -40,7 +35,7 @@ angular.module('app')
 			},function(){
 				
 			})
-		}else if(type="tag"){
+		}else if(type="tag"){				//删除标签
 			alertService.confirm().then(function(){
 				categoryService.tag.remove({tag:item}).then(function(res){
 					if(res.data.code==1){
@@ -89,7 +84,7 @@ angular.module('app')
 			}).catch(function(){
 				
 			});
-		}else if(type=="tag"){
+		}else if(type=="tag"){				//保存标签
 			console.log($scope.tag)
 			categoryService.tag.add({tag:$scope.tag}).then(function(res){
 				console.log(res.data);
@@ -124,16 +119,16 @@ angular.module('app')
 	}	
 
 	
+	//取消
 	$scope.cancel=function(type){
 		if(type=="category"){
-			 $timeout(function(){  
-                $scope.iscNew = true;  
-                $scope.category={};
-                $scope.$apply();
-            },10);  
-			
-			//$scope.category={};
-	
+			$scope.iscNew = true;  
+            $scope.category={};
+//			 $timeout(function(){  
+//              $scope.iscNew = true;  
+//              $scope.category={};
+//              $scope.$apply();
+//          },10);  
 		}else if(type=="tag"){
 			$scope.istNew=true;
 			$scope.tag={};

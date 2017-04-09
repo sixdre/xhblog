@@ -54,17 +54,28 @@ angular.module('app').controller('friendCtrl',
 	 * */
 	$scope.editfriend=function(item){
 		$scope.isNewHandle=false;
-		$scope.friend=item;
+		$scope.friend=angular.copy(item);
 	}
 	$scope.updatefriend=function(item){
 		friendService.addFriend(item).then(function(res){
-			if(res.data.code==1){
-				alertService.success('更新成功!');
-				$scope.friend={};
-				$scope.isNewHandle=true;
-			}
+			console.log(res);
+			var p=new Promise(function(resolve,reject){
+				if(res.data.code==1){
+					resolve(res.data.message);
+				}else{
+					reject('错误')
+				}
+			})
+			return p;
+		}).then(function(msg){
+			alertService.success('更新成功!');
+			$scope.friend={};
+			$scope.isNewHandle=true;
+			$scope.loadfriend();
+		},function(err){
+			alertService.error()
 		}).catch(function(err){
-			
+			console.log(err);
 		})
 	}
 	
