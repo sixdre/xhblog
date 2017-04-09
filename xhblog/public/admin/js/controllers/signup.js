@@ -1,7 +1,9 @@
 'use strict';
 
 // signup controller
-app.controller('SignupFormController', ['$scope', '$http', '$state', function($scope, $http, $state) {
+app.controller('SignupFormController', [
+	'$scope', '$http', '$state','defPopService',function($scope, $http, $state,defPopService) {
+		
 	$scope.user = {};
 	$scope.authError = null;
 	$scope.signup = function() {
@@ -18,7 +20,13 @@ app.controller('SignupFormController', ['$scope', '$http', '$state', function($s
 						$scope.authError = message;
 						break;
 					case 1:
-						$state.go('access.signin');
+						defPopService.defPop({
+							status:1,
+							content:"注册成功!",
+							callback:function(){
+								$state.go('access.signin');
+							}
+						});
 						break;
 				}
 			}, function(x) {

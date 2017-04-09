@@ -1,4 +1,4 @@
-angular.module('app').factory('categoryService',['$http','$q',function($http,$q){
+angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 
 	function handelRequest(method,url,data){
 		var config={

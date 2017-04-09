@@ -166,15 +166,15 @@ app.controller('articleListCtrl',
 		alertService.confirm().then(function(){
 			articleService.removeOne(bId).then(function(res){
 				var data=res.data;
-				if(data.code>0){
-					alertService.success('删除成功');
+				if(data.code==1){
+					alertService.success(res.data.message);
 					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
 					$scope.pageChanged();
 				}
 			}).catch(function(err){
-				console.log(1);
+				
 			})
-		}).catch(function(){
+		}).catch(function(err){
 			$log.info('Modal dismissed at: ' + new Date());
 		});
 	};

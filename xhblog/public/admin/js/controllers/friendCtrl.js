@@ -9,7 +9,7 @@ angular.module('app').controller('friendCtrl',
 	 * */
 	$scope.loadfriend=function(){
 		friendService.loadFriend().then(function(res){
-			$scope.friends=res.data.doc;
+			$scope.friends=res.data.friends;
 		}).catch(function(err){
 			
 		})
@@ -39,7 +39,7 @@ angular.module('app').controller('friendCtrl',
 		alertService.confirm().then(function(){
 			friendService.delFriend(item._id).then(function(res){
 				if(res.data.code==1){
-					alertService.success('删除成功!');
+					alertService.success(res.data.message);
 					$scope.friends.splice($scope.friends.indexOf(item), 1);
 				}
 			}).catch(function(err){

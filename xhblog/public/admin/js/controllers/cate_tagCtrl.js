@@ -1,11 +1,39 @@
 angular.module('app')
 	.controller('CateTagCtrl',
-			['$rootScope','$scope','$timeout','$window','defPopService','alertService','categoryService',
-   function($rootScope,$scope,$timeout,$window,defPopService,alertService,categoryService){
+			['$rootScope','$scope','$timeout','$window','defPopService','alertService','catetagService','toolService',
+   function($rootScope,$scope,$timeout,$window,defPopService,alertService,catetagService,toolService){
 	
 	
 	$scope.iscNew=true;   //判断类型是更新还是添加
 	$scope.istNew=true;   //判断标签是更新还是添加
+
+	//获取类型列表
+	function getCategorys(){
+		catetagService.category.list().then(function(res){
+			if(res.data.code==1){
+				$rootScope.categorys=res.data.categorys;
+			}else{
+				alert('获取类型失败')
+			}
+		}).catch(function(){
+			
+		});
+	}
+	getCategorys();
+	//获取类型列表
+	function getTags(){
+		catetagService.tag.list().then(function(res){
+			if(res.data.code==1){
+				$rootScope.tags=res.data.tags;
+			}else{
+				alert('获取标签失败')
+			}
+		}).catch(function(){
+			
+		})
+	}
+	getTags();
+	
 
 	
 	//修改
@@ -24,7 +52,7 @@ angular.module('app')
 	$scope.remove=function(type,item){			
 		if(type=="category"){				//删除分类
 			alertService.confirm().then(function(){
-				categoryService.category.remove({category:item}).then(function(res){
+				catetagService.category.remove({category:item}).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
 						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
@@ -37,7 +65,7 @@ angular.module('app')
 			})
 		}else if(type="tag"){				//删除标签
 			alertService.confirm().then(function(){
-				categoryService.tag.remove({tag:item}).then(function(res){
+				catetagService.tag.remove({tag:item}).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
 						$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
@@ -55,7 +83,7 @@ angular.module('app')
 	$scope.add=function(type){				//保存分类
 		if(type=="category"){
 
-			categoryService.category.add({category:$scope.category}).then(function(res){
+			catetagService.category.add({category:$scope.category}).then(function(res){
 				console.log(res.data);
 				if(res.data.code==-1){
 					defPopService.defPop({
@@ -77,7 +105,9 @@ angular.module('app')
 						content:"修改成功",
 						callback:function(){
 							$scope.iscNew=true;
+							getCategorys();
 							$scope.category={};
+							
 						}
 					});
 				}
@@ -86,7 +116,7 @@ angular.module('app')
 			});
 		}else if(type=="tag"){				//保存标签
 			console.log($scope.tag)
-			categoryService.tag.add({tag:$scope.tag}).then(function(res){
+			catetagService.tag.add({tag:$scope.tag}).then(function(res){
 				console.log(res.data);
 				if(res.data.code==-1){
 					defPopService.defPop({
@@ -109,6 +139,7 @@ angular.module('app')
 						callback:function(){
 							$scope.istNew=true;
 							$scope.tag={};
+							getTags();
 						}
 					});
 				}
