@@ -10,8 +10,8 @@ const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 const async = require('async');
 const events = require('events');				//事件处理模块
-
-
+const tool =require('../utility/tool');
+const path = require('path');
 /*
  * 对ajax请求进行用户状态检查
  */
@@ -74,11 +74,21 @@ exports.loadCommonData=function(req,res,next){
 				        myEventEmitter.emit('next');
 				  });
 			   });
-		}]
+		}],
+		settings:function(cb){
+			 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
+		        if (err) {
+		        	cb(err);
+		        } else {
+		        	cb(null,settings); 
+		        }
+		    });
+		},
 	},function(err,results){
 		console.log(results.categorys);
 		 app.locals.friends=results.friends;		//友链
 		 app.locals.categorys=results.categorys;	//根据文章类型同计数量
+		 app.locals.settings=results.settings;		//获取博客配置
 		 next();
 	})
 }

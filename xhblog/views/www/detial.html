@@ -1,207 +1,170 @@
-<!DOCTYPE HTML>
-<html lang="zh-CN">
-	<head>
-		<meta http-equiv="Cache-Control" content="no-siteapp" />
-		<link rel="alternate" media="handheld" href="#" />
-		<meta charset="utf-8">
-		<title><%=title%></title>
-		<link rel="stylesheet" type="text/css" href="/libs/font-awesome/css/font-awesome.min.css"/>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/common.css">
-		<link rel="stylesheet" type="text/css" href="/stylesheets/module.css">
-		<link rel="stylesheet" type="text/css" href="/stylesheets/new-index.css">
-		<style type="text/css">
-			
-		</style>
-		
-	</head>
 
-	<body>
-		<%include header.html%>
-		<div class="column w-1200 center mt-20 clearfix pb-60">
-			<div class="article-details-crumb clearfix w-per100 f12"> <span><a href="/" >首页</a></span>&gt;<span><a href="" ><%=article.category.name%></a></span>&gt;<span><a href="javascript:void(0);"><%=article.title%></a></span> </div>
-			<div class="col-l-main f-l w-870">
-				<h1 class="f34 mt-50" style="height:auto"><%=article.title%></h1>
-				<div class="clearfix mt-25 pb-15 article-details-info">
-					<div class="article-details-user clearfix mr-15"> <span class="f13">作者：<%=article.author%></span> </div>
-					<span class="new-article-time"></span> <span class="mr-15"><%=moment(article.create_time).format('YYYY-MM-DD')%></span>
-					<label><!--<span>来源：</span><span class="article-iheima">DOTA2</span>--><i class="fa fa-eye"></i> <%=article.pv%></label>
-					<div class="article-my-review f-r clearfix"> <span class="article-review-icon"></span> <span>(<a href="#SOHUCS" id="changyan_count_unit"></a>)</span> </div>
-				</div>
-
-				<div class="article-details-tag clearfix mt-15 f13">
-					<a href="#"> <span>DOTA2</span> </a>
-					<a href="#"> <span>赛事</span> </a>
-				</div>
-
-				<div class="article-details-content article-content">
-					<%-article.tagcontent%>
-				</div>
-				
-			
-				<ul class="article_next_prev clearfix">
-					<%if(nextArticle){%>
-						<li class="next">【下一篇】<a href="/blog/<%=nextArticle.bId%>"><%=nextArticle.title%></a></li>
-					<%}else{%>
-						<li class="next">【下一篇】<a href="javascript:void(0);">无</a></li>
-					<%}%>
-					<%if(prevArticle){%>
-						<li class="prev">【上一篇】<a href="/blog/<%=prevArticle.bId%>"><%=prevArticle.title%></a></li>
-					<%}else{%>
-						<li class="prev">【上一篇】<a href="javascript:void(0);">无</a></li>
-					<%}%>
-				</ul>
-				
-
-
-
-				<!--搜狐畅言-->
-				<!--<div id="SOHUCS" sid="2293"></div>
-				<script charset="utf-8" type="text/javascript" src="/javascripts/changyan.js"></script>
-				<script type="text/javascript">
-				/*	$(function(){*/
-						window.changyan.api.config({
-							appid: 'cyrR1e0sL',
-							conf: 'prod_820fa03d9740bc431b67c4cb4c69b073'
-						});
-					/*})*/
-				</script>
-				<div style="width:25px;height:20px;position:relative;bottom:32px;left:845px;background-color:#FFF;"></div>-->
-				<!--搜狐畅言 ends-->
-				
-				<div class="comment-wrapper">
-					<%if(!user){%>
-						<div class="guest_link">
-							您还没有登录,请<a href="/login?ref=detial&&articleId=<%=article.bId%>">[登录]</a>或
-							<a href="/regist">[注册]</a>
-						</div>
-					<%}%>
-					<form id="comment_form" onsubmit="return false;">
-						<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
-						<div class="form-ceil form-user-avatar">
-							<img src="/images/noavatar_default.png" alt="" />
-						</div>
-						<div class="form-ceil form-content">
-							<div class="form-user-info">
-								<%if(user){%>
-									<%if(user.isAdmin){%>
-										<span>您好管理员</span>
-									<%}%>
-									<%=user.username%>
-								<%}%>
-							</div>
-							<div class="form-wordlimit">0/300</div>
-							<div class="form-textarea">
-								<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
-							</div>
-							<div class="form-toolbars">
-								<div class="form-action">
-									<input type="submit" value="提交" id="comment_submit"/>
-								</div>
-							</div>
-						</div>
-						
-					</form>
-					
-					<div class="comment-area">
-						<div class="comment-tab">
-							<ul class="comment-tab-left">
-								<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=comments.length%>)</em></li>
-							</ul>
-						</div>
-						<div class="comment-pager-haeder">
-							<div class="comment-pager fix">
-								<div class="comment-pager-state">
-									第<span>1</span>页/共<span>10</span>页
-								</div>
-							</div>
-						</div>
-						<ul>
-						<%if(comments&&comments.length>0){%>
-							<%comments.forEach(function(v,i){%>
-								<li class="clearfix comment_item">
-									<div class="comment_user avatar">
-										<img src="/images/noavatar_default.png" alt="" />
-									</div>
-									<%if(v.from){%>
-										<div class="comment-main">
-											<h4 class="comment-header">
-												<span class="username">
-													<%if(user&&user.isAdmin){%>
-														站主
-													<%}else{%>
-														<%=v.from.username%>
-													<%}%>
-												</span>
-											</h4>
-											<p class="comment-content"><%=v.content%></p>
-											<div class="comment-footer">
-												<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
-												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
-											</div>
-											<%if(v.reply&&v.reply.length>0){%>
-												<%v.reply.forEach(function(reply,i){%>
-												<div class="clearfix reply_list">
-													<div class="comment_user avatar">
-														<img src="/images/noavatar_default.png" alt="" />
-													</div>
-													<div class="comment-main">
-														<h4 class="comment-header">
-															<span class="username">
-																<%if(reply.from.isAdmin){%>
-																	站主
-																<%}else{%>
-																	<%=reply.from.username%>
-																<%}%>
-															</span> 
-															回复
-															<span class="username">
-																<%if(reply.to.isAdmin){%>
-																	站主
-																<%}else{%>
-																	<%=reply.to.username%>
-																<%}%>
-															</span>
-														</h4>
-														<p class="comment-content"><%=reply.content%></p>
-														<div class="comment-footer">
-															<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
-															<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
-														</div>
-													</div>
-												</div>	
-												<%})%>
-											<%}%>
-										</div>
-									<%}%>
-								</li>
-							<%})%>
-						</ul>
-						<%}%>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-r-extra f-r w-300">
-				<div class="article-hot clearfix mt-20">
-					<h2 class="f24"><span>热门</span>文章</h2>
-					<ul>
-						<%hot.forEach(function(value,i){%>
-						<li class="clearfix">
-							<div class="f-l">
-								<a href="/blog/<%=value.bId%>" class="f-l" target='_blank'><img src="/images/hd1.jpg"></a>
-							</div>
-							<div class="f-l text_right">
-								<h3 class="f14"><a href="/blog/<%=value.bId%>" ><%=value.title%></a></h3>
-								<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
-							</div>
-						</li>
-						<%})%>
-					</ul>
-				</div>
-			</div>
+<%include head.html%>
+<div class="column w-1200 center mt-20 clearfix pb-60">
+	<div class="article-details-crumb clearfix w-per100 f12"> <span><a href="/" >首页</a></span>&gt;<span><a href="" ><%=article.category.name%></a></span>&gt;<span><a href="javascript:void(0);"><%=article.title%></a></span> </div>
+	<div class="col-l-main f-l w-870">
+		<h1 class="f34 mt-50" style="height:auto"><%=article.title%></h1>
+		<div class="clearfix mt-25 pb-15 article-details-info">
+			<div class="article-details-user clearfix mr-15"> <span class="f13">作者：<%=article.author%></span> </div>
+			<span class="new-article-time"></span> <span class="mr-15"><%=moment(article.create_time).format('YYYY-MM-DD')%></span>
+			<label><!--<span>来源：</span><span class="article-iheima">DOTA2</span>--><i class="fa fa-eye"></i> <%=article.pv%></label>
+			<div class="article-my-review f-r clearfix"> <span class="article-review-icon"></span> <span>(<a href="#SOHUCS" id="changyan_count_unit"></a>)</span> </div>
 		</div>
 
-		<%include footer.html%>
-		<script type="text/javascript" src="/javascripts/jquery.SuperSlide.2.1.1.js"></script>
-	</body>
-</html>
+		<div class="article-details-tag clearfix mt-15 f13">
+			<a href="#"> <span>DOTA2</span> </a>
+			<a href="#"> <span>赛事</span> </a>
+		</div>
+
+		<div class="article-details-content article-content">
+			<%-article.tagcontent%>
+		</div>
+		
+	
+		<ul class="article_next_prev clearfix">
+			<%if(nextArticle){%>
+				<li class="next">【下一篇】<a href="/blog/<%=nextArticle.bId%>"><%=nextArticle.title%></a></li>
+			<%}else{%>
+				<li class="next">【下一篇】<a href="javascript:void(0);">无</a></li>
+			<%}%>
+			<%if(prevArticle){%>
+				<li class="prev">【上一篇】<a href="/blog/<%=prevArticle.bId%>"><%=prevArticle.title%></a></li>
+			<%}else{%>
+				<li class="prev">【上一篇】<a href="javascript:void(0);">无</a></li>
+			<%}%>
+		</ul>
+		
+		<div class="comment-wrapper">
+			<%if(!user){%>
+				<div class="guest_link">
+					您还没有登录,请<a href="/login?ref=detial&&articleId=<%=article.bId%>">[登录]</a>或
+					<a href="/regist">[注册]</a>
+				</div>
+			<%}%>
+			<form id="comment_form" onsubmit="return false;">
+				<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
+				<div class="form-ceil form-user-avatar">
+					<img src="/images/noavatar_default.png" alt="" />
+				</div>
+				<div class="form-ceil form-content">
+					<div class="form-user-info">
+						<%if(user){%>
+							<%if(user.isAdmin){%>
+								<span>您好管理员</span>
+							<%}%>
+							<%=user.username%>
+						<%}%>
+					</div>
+					<div class="form-wordlimit">0/300</div>
+					<div class="form-textarea">
+						<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
+					</div>
+					<div class="form-toolbars">
+						<div class="form-action">
+							<input type="submit" value="提交" id="comment_submit"/>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+			
+			<div class="comment-area">
+				<div class="comment-tab">
+					<ul class="comment-tab-left">
+						<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=comments.length%>)</em></li>
+					</ul>
+				</div>
+				<div class="comment-pager-haeder">
+					<div class="comment-pager fix">
+						<div class="comment-pager-state">
+							第<span>1</span>页/共<span>10</span>页
+						</div>
+					</div>
+				</div>
+				<ul>
+				<%if(comments&&comments.length>0){%>
+					<%comments.forEach(function(v,i){%>
+						<li class="clearfix comment_item">
+							<div class="comment_user avatar">
+								<img src="/images/noavatar_default.png" alt="" />
+							</div>
+							<%if(v.from){%>
+								<div class="comment-main">
+									<h4 class="comment-header">
+										<span class="username">
+											<%if(user&&user.isAdmin){%>
+												站主
+											<%}else{%>
+												<%=v.from.username%>
+											<%}%>
+										</span>
+									</h4>
+									<p class="comment-content"><%=v.content%></p>
+									<div class="comment-footer">
+										<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
+										<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+									</div>
+									<%if(v.reply&&v.reply.length>0){%>
+										<%v.reply.forEach(function(reply,i){%>
+										<div class="clearfix reply_list">
+											<div class="comment_user avatar">
+												<img src="/images/noavatar_default.png" alt="" />
+											</div>
+											<div class="comment-main">
+												<h4 class="comment-header">
+													<span class="username">
+														<%if(reply.from.isAdmin){%>
+															站主
+														<%}else{%>
+															<%=reply.from.username%>
+														<%}%>
+													</span> 
+													回复
+													<span class="username">
+														<%if(reply.to.isAdmin){%>
+															站主
+														<%}else{%>
+															<%=reply.to.username%>
+														<%}%>
+													</span>
+												</h4>
+												<p class="comment-content"><%=reply.content%></p>
+												<div class="comment-footer">
+													<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
+													<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+												</div>
+											</div>
+										</div>	
+										<%})%>
+									<%}%>
+								</div>
+							<%}%>
+						</li>
+					<%})%>
+				</ul>
+				<%}%>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-r-extra f-r w-300">
+		<div class="article-hot clearfix mt-20">
+			<h2 class="f24"><span>热门</span>文章</h2>
+			<ul>
+				<%hot.forEach(function(value,i){%>
+				<li class="clearfix">
+					<div class="f-l">
+						<a href="/blog/<%=value.bId%>" class="f-l" target='_blank'><img src="/images/hd1.jpg"></a>
+					</div>
+					<div class="f-l text_right">
+						<h3 class="f14"><a href="/blog/<%=value.bId%>" ><%=value.title%></a></h3>
+						<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
+					</div>
+				</li>
+				<%})%>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<%include foot.html%>

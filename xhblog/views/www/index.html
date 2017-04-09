@@ -1,187 +1,116 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-	<head>
-		<meta http-equiv="Cache-Control" content="no-siteapp" />
-		<link rel="alternate" media="handheld" href="#" />
-		<meta charset="utf-8">
-		<title><%=title%></title>
-		<meta property="qc:admins" content="274641777261051516375" />
-		<!--字体图标-->
-		<link rel="stylesheet" type="text/css" href="/libs/font-awesome/css/font-awesome.min.css"/>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/common.css">
-		<!--分页-->
-		<link rel="stylesheet" type="text/css" href="/stylesheets/page.css" />
-		<link rel="stylesheet" type="text/css" href="/stylesheets/module.css">
-		<link rel="stylesheet" type="text/css" href="/stylesheets/new-index.css">
-	</head>
-	<body>
-		<!--头部-->
-		<%include header.html%>
+<!--头部-->
+<%include head.html%>
+<!--banner -->
+<%include banner.html%>
+<!--banner /-->
+
+<div class="column w-1200 center mt-30 clearfix pb-60">
+	<div class="col-l-main f-l list_item">
+		<h2><span>推荐</span>文章</h2>
+		<ul class="clearfix article_list" id="article_list">
+			<%articles.forEach(function(value,i){%>
+			<li class="clearfix">
+				<div class="new-img-list pos-r f-l mr-18 clearfix">
+					<a href="/blog/<%=value.bId%>"> <img src="/images/hd3.jpg" />
+						<a href="/blog/<%=value.bId%>" target="_blank"> 
+							<%if(value.category){%>
+								<span class="pos-a f14"><%=value.category.name%></span> 
+							<%}%>
+						</a>
+					</a>
+				</div>
+				<div class="new-txt-list f-l w-572">
+					<h3 class="f20"><a href="/blog/<%=value.bId%>"><%=value.title%></a></h3>
+					<div class="new-user-info mt-5">
+						<div class="new-user-name mr-40"> <span>作者：<a href="/blog/<%=value.bId%>" ><%=value.author%></a></span> </div>
+						<span class="new-article-time"></span> <span><%=moment(value.create_time).format('YYYY-MM-DD')%></span> </div>
+					<div class="new-article-intro f14  mt-20">
+						<p><%-value.content.substring(0,100)%>...</p>
+					</div>
+					<div class="mt-28">
+						<div class="new-article-tag f-l">
+							<span></span>
+							<span class="mr-20">
+								<%if(value.tags.length>0){%>
+									<%value.tags.forEach(function(tag){%>
+										<%if(tag){%>
+											<a href="">
+												<%=tag.name%>
+											</a>
+										<%}%>
+									<%})%>			
+								<%}%>					
+							</span>
+							<span class="mr-20"><i class="fa fa-thumbs-o-up"></i> <%=value.likes%></span>
+							<span class="mr-20"><i class="fa fa-eye"></i> <%=value.pv%></span> 
+						</div>
+					</div>
+				</div>
+			</li>
+			<%})%>
+		</ul>
+		<!--查看更多-->
+		<!--<div class="new-article-more" style='margin-top:30px'>
+			<a href="">查看更多</a>
+		</div>-->
 		
-		<div id="demo1" class="picBtnTop center">
-			<div class="hd">
-				<ul>
-					<%banners.forEach(function(value,i){%>
-						<li class="hd-intro1">
-							<div>
-								<a href="<%=value.url%>"><img src="<%=value.imgAdress%>"></a>
-								<div class="hd-introword f-l pos-r">
-									<h2><a href="" ><%=value.dec%></a></h2>
-									<div class="pos-a"> <span class="f-l"><%=moment(value.create_time).format('YYYY-MM-DD')%></span> </div>
-								</div>
-							</div>
-						</li>
-					<%})%>
-				</ul>
-			</div>
-			<div class="bd">
-				<ul>
-					<%banners.forEach(function(value,i){%>
-						<li>
-							<div class="bg"></div>
-							<div class="pic">
-								<a href="<%=value.url%>"> <img src="<%=value.imgAdress%>" /></a>
-							</div>
-							<div class="title">
-								<a href="<%=value.url%>"><%=banners.dec%></a>
-							</div>
-						</li>
-					<%})%>
-				</ul>
-			</div>
-		</div>
-		<div class="column w-1200 center mt-30 clearfix pb-60">
-			<div class="col-l-main f-l list_item">
-				<h2><span>推荐</span>文章</h2>
-				<ul class="clearfix article_list" id="article_list">
-					<%articles.forEach(function(value,i){%>
-					<li class="clearfix">
-						<div class="new-img-list pos-r f-l mr-18 clearfix">
-							<a href="/blog/<%=value.bId%>"> <img src="/images/hd3.jpg" />
-								<a href="/blog/<%=value.bId%>" target="_blank"> 
-									<%if(value.category){%>
-										<span class="pos-a f14"><%=value.category.name%></span> 
-									<%}%>
-								</a>
-							</a>
-						</div>
-						<div class="new-txt-list f-l w-572">
-							<h3 class="f20"><a href="/blog/<%=value.bId%>"><%=value.title%></a></h3>
-							<div class="new-user-info mt-5">
-								<div class="new-user-name mr-40"> <span>作者：<a href="/blog/<%=value.bId%>" ><%=value.author%></a></span> </div>
-								<span class="new-article-time"></span> <span><%=moment(value.create_time).format('YYYY-MM-DD')%></span> </div>
-							<div class="new-article-intro f14  mt-20">
-								<p><%-value.content.substring(0,100)%>...</p>
-							</div>
-							<div class="mt-28">
-								<div class="new-article-tag f-l">
-									<span></span>
-									<span class="mr-20">
-										<%if(value.tags.length>0){%>
-											<%value.tags.forEach(function(tag){%>
-												<%if(tag){%>
-													<a href="">
-														<%=tag.name%>
-													</a>
-												<%}%>
-											<%})%>			
-										<%}%>					
-									</span>
-									<span class="mr-20"><i class="fa fa-thumbs-o-up"></i> <%=value.likes%></span>
-									<span class="mr-20"><i class="fa fa-eye"></i> <%=value.pv%></span> 
-								</div>
-							</div>
-						</div>
-					</li>
-					<%})%>
-				</ul>
-				<!--查看更多-->
-				<!--<div class="new-article-more" style='margin-top:30px'>
-					<a href="">查看更多</a>
-				</div>-->
-				
-				<!--分页区-->
-				<div class="page_box" style="text-align: center;">
-					<ul class="pagination" id="pagination"></ul>
-				</div>
-
-
-			</div>
-			<div class="col-r-extra f-r w-300">
-				<div class="new-mag clearfix">
-					<h2 class="f22"><span>最新</span>文章</h2>
-					<%if(newArticle){%>
-						<div class="new-mag-info mt-20">
-							<a href="/blog/<%=newArticle.bId%>"><img src="/images/ss1.jpg"></a>
-							<div class="new-mag-intro f12 p1-14">
-								<h6 class="mt-6"><%=newArticle.title%></h6>
-								<h6 class="mt-5">发布时间：<span><%=moment(newArticle.create_time).format('YYYY-MM-DD')%></span></h6>
-								<a href="/blog/<%=newArticle.bId%>" class="new-mag-online f14 mt-15" target='_blank'>查看详情</a>
-							</div>
-						</div>
-					<%}%>
-				</div>
-				
-				<div class="hot-article mt-20 clearfix">
-					<h2 class="f24"><span>热门</span>文章</h2>
-					<ul>
-						<%hot.forEach(function(value,i){%>
-						<li class="clearfix">
-							<div class="f-l">
-								<a href="/blog/<%=value.bId%>" class="f-l" target='_blank'><img src="/images/hd1.jpg"></a>
-							</div>
-							<div class="f-l text_right">
-								<h3 class="f14"><a href="/blog/<%=value.bId%>" ><%=value.title%></a></h3>
-								<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
-							</div>
-						</li>
-						<%})%>
-					</ul>
-				</div>
-
-			</div>
+		<!--分页区-->
+		<div class="page_box" style="text-align: center;">
+			<ul class="pagination" id="pagination"></ul>
 		</div>
 
 
+	</div>
+	<div class="col-r-extra f-r w-300">
+		<div class="new-mag clearfix">
+			<h2 class="f22"><span>最新</span>文章</h2>
+			<%if(newArticle){%>
+				<div class="new-mag-info mt-20">
+					<a href="/blog/<%=newArticle.bId%>"><img src="/images/ss1.jpg"></a>
+					<div class="new-mag-intro f12 p1-14">
+						<h6 class="mt-6"><%=newArticle.title%></h6>
+						<h6 class="mt-5">发布时间：<span><%=moment(newArticle.create_time).format('YYYY-MM-DD')%></span></h6>
+						<a href="/blog/<%=newArticle.bId%>" class="new-mag-online f14 mt-15" target='_blank'>查看详情</a>
+					</div>
+				</div>
+			<%}%>
+		</div>
 		
+		<div class="hot-article mt-20 clearfix">
+			<h2 class="f24"><span>热门</span>文章</h2>
+			<ul>
+				<%hot.forEach(function(value,i){%>
+				<li class="clearfix">
+					<div class="f-l">
+						<a href="/blog/<%=value.bId%>" class="f-l" target='_blank'><img src="/images/hd1.jpg"></a>
+					</div>
+					<div class="f-l text_right">
+						<h3 class="f14"><a href="/blog/<%=value.bId%>" ><%=value.title%></a></h3>
+						<span class="hot-article-time f-l f13"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
+					</div>
+				</li>
+				<%})%>
+			</ul>
+		</div>
 
-		<!--底部-->
-		<%include footer.html%>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		var pagehtml=page({
+			pagecount:<%=total%>,
+			pagesize:<%=pagesize%>,
+			currentpage:<%=currentpage%>
+		});
+		
+		//分页
+		$("#pagination").html(pagehtml);
+	})
+	
+</script>
+<!--底部-->
+<%include foot.html%>
 		
 		
-		<!--弹出层登陆-->
-		<script type="text/javascript" src="/javascripts/jquery.SuperSlide.2.1.1.js"></script>
-		<script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
-		<link rel="stylesheet" type="text/css" href="/javascripts/style.css" />
-		<script type="text/javascript" src="/javascripts/cmstop.validator.js"></script>
-		<script type="text/javascript">
-			$.validate.setConfigs({
-				xmlPath: 'apps/member/validators/'
-			});
-			$(document).ready(function() {
-				$('#member_registerForm').validate();
-			});
-		</script>
-		<div class="ajax-form-modal"></div>
-		<script type="text/javascript">
-			$("#nav_ul > li:eq(0)").addClass("current");
-		</script>
-		
-		<!--自己封装的分页-->
-		<script src="/javascripts/page.js" type="text/javascript" charset="utf-8"></script>
-		
-		<script type="text/javascript">
-			$(function(){
-				var pagehtml=page({
-					pagecount:<%=total%>,
-					pagesize:<%=pagesize%>,
-					currentpage:<%=currentpage%>
-				});
-				
-				//分页
-				$("#pagination").html(pagehtml);
-			})
-			
-		</script>
-	</body>
-</html>

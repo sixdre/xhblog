@@ -1,5 +1,4 @@
 'use strict';
-
 // signup controller
 app.controller('SignupFormController', [
 	'$scope', '$http', '$state','defPopService',function($scope, $http, $state,defPopService) {
@@ -7,8 +6,10 @@ app.controller('SignupFormController', [
 	$scope.user = {};
 	$scope.authError = null;
 	$scope.signup = function() {
-		// Try to create
-		$http.post('/admin/regist', { username: $scope.user.username, email: $scope.user.email, password: $scope.user.password })
+		$http.post('/admin/regist', { 
+			username: $scope.user.username, 
+			email: $scope.user.email, 
+			password: $scope.user.password })
 			.then(function(res) {
 				var code = res.data.code;
 				var message = res.data.message;
