@@ -4,10 +4,10 @@
  * 后台操作检查
  */
 exports.checkAdmin=function(req,res,next){
-	if(req.session['manager']){
-		 res.header('AUTH','ADMIN');
-	}
-	next();
+//	if(req.session['manager']){
+//		res.setHeader('AUTH', 'admin')
+//	}
+//	next()
 }
 /*
  * 对ajax请求进行用户状态检查

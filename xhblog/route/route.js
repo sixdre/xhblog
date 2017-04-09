@@ -25,6 +25,6 @@ module.exports=function(app){
 	app.use('/',indexRouter);
 	app.use('/',blogRouter);
 	app.use('/',userRouter);
-	app.use('/admin',Auth.checkAdmin,adminRouter);
+	app.use('/admin',adminRouter);
 	
 }

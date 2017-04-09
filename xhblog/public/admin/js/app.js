@@ -93,7 +93,6 @@ angular.module('app', [
 			return config;
 		},
 		response:function(response){
-			console.log(response.headers);
 			return response;
 		},
 		responseError: function(response) {
