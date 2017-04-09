@@ -3,35 +3,14 @@
 const mongoose=require('mongoose');
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");			//类型
-const Banner = mongoose.model('Banner');			//轮播图
-const User = mongoose.model('User');				//用户
-const Lm = mongoose.model('Lm');				//留言
 const Friend=mongoose.model("Friend");			//友链
-const Comment=mongoose.model('Comment');		//评论
+
+
 const async = require('async');
 const events = require('events');				//事件处理模块
 const tool =require('../utility/tool');
 const path = require('path');
-/*
- * 对ajax请求进行用户状态检查
- */
-exports.checkLoginByAjax=function(req,res,next){
-	if(!req.session["User"]){
-       return res.json({
-    	   code:-2
-       });
-    }
-	next();
-}
-/*
- * 对表单请求或者链接跳转进行用户状态检查
- */
-exports.checkLoginByNative=function(req,res,next){
-	if(!req.session["User"]){
-		return res.redirect('login');
-	}
-	next();
-}
+
 
 /*
  * 加载网站公共的数据（页面导航，友情链接 

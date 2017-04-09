@@ -50,14 +50,14 @@ $(function() {
 		var articleId=GetQueryString('articleId');
 		$.ajax({
 			type:"POST",
-			url:"/login?ref="+ref+'&articleId='+articleId,
+			url:"/login",
 			async:true,
 			data:$("#loginForm").serialize(), 
 			success:function(res){
 				if(res.code>0){
 					alert(res.message);
-					if(res.ref=="detial"){
-						window.location.href="/detial/"+res.articleId;
+					if(ref){
+						window.location.href=ref+'/'+articleId;
 					}else{
 						window.location.href="/";
 					} 

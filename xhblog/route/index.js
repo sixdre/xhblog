@@ -18,6 +18,8 @@ const Comment=mongoose.model('Comment');		//评论
 
 //公用数据
 const Common=require('./common');
+//验证
+const Auth=require('./auth');
 
 const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
@@ -105,7 +107,7 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 
 
 //评论
-router.post('/comment',Common.checkLoginByAjax,function(req,res,next){
+router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 	let _comment=req.body;
 	_comment.from=req.session["User"];
 	if(_comment.cId){
@@ -137,7 +139,7 @@ router.post('/comment',Common.checkLoginByAjax,function(req,res,next){
 
 
 //留言页面
-router.get('/word',Common.checkLoginByNative,function(req,res,next){
+router.get('/word',Auth.checkLoginByNative,function(req,res,next){
 	res.render("www/word",{
 		title:'留言'
 	});

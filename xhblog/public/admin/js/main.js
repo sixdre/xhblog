@@ -20,9 +20,6 @@ angular.module('app')
     	  $rootScope.manager=res.data.manager;
     	  $rootScope.categorys=res.data.categorys;
     	  $rootScope.tags=res.data.tags;
-		  if(!$rootScope.manager){
-			  $state.go("access.signin");
-		  }
 	  }).catch(function(err){
 		 console.log(err)
 	  })
