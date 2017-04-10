@@ -61,10 +61,11 @@ router.get('/loadData',function(req,res,next){
 	let manager = req.session["manager"];
 	async.parallel({
 		lmdoc:function(callback){
-			Lm.find({"meta.isRead":false}).populate('user','username').exec(function(err,lmdoc){
+			Lm.find({"state.isRead":false}).populate('user','username').exec(function(err,lmdoc){
 				if(err){
 					callback(err);
 				}
+				console.log(lmdoc);
 				callback(null,lmdoc);
 			})
 		},
@@ -177,6 +178,27 @@ router.post('/logout',function(req,res,next){
 		message:'退出成功'
 	});
 })
+
+//留言
+router.post('/word',function(req,res,next){
+	Lm.update({_id:req.body.id},{$set:{
+		"replyUser":req.session['manager']._id,
+		"state.isRead":true,
+		"state.isReply":true,
+		"meta.replyTime":new Date()
+	}}).exec(function(err){
+		if(err){
+			console.log(err);
+			next(err);
+		}
+		res.json({
+			code:1,
+			message:'留言回复成功'
+		});
+	});
+})
+
+
 
 
 //发布新文章

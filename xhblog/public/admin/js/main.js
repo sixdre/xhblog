@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl',['$rootScope','$scope','$localStorage','$window',"$http","$state" ,
-    function($rootScope,$scope,$localStorage,$window,$http,$state ) {
+  .controller('AppCtrl',['$rootScope','$scope','$localStorage','$window',"$http","$state","$uibModal",
+    function($rootScope,$scope,$localStorage,$window,$http,$state,$uibModal) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -17,6 +17,7 @@ angular.module('app')
       }).then(function(res){
     	  $rootScope.articleTotal=res.data.total;
     	  $rootScope.lm=res.data.lmdoc;
+    	  console.log(res.data.lmdoc);
     	  $rootScope.manager=res.data.manager;
     	  $rootScope.categorys=res.data.categorys;
     	  $rootScope.tags=res.data.tags;
@@ -25,7 +26,7 @@ angular.module('app')
 	  })
       
       //退出登录
-      $scope.logout=function(){
+    $scope.logout=function(){
 		  $http({
 			  method:"POST",
 			  url:"/admin/logout"
@@ -37,6 +38,36 @@ angular.module('app')
 			  
 		  })
 	  }
+     
+     //留言回复
+	  $scope.reply=function(item){
+	  	$uibModal.open({
+	        templateUrl: '/admin/tpl/modal/wordModal.html',
+	        size:'md',
+	        controller: 'WordModalInstanceCtrl',
+	        resolve: {
+	        	wordItem:function(){
+	        		return item;
+	        	}
+	        }
+	    }).result.then(function(data){
+	    	if(data.code==1){
+	    	console.log(x);
+	    	}
+	    }).catch(function(){
+	    	console.log(2);
+	    })
+//		  $http({
+//			  method:"POST",
+//			  url:"/admin/word"
+//		  }).then(function(res){
+//			 console.log(res);
+//		  },function(err){
+//			  
+//		  })
+	  }
+      
+      
       
       // config
       $scope.app = {
@@ -102,3 +133,36 @@ angular.module('app')
       }
 
   }]);
+  
+/*
+ * 模态框
+ */
+app.controller('WordModalInstanceCtrl',
+	['$scope','$http','$uibModalInstance','wordItem',
+	 function($scope,$http,$uibModalInstance,wordItem){
+	 	console.log(wordItem);
+			$scope.word=wordItem;
+			//回复提交
+			$scope.postReply=function(){
+				$http({
+				  method:"POST",
+				  url:"/admin/word",
+				  data:{
+				  	id:$scope.word._id,
+				  	replyContent:$scope.replyContent
+				  }
+			  }).then(function(res){
+			  	if(res.data.code==1){
+			  		alert(res.data.message);
+			  		$uibModalInstance.close({code:1});
+			  	}
+			  },function(err){
+				  
+			  })
+			}
+			
+	    $scope.cancel = function () {
+	       $uibModalInstance.dismiss('cancel');
+	    };
+	    
+}])
