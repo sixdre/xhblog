@@ -18,12 +18,15 @@ const Comment=mongoose.model('Comment');		//评论
 
 //公用数据
 const Common=require('./common');
+//验证
+const Auth=require('./auth');
 
 const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
 
 //首页面初始化
 function init(currentPage,cb){
+	let settings=app.locals.settings;
 	async.auto({
 		banners:function(callback){
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
@@ -38,17 +41,8 @@ function init(currentPage,cb){
 				callback(null,total);
 			})
 		},
-		settings:function(callback){
-			 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
-		        if (err) {
-		        	callback(err);
-		        } else {
-		        	callback(null,settings); 
-		        }
-		    });
-		},
-		articles:['settings',function(results,callback){
-			let pageSize=parseInt(results.settings.PageSize);
+		articles:function(callback){
+			let pageSize=parseInt(settings.PageSize);
 			let query=aQuery();
 			Article.find(query).skip((currentPage-1)*pageSize)
 			.limit(pageSize).sort({create_time:-1})
@@ -57,7 +51,7 @@ function init(currentPage,cb){
 				console.log(articles);
 				callback(null,articles);
 			})
-		}],
+		},
 		newArticle:function(callback){
 			Article.findNew(1,function(newArticle){
 				callback(null,newArticle);
@@ -70,6 +64,7 @@ function init(currentPage,cb){
 		}
 		
 	},function(err,results){
+		results.settings=settings;
 		cb(results);
 	})
 }
@@ -112,7 +107,7 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 
 
 //评论
-router.post('/comment',Common.checkLoginByAjax,function(req,res,next){
+router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 	let _comment=req.body;
 	_comment.from=req.session["User"];
 	if(_comment.cId){
@@ -144,7 +139,7 @@ router.post('/comment',Common.checkLoginByAjax,function(req,res,next){
 
 
 //留言页面
-router.get('/word',Common.checkLoginByNative,function(req,res,next){
+router.get('/word',Auth.checkLoginByNative,function(req,res,next){
 	res.render("www/word",{
 		title:'留言'
 	});

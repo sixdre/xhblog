@@ -18,7 +18,6 @@ angular.module('app', [
 ]).run(function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,ConstantService) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
-	
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 		//如果跳到登录页面直接放行
 		if(toState.name == 'access.signin' || toState.name == 'access.signup') {
@@ -51,7 +50,11 @@ angular.module('app', [
 		}
 	});
 
-}).service('ConstantService',function(){
+}).config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider",
+	function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+		$httpProvider.interceptors.push('authInterceptor');
+}])
+.service('ConstantService',function(){
 	this.LOGIN_USER="LOGIN_USER";		//存储到cookie中的登录用户用户名
 })
 //请求拦截器 每当有请求发生，更新cookies失效时间
@@ -83,19 +86,17 @@ angular.module('app', [
 //  return cookiesRefreshInterceptor;
 //}]);
 
-/*.factory('authInterceptor', function($rootScope, $cookies,ConstantService) {
+.factory('authInterceptor', function($rootScope, $cookies,ConstantService) {
 	return {
 		request: function(config) {
-			config.headers = config.headers || {};
-			var merchantID = $cookies.get(ConstantService.LOGIN_ID_KEY);
-			if(merchantID) {
-				config.headers.AUTHUID = merchantID;
-				return config;
-			}
+			
 			return config;
+		},
+		response:function(response){
+			return response;
 		},
 		responseError: function(response) {
 			// ...
 		}
 	};
-})*/
+})

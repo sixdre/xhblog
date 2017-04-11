@@ -46,14 +46,18 @@
                 </div>
                 <div class="list-group" ui-jq="slimScroll" ui-options="{height:'150px', size:'5px'}">
                 	
-                	 <a ng-repeat="item in lm |orderBy:'create_time':true" class="media list-group-item">
+                	 <a href="javascript:;" ng-repeat="item in lm |orderBy:'meta.postTime':true" class="media list-group-item">
                     <span class="pull-left thumb-sm">
                       <img src="/admin/img/a0.jpg" alt="..." class="img-circle">
                     </span>
                     <span class="media-body">
                       {{item.message|limitTo:10}} --来自{{item.user.username}}<br>
-                      <small class="text-muted"> {{item.post_time|fromNow}}</small>
+                      <small class="text-muted"> {{item.meta.postTime|fromNow}}</small>
+                      <span class="pull-right text-info" ng-click="reply(item)">
+	                    	回复
+	                    </span>
                     </span>
+                   
                   </a>
                 </div>
                 <div class="panel-footer text-sm">

@@ -1,5 +1,4 @@
 'use strict';
-
 /* Controllers */
 // signin controller
 app.controller('SigninFormController', 
@@ -10,8 +9,9 @@ function($rootScope, $scope,$cookies,$http, $state,ConstantService) {
 	var expireDate = new Date();
     expireDate.setMinutes(expireDate.getMinutes()+10*6);		//一小时
 	$scope.login = function() {
-		// Try to login
-		$http.post('/admin/login', { username: $scope.user.username, password: $scope.user.password })
+		$http.post('/admin/login', { 
+			username: $scope.user.username, 
+			password: $scope.user.password })
 			.then(function(res) {
 				var code = res.data.code;
 				var message=res.data.message;

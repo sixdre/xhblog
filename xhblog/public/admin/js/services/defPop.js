@@ -13,7 +13,7 @@ angular.module('app').factory('defPopService',["$window","toaster",function($win
 	            positionClass: "toast-top-center",
 	            body: obj.content,
 	            showCloseButton: true,
-	            timeout:200,
+	            timeout:800,
 	            onHideCallback: function () { 
 	            	obj.callback?obj.callback():window.location.reload();
 	            }

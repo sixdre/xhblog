@@ -4,8 +4,11 @@ const adminRouter=require('./admin');
 
 //网站
 const indexRouter=require('./index');
-const authRouter=require('./auth');
+const userRouter=require('./user');
 const blogRouter=require('./blog');
+
+const Auth=require('./auth');
+
 
 module.exports=function(app){
 	
@@ -21,7 +24,7 @@ module.exports=function(app){
 	
 	app.use('/',indexRouter);
 	app.use('/',blogRouter);
-	app.use('/',authRouter);
+	app.use('/',userRouter);
 	app.use('/admin',adminRouter);
 	
 }

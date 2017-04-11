@@ -74,10 +74,10 @@ app.config(
 	                      }]
 		            }
 				})
-				.state("app.category",{
-					url:"/category",
+				.state("app.catetag",{
+					url:"/catetag",
 					templateUrl:'/admin/tpl/cate_tag.html',
-					controller:'categoryCtrl',
+					controller:'CateTagCtrl',
 					resolve: {
                       deps: ['uiLoad',
                         function( uiLoad){
