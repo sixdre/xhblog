@@ -22,7 +22,7 @@ angular.module('app')
     	  $rootScope.categorys=res.data.categorys;
     	  $rootScope.tags=res.data.tags;
 	  }).catch(function(err){
-		 console.log(err)
+		 
 	  })
       
       //退出登录
@@ -52,19 +52,12 @@ angular.module('app')
 	        }
 	    }).result.then(function(data){
 	    	if(data.code==1){
+	    		//http://blog.csdn.net/u013415189/article/details/51451431
 	    	console.log(x);
 	    	}
 	    }).catch(function(){
 	    	console.log(2);
 	    })
-//		  $http({
-//			  method:"POST",
-//			  url:"/admin/word"
-//		  }).then(function(res){
-//			 console.log(res);
-//		  },function(err){
-//			  
-//		  })
 	  }
       
       

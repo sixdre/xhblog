@@ -111,9 +111,15 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(code);
+  //if(code==404||code==500){
+	  
   res.render('www/error', {
-      code: code
+		code: code
   });
+ // }
+  
+  next(err);
+  
 });
 
 module.exports = app;

@@ -127,7 +127,9 @@ app.controller('articleListCtrl',
 	$scope.selectAll=function(allCheck){
 		if(allCheck==true){			//全选
 			angular.forEach($scope.articlelist,function (v) {
-				toolService.addSelect($scope.checkedIds,v.bId);
+				if($scope.checkedIds.indexOf(v.bId)==-1){
+					$scope.checkedIds.push(v.bId);
+				}
             });
 		}else{			//取消全选
 			$scope.checkedIds=[];

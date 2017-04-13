@@ -58,8 +58,8 @@ angular.module('app', [
 	this.LOGIN_USER="LOGIN_USER";		//存储到cookie中的登录用户用户名
 })
 //请求拦截器 每当有请求发生，更新cookies失效时间
-//.factory('cookiesRefreshInterceptor', ['$q', '$cookies', '$rootScope','$state',
-//	function($q, $cookies,$rootScope,$state) {
+//.factory('cookiesRefreshInterceptor', ['$q', '$cookies', '$rootScope',
+//	function($q, $cookies,$rootScope,) {
 //		console.log(123);
 //  var cookiesRefreshInterceptor = {
 //      request: function(config) {
@@ -76,7 +76,7 @@ angular.module('app', [
 //                return config;
 //          }else{
 //            
-//            $state.go('login');
+//            
 //            return $q.reject('not login');
 //          }
 //

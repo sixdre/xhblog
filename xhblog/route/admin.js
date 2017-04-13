@@ -48,7 +48,18 @@ const upload = multer({
 
 
 
-
+//router.use(function(req,res,next){
+//	if(!req.session["manager"]){
+//		let err = new Error('错误');
+//		err.status = 401;
+//		next(err);
+//		console.log(123);
+////		return res.status(401).json({
+//	
+//});
+//	}
+//	next();
+//})/
 //渲染后台管理页
 router.get('/',function(req,res,next){
 	res.render('admin', {
@@ -69,7 +80,7 @@ router.get('/loadData',function(req,res,next){
 				callback(null,lmdoc);
 			})
 		},
-		total:function(callback){
+		articleTotal:function(callback){
 			Article.count({}).exec(function(err,total){
 				if(err){
 					callback(err);
@@ -94,9 +105,12 @@ router.get('/loadData',function(req,res,next){
 			})
 		}
 	},function(err,results){
+		if(err){
+			next(err);
+		}
 		res.json({
 			manager:manager,				//管理员
-			total:results.total,			//文章总数
+			articleTotal:results.articleTotal,			//文章总数
 			lmdoc:results.lmdoc,			//留言
 			categorys:results.categorys,	//文章分类
 			tags:results.tags				//文章标签
@@ -204,7 +218,7 @@ router.post('/word',function(req,res,next){
 //发布新文章
 router.post('/article/publish',function(req,res,next){
 	let article=req.body;
-	article['author']=req.session["manager"].username||'徐小浩';
+		article['author']=req.session["manager"].username||'徐小浩';
 	let _article=new Article(article);
 	let resArticle;
 	//promise 解决多个数据传值，可以定义一个空对象然后将数据传入到空对象中，再返回前台
