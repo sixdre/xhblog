@@ -7,6 +7,10 @@ http://liubin.org/promises-book/#ch2-promise-all
 http://efe.baidu.com/blog/promises-anti-pattern/
 http://www.jianshu.com/p/063f7e490e9a
 
+mongoose操作
+http://ourjs.com/detail/53ad24edb984bb4659000013
+
+
 关于async的介绍 http://blog.csdn.net/qqhjqs/article/details/51913942
 async.waterfall 串行有关联(多个函数或方法执行，每一步执行时都需要上一步执行的结果当参数)
 async.parallel 并行无关联(多个函数执行，之间没有任何的关系，也就是说谁执行都行，为了节约时间就可以使用并行流程来解决)

@@ -30,7 +30,8 @@ router.post('/login',function(req,res,next){
 	}else{
 		User.findOne({username:username},function(err,user){
 			if(err){
-				return console.dir("查询出错");
+				console.dir("查询出错");
+				next(err);
 			}else if(!user){
 				res.json({
 					code:-1,
@@ -98,7 +99,8 @@ router.post('/regist',function(req,res,next){
 	}else{
 		User.findOne({username:username},function(err,result){
 			if(err){
-				return console.dir("查询出错");
+				console.dir("查询出错");
+				next(err);
 			}else if(result){
 				res.json({
 					code:-1,
@@ -107,7 +109,8 @@ router.post('/regist',function(req,res,next){
 			}else{
 				user.save(function(err){
 					if(err){
-						return console.dir("保存用户出错");
+						console.dir("保存用户出错");
+						next(err);
 					}
 					res.json({
 						code:1,
@@ -126,7 +129,8 @@ router.get('/logout',function(req,res,next){
 	delete req.session['User'];
 	delete app.locals.user;
 	res.json({
-		code:1
+		code:1,
+		message:'退出登陆成功'
 	});
 })
 

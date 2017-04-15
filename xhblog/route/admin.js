@@ -76,7 +76,6 @@ router.get('/loadData',function(req,res,next){
 				if(err){
 					callback(err);
 				}
-				console.log(lmdoc);
 				callback(null,lmdoc);
 			})
 		},
@@ -195,11 +194,14 @@ router.post('/logout',function(req,res,next){
 
 //留言
 router.post('/word',function(req,res,next){
-	Lm.update({_id:req.body.id},{$set:{
-		"replyUser":req.session['manager']._id,
+	let id=req.body.id,
+		content=req.body.replyContent;
+	Lm.update({_id:id},{$set:{
+		"reply.user":req.session['manager']._id,
+		"reply.content":content,
+		"reply.replyTime":new Date(),
 		"state.isRead":true,
-		"state.isReply":true,
-		"meta.replyTime":new Date()
+		"state.isReply":true
 	}}).exec(function(err){
 		if(err){
 			console.log(err);

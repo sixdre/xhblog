@@ -7,9 +7,6 @@ const indexRouter=require('./index');
 const userRouter=require('./user');
 const blogRouter=require('./blog');
 
-const Auth=require('./auth');
-
-
 module.exports=function(app){
 	
 	app.use(function(req,res,next){

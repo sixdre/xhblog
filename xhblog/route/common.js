@@ -22,14 +22,22 @@ exports.loadCommonData=function(req,res,next){
 	let j = 0;
 	let myEventEmitter = new events.EventEmitter();
 	async.auto({
+		settings:function(cb){
+			 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
+		        if (err) {
+		        	cb(err);
+		        } else {
+		        	cb(null,settings); 
+		        }
+		    });
+		},
 		friends:function(cb){
 			 Friend.find({}).exec(function(err,friends){
 				  cb(null,friends)
 			 });
 		},
 		types:function(cb){
-			 Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}])
-			 		.exec(function(err,types){
+			 Article.aggregate([{$group : {_id:"$category", total : {$sum : 1}}}]).exec(function(err,types){
 				  cb(null,types);
 			 });
 		},
@@ -53,21 +61,11 @@ exports.loadCommonData=function(req,res,next){
 				        myEventEmitter.emit('next');
 				  });
 			   });
-		}],
-		settings:function(cb){
-			 tool.getConfig(path.join(__dirname, '../config/settings.json'), function (err, settings) {
-		        if (err) {
-		        	cb(err);
-		        } else {
-		        	cb(null,settings); 
-		        }
-		    });
-		},
+		}]
 	},function(err,results){
-		console.log(results.categorys);
 		 app.locals.friends=results.friends;		//友链
 		 app.locals.categorys=results.categorys;	//根据文章类型同计数量
-		 app.locals.settings=results.settings;		//获取博客配置
+		 app.locals.settings=results.settings;		//获取网站设置
 		 next();
 	})
 }

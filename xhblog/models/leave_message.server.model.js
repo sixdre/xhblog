@@ -11,12 +11,18 @@ const LMSchema=new Schema({
 	message:{				//留言内容
 		type:"String"
 	},
-	replyUser:{				//回复者
-		type: ObjectId,
-		ref: 'User'
-	},
-	replyContent:{			//回复内容
-		type:"String"
+	reply:{
+		user:{
+			type: ObjectId,
+			ref: 'User'
+		},
+		content:{
+			type:String
+		},
+		replyTime:{
+			type:Date,
+			default:Date.now
+		}
 	},
 	state:{
 		isRead:{
@@ -32,13 +38,32 @@ const LMSchema=new Schema({
 		postTime:{					//用户留言时间
 			type:Date,
 			default:Date.now
-		},
-		replyTime:{					//回复时间
-			type:Date
 		}
 	}
 
 });
+
+//查询所有未回复的留言
+LMSchema.statics.findAllNotReply=function(){
+	return this.model('Lm')
+			.find({'state.isReply':false}).then(function(doc){
+				return doc;
+			},function(){
+				
+			})
+}
+
+//查询所有已回复的留言
+LMSchema.statics.findAllReply=function(){
+	return this.model('Lm')
+			.find({'state.isReply':true}).then(function(doc){
+				return doc;
+			},function(){
+				
+			})
+}
+
+
 mongoose.model("Lm",LMSchema);
 
 

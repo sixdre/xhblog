@@ -19,7 +19,7 @@ const Comment=mongoose.model('Comment');		//评论
 //公用数据
 const Common=require('./common');
 //验证
-const Auth=require('./auth');
+const Auth=require('../middleware/auth');
 
 const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
@@ -37,7 +37,7 @@ function init(currentPage,cb){
 			})
 		},
 		total:function(callback){
-			Article.count({},function(err,total){	//所有文章
+			Article.count({},function(err,total){	//所有文章数量
 				callback(null,total);
 			})
 		},
