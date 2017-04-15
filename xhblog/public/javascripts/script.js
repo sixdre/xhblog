@@ -119,12 +119,13 @@ $(function() {
 	var replyForm='<form id="reply_form" method="post" onsubmit="return false;">'+
 			'<input type="hidden" name="toId" value="">'+
 			'<input type="hidden" name="cId" value="">'+
-			'<input type="hidden" name="article" value="">'+
+			'<input type="hidden" name="articleId" value="">'+
 			'<div>'+
 				'<textarea name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea>'+
 			'</div>'+
-			'<div>'+
-				'<button id="replay_submit" type="submit">发布</button>'+
+			'<div class="fr">'+
+				'<input type="submit" value="回复"  id="replay_submit"/>'+
+				'<input type="button" value="取消"  id="replay_cancel"/>'+
 			'</div>'+
 		'</form>';
 	
@@ -158,8 +159,7 @@ $(function() {
 	}
 	
 	
-	
-	
+	//评论
 	$('#comment_submit').on('click',function(){
 		Comment('#comment_form');
 	});
@@ -171,14 +171,62 @@ $(function() {
 		$(this).parent().parent().append(replyForm);
 		$('#reply_form input[name="toId"]').val(toId);
 		$('#reply_form input[name="cId"]').val(cId);
-		$('#reply_form input[name="article"]').val($('#articleId').val());
+		$('#reply_form input[name="articleId"]').val($('#articleId').val());
 	});
 	
 	
-	
+	//评论回复
 	$('body').delegate('#replay_submit',"click",function(){
 		Comment('#reply_form');
 	});
+	
+	//回复取消
+	$('body').delegate('#replay_cancel',"click",function(){
+		$('#reply_form').remove();
+	});
+	
+	
+	//评论点赞(顶）
+	function likes(){
+		var state=true;
+		$('.zan').on('click',function(){
+			var self=$(this);
+			var params={
+				commentId:self.data('cid'),
+				replyId:self.data('replyid')
+			}
+			if(state){
+				$.ajax({
+					url:'/comment/point',
+					type:'GET',
+					data:params,
+					async:true,
+					success:function(res){
+						if(res.code==1){
+							var nums=parseInt(self.find('.nums').html());
+								nums+=1;
+							self.find('.nums').html(nums);
+							state=true;
+						}else if(res.code==-2){
+							alert(res.message);
+						}
+					},
+					error:function(){
+						
+					}
+				})
+			}
+			state=false;
+			return false;
+		})
+	}
+	likes();
+	
+	
+	
+	
+	
+	
 	
 	
 	//

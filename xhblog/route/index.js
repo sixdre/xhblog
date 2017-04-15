@@ -114,7 +114,8 @@ router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 		let reply={
 			from:_comment.from._id,
 			to:_comment.toId,
-			content:_comment.content
+			content:_comment.content,
+			create_time:new Date()
 		};
 		Comment.update({_id:_comment.cId},{
 			$addToSet:{"reply": reply}
@@ -136,6 +137,58 @@ router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 		});
 	}
 })
+
+//评论点赞
+router.get('/comment/point',function(req,res,next){
+	let commentId=req.query.commentId,
+		replyId=req.query.replyId;
+		
+		if(!commentId){
+			return res.json({
+				code:-2,
+				message:'请求参数有误'
+			})
+		}
+		if(commentId&&!replyId){			//评论点赞
+			Comment.update({_id:commentId},{'$inc':{'likes':1}}).then(function(){
+				res.json({
+					code:1,
+					message:'点赞更新成功'
+				})
+			}).catch(function(err){
+				console.log('评论点赞更新出错:'+err)
+			})
+//			Comment.findById(commentId).then(function(comment){
+//				comment.likes=comment.likes+1;
+//				comment.save(function(err,doc){
+//					console.log('保存成功')
+//				})
+////				console.log(comment);
+//			}).catch(function(err){
+//				console.log('出错了');
+//			})
+		}else if(commentId&&replyId){		//给回复点赞
+			Comment.findById(commentId).then(function(comment){
+				console.log(comment.reply);
+				comment.reply.forEach(function(value,key){
+					if(value._id==replyId){
+						value.likes+=1;
+						comment.save(function(){
+							res.json({
+								code:1,
+								message:'点赞更新成功'
+							})
+						})
+						return;
+					}
+				})
+			})
+		}
+
+})
+
+
+
 
 
 //留言页面

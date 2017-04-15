@@ -56,7 +56,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 		},
 		comments:["doc",function(results,callback){
 			let articleId=results.doc._id;
-			Comment.find({article:articleId})
+			Comment.find({articleId:articleId})
 			.populate('from')
 			.populate('reply.from reply.to').exec(function(err,comments){
 				console.log(comments);
@@ -99,6 +99,7 @@ router.get('/blog/category/:name',function(req,res,next){
 })
 
 
+//搜索文章
 router.get('/blog/search',function(req,res,next){
 	let title=req.query.wd;
 	async.waterfall([

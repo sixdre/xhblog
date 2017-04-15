@@ -42,7 +42,7 @@
 				</div>
 			<%}%>
 			<form id="comment_form" onsubmit="return false;">
-				<input type="hidden" id="articleId" name="article" value="<%=article._id%>" />
+				<input type="hidden" id="articleId" name="articleId" value="<%=article._id%>" />
 				<div class="form-ceil form-user-avatar">
 					<img src="/images/noavatar_default.png" alt="" />
 				</div>
@@ -84,7 +84,89 @@
 				<ul>
 				<%if(comments&&comments.length>0){%>
 					<%comments.forEach(function(v,i){%>
-						<li class="clearfix comment_item">
+						<li class="clearfix comment-item">
+							<div class="avatar">
+								<img src="/images/noavatar_default.png" alt="" />
+							</div>
+							<div class="comment-main">
+								<div class="comment-header">
+									<span class="username">
+										<%if(user&&user.isAdmin){%>
+											站主
+										<%}else{%>
+											<%=v.from.username%>
+										<%}%>
+									</span>
+									<span class="fr comment-time">
+										发表于<em> <%=moment(v.create_time).format('MM-DD HH:mm')%></em>
+									</span>
+								</div>
+								<div class="comment-body">
+									<div class="comment-content">
+										<%=v.content%>
+									</div>
+								</div>
+								<div class="comment-footer clearfix">
+									<em>
+										<a href="javascript:;" class="zan" data-cid="<%=v._id%>">
+											顶<span class="nums"><%=v.likes%></span>
+										</a>
+										<span class="pipe">|</span>
+										<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>">	回复</a>
+									</em>
+								</div>
+								<div class="reply-area">
+								<%if(v.reply&&v.reply.length>0){%>
+									<%v.reply.forEach(function(reply,i){%>
+										<div class="reply-item clearfix">
+											<div class="avatar">
+												<img src="/images/noavatar_default.png" alt="" />
+											</div>
+											<div class="comment-main">
+												<div class="comment-header">
+													<span class="username">
+														<%if(reply.from.isAdmin){%>
+															站主
+														<%}else{%>
+															<%=reply.from.username%>
+														<%}%>
+													</span> 
+													回复
+													<span class="username">
+														<%if(reply.to.isAdmin){%>
+															站主
+														<%}else{%>
+															<%=reply.to.username%>
+														<%}%>
+													</span>
+													<span class="fr comment-time">
+														回复于<em> <%=moment(reply.create_time).format('MM-DD HH:mm')%></em>
+													</span>
+												</div>
+												<div class="comment-body">
+													<div class="comment-content">
+														<%=reply.content%>
+													</div>
+												</div>
+												<div class="comment-footer clearfix">
+													<em>
+														<a href="javascript:;" class="zan" data-cid="<%=v._id%>"  data-replyid="<%=reply._id%>">
+															顶<span class="nums"><%=reply.likes%></span>
+														</a>
+														<span class="pipe">|</span>
+														<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">	回复</a>
+													</em>
+												</div>
+											</div>
+										</div>
+									<%})%>
+								<%}%>
+								</div>
+							</div>
+						</li>
+						
+						
+						<!--<li class="clearfix comment_item">
 							<div class="comment_user avatar">
 								<img src="/images/noavatar_default.png" alt="" />
 							</div>
@@ -98,11 +180,23 @@
 												<%=v.from.username%>
 											<%}%>
 										</span>
+										<span class="fr comment-time">
+											发表于<em> <%=moment(v.create_time).format('MM-DD HH:mm')%></em>
+										</span>
 									</h4>
-									<p class="comment-content"><%=v.content%></p>
-									<div class="comment-footer">
-										<span class="comment-time"><%=moment(v.create_time).format('MM-DD HH:mm')%></span>
-										<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">回复</a>
+									<div class="comment-body">
+										<div class="comment-content">
+											<%=v.content%>
+										</div>
+									</div>
+									<div class="comment-footer clearfix">
+										<em>
+											<a href="javascript:;" class="zan">
+												顶<span class="nums">129</span>
+											</a>
+											<span class="pipe">|</span>
+											<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">	回复</a>
+										</em>
 									</div>
 									<%if(v.reply&&v.reply.length>0){%>
 										<%v.reply.forEach(function(reply,i){%>
@@ -127,11 +221,23 @@
 															<%=reply.to.username%>
 														<%}%>
 													</span>
+													<span class="fr comment-time">
+														回复于<em> <%=moment(reply.create_time).format('MM-DD HH:mm')%></em>
+													</span>
 												</h4>
-												<p class="comment-content"><%=reply.content%></p>
-												<div class="comment-footer">
-													<span class="comment-time"><%=moment(reply.create_time).format('MM-DD HH:mm')%></span>
-													<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">回复</a>
+												<div class="comment-body">
+													<div class="comment-content">
+														<%=reply.content%>
+													</div>
+												</div>
+												<div class="comment-footer clearfix">
+													<em>
+														<a href="javascript:;" class="zan">
+															顶<span class="nums">129</span>
+														</a>
+														<span class="pipe">|</span>
+														<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">	回复</a>
+													</em>
 												</div>
 											</div>
 										</div>	
@@ -139,7 +245,7 @@
 									<%}%>
 								</div>
 							<%}%>
-						</li>
+						</li>-->
 					<%})%>
 				</ul>
 				<%}%>

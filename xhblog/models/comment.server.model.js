@@ -3,18 +3,26 @@ const mongoose = require('mongoose')
     , Schema = mongoose.Schema  
     , ObjectId = Schema.Types.ObjectId;  
 const CommentSchema = new Schema({
-	  article:{type: ObjectId, ref: 'Article'},
+	  articleId:{type: ObjectId, ref: 'Article'},
 	  from:{type: ObjectId, ref: 'User'},		//谁评论
 	  reply:[{			
 		    from: {type: ObjectId, ref: 'User'},
 		    to: {type: ObjectId, ref: 'User'},
 		    content: String,
+		    likes:{
+		    	type:Number,
+			  	default:0
+		    },
 		    create_time:{
-		    	 type: Date,
-	      	  	 default: Date.now()
-		    }
+		    	type: Date,
+	      	  	default: Date.now()
+		    },
 	  }],
 	  content: String,
+	  likes:{
+		  type:Number,
+		  default:0
+	  },
 	  create_time:{
 		  type: Date,
       	  default: Date.now()
