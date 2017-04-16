@@ -4,10 +4,12 @@
  * 后台操作检查
  */
 exports.checkAdmin=function(req,res,next){
-//	if(req.session['manager']){
-//		res.setHeader('AUTH', 'admin')
-//	}
-//	next()
+	if(!req.session['manager']){	
+		return res.status(403).json({ message: '请重新登陆' })
+//		return res.sendStatus(403)
+	}
+	//res.setHeader('AUTH', 'admin')
+	next();
 }
 /*
  * 对ajax请求进行用户状态检查

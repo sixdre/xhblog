@@ -15,7 +15,9 @@ angular.module('app', [
     //'pascalprecht.translate',
     "toaster",
    /* "textAngular"*/
-]).run(function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,USER) {
+]).run(['$rootScope', '$window', '$cookies', '$cookieStore', '$state', '$stateParams','USER',
+	function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,USER) {
+		
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
@@ -50,51 +52,43 @@ angular.module('app', [
 		}
 	});
 
-}).config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider",
+}]).config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider",
 	function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 		$httpProvider.interceptors.push('authInterceptor');
 }])
-//请求拦截器 每当有请求发生，更新cookies失效时间
-//.factory('cookiesRefreshInterceptor', ['$q', '$cookies', '$rootScope',
-//	function($q, $cookies,$rootScope,) {
-//		console.log(123);
-//  var cookiesRefreshInterceptor = {
-//      request: function(config) {
-//          if (config.url.indexOf('login')>-1) {
-//            return config;
-//          };
-//          //用户身份标识
-//          var uid = $cookies.get("LOGIN_USER_ID");
-//          if(uid){
-//                //刷新cookie 失效时间
-//                var expireDate = new Date();
-//                expireDate.setMinutes(expireDate.getMinutes()+10);
-//                $cookies.put('LOGIN_USER_ID' , uid,{'expires': expireDate});
-//                return config;
-//          }else{
-//            
-//            
-//            return $q.reject('not login');
-//          }
-//
-//      }
-//  };
-//	console.log(cookiesRefreshInterceptor)
-//  return cookiesRefreshInterceptor;
-//}]);
 
-.factory('authInterceptor', function($rootScope, $cookies) {
+//请求拦截器 每当有请求发生，更新cookies失效时间
+.factory('authInterceptor',['$rootScope','$cookies','USER','AUTH_EVENTS',function($rootScope, $cookies,USER,AUTH_EVENTS) {
 	return {
 		request: function(config) {
-			
+			var username = $cookies.get(USER.user_name);
+            if (config.url.indexOf('admin/login')>-1||config.url.indexOf('admin/regist')>-1 || config.url.indexOf('.html')>-1) {
+             	return config;
+            }
+            //用户身份标识
+            if(username){
+                  //刷新cookie 失效时间
+                  var expireDate = new Date();
+                  expireDate.setMinutes(expireDate.getMinutes()+10);
+                  $cookies.put(USER.user_name, username,{'expires': expireDate});
+                  return config;
+            }else{
+                $rootScope.$broadcast(AUTH_EVENTS.notAuthorized,'请重新登录');
+              	return $q.reject('not login');
+            }
 			return config;
 		},
 		response:function(response){
 			return response;
 		},
 		responseError: function(response) {
-//			console.log(123);
-			// ...
+			$rootScope.$broadcast({
+			        401: AUTH_EVENTS.notAuthenticated,	//session失效
+			        403: AUTH_EVENTS.notAuthorized,
+			        419: AUTH_EVENTS.sessionTimeout,
+			        440: AUTH_EVENTS.sessionTimeout
+			    }[response.status], response.data.message);
+			return $q.reject(response);
 		}
 	};
-})
+}])

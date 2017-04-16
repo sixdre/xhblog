@@ -103,7 +103,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-	
+
+	console.log(err.status+'cc')
   let code = err.status || 500;
   
   // set locals, only providing error in development
