@@ -13,7 +13,6 @@ angular.module('app')
 		catetagService.category.list().then(function(res){
 			if(res.data.code==1){
 				DataService.Categorys=res.data.categorys;
-//				$rootScope.categorys=res.data.categorys;
 			}else{
 				alert('获取类型失败')
 			}
@@ -26,7 +25,6 @@ angular.module('app')
 	function getTags(){
 		catetagService.tag.list().then(function(res){
 			if(res.data.code==1){
-//				$rootScope.tags=res.data.tags;
 				DataService.Tags=res.data.tags;
 			}else{
 				alert('获取标签失败')
@@ -55,11 +53,10 @@ angular.module('app')
 	$scope.remove=function(type,item){			
 		if(type=="category"){				//删除分类
 			alertService.confirm().then(function(){
-				catetagService.category.remove({category:item}).then(function(res){
+				catetagService.category.remove(item._id).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
 						DataService.Categorys.splice(DataService.Categorys.indexOf(item), 1);
-//						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
 					}
 				}).catch(function(){
 					
@@ -69,11 +66,10 @@ angular.module('app')
 			})
 		}else if(type="tag"){				//删除标签
 			alertService.confirm().then(function(){
-				catetagService.tag.remove({tag:item}).then(function(res){
+				catetagService.tag.remove(item._id).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
 						DataService.Tags.splice(DataService.Tags.indexOf(item), 1);
-//						$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
 					}
 				}).catch(function(){
 					
@@ -87,8 +83,7 @@ angular.module('app')
 	//分类或者标签的保存
 	$scope.add=function(type){				//保存分类
 		if(type=="category"){
-			catetagService.category.add({category:$scope.category}).then(function(res){
-				console.log(res.data);
+			catetagService.category.add($scope.category).then(function(res){
 				if(res.data.code==-1){
 					defPopService.defPop({
 						status:0,
@@ -99,7 +94,6 @@ angular.module('app')
 						status:1,
 						content:"添加成功",
 						callback:function(){
-//							$rootScope.categorys.push(res.data.category);
 							DataService.Categorys.push(res.data.category);
 							$scope.category={};
 						}
@@ -112,7 +106,6 @@ angular.module('app')
 							$scope.iscNew=true;
 							getCategorys();
 							$scope.category={};
-							
 						}
 					});
 				}
@@ -120,9 +113,7 @@ angular.module('app')
 				
 			});
 		}else if(type=="tag"){				//保存标签
-			console.log($scope.tag)
-			catetagService.tag.add({tag:$scope.tag}).then(function(res){
-				console.log(res.data);
+			catetagService.tag.add($scope.tag).then(function(res){
 				if(res.data.code==-1){
 					defPopService.defPop({
 						status:0,
@@ -133,7 +124,6 @@ angular.module('app')
 						status:1,
 						content:"添加成功",
 						callback:function(){
-//							$rootScope.tags.push(res.data.tag);
 							DataService.Tags.push(res.data.tag);
 							$scope.tag={};
 						}

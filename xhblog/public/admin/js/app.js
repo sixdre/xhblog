@@ -93,6 +93,7 @@ angular.module('app', [
 			return response;
 		},
 		responseError: function(response) {
+//			console.log(123);
 			// ...
 		}
 	};

@@ -39,24 +39,20 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		list:function(data){
 			return handelRequest("GET",'/admin/article/getArticles',data);
 		},
-		removeOne:function(bId){
-			return handelRequest("POST",'/admin/article/romoveOne',{bId:bId});
+		removeOne:function(id){
+			return handelRequest("POST",'/admin/article/romoveOne',{id:id});
 		},
 		removeMulti:function(ids){
-			return handelRequest("POST",'/admin/article/removeMulti',ids);
+			return handelRequest("POST",'/admin/article/removeMulti',{ids:ids});
 		},
 		save:function(data){
-			function ss(){
-				var config={
-					method:"POST",
-					url:'/admin/article/sub',
-					data:data,
-					headers: {'Content-Type':undefined},
-              		transformRequest:angular.identity   
-				};
-				return $http(config);
-			};
-			return ss();
+			return $http({
+				method:"POST",
+				url:'/admin/article/sub',
+				data:data,
+				headers: {'Content-Type':undefined},
+          		transformRequest:angular.identity   
+			});
 		},
 		publish:function(data){
 			return handelRequest("POST",'/admin/article/publish',data);
@@ -64,11 +60,11 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		search:function(title){
 			return handelRequest("GET",'/admin/article/search',{title:title});
 		},
-		page:function(arg){
-			return handelRequest("GET",'/admin/article/page',arg);
+		page:function(params){
+			return handelRequest("GET",'/admin/article/page',params);
 		},
-		find:function(id){
-			return handelRequest("POST",'/admin/article/find',{id:id});
+		findById:function(id){
+			return handelRequest("GET",'/admin/article/findById',{id:id});
 		},
 		update:function(arg){
 			return handelRequest("POST",'/admin/article/update',arg);

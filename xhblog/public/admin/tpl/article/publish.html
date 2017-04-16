@@ -4,47 +4,36 @@
 <div class="wrapper-md">
 	<div class="">
 		<form name="article_form" 
-			class="clearfix form-horizontal" id="Article_form" u
-			ploader="uploader" enctype='multipart/form-data'>
+			class="clearfix form-horizontal" id="Article_form" 
+			enctype='multipart/form-data' ng-submit="publish()">
 			<div class="form-group">
 				<label for="" class="col-sm-1 control-label">标题</label>
 				<div class="col-sm-6">
-	                	<input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required">
+	                <input type="text" class="form-control" ng-model="article.title" name="article_title" placeholder="请输入文章标题（必须）" required="required">
 				</div>
             	</div>
             	<div class="form-group">
             		<label for="" class="col-sm-1 control-label">类型</label>
             		<div class="col-sm-6">
             			<ui-select ng-model="article.category" theme="bootstrap" required>
-						<ui-select-match placeholder="请选择文章的类型">{{$select.selected.name}}</ui-select-match>
-						<ui-select-choices repeat="item._id as item in CommonData.Categorys | filter: {name: $select.search}">
-							<div ng-bind-html="item.name"></div>
-						</ui-select-choices>
-					</ui-select>
+							<ui-select-match placeholder="请选择文章的类型">{{$select.selected.name}}</ui-select-match>
+							<ui-select-choices repeat="item._id as item in CommonData.Categorys | filter: {name: $select.search}">
+								<div ng-bind-html="item.name"></div>
+							</ui-select-choices>
+						</ui-select>
             		</div>
             	</div>
             	<div class="form-group">
             		<label for="" class="col-sm-1 control-label">标签</label>
             		<div class="col-sm-6">
             			<ui-select multiple ng-model="article.tags" theme="bootstrap" required>
-						<ui-select-match placeholder="请选择文章标签">{{$item.name}}</ui-select-match>
-						<ui-select-choices  repeat="tag in CommonData.Tags | filter: {name: $select.search}">
-							<div ng-bind-html="tag.name"></div>
-						</ui-select-choices>
-					</ui-select>
+							<ui-select-match placeholder="请选择文章标签">{{$item.name}}</ui-select-match>
+							<ui-select-choices  repeat="tag._id as tag in CommonData.Tags | filter: {name: $select.search}">
+								<div ng-bind-html="tag.name"></div>
+							</ui-select-choices>
+						</ui-select>
             		</div>
             	</div>
- 			
-            	<!--<div class="form-group col-md-6">
-            <input type="file" nv-file-select="" uploader="uploader" name="img">
-            	<div ng-repeat="item in uploader.queue">
-            		<div><strong>{{ item.file.name }}</strong></div>
-            		<div class="progress progress-sm m-b-none m-t-xs">
-	                  	<div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-	                </div>
-            	</div>
-				<input type="file" name="img">
-			</div>-->
             <div class="form-group col-md-12">
             	<script id="editor" type="text/plain"></script>
             </div>
@@ -52,7 +41,7 @@
             	<button type="button" class="btn btn-warning waves-effect waves-light" ng-disabled='article_form.$invalid' ng-click="publish('draft');">
                    	存为草稿
                 </button>
-                <button type="button" class="btn btn-primary waves-effect waves-light"  ng-click="publish()" ng-disabled='article_form.$invalid'>
+                <button type="submit" class="btn btn-primary waves-effect waves-light" ng-disabled='article_form.$invalid'>
                                         发表文章
                 </button>
             </div>

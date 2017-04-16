@@ -19,11 +19,10 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 				return handelRequest("GET",'/admin/category');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/admin/category/remove',data);
+				return handelRequest("POST",'/admin/category/remove',{id:data});
 			},
 			add:function(data){
-				console.log(data);
-				return handelRequest("POST",'/admin/category',data);
+				return handelRequest("POST",'/admin/category',{category:data});
 			}
 		},
 		tag:{
@@ -31,10 +30,10 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 				return handelRequest("GET",'/admin/tag');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/admin/tag/remove',data);
+				return handelRequest("POST",'/admin/tag/remove',{id:data});
 			},
 			add:function(data){
-				return handelRequest("POST",'/admin/tag',data);
+				return handelRequest("POST",'/admin/tag',{tag:data});
 			}
 		}
 	}

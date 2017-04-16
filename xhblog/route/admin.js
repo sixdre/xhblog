@@ -138,7 +138,8 @@ router.post('/login',function(req,res,next){
 			});			
 		}
 	}).catch(function(err){
-		console.log('登陆出错:'+err)
+		console.log('登陆出错:'+err);
+		next(err);
 	})
 })
 
@@ -174,10 +175,13 @@ router.post('/regist',function(req,res,next){
 			});
 	}).catch(function(err){
 		console.log('注册失败:'+err);
-		res.json({
-			code:err.code,
-			message:err.message
-		});
+		if(err.code){
+			return res.json({
+				code:err.code,
+				message:err.message
+			});
+		}
+		next(err);
 	});
 })
 
@@ -235,6 +239,7 @@ router.post('/article/publish',function(req,res,next){
 			});
 	 }).catch(function(err){
 		 console.log('文章发布出错'+err);
+		 next(err);
 	 });
 })
 
@@ -275,22 +280,22 @@ router.get('/article/page',function(req,res,next){
 		})
 	}).catch(function(err){
 		console.log('文章分页查询出错:'+err);
+		next(err);
 	})
-//	query.find({}).populate('category','name').then(function(results){
-//		if(results.length>0){		//找到文章
-//			return res.json({
-//				results:results
-//			});
-//		}
-//		res.json({		//没有更多文章
-//			code:-1,
-//			message:'没有更多文章'
-//		});
-//	}).catch(function(err){
-//		console.log('文章分页查询出错:'+err);
-//	});
 })
 
+//编辑文章根据id查找
+router.get('/article/findById',function(req,res,next){
+	let id=req.query.id;
+	Article.findOne({_id:id}).populate('category').populate('tags').then(function(article){
+		res.json({
+			code:1,
+			article:article,
+			message:'success'
+		})
+		console.log(article);
+	})
+})
 
 //编辑更新文章
 router.post('/article/update',function(req,res,next){	//有问题待修复
@@ -308,17 +313,18 @@ router.post('/article/update',function(req,res,next){	//有问题待修复
 		});
 	}).catch(function(err){
 		console.log('更新文章失败:'+err);
+		next(err);
 	});
 
 })
 
 //删除文章 (单项)
 router.post('/article/romoveOne',function(req,res,next){
-	let bId=req.body.bId;
-	Article.findOne({bId:bId}).then(function(article){
+	let id=req.body.id;
+	Article.findById(id).then(function(article){
 		return Category.update({_id:article.category},{$pull:{"articles": article._id}});
 	}).then(function(){
-		return Article.remove({bId:bId});
+		return Article.remove({_id:id});
 	}).then(function(){
 		res.json({
 			code:1,
@@ -334,7 +340,7 @@ router.post('/article/romoveOne',function(req,res,next){
 //删除文章 （多选)
 router.post('/article/removeMulti',function(req,res,next){
 	console.log(req.body.ids);
-	Article.find({bId:{$in:req.body.ids}}).then(function(articles){
+	Article.find({_id:{"$in":req.body.ids}}).then(function(articles){
 		return Promise.all(articles.map(function(article){
 			return Category.update({_id:article.category},{
 				$pull:{"articles": article._id}
@@ -345,7 +351,7 @@ router.post('/article/removeMulti',function(req,res,next){
 			});
 		}));
 	}).then(function(dd){
-		console.log(dd);		//1
+		//console.log(dd);		//1
 		res.json({
 			code:1,
 			message:'删除成功'
@@ -383,7 +389,7 @@ router.get('/article/search',function(req,res,next){
 
 //获取友情链接数据 
 router.get('/friend',function(req,res,next){
-	Friend.find({}).sort({time:-1}).then(function(friends){
+	Friend.find({}).sort({"meta.update_time":-1}).then(function(friends){
 		res.json({
 			code:1,
 			friends:friends
@@ -397,42 +403,46 @@ router.get('/friend',function(req,res,next){
 
 //添加友情链接
 router.post('/friend',function(req,res,next){
-	let id=req.body._id,
-	title=req.body.title,
-	url=req.body.url,
-	logo=req.body.logo,
-	sort=req.body.sort;
+	const id=req.body._id,
+		title=req.body.title,
+		url=req.body.url,
+		sort=req.body.sort;
 	if(id==undefined){			//说明是新增
 		let friend=new Friend({
-			title:req.body.title,
-			url:req.body.url,
-			logo:req.body.logo,
-			sort:req.body.sort
-		});
-		Friend.findByTitle(title,function(err){
-			if(err){
-				return res.json({
-					code:-1
-				});
-			}
-			friend.save().then(function(doc){
-				res.json({
-					code:1,
-					friend:doc
-				});
-			}).catch(function(err){
-				console.log('添加失败 err：'+err);
-				next(err);
-			});
-		})
-		
-	}else{						//更新
-		Friend.update({_id:id},{
 			title:title,
 			url:url,
-			logo:logo,
-			sort:sort,
-			update_time:Date.now()
+			sort:sort
+		});
+		Friend.findOne({title:title}).then(function(doc){
+			if(doc){
+				throw {
+					code:-2,
+					message:'该友链已经添加过了'
+				}
+			}
+			return friend.save();
+		}).then(function(doc){
+			res.json({
+				code:1,
+				friend:doc,
+				message:'添加成功'
+			});
+		}).catch(function(err){
+			console.log('友链添加出错:'+err);
+			if(err.code){
+				return res.json({
+					code:err.code,
+					message:err.message
+				})
+			}
+			next(err);
+		})
+	}else{						//更新
+		Friend.update({_id:id},{
+			"title":title,
+			"url":url,
+			"sort":sort,
+			"meta.update_time":Date.now()
 			}).then(function(){
 				res.json({
 					code:1,
@@ -460,29 +470,6 @@ router.post('/friend/remove',function(req,res,next){
 })
 
 
-//更新友情链接
-router.post('/friend/update',function(req,res,next){
-	let id=req.body._id,
-		title=req.body.title,
-		url=req.body.url,
-		logo=req.body.logo,
-		sort=req.body.sort;
-	Friend.update({_id:id},{
-		title:title,
-		url:url,
-		logo:logo,
-		sort:sort,
-		update_time:Date.now()
-		}).then(function(){
-			res.json({
-				code:1,
-				message:'更新成功'
-			});
-		}).catch(function(err){
-			console.log('友链更新失败:'+err);
-			next(err);
-		});
-})
 
 //获取category数据
 router.get("/category",function(req,res,next){
@@ -517,10 +504,13 @@ router.post("/category",function(req,res,next){
 			});
 		}).catch(function(err){
 			console.log('类型更新失败:'+err);
-			res.json({
-				code:err.code,
-				message:err.message
-			});
+			if(err.code){
+				return res.json({
+					code:err.code,
+					message:err.message
+				});
+			}
+			next(err);
 		});
 	}else{		//新添加
 		Category.findOne({name:name}).then(function(cate){
@@ -540,11 +530,13 @@ router.post("/category",function(req,res,next){
 			});
 		}).catch(function(err){
 			console.log('类型添加失败:'+err);
-			res.json({
-				code:err.code,
-				message:err.message
-			})
-//			next(err);
+			if(err.code){
+				return res.json({
+					code:err.code,
+					message:err.message
+				})
+			}
+			next(err);
 		});
 	}
 })
@@ -552,7 +544,7 @@ router.post("/category",function(req,res,next){
 
 //分类删除
 router.post('/category/remove',function(req,res,next){
-	let id=req.body.category._id;
+	let id=req.body.id;
 	Category.remove({_id:id}).exec(function(err){
 		res.json({
 			code:1,
@@ -595,14 +587,16 @@ router.post('/tag',function(req,res,next){
 			});
 		}).catch(function(err){
 			console.log('标签更新失败:'+err);
-			res.json({
-				code:err.code,
-				message:err.message
-			});
+			if(err.code){
+				return res.json({
+					code:err.code,
+					message:err.message
+				});
+			}
+			next(err);
 		});
 	}else{				//新添加
 		Tag.findOne({name:name}).then(function(tag){
-			console.log(tag);
 			if(tag){
 				throw {
 					code:-1,
@@ -618,11 +612,13 @@ router.post('/tag',function(req,res,next){
 			});
 		}).catch(function(err){
 			console.log('类型添加失败:'+err);
-			res.json({
-				code:err.code,
-				message:err.message
-			})
-//			next(err);
+			if(err.code){
+				return res.json({
+					code:err.code,
+					message:err.message
+				})
+			}
+			next(err);
 		});
 	}
 })
@@ -684,19 +680,6 @@ router.post('/banner',function(req,res,next){
 		}
 	})
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;
 

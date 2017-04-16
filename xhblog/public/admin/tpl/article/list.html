@@ -59,7 +59,7 @@
 						<tr ng-repeat="item in articlelist | orderBy:'create_time':timesort" class="editable-tr-wrap">
 							<td>
 								<label class="i-checks m-b-none">
-									<input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item.bId)">
+									<input type="checkbox" ng-checked="select_all" ng-model="item_checked" ng-click="selectOne(item._id)">
 									<i></i>
 								</label>
 							</td>
@@ -78,7 +78,7 @@
 								<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
 							</span>
 								</a>
-								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="removeOne(item)" class="table-link danger remove">
+								<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="removeOne(item._id)" class="table-link danger remove">
 									<span class="fa-stack">
 								<i class="fa fa-square fa-stack-2x"></i>
 								<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>

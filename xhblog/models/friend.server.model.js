@@ -9,31 +9,29 @@ const FriendSchema=new Schema({
 		required:true 
 	},
 	url:{
-		type:"String",
-		required:true 
-	},
-	logo:{
-		type:String
+		type:"String"
 	},
 	sort:{
 		type: Number, 
 		default: 0
 	},
-	post_time:{
-		type:Date,
-		default:Date.now
-	},
-	update_time:{ 
-		type: Date, 
-		default: Date.now 
+	meta:{
+		create_time:{
+			type:Date,
+			default:Date.now
+		},
+		update_time:{ 
+			type: Date, 
+			default: Date.now 
+		}
 	}
 })
 
 FriendSchema.pre("save",function(next){
 	if(this.isNew){
-		this.post_time=this.update_time=Date.now();
+		this.meta.create_time=this.meta.update_time=Date.now();
 	}else{
-		this.update_time=Date.now();
+		this.meta.update_time=Date.now();
 	}
 	next();
 })
@@ -43,7 +41,7 @@ FriendSchema.pre("save",function(next){
 FriendSchema.statics.findAll = function(callback) {
     return this.model('Friend')
         .find({})
-        .sort({ post_time: -1 })
+        .sort({ "meta.create_time": -1 })
         .exec(function (error, doc) {
             if (error) {
                return console.log(error);

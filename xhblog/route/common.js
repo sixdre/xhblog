@@ -32,7 +32,7 @@ exports.loadCommonData=function(req,res,next){
 		    });
 		},
 		friends:function(cb){
-			 Friend.find({}).exec(function(err,friends){
+			 Friend.find({}).sort({'sort':-1}).exec(function(err,friends){
 				  cb(null,friends)
 			 });
 		},
