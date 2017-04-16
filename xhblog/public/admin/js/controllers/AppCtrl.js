@@ -36,7 +36,7 @@ angular.module('app').controller('AppCtrl',
 				getCommonData();
 			})
 			
-			//cookies 失效
+			//用户验证失败
 			$scope.$on(AUTH_EVENTS.notAuthorized,function(event,data){
 				alert(data);
 				$state.go('access.signin');
@@ -82,7 +82,7 @@ angular.module('app').controller('AppCtrl',
 			}
 			
 			
-			//网站布局颜色设置
+			//网站布局设置
 			$scope.app = SETTINGS;
 
 			// save settings to local storage
