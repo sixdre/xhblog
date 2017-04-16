@@ -62,7 +62,7 @@ app.config(
 				})
 				.state("app.friend",{
 					url:"/friend",
-					templateUrl:'/admin/tpl/setting/newFriend.html',
+					templateUrl:'/admin/tpl/indep/friends.html',
 					controller:"friendCtrl",
 					resolve: {
 	                      deps: ['uiLoad',
@@ -76,7 +76,7 @@ app.config(
 				})
 				.state("app.catetag",{
 					url:"/catetag",
-					templateUrl:'/admin/tpl/cate_tag.html',
+					templateUrl:'/admin/tpl/indep/cate_tag.html',
 					controller:'CateTagCtrl',
 					resolve: {
                       deps: ['uiLoad',
@@ -90,7 +90,7 @@ app.config(
 				})
 				.state("app.users",{
 					url:"/users",
-					templateUrl:'/admin/tpl/users.html'
+					templateUrl:'/admin/tpl/indep/users.html'
 				})
 				.state('app.setting', {
 					abstract: true,
