@@ -1,7 +1,8 @@
 angular.module('app')
 	.controller('CateTagCtrl',
-			['$rootScope','$scope','$timeout','$window','defPopService','alertService','catetagService','toolService',
-   function($rootScope,$scope,$timeout,$window,defPopService,alertService,catetagService,toolService){
+			['$rootScope','$scope','$timeout','$window','defPopService',
+			'alertService','catetagService','toolService','DataService',
+   function($rootScope,$scope,$timeout,$window,defPopService,alertService,catetagService,toolService,DataService){
 	
 	
 	$scope.iscNew=true;   //判断类型是更新还是添加
@@ -11,7 +12,8 @@ angular.module('app')
 	function getCategorys(){
 		catetagService.category.list().then(function(res){
 			if(res.data.code==1){
-				$rootScope.categorys=res.data.categorys;
+				DataService.Categorys=res.data.categorys;
+//				$rootScope.categorys=res.data.categorys;
 			}else{
 				alert('获取类型失败')
 			}
@@ -24,7 +26,8 @@ angular.module('app')
 	function getTags(){
 		catetagService.tag.list().then(function(res){
 			if(res.data.code==1){
-				$rootScope.tags=res.data.tags;
+//				$rootScope.tags=res.data.tags;
+				DataService.Tags=res.data.tags;
 			}else{
 				alert('获取标签失败')
 			}
@@ -55,7 +58,8 @@ angular.module('app')
 				catetagService.category.remove({category:item}).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
-						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
+						DataService.Categorys.splice(DataService.Categorys.indexOf(item), 1);
+//						$rootScope.categorys.splice($rootScope.categorys.indexOf(item), 1);
 					}
 				}).catch(function(){
 					
@@ -68,7 +72,8 @@ angular.module('app')
 				catetagService.tag.remove({tag:item}).then(function(res){
 					if(res.data.code==1){
 						alertService.success();
-						$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
+						DataService.Tags.splice(DataService.Tags.indexOf(item), 1);
+//						$rootScope.tags.splice($rootScope.tags.indexOf(item), 1);
 					}
 				}).catch(function(){
 					
@@ -82,7 +87,6 @@ angular.module('app')
 	//分类或者标签的保存
 	$scope.add=function(type){				//保存分类
 		if(type=="category"){
-
 			catetagService.category.add({category:$scope.category}).then(function(res){
 				console.log(res.data);
 				if(res.data.code==-1){
@@ -95,7 +99,8 @@ angular.module('app')
 						status:1,
 						content:"添加成功",
 						callback:function(){
-							$rootScope.categorys.push(res.data.category);
+//							$rootScope.categorys.push(res.data.category);
+							DataService.Categorys.push(res.data.category);
 							$scope.category={};
 						}
 					});
@@ -128,7 +133,8 @@ angular.module('app')
 						status:1,
 						content:"添加成功",
 						callback:function(){
-							$rootScope.tags.push(res.data.tag);
+//							$rootScope.tags.push(res.data.tag);
+							DataService.Tags.push(res.data.tag);
 							$scope.tag={};
 						}
 					});

@@ -1,35 +1,55 @@
 'use strict';
 /*main Controllers */
 angular.module('app').controller('AppCtrl', 
-	['$rootScope', '$scope', '$localStorage', '$window', '$http', '$state', '$uibModal', 'SETTINGS',
-		function($rootScope, $scope, $localStorage, $window, $http, $state, $uibModal, SETTINGS) {
+	['$rootScope', '$scope', '$cookies','$localStorage', '$window',
+	'$http', '$state', '$uibModal','DataService', 'SETTINGS','AUTH_EVENTS','USER',
+		function($rootScope, $scope,$cookies, $localStorage, 
+			$window, $http, $state, $uibModal,DataService, SETTINGS,AUTH_EVENTS,USER) {
+				
+			var Manager=$rootScope.Manager={};
+				
 			//向后台请求主页面要展示的数据（文章总数，未读留言）
 			$http({ 
 				method: "GET",
 				url: "/admin/loadData"
 			}).then(function(res) {
-				console.log(res);
-				$rootScope.articleTotal = res.data.articleTotal;
-				$rootScope.lm = res.data.lmdoc;
-				$rootScope.manager = res.data.manager;
-				$rootScope.categorys = res.data.categorys;
-				$rootScope.tags = res.data.tags;
+				DataService.ArticleTotal=res.data.articleTotal;
+				DataService.Words=res.data.lmdoc;
+				DataService.Categorys=res.data.categorys;
+				DataService.Tags=res.data.tags;
+				$rootScope.CommonData=DataService;
+				
+//				$rootScope.articleTotal = res.data.articleTotal;
+//				$rootScope.lm = res.data.lmdoc;
+//				$rootScope.manager = res.data.manager;
+//				$rootScope.categorys = res.data.categorys;
+//				$rootScope.tags = res.data.tags;
 			}).catch(function(err) {
 
 			})
 
+			//管理员
+			Manager.name=$cookies.get(USER.user_name);
+			$scope.$on(AUTH_EVENTS.loginSuccess,function(event,data){
+				alert('欢迎您回来');
+				Manager.name=$cookies.get(USER.user_name);
+			})
+
+
 			//退出登录
 			$scope.logout = function() {
-				$http({
-					method: "POST",
-					url: "/admin/logout"
-				}).then(function(res) {
-					if(res.data.code == 1) {
-						$state.go("access.signin");
-					}
-				}, function(err) {
-
-				})
+				$cookies.remove(USER.user_name);
+				$state.go("access.signin");
+//				$http({
+//					method: "POST",
+//					url: "/admin/logout"
+//				}).then(function(res) {
+//					if(res.data.code == 1) {
+//						$state.go("access.signin");
+//					}
+//				}, function(err) {
+//
+//				})
 			}
 
 			//留言回复

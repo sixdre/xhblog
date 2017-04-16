@@ -4,51 +4,91 @@ var uetrue=null;
  * 文章发布控制器
  */
 app.controller('articlePublishCtrl',
-		['$rootScope','$scope',"$stateParams",'articleService',"defPopService","alertService",
-		 function($rootScope,$scope,$stateParams,articleService,defPopService,alertService){
-			
+		['$rootScope','$scope',"$stateParams",'articleService',"defPopService","alertService",'DataService',
+		 function($rootScope,$scope,$stateParams,articleService,defPopService,alertService,DataService){
+		 	
+
 			$scope.clearArticle=function(){		//注在请求中不要调用此方法,angular会自动脏数据检查
 				$scope.$apply(function(){
 					$scope.article={};
 				});
 			}
-			
+			$scope.article={};
 			//文章发表
-			$scope.publish=function(data){
-				if(data=="draft"){	//存为草稿
-					$scope.article.isDraft=true;		//为草稿
+			$scope.publish=function(state){
+				var article={
+					title:$scope.article.title,
+					category:$scope.article.category,
+					content:UE.getEditor('editor').getContentTxt(),
+					tagcontent:UE.getEditor('editor').getContent(),
+					tags:[]
 				}
-				var tagArr=[];
-				angular.forEach($scope.article.tags,function(tag){
-					if(tag){
-						tagArr.push(tag);
-					}
-				});
-				$scope.article.tags=tagArr;
-				var content=UE.getEditor('editor').getContentTxt();
-				var tagcontent=UE.getEditor('editor').getContent();
-				if(content.trim().length==0){
+				if(article.content.trim().length==0){
 					return defPopService.defPop({
-						status:0,
-						content:"请输入文章内容！"
-					});
+							status:0,
+							content:"请输入文章内容！"
+						});
 				}
-				$scope.article.tagcontent=tagcontent;
-				$scope.article.content=content;
-				articleService.publish($scope.article).then(function(res){
-					var data=res.data;
-					console.log(res);
-					if(data.code>0){
+				if(state=="draft"){			//存为草稿
+					article.isDraft=true;		//为草稿
+				}
+				angular.forEach($scope.article.tags,function(value,key){
+					article.tags.push(value._id);
+				})
+				articleService.publish(article).then(function(res){
+					if(res.data.code>0){
 						alertService.success('发表成功!');
-						$rootScope.articleTotal++;
+//						$rootScope.articleTotal++;
+						DataService.ArticleTotal+=1;
 						$scope.article={};
 					}
 				}).catch(function(err){
 					 defPopService.defPop({
-							status:0,
-							content:"出错了！"
+						status:0,
+						content:"出错了！"
 					 });
 				});
+			}
+			
+			
+			
+			
+			
+//			$scope.publish=function(data){
+//				if(data=="draft"){	//存为草稿
+//					$scope.article.isDraft=true;		//为草稿
+//				}
+//				var tagArr=[];
+//				angular.forEach($scope.article.tags,function(tag){
+//					if(tag){
+//						tagArr.push(tag);
+//					}
+//				});
+//				$scope.article.tags=tagArr;
+//				var content=UE.getEditor('editor').getContentTxt();
+//				var tagcontent=UE.getEditor('editor').getContent();
+//				if(content.trim().length==0){
+//					return defPopService.defPop({
+//						status:0,
+//						content:"请输入文章内容！"
+//					});
+//				}
+//				$scope.article.tagcontent=tagcontent;
+//				$scope.article.content=content;
+//				articleService.publish($scope.article).then(function(res){
+//					var data=res.data;
+//					console.log(res);
+//					if(data.code>0){
+//						alertService.success('发表成功!');
+//						$rootScope.articleTotal++;
+//						$scope.article={};
+//					}
+//				}).catch(function(err){
+//					 defPopService.defPop({
+//							status:0,
+//							content:"出错了！"
+//					 });
+//				});
 
 				/*var formData = new FormData($("#Article_form")[0]);
 				formData.append('author',$('#manager_name').text().trim());
@@ -69,7 +109,7 @@ app.controller('articlePublishCtrl',
 							content:"出错了！"
 					 });
 				});*/
-			};
+//			};
 }])
 
 /*
@@ -78,10 +118,10 @@ app.controller('articlePublishCtrl',
 app.controller('articleListCtrl',
 		['$rootScope','$scope',"$stateParams",
 		 "$http",'$log','$uibModal','articleService',
-		 "defPopService","alertService","toolService",
+		 "defPopService","alertService","toolService",'DataService',
 		 function($rootScope,$scope,$stateParams,
 				 $http,$log,$uibModal,articleService,
-				 defPopService,alertService,toolService){
+				 defPopService,alertService,toolService,DataService){
 			
 	var currentPage=$stateParams.page;
 	if(currentPage==""){
@@ -94,7 +134,8 @@ app.controller('articleListCtrl',
 	$scope.pageConfig = {
 		maxSize:5,
 		limit:5,		//每页显示的文章数
-	    totalItems:$rootScope.articleTotal,	//文章总数
+		totalItems:DataService.ArticleTotal,
+//	    totalItems:$rootScope.articleTotal,	//文章总数
         currentPage:currentPage
     };
 	$scope.checkedIds = [];		//id组用来存放选中的文章id
@@ -105,9 +146,10 @@ app.controller('articleListCtrl',
 		 	limit=$scope.pageConfig.limit;
     	 articleService.page({current:cp,textCount:limit}).then(function(res){
     		 $scope.articlelist=res.data.results;
+    		 DataService.ArticleTotal=res.data.total;
     		 $scope.listStart=($scope.pageConfig.currentPage-1)*$scope.pageConfig.limit+1;
     		 var listEnd=$scope.pageConfig.currentPage*$scope.pageConfig.limit;
-    		 $scope.listEnd=listEnd<$rootScope.articleTotal?listEnd:$rootScope.articleTotal;
+    		 $scope.listEnd=listEnd<DataService.ArticleTotal?listEnd:DataService.ArticleTotal;
     		
     	 }).catch(function(err){
     		 defPopService.defPop({
@@ -153,8 +195,6 @@ app.controller('articleListCtrl',
 			var data=res.data;
 			if(data.code>0){
 				alertService.success('删除成功');
-				var total=($rootScope.articleTotal)-($scope.checkedIds.length);
-				$rootScope.articleTotal=total<0?0:total;
 				$scope.pageChanged();
 			}
 		}).catch(function(){
@@ -170,7 +210,6 @@ app.controller('articleListCtrl',
 				var data=res.data;
 				if(data.code==1){
 					alertService.success(res.data.message);
-					$rootScope.articleTotal=($rootScope.articleTotal)-1<0?0:($rootScope.articleTotal-1);
 					$scope.pageChanged();
 				}
 			}).catch(function(err){

@@ -23,12 +23,12 @@ const ArticleSchema = new Schema({
 	    ref: 'Category'
 	},
 	tags:[{				//标签
-	    	  type: ObjectId, ref: 'Tag'
+	    type: ObjectId, ref: 'Tag'
 	}],
 	content:String,				//内容
     tagcontent:String,			//带格式的内容
     imgurl:String,				//封面
-    Source: {type: String},		//文章来源(出处)
+    source: {type: String},		//文章来源(出处)
     likes:{type: Number, default: 0 },			//点赞数
     pv:{type: Number, default: 0 },				//浏览量
     comments:{type: Number, default: 0 },		//评论数

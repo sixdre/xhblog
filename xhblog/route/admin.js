@@ -69,7 +69,6 @@ router.get('/',function(req,res,next){
 
 //后台angular 请求数据路由
 router.get('/loadData',function(req,res,next){
-	let manager = req.session["manager"];
 	async.parallel({
 		lmdoc:function(callback){
 			Lm.find({"state.isRead":false}).populate('user','username').exec(function(err,lmdoc){
@@ -108,7 +107,6 @@ router.get('/loadData',function(req,res,next){
 			next(err);
 		}
 		res.json({
-			manager:manager,				//管理员
 			articleTotal:results.articleTotal,			//文章总数
 			lmdoc:results.lmdoc,			//留言
 			categorys:results.categorys,	//文章分类
@@ -260,19 +258,37 @@ router.get('/article/page',function(req,res,next){
 	let query = Article.find({}).sort({
 		"create_time": -1
 	}).skip(textCount*current).limit(textCount);
-	query.find({}).populate('category','name').then(function(results){
-		if(results.length>0){		//找到文章
-			return res.json({
-				results:results
+	Article.count({}).then(function(total){
+		return total;
+	}).then(function(total){
+		query.find({}).populate('category','name').then(function(results){
+			if(total>0){		//找到文章
+				return res.json({
+					results:results,
+					total:total
+				});
+			}
+			res.json({		//没有更多文章
+				code:-1,
+				message:'没有更多文章'
 			});
-		}
-		res.json({		//没有更多文章
-			code:-1,
-			message:'没有更多文章'
-		});
+		})
 	}).catch(function(err){
 		console.log('文章分页查询出错:'+err);
-	});
+	})
+//	query.find({}).populate('category','name').then(function(results){
+//		if(results.length>0){		//找到文章
+//			return res.json({
+//				results:results
+//			});
+//		}
+//		res.json({		//没有更多文章
+//			code:-1,
+//			message:'没有更多文章'
+//		});
+//	}).catch(function(err){
+//		console.log('文章分页查询出错:'+err);
+//	});
 })
 
 

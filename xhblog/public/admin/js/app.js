@@ -15,7 +15,7 @@ angular.module('app', [
     //'pascalprecht.translate',
     "toaster",
    /* "textAngular"*/
-]).run(function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,ConstantService) {
+]).run(function($rootScope, $window, $cookies, $cookieStore, $state, $stateParams,USER) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
@@ -23,8 +23,8 @@ angular.module('app', [
 		if(toState.name == 'access.signin' || toState.name == 'access.signup') {
 			return;
 		}
-		var user=$cookies.get(ConstantService.LOGIN_USER); //用户身份
-		if(!user){					//cookies 没有找到用户
+		var username=$cookies.get(USER.user_name); //用户身份
+		if(!username){					//cookies 没有找到用户
 			event.preventDefault(); // 取消默认跳转行为
 			//记录被拦截的页面信息 当登录后再调至该页面
 			//失效时间
@@ -38,7 +38,7 @@ angular.module('app', [
 			//刷新cookie 失效时间
 			var expireDate = new Date();
 			expireDate.setMinutes(expireDate.getMinutes() + 10 * 6); //一小时
-			$cookies.put(ConstantService.LOGIN_USER, user, { 'expires': expireDate });
+			$cookies.put(USER.user_name, username, { 'expires': expireDate });
 		}
 	});
 
@@ -54,9 +54,6 @@ angular.module('app', [
 	function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 		$httpProvider.interceptors.push('authInterceptor');
 }])
-.service('ConstantService',function(){
-	this.LOGIN_USER="LOGIN_USER";		//存储到cookie中的登录用户用户名
-})
 //请求拦截器 每当有请求发生，更新cookies失效时间
 //.factory('cookiesRefreshInterceptor', ['$q', '$cookies', '$rootScope',
 //	function($q, $cookies,$rootScope,) {
@@ -86,7 +83,7 @@ angular.module('app', [
 //  return cookiesRefreshInterceptor;
 //}]);
 
-.factory('authInterceptor', function($rootScope, $cookies,ConstantService) {
+.factory('authInterceptor', function($rootScope, $cookies) {
 	return {
 		request: function(config) {
 			

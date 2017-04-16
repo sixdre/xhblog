@@ -2,8 +2,8 @@
 /* Controllers */
 // signin controller
 app.controller('SigninFormController', 
-["$rootScope", '$scope','$cookies', '$http', '$state','ConstantService',
-function($rootScope, $scope,$cookies,$http, $state,ConstantService) {
+["$rootScope", '$scope','$cookies', '$http', '$state','USER','AUTH_EVENTS',
+function($rootScope, $scope,$cookies,$http, $state,USER,AUTH_EVENTS) {
 	$scope.user = {};
 	$scope.authError = null; //错误信息
 	var expireDate = new Date();
@@ -23,8 +23,9 @@ function($rootScope, $scope,$cookies,$http, $state,ConstantService) {
 						$scope.authError = message;
 						break;
 					case 1:
-						$cookies.put(ConstantService.LOGIN_USER,$scope.user.username,{'expires': expireDate})
-						$state.go('app.article.publish');
+						$cookies.put(USER.user_name,$scope.user.username,{'expires': expireDate});
+						$scope.$emit(AUTH_EVENTS.loginSuccess,'登陆成功');
+						$state.go('app.article.list');
 						break;
 				}
 			}, function(err) {

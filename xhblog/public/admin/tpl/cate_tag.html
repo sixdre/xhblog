@@ -10,7 +10,7 @@
 					<h1 class="panel-title">分类列表</h1>
 				</div>
 				<div class="panel-body" style="min-height:200px;">
-					<div class="btn-group" ng-repeat="item in categorys" style="margin:0 10px 10px 0;">
+					<div class="btn-group" ng-repeat="item in CommonData.Categorys" style="margin:0 10px 10px 0;">
 						<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          	{{item.name}} <span class="caret"></span>
 			          </button>
@@ -47,7 +47,7 @@
 					<h1 class="panel-title">标签列表</h1>
 				</div>
 				<div class="panel-body" style="min-height: 200px;">
-					<div class="btn-group" ng-repeat="item in tags" style="margin:0 10px 10px 0;">
+					<div class="btn-group" ng-repeat="item in CommonData.Tags" style="margin:0 10px 10px 0;">
 						<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          	{{item.name}} <span class="caret"></span>
 			          </button>
