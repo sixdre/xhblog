@@ -94,23 +94,27 @@ app.controller('articleListCtrl',
 		
 			//分页配置参数
 	$scope.pageConfig = {
-		maxSize:5,
-		limit:5,		//每页显示的文章数
-		totalItems:DataService.ArticleTotal,
-        currentPage:currentPage
+		maxSize:5,					//分页页数
+		limit:5,					//每页显示的文章数
+ 		pageSizes:[5,10,20],		//每页显示的文章数量下拉列表
+		totalItems:DataService.ArticleTotal,		//文章总数
+        currentPage:currentPage,		//当前页
     };
 	$scope.checkedIds = [];		//id组用来存放选中的文章id
 	
+	
+
 	  //分页显示
 	 $scope.pageChanged = function() {
+	 	
 		 var cp=$scope.pageConfig.currentPage,
 		 	limit=$scope.pageConfig.limit;
     	 articleService.page({current:cp,textCount:limit}).then(function(res){
-    		 $scope.articlelist=res.data.results;
-    		 DataService.ArticleTotal=res.data.total;
-    		 $scope.listStart=($scope.pageConfig.currentPage-1)*$scope.pageConfig.limit+1;
-    		 var listEnd=$scope.pageConfig.currentPage*$scope.pageConfig.limit;
-    		 $scope.listEnd=listEnd<DataService.ArticleTotal?listEnd:DataService.ArticleTotal;
+    		 $scope.articleList=res.data.results;			//文章列表
+    		 DataService.ArticleTotal=res.data.total;		//文章总数
+    		 $scope.StartNum=($scope.pageConfig.currentPage-1)*$scope.pageConfig.limit+1;
+    		 var End=$scope.pageConfig.currentPage*$scope.pageConfig.limit;
+    		 $scope.EndNum=End<DataService.ArticleTotal?End:DataService.ArticleTotal;
     		
     	 }).catch(function(err){
     		 defPopService.defPop({
@@ -119,17 +123,29 @@ app.controller('articleListCtrl',
 			 });
  		 })
 	};	
-	$scope.pageChanged()
+	//初始化
+	$scope.pageChanged();
 	 
-	 $scope.$watch('articlelist',function(newVal,oldVal){
+	//检测文章列表数据
+	$scope.$watch('articleList',function(newVal,oldVal){
 	 	if(newVal!==oldVal){
+	 		$scope.select_all=false;
 	 		$scope.checkedIds = [];
 	 	}
-	 })
+	})
+	 
+	//检测下拉文章列表数
+	$scope.$watch('pageConfig.limit',function(newVal,oldVal){
+		if(newVal!==oldVal){
+			$scope.pageChanged();
+		}
+	})
+	 
+	 
 	//文章全选操作
 	$scope.selectAll=function(allCheck){
 		if(allCheck==true){			//全选
-			angular.forEach($scope.articlelist,function (value) {
+			angular.forEach($scope.articleList,function (value) {
 				if($scope.checkedIds.indexOf(value._id)==-1){
 					$scope.checkedIds.push(value._id);
 				}
