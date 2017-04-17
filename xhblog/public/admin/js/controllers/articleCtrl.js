@@ -287,6 +287,8 @@ app.controller('ModalInstanceCtrl',
 	    		})
 	    	}
 	    	var article=angular.copy($scope.article);
+	    		article.isDraft=!$scope.isDraft;
+	    		article.isActive=true;
 	    		article.tagcontent=UE.getEditor('update_modal').getContent();
 	    		article.content=UE.getEditor('update_modal').getContentTxt();
 	    	articleService.update(article).then(function(res){

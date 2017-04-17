@@ -41,6 +41,11 @@
 	   		<script id="update_modal" type="text/plain"></script>
    		</div>
    		<div class="text-right" style="margin-top: 20px;">
+   			<label class="i-checks m-b-none" ng-show="article.isDraft">
+   				标记为正式文章
+                <input type="checkbox" ng-model="isDraft">
+                <i></i>
+            </label>
     		<button type="submit" class="btn btn-primary">Update</button>
    			<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
    		</div>
