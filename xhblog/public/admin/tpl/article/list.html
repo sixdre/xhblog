@@ -71,8 +71,9 @@
 								<td style="width: 16%;">{{item.category.name}}</td>
 								<td style="width: 16%;">{{item.pv}}</td>
 								<td style="width: 16%;">
-									<span ng-if="item.isActive" class="label label-success">有效</span>
-									<span ng-if="!item.isActive" class="label label-danger">无效</span>
+									<span ng-if="item.isActive&&!item.isDraft" class="label label-success">有效</span>
+									<span ng-if="!item.isActive&&!item.isDraft" class="label label-warning">无效</span>
+									<span ng-if="item.isDraft" class="label label-danger">草稿</span>
 								</td>
 								<td style="width: 15%;">
 									<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">

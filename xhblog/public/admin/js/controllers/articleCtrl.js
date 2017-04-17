@@ -37,6 +37,7 @@ app.controller('articlePublishCtrl',
 				}
 				if(state&&state=="draft"){			//存为草稿
 					article.isDraft=true;		//为草稿
+					article.isActive=false;		//无效
 				}
 				articleService.publish(article).then(function(res){
 					if(res.data.code>0){

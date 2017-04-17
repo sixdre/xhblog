@@ -1,4 +1,4 @@
-<!--友情链接管理-->
+<!--用户管理-->
 <div class="bg-light lter b-b wrapper-md">
    <h1 class="m-n font-thin h3">用户管理</h1>
 </div>
@@ -7,17 +7,21 @@
 		<div class="col-md-12">
 			<table class="table table-striped table-bordered">
 	            <thead>
-	            <tr>
-	                <th>用户名称</th>
-	            </tr>
+		            <tr>
+		                <th>用户名称</th>
+		                <th>用户邮箱</th>
+		                <th>注册时间</th>
+		            </tr>
 	            </thead>
 	            <tbody>
-	            <tr ng-repeat="user in users | orderBy:'create_time':true">
-	                <td>{{user.username}}</td>
-	            </tr>
+		            <tr ng-repeat="user in Users">
+		                <td>{{user.username}}</td>
+		                <td>{{user.email}}</td>
+		                <td>{{user.create_time |date:'yyyy-MM-dd HH:mm:ss'}}</td>
+		            </tr>
 	            </tbody>
 	        </table>
-	   </div>
+	  </div>
 	</div>
 </div>
 

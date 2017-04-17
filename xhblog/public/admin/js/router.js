@@ -90,7 +90,17 @@ app.config(
 				})
 				.state("app.users",{
 					url:"/users",
-					templateUrl:'/admin/tpl/indep/users.html'
+					templateUrl:'/admin/tpl/indep/users.html',
+					controller:'userCtrl',
+					resolve: {
+	                      deps: ['uiLoad',
+	                        function( uiLoad){
+	                          return uiLoad.load([
+	                                '/admin/js/services/userService.js',
+	                                '/admin/js/controllers/userCtrl.js'
+	                          ]);
+	                      }]
+	                },
 				})
 				.state('app.setting', {
 					abstract: true,

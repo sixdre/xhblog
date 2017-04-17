@@ -14,7 +14,8 @@ const Friend=mongoose.model("Friend");
 const User = mongoose.model('User');
 const Lm = mongoose.model('Lm');
 const Comment=mongoose.model('Comment');		//评论
-
+const BaseQuery=require('../models/dbHelper'),
+	  aQuery=BaseQuery.ArticlesQuery;
 //公用数据
 const Common=require('./common');
 

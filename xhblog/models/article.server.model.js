@@ -69,19 +69,12 @@ ArticleSchema.statics.findAll = function(callback) {
         });
 }
 
-//查找
-ArticleSchema.statics.findNeeee = function(limit){
-    return this.model('Article')
-        .find({})
-        .sort({ create_time: -1 })
-        .limit(limit).exec()
-       
-}
 
 //查找最新的
 ArticleSchema.statics.findNew = function(limit,callback) {
+	let query=aQuery();
     return this.model('Article')
-        .find({})
+        .find(query)
         .sort({ create_time: -1 })
         .limit(limit)
         .exec(function (error, doc) {
@@ -95,8 +88,12 @@ ArticleSchema.statics.findNew = function(limit,callback) {
 }
 //查找上一篇
 ArticleSchema.statics.findPrev = function(bid,callback) {
+	let query=aQuery();
+		query.bId={
+			'$lt':bid
+		}
     return this.model('Article')
-      	.findOne({bId:{'$lt':bid}})
+      	.findOne(query).sort({bId: -1}).limit(1)
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
@@ -109,8 +106,12 @@ ArticleSchema.statics.findPrev = function(bid,callback) {
 
 //查找下一篇
 ArticleSchema.statics.findNext = function(bid,callback) {
+	let query=aQuery();
+		query.bId={
+			'$gt':bid
+		}
     return this.model('Article')
-        .findOne({bId:{'$gt':bid}})
+        .findOne(query).sort({bId: 1}).limit(1)		//此处.sort({bId: -1}).limit(1) 可省
         .exec(function (error, doc) {
             if (error) {
                 console.log(error);
@@ -123,7 +124,7 @@ ArticleSchema.statics.findNext = function(bid,callback) {
 
 
 
-//通过自增id来查找
+//通过自增bId来查找
 ArticleSchema.statics.findByBId = function(id,callback) {
 	return this.model('Article').findOne({bId:id}, function (error, doc) {
         if (error) {
@@ -136,20 +137,7 @@ ArticleSchema.statics.findByBId = function(id,callback) {
   
 }
 
-//限制数量
-ArticleSchema.statics.findByLimit = function(num,callback) {
-	return this.model('Article')
-        .find({})
-        .sort({ create_time: -1 }).skip(0).limit(num)
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
-}
+
 //根据时间来查找
 ArticleSchema.statics.findByTime = function(time,callback) {
 	return this.model('Article')
@@ -164,10 +152,11 @@ ArticleSchema.statics.findByTime = function(time,callback) {
         });
 }
 
-//查询热门文章 (根据浏览数来排序)
+//查询热门文章 (根据浏览数来排序)--客户端
 ArticleSchema.statics.findByHot = function(limit,callback) {
+	let query=aQuery();
 	return this.model('Article')
-        .find({})
+        .find(query)
         .sort({views:-1})
         .limit(limit)
         .exec(function (error, hot) {

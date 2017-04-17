@@ -37,7 +37,8 @@ function init(currentPage,cb){
 			})
 		},
 		total:function(callback){
-			Article.count({},function(err,total){	//所有文章数量
+			let query=aQuery();
+			Article.count(query).exec(function(err,total){	//所有文章数量
 				callback(null,total);
 			})
 		},

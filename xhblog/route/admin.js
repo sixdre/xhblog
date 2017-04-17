@@ -637,6 +637,30 @@ router.post('/tag/remove',Auth.checkAdmin,function(req,res,next){
 })
 
 
+//获取注册用户
+router.get('/users',Auth.checkAdmin,function(req,res,next){
+	console.log('123');
+	User.find({}).sort({'create_time':-1}).then(function(users){
+		res.json({
+			code:1,
+			users:users,
+			message:'获取用户列表成功'
+		})
+	}).catch(function(err){
+		console.log('查询用户列表出错:'+err);
+		next(err);
+	})
+	
+})
+
+
+
+
+
+
+
+
+
 //首页banner图的添加
 
 router.post('/banner',Auth.checkAdmin,function(req,res,next){
