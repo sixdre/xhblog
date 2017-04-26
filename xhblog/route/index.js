@@ -75,7 +75,7 @@ function init(currentPage,cb){
 router.get('/',Common.loadCommonData,function(req,res,next){
 	let currentPage=1;
 	init(currentPage,function(results){
-		res.render('www/', {
+		res.render('www/new', {
 			title: results.settings.SiteName,
 			banners:results.banners,
 			total:results.total,

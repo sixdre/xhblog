@@ -1,0 +1,214 @@
+@charset "utf-8";
+body{
+	padding-top: 56px;
+}
+.container{
+	width: 960px;
+}
+.navbar-default {
+    background-color: #fff;
+    border-color: #f0f0f0;
+}
+nav .width-limit {
+    min-width: 768px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+.navbar-default .navbar-nav a{
+	font-size: 17px;
+	line-height: 26px;
+}
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:focus, 
+.navbar-default .navbar-nav>.active>a:hover {
+    color: #ea6f5a;
+    background: none;
+}
+nav .logo {
+    float: left;
+    height: 56px;
+    padding: 14px 25px 15px 20px;
+}
+nav .logo img {
+    width: 55px;
+    height: 26px;
+}
+nav .sign-up {
+    float: right;
+    width: 80px;
+    height: 38px;
+    line-height: 24px;
+    margin: 9px 5px 0 15px;
+    border: 1px solid rgba(236,97,73,.7);
+    border-radius: 4px;
+    font-size: 15px;
+    color: #ea6f5a;
+    background-color: transparent;
+}
+nav .sign-in {
+    float: right;
+    margin: 11px 6px 0 10px;
+    font-size: 15px;
+}
+
+nav .navbar-nav .search {
+    padding-left: 15px;
+}
+nav form {
+    position: relative;
+    top: 9px;
+}
+nav form .search-input {
+    padding: 0 40px 0 20px;
+    width: 160px;
+    height: 38px;
+    font-size: 14px;
+    border: 1px solid #eee;
+    border-radius: 40px;
+    background: #eee;
+    transition: width .5s;
+    -moz-transition: width .5s;
+    -webkit-transition: width .5s;
+    -o-transition: width .5s;
+}
+nav form .search-btn {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    width: 30px;
+    height: 30px!important;
+    line-height: normal!important;
+    padding: 0!important;
+    color: #969696!important;
+    text-align: center;
+    background-color: rgb(150, 150, 150);
+    border-radius: 50%;
+    color: rgb(255, 255, 255) !important;
+}
+nav form .search-btn .search_ic{
+    margin: 7px -1px 0 0;
+    display: block;
+}
+
+.index .main {
+    padding-top: 40px;
+    padding-right: 0;
+}
+.index .main .category_collection {
+    margin-bottom: 20px;
+}
+.index .main .category_collection .collection {
+    display: inline-block;
+    margin: 0 18px 18px 0;
+    min-height: 32px;
+    background-color: #f7f7f7;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    vertical-align: top;
+    overflow: hidden;
+}
+.index .main .category_collection .collection .category_name{
+	display: inline-block;
+    padding: 5px 11px;
+    font-size: 14px;
+}
+.index .main .category_collection .more-collection{
+	display: inline-block;
+    margin-top: 7px;
+    font-size: 14px;
+    color: #787878;
+}
+
+.article_list_container{
+	
+}
+
+.article_list_container .article_list{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.article_list li {
+    position: relative;
+    width: 100%;
+    margin: 0 0 17px;
+    padding: 0 2px 17px 0;
+    border-bottom: 1px solid #f0f0f0;
+    word-wrap: break-word;
+}
+.article_list li.have-img {
+    min-height: 140px;
+}
+.article_list .have-img .wrap-img {
+    position: absolute;
+    top: 50%;
+    margin-top: -68px;
+    right: 0;
+    width: 150px;
+    height: 120px;
+}
+.article_list .have-img .wrap-img img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+}
+.article_list .have-img .content {
+    padding-right: 160px;
+}
+.article_list .author {
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+.article_list .author .avatar, .note-list .author .name {
+    display: inline-block;
+    vertical-align: middle;
+}
+.article_list .author .avatar {
+    margin: 0 5px 0 0;
+}
+.article_list .author a {
+    color: #333;
+}
+.avatar {
+    width: 32px;
+    height: 32px;
+    display: block;
+    cursor: pointer;
+}
+.article_list .title {
+    margin: -7px 0 4px;
+    display: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #333;
+}
+.article_list .author .name {
+    display: inline-block;
+    vertical-align: middle;
+}
+.article_list .author a {
+    color: #333;
+}
+.article_list .abstract {
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 24px;
+}
+.article_list .meta {
+    padding-right: 0!important;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+}
+.article_list .meta a{
+    color: #808080;
+    margin-right: 8px;
+}
+.article_list .art_category {
+    padding: 2px 6px;
+    color: #ea6f5a!important;
+    border: 1px solid rgba(236,97,73,.7);
+    border-radius: 3px;
+}
