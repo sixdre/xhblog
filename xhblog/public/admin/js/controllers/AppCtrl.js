@@ -1,11 +1,10 @@
 'use strict';
 /*main Controllers */
 angular.module('app').controller('AppCtrl', 
-	['$rootScope', '$scope', '$cookies','$localStorage', '$window',
+	['$rootScope', '$scope', '$location','$cookies','$localStorage', '$window',
 	'$http', '$state', '$uibModal','DataService', 'SETTINGS','AUTH_EVENTS','USER',
-		function($rootScope, $scope,$cookies, $localStorage, 
+		function($rootScope, $scope,$location,$cookies, $localStorage, 
 			$window, $http, $state, $uibModal,DataService, SETTINGS,AUTH_EVENTS,USER) {
-				
 			var Manager=$rootScope.Manager={};
 			
 			//向后台请求主页面要展示的数据（文章总数，未读留言）
@@ -23,8 +22,13 @@ angular.module('app').controller('AppCtrl',
 	
 				})
 			}
-			getCommonData();
-		
+			//如果是登陆页面或者注册页面,不做请求数据处理
+			if($location.path().indexOf('signin')>-1||$location.path().indexOf('signup')>-1){
+				
+			}else{
+				getCommonData();
+			}
+			
 
 			//管理员
 			Manager.name=$cookies.get(USER.user_name);

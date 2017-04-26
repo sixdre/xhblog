@@ -34,7 +34,7 @@ angular.module('app', [
 			expireDate.setMinutes(expireDate.getMinutes() + 10);
 			$cookies.put('rejectState', toState, { 'expires': expireDate });
 			$cookies.put('rejectParams', toParams, { 'expires': expireDate });
-			$state.go("access.signin", { w: 'notLogin' }); //跳转到登录界面
+			$state.go("access.signin"); //跳转到登录界面
 			return;
 		}else{
 			//刷新cookie 失效时间
@@ -72,8 +72,8 @@ angular.module('app', [
                   expireDate.setMinutes(expireDate.getMinutes()+10);
                   $cookies.put(USER.user_name, username,{'expires': expireDate});
                   return config;
-            }else{
-                $rootScope.$broadcast(AUTH_EVENTS.notAuthorized,'请重新登录');
+            }else {
+            	$rootScope.$broadcast(AUTH_EVENTS.notAuthorized,'请重新登录');
               	return $q.reject('not login');
             }
 			return config;

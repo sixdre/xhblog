@@ -59,8 +59,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 			let articleId=results.doc._id;
 			Comment.find({articleId:articleId})
 			.populate('from')
-			.populate('reply.from reply.to').exec(function(err,comments){
-				console.log(comments);
+			.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
 				callback(null,comments);
 			});
 		}]
