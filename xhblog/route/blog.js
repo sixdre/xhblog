@@ -81,16 +81,24 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 router.get('/blog/category/:name',function(req,res,next){
 	let category_name=req.params.name;
 	async.waterfall([
-	       function(cb){
+	      function(cb){
 	    	   Category.findOne({name:category_name}).exec(function(err,category){
-	    		   cb(null,category);
+	    	   	if(category){
+	    	   	   return cb(null,category);
+	    	   	}
+	    	   	cb({code:-1})
 	    	   })
 	       },function(category,cb){
 	    	   Article.find({category:category._id}).populate('category','name').then(function(articles){
-	    		   cb(null,category,articles);
+	    	   	if(articles){
+	    	   	   return cb(null,category,articles);
+	    	   	}
 				});
 	       }
 	  ],function(err,category,articles){
+	  		if(err&&err.code==-1){
+	  			articles=[];
+	  		}
 			res.render('www/category',{
 				articles:articles,
 				title:category_name+'——徐浩的个人博客'
@@ -100,15 +108,20 @@ router.get('/blog/category/:name',function(req,res,next){
 
 
 //搜索文章
-router.get('/blog/search',function(req,res,next){
+router.get('/search',Common.loadCommonData,function(req,res,next){
 	let title=req.query.wd;
 	async.waterfall([
 		function(callback){
-			Article.findByTitle(title,function(articles){
-				callback(null,articles);
+			Article.find({title:{$regex:''+title+''}})
+			.sort({create_time:-1})
+			.exec(function(err,articles){
+				!articles?[]:articles;
+				console.log(articles);
+				callback(null,articles)
 			});
 		},
 	],function(err,articles){
+		console.log(articles);
 		res.render("www/search_results",{
 			articles:articles,
 			title:'搜索结果'

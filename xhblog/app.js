@@ -105,24 +105,17 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-
-	console.log(err.status+'cc')
   let code = err.status || 500;
-  
+  console.log(code)
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(code);
-  //if(code==404||code==500){
-	  
   res.render('www/error', {
 		code: code
   });
- // }
-  
   next(err);
-  
 });
 
 module.exports = app;
