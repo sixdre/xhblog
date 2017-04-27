@@ -2,10 +2,8 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8">
-		<title>
-			<%=title%>
-		</title>
-		<!--字体图标-->
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title><%=title%></title>
 		<link rel="stylesheet" type="text/css" href="/libs/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="/libs/bootstrap/dist/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
@@ -42,9 +40,10 @@
 							<a class="app-download-btn" href="/apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
 						</li>
 						<li class="search">
-							<form target="_blank" action="/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
-								<input type="text" name="q" id="q" value="" placeholder="搜索" class="search-input">
-								<a class="search-btn" href="javascript:void(null)"><i class="fa fa-search search_ic"></i></a>
+							<form target="_blank" action="/blog/search" accept-charset="UTF-8" method="get">
+								<!--<input name="utf8" type="hidden" value="✓">-->
+								<input type="text" name="wd" id="wd" value="" placeholder="搜索" class="search-input">
+								<button class="search-btn" ><i class="fa fa-search search_ic"></i></button>
 							</form>
 						</li>
 					</ul>
@@ -85,9 +84,6 @@
 						  	<%}%>
 						    <div class="content">
 								<div class="author">
-									<!--<a class="avatar" target="_blank" href="/u/9ff8af0a01e4">
-										<img src="//upload.jianshu.io/users/upload_avatars/255737/9799bcaa8804.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96" alt="96">
-									</a>-->
 									<div class="name">
 										<a class="blue-link" href="javascript:;"><%=value.author%></a>
 										<span class="time"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
@@ -99,34 +95,21 @@
 								</p>
 								<div class="meta">
 									<%if(value.category){%>
-									<a class="art_category" target="_blank" href="">
-										<%=value.category.name%>
-									</a>
+									<a class="art_category" target="_blank" href="/blog/category/<%=value.category.name%>"><%=value.category.name%></a>
 									<%}%>
-									<a >
-										<%if(value.tags.length>0){%>
-											<%value.tags.forEach(function(tag){%>
-												<%if(tag){%>
-													<span class="fa fa-tags">
-														<%=tag.name%>
-													</span>
-												<%}%>
-											<%})%>			
-										<%}%>					
-									</a>
-									
-									<a class="fa fa-eye">
-										<%=value.likes%>
-									</a>
-									<a class="fa fa-eye">
-										<%=value.pv%>
-									</a> 
+									<a class="fa fa-eye"> <%=value.pv%></a> 
+									<a class="fa fa-thumbs-o-up"> <%=value.likes%></a>
 								</div>
 							</div>
 						</li>
 						<%})%>
 					</ul>
 				</div>
+				
+				<div class="page_wrapper" id="page_wrapper" data-total="" data-pagesize="">
+					123
+				</div>
+				
 				<!--/ 文章列表-->
 			</div>
 		</div>
@@ -135,6 +118,6 @@
 	
 
 
-
+	<script src="/libs/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>

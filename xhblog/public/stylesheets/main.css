@@ -2,6 +2,9 @@
 body{
 	padding-top: 56px;
 }
+a{
+	color: #333;
+}
 .container{
 	width: 960px;
 }
@@ -57,6 +60,7 @@ nav .navbar-nav .search {
 nav form {
     position: relative;
     top: 9px;
+    margin-bottom: 15px;
 }
 nav form .search-input {
     padding: 0 40px 0 20px;
@@ -84,9 +88,10 @@ nav form .search-btn {
     background-color: rgb(150, 150, 150);
     border-radius: 50%;
     color: rgb(255, 255, 255) !important;
+    border: none;
 }
 nav form .search-btn .search_ic{
-    margin: 7px -1px 0 0;
+    /*margin:  -1px 0 0;*/
     display: block;
 }
 
