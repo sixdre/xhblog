@@ -6,6 +6,7 @@
 		<title><%=title%></title>
 		<link rel="stylesheet" type="text/css" href="/libs/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="/libs/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/page.css" />
 		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
 		<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
 	</head>
@@ -58,7 +59,7 @@
 				<!--类型-->
 				<div class="category_collection">
 					<%categorys.forEach(function(cate){%>
-					<a class="collection" target="_blank" href="/blog/category/<%=cate.name%>">
+					<a class="collection" target="_blank" href="/category/<%=cate.name%>">
 						<span class="category_name"><%=cate.name%> <label><%=cate.total%></label></span>
 					</a>
 					<%})%>
@@ -95,7 +96,7 @@
 								</p>
 								<div class="meta">
 									<%if(value.category){%>
-									<a class="art_category" target="_blank" href="/blog/category/<%=value.category.name%>"><%=value.category.name%></a>
+									<a class="art_category" target="_blank" href="/category/<%=value.category.name%>"><%=value.category.name%></a>
 									<%}%>
 									<a class="fa fa-eye"> <%=value.pv%></a> 
 									<a class="fa fa-thumbs-o-up"> <%=value.likes%></a>
@@ -106,10 +107,10 @@
 					</ul>
 				</div>
 				
-				<div class="page_wrapper" id="page_wrapper" data-total="" data-pagesize="">
-					123
+				<div class="page_box" style="text-align: center;">
+					<ul class="pagination" id="pagination" data-pagesize="<%=pagesize%>" data-total="<%=total%>" data-curp="<%=currentpage%>"></ul>
 				</div>
-				
+
 				<!--/ 文章列表-->
 			</div>
 		</div>
@@ -119,5 +120,18 @@
 
 
 	<script src="/libs/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/javascripts/page.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			var pagehtml=page({
+				pagecount:$('#pagination').data('total'),
+				pagesize:$('#pagination').data('pagesize'),
+				currentpage:$('#pagination').data('curp')
+			});
+			
+			//分页
+			$("#pagination").html(pagehtml);
+		})
+	</script>
 	</body>
 </html>

@@ -91,7 +91,7 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 	let currentPage=parseInt(req.params["page"]);
 	init(currentPage,function(results){
-		res.render('www/', {
+		res.render('www/new', {
 			title: results.settings.SiteName,
 			banners:results.banners,
 			total:results.total,

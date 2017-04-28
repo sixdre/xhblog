@@ -1,201 +1,245 @@
 'use strict';
-const mongoose = require('mongoose')  
-    , Schema = mongoose.Schema  
-    , ObjectId = Schema.ObjectId
-    , base  =require('./base');
+const mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
+	ObjectId = Schema.ObjectId,
+	base = require('./base');
 
-const autoIncrement = require('mongoose-auto-increment');   //自增ID 模块		http://www.pinterspace.com/2015/mongoose-定义自增字段.html
+const autoIncrement = require('mongoose-auto-increment'); //自增ID 模块		http://www.pinterspace.com/2015/mongoose-定义自增字段.html
 autoIncrement.initialize(mongoose.connection);
 
-const BaseQuery=require('../models/dbHelper'),
-	  aQuery=BaseQuery.ArticlesQuery;
-
-
+const BaseQuery = require('../models/dbHelper'),
+	aQuery = BaseQuery.ArticlesQuery;
 
 //文章
 const ArticleSchema = new Schema({
-	author:{			//作者
-        type:String
-    },
-    title:String,		//标题
-    category:{			//类型
-	    type: ObjectId,	
-	    ref: 'Category'
+	author: { //作者
+		type: String
 	},
-	tags:[{				//标签
-	    type: ObjectId, ref: 'Tag'
+	title: String, //标题
+	category: { //类型
+		type: ObjectId,
+		ref: 'Category'
+	},
+	tags: [{ //标签
+		type: ObjectId,
+		ref: 'Tag'
 	}],
-	content:String,				//内容
-    tagcontent:String,			//带格式的内容
-    imgurl:String,				//封面
-    source: {type: String},		//文章来源(出处)
-    likes:{type: Number, default: 0 },			//点赞数
-    pv:{type: Number, default: 0 },				//浏览量
-    comments:{type: Number, default: 0 },		//评论数
-    top: { type: Boolean, default: false }, 	// 置顶文章
-    good: { type: Boolean, default: false }, 	// 精华文章
-    isDraft: {type: Boolean,default: false},					//是否草稿
-    isActive: {type: Boolean, default: true},    //是否有效
-    //创建时间
-    create_time: {type: Date, default: Date.now},
-    //更新时间或修改时间
-    update_time: {type: Date, default: Date.now }
+	content: String, //内容
+	tagcontent: String, //带格式的内容
+	imgurl: String, //封面
+	source: { //文章来源(出处)
+		type: String
+	},
+	likes: {
+		type: Number,
+		default: 0
+	}, //点赞数
+	pv: {
+		type: Number,
+		default: 0
+	}, //浏览量
+	comments: {
+		type: Number,
+		default: 0
+	}, //评论数
+	top: {
+		type: Boolean,
+		default: false
+	}, // 置顶文章
+	good: {
+		type: Boolean,
+		default: false
+	}, // 精华文章
+	isDraft: {
+		type: Boolean,
+		default: false
+	}, //是否草稿
+	isActive: {
+		type: Boolean,
+		default: true
+	}, //是否有效
+	//创建时间
+	create_time: {
+		type: Date,
+		default: Date.now
+	},
+	//更新时间或修改时间
+	update_time: {
+		type: Date,
+		default: Date.now
+	}
 })
-
 
 /*const categorySchema = mongoose.Schema({
   name: String
 }*/
 //Schema.method( 'say', function(){console.log('hello');} ) 	//这样Model和Entity的实例就能使用这个方法了
- 
 
-
-
- 
 //查找所有
 ArticleSchema.statics.findAll = function(callback) {
-	let query=aQuery();
-	
-    return this.model('Article')
-        .find(query)
-        .sort({ create_time: -1 })
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
-}
+	let query = aQuery();
 
+	return this.model('Article')
+		.find(query)
+		.sort({
+			create_time: -1
+		})
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
+}
 
 //查找最新的
-ArticleSchema.statics.findNew = function(limit,callback) {
-	let query=aQuery();
-    return this.model('Article')
-        .find(query)
-        .sort({ create_time: -1 })
-        .limit(limit)
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
+ArticleSchema.statics.findNew = function(limit, callback) {
+	let query = aQuery();
+	return this.model('Article')
+		.find(query)
+		.sort({
+			create_time: -1
+		})
+		.limit(limit)
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
 }
 //查找上一篇
-ArticleSchema.statics.findPrev = function(bid,callback) {
-	let query=aQuery();
-		query.bId={
-			'$lt':bid
-		}
-    return this.model('Article')
-      	.findOne(query).sort({bId: -1}).limit(1)
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
+ArticleSchema.statics.findPrev = function(bid, callback) {
+	let query = aQuery();
+	query.bId = {
+		'$lt': bid
+	}
+	return this.model('Article')
+		.findOne(query).sort({
+			bId: -1
+		}).limit(1)
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
 }
 
 //查找下一篇
-ArticleSchema.statics.findNext = function(bid,callback) {
-	let query=aQuery();
-		query.bId={
-			'$gt':bid
-		}
-    return this.model('Article')
-        .findOne(query).sort({bId: 1}).limit(1)		//此处.sort({bId: -1}).limit(1) 可省
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
+ArticleSchema.statics.findNext = function(bid, callback) {
+	let query = aQuery();
+	query.bId = {
+		'$gt': bid
+	}
+	return this.model('Article')
+		.findOne(query).sort({
+			bId: 1
+		}).limit(1) //此处.sort({bId: -1}).limit(1) 可省
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
 }
-
-
 
 //通过自增bId来查找
-ArticleSchema.statics.findByBId = function(id,callback) {
-	return this.model('Article').findOne({bId:id}, function (error, doc) {
-        if (error) {
-            console.log(error);
-            callback(null);
-        } else {
-        	callback(doc);
-        }
-    });
-  
+ArticleSchema.statics.findByBId = function(id, callback) {
+	return this.model('Article').findOne({
+		bId: id
+	}, function(error, doc) {
+		if(error) {
+			console.log(error);
+			callback(null);
+		} else {
+			callback(doc);
+		}
+	});
+
 }
 
-
 //根据时间来查找
-ArticleSchema.statics.findByTime = function(time,callback) {
+ArticleSchema.statics.findByTime = function(time, callback) {
 	return this.model('Article')
-        .find({create_time:time})
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
+		.find({
+			create_time: time
+		})
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
 }
 
 //查询热门文章 (根据浏览数来排序)--客户端
-ArticleSchema.statics.findByHot = function(limit,callback) {
-	let query=aQuery();
+ArticleSchema.statics.findByHot = function(limit, callback) {
+	let query = aQuery();
 	return this.model('Article')
-        .find(query)
-        .sort({views:-1})
-        .limit(limit)
-        .exec(function (error, hot) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(hot);
-            }
-        });
+		.find(query)
+		.sort({
+			views: -1
+		})
+		.limit(limit)
+		.exec(function(error, hot) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(hot);
+			}
+		});
 }
 
 //根据文章标题进行查找
-ArticleSchema.statics.findByTitle = function(title,callback) {
+ArticleSchema.statics.findByTitle = function(title, callback) {
 	return this.model('Article')
-        .find({title:{$regex:''+title+''}})
-        .sort({create_time:-1})
-        .exec(function (error, doc) {
-            if (error) {
-                console.log(error);
-                callback([]);
-            } else {
-                callback(doc);
-            }
-        });
+		.find({
+			title: {
+				$regex: '' + title + ''
+			}
+		})
+		.sort({
+			create_time: -1
+		})
+		.exec(function(error, doc) {
+			if(error) {
+				console.log(error);
+				callback([]);
+			} else {
+				callback(doc);
+			}
+		});
 }
 //根据文章文章id进行更新阅读浏览数
-ArticleSchema.statics.findBybIdUpdate = function(id,callback) {
+ArticleSchema.statics.findBybIdUpdate = function(id, callback) {
 	return this.model('Article')
-        .update({bId:id},{'$inc':{pv: 1}})
-        .exec(function (error) {
-            if (error) {
-                console.log(error);
-            } else {
-                callback();
-            }
-        });
+		.update({
+			bId: id
+		}, {
+			'$inc': {
+				pv: 1
+			}
+		})
+		.exec(function(error) {
+			if(error) {
+				console.log(error);
+			} else {
+				callback();
+			}
+		});
 }
-
 
 /* var CounterSchema = Schema({
  	_id: {
@@ -225,10 +269,10 @@ ArticleSchema.statics.findBybIdUpdate = function(id,callback) {
 });*/
 
 ArticleSchema.plugin(autoIncrement.plugin, {
-    model: 'Article',   //数据模块，需要跟同名 x.model("Books", BooksSchema);
-    field: 'bId',     //字段名
-    startAt: 1,    //开始位置，自定义
-    incrementBy:1    //每次自增数量
+	model: 'Article', //数据模块，需要跟同名 x.model("Books", BooksSchema);
+	field: 'bId', //字段名
+	startAt: 1, //开始位置，自定义
+	incrementBy: 1 //每次自增数量
 });
 ArticleSchema.pre('save', function(next) {
 	if(this.isNew) {
@@ -239,5 +283,5 @@ ArticleSchema.pre('save', function(next) {
 
 	next()
 });
- 
-mongoose.model('Article', ArticleSchema);  
+
+mongoose.model('Article', ArticleSchema);

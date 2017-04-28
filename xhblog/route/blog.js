@@ -78,7 +78,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 
 
 //列出类型下的文章
-router.get('/blog/category/:name',function(req,res,next){
+router.get('/category/:name',function(req,res,next){
 	let category_name=req.params.name;
 	async.waterfall([
 	      function(cb){
@@ -115,13 +115,14 @@ router.get('/search',Common.loadCommonData,function(req,res,next){
 			Article.find({title:{$regex:''+title+''}})
 			.sort({create_time:-1})
 			.exec(function(err,articles){
-				!articles?[]:articles;
-				console.log(articles);
 				callback(null,articles)
 			});
 		},
 	],function(err,articles){
-		console.log(articles);
+		if(err){
+			console.log('文章查询出错:'+err);
+			return next(err);
+		}
 		res.render("www/search_results",{
 			articles:articles,
 			title:'搜索结果'

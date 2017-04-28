@@ -5,38 +5,14 @@
 		<link rel="alternate" media="handheld" href="#" />
 		<meta charset="utf-8">
 		<title><%=title%></title>
-		<meta property="qc:admins" content="274641777261051516375" />
-		<link rel="stylesheet" type="text/css" href="/font/css/font-awesome.min.css"/>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/common.css">
-		<link rel="stylesheet" type="text/css" href="/stylesheets/module.css">
-		<link rel="stylesheet" type="text/css" href="/stylesheets/new-index.css">
-<!--		<script type="text/javascript" src="/javascripts/jquery-1.11.2.js"></script>-->
 	</head>
 	<body>
-		
-		<%include header.html%>
-		<div><%=articles%></div>
-		<div class="w-1200 center clearfix">
-			<ul id="search-results">
-				<%if(articles&&!articles.length){%>
-					<%articles.forEach(function(value){%>
-					<li>
-						<h3 class="title">
-							<a href="/blog/<%=value.bId%>"><%=value.title%></a>
-						</h3>
-						<div class="clearfix">
-							<img src="/images/hd3.jpg" alt="" class="search-img hidden-xs" height="50">
-							<div class="meta-info">
-								<div class="desc">
-									<%-value.content.substring(0,100)%> ...
-								</div>
-							</div>
-						</div>
-					</li>
-					<%})%>
-				<%}%>
-			</ul>
-		</div>
-
+		<%if(articles&&articles.length){%>
+		<ul>
+			<%articles.forEach(function(value){%>
+				<li><%=value.title%></li>
+			<%})%>
+		</ul>
+	   <%}%>
 	</body>
 </html>
