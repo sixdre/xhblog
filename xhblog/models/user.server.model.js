@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 //用户
 const UserSchema=new Schema({ 
- 	username:{				//用户名唯一
+ 	  username:{				//用户名唯一
         type:'String',
         required:true,
         unique: true
