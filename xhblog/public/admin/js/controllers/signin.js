@@ -13,7 +13,6 @@ function($rootScope, $scope,$cookies,$http, $state,USER,AUTH_EVENTS) {
 			username: $scope.user.username, 
 			password: $scope.user.password })
 			.then(function(res) {
-				console.log(res);
 				var code = res.data.code;
 				var message=res.data.message;
 				switch(code) {

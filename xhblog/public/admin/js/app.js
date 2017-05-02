@@ -79,11 +79,9 @@ angular.module('app', [
 			return config;
 		},
 		response:function(response){
-			console.log(response);
 			return response;
 		},
 		responseError: function(response) {
-			console.log(response);
 			$rootScope.$broadcast({
 			        401: AUTH_EVENTS.notAuthenticated,	//session失效
 			        403: AUTH_EVENTS.notAuthorized,

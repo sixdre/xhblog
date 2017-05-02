@@ -222,9 +222,19 @@ $(function() {
 	}
 	likes();
 	
-	
-	
-	
+//	
+//	$.ajax({
+//		url:'/comment',
+//		type:'GET',
+//		data:{
+//			articleId:'58f4d366f012f829b05b15fe'
+//		},
+//		success:function(res){
+//			console.log(res);
+//		}
+//		
+//	})
+//	
 	
 	
 	

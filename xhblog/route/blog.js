@@ -18,6 +18,7 @@ const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
 //公用数据
 const Common=require('./common');
+const Auth=require('../middleware/auth');
 
 //文章详情页面
 router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
@@ -65,7 +66,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 		}]
 		
 	},function(err,results){
-		res.render("www/detial",{
+		res.render("www/new_detial",{
 			article:results.doc,
 			hot:results.hot,
 			title:results.doc.title,
@@ -76,6 +77,98 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 	});
 })
 
+
+//评论
+router.get('/comment',function(req,res,next){
+	let articleId=req.query.articleId,
+		order_by=req.query.order_by,
+		page=req.query.page;
+		
+		Comment.find({articleId:articleId})
+		.populate('from')
+		.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
+			if(err){
+				console.log(err);
+				next(err);
+			}
+			res.json({
+				code:1,
+				comments:comments
+			})
+		});
+})
+
+
+//提交评论
+router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
+	let _comment=req.body;
+	_comment.from=req.session["User"];
+	if(_comment.cId){
+		let reply={
+			from:_comment.from._id,
+			to:_comment.toId,
+			content:_comment.content,
+			create_time:new Date()
+		};
+		Comment.update({_id:_comment.cId},{
+			$addToSet:{"reply": reply}
+		}).then(function(){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log(err);
+		});
+	}else{
+		let comment=new Comment(_comment);
+		comment.save().then(function(comment){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log('评论报错出错:'+err);
+		});
+	}
+})
+
+//评论点赞
+router.get('/comment/point',function(req,res,next){
+	let commentId=req.query.commentId,
+		replyId=req.query.replyId;
+		
+		if(!commentId){
+			return res.json({
+				code:-2,
+				message:'请求参数有误'
+			})
+		}
+		if(commentId&&!replyId){			//评论点赞
+			Comment.update({_id:commentId},{'$inc':{'likes':1}}).then(function(){
+				res.json({
+					code:1,
+					message:'点赞更新成功'
+				})
+			}).catch(function(err){
+				console.log('评论点赞更新出错:'+err)
+			})
+		}else if(commentId&&replyId){		//给回复点赞
+			Comment.findById(commentId).then(function(comment){
+				console.log(comment.reply);
+				comment.reply.forEach(function(value,key){
+					if(value._id==replyId){
+						value.likes+=1;
+						comment.save(function(){
+							res.json({
+								code:1,
+								message:'点赞更新成功'
+							})
+						})
+						return;
+					}
+				})
+			})
+		}
+})
 
 //列出类型下的文章
 router.get('/category/:name',function(req,res,next){

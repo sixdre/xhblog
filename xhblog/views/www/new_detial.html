@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title><%=title%></title>
+		<link rel="stylesheet" type="text/css" href="/libs/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="/libs/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/page.css" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+		<script type="text/javascript" src="/libs/jquery/dist/jquery.min.js"></script>
+	</head>
+	<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="width-limit">
+			<!-- 左上方 Logo -->
+			<a class="logo" href="/"><img src="/images/logo-js.png" alt="Logo"></a>
+
+			<!-- 右上角 -->
+			<!-- 未登录显示登录/注册/ -->
+			<a class="btn sign-up" href="/regist">注册</a>
+			<a class="btn sign-in" href="/login">登录</a>
+
+
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu" aria-expanded="true">
+			          <span class="icon-bar"></span>
+			          <span class="icon-bar"></span>
+			          <span class="icon-bar"></span>
+			        </button>
+				</div>
+				<div class="navbar-collapse collapse in" id="menu" aria-expanded="true">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="/">
+								<span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+							</a>
+						</li>
+						<li class="">
+							<a class="app-download-btn" href="/apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
+						</li>
+						<li class="search">
+							<form action="/search" method="GET">
+								<!--<input name="utf8" type="hidden" value="✓">-->
+								<input type="text" name="wd" id="wd" value="" placeholder="搜索" class="search-input">
+								<button type="submit" class="search-btn" ><i class="fa fa-search search_ic"></i></button>
+							</form>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="post">
+		<div class="article">
+			<h1 class="title"><%=article.title%></h1>
+		</div>
+	</div>
+	
+	
+
+
+	<script src="/libs/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>
