@@ -22,6 +22,13 @@ module.exports=function(app){
 	app.use('/',indexRouter);
 	app.use('/',blogRouter);
 	app.use('/',userRouter);
-	app.use('/admin',adminRouter);
+
+	app.get('/admin',function(req,res,next){
+		res.render('admin', {
+			title: '博客后台管理系统',
+		});
+	})
+	app.all('/api/admin/*',Auth.checkAdmin);
+	app.use('/api/admin',adminRouter);
 	
 }

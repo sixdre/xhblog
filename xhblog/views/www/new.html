@@ -124,11 +124,10 @@
 	<script type="text/javascript">
 		$(function(){
 			var pagehtml=page({
-				pagecount:$('#pagination').data('total'),
-				pagesize:$('#pagination').data('pagesize'),
-				currentpage:$('#pagination').data('curp')
+				pagecount:parseInt($('#pagination').data('total')),
+				pagesize:parseInt($('#pagination').data('pagesize')),
+				currentpage:parseInt($('#pagination').data('curp'))
 			});
-			
 			//分页
 			$("#pagination").html(pagehtml);
 		})

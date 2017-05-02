@@ -11,7 +11,7 @@ angular.module('app').controller('AppCtrl',
 			function getCommonData(){
 				$http({ 
 					method: "GET",
-					url: "/admin/loadData"
+					url: "/api/admin/loadData"
 				}).then(function(res) {
 					DataService.ArticleTotal=res.data.articleTotal;
 					DataService.Words=res.data.lmdoc;
@@ -49,19 +49,19 @@ angular.module('app').controller('AppCtrl',
 
 			//退出登录
 			$scope.logout = function() {
-				$cookies.remove(USER.user_name);
-				$state.go("access.signin");
-//				$http({
-//					method: "POST",
-//					url: "/admin/logout"
-//				}).then(function(res) {
-//					if(res.data.code == 1) {
-//						alert('退出登陆成功')
+//				$cookies.remove(USER.user_name);
+//				$state.go("access.signin");
+				$http({
+					method: "GET",
+					url: "/admin_logout"
+				}).then(function(res) {
+					if(res.data.code == 1) {
+						alert('退出登陆成功')
 //						$state.go("access.signin");
-//					}
-//				}, function(err) {
-//
-//				})
+					}
+				}, function(err) {
+
+				})
 			}
 
 			//留言回复

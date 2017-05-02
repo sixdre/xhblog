@@ -62,7 +62,7 @@ angular.module('app', [
 	return {
 		request: function(config) {
 			var username = $cookies.get(USER.user_name);
-            if (config.url.indexOf('admin/login')>-1||config.url.indexOf('admin/regist')>-1 || config.url.indexOf('.html')>-1) {
+            if (config.url.indexOf('admin_login')>-1||config.url.indexOf('admin_regist')>-1 || config.url.indexOf('.html')>-1) {
              	return config;
             }
             //用户身份标识
@@ -79,9 +79,11 @@ angular.module('app', [
 			return config;
 		},
 		response:function(response){
+			console.log(response);
 			return response;
 		},
 		responseError: function(response) {
+			console.log(response);
 			$rootScope.$broadcast({
 			        401: AUTH_EVENTS.notAuthenticated,	//session失效
 			        403: AUTH_EVENTS.notAuthorized,

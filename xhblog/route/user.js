@@ -134,6 +134,87 @@ router.get('/logout',function(req,res,next){
 	});
 })
 
+router.get('/admin_logout',function(req,res,next){
+	delete req.session['manager'];
+	res.json({
+		code:1,
+		message:'退出登陆成功'
+	});
+})
+//后台登陆
+router.post('/admin_login',function(req,res,next){
+	console.log('sxs')
+	let username=req.body.username;
+	let password=req.body.password;
+	User.findOne({username:username}).then(function(manager){
+		if(!manager|| !manager.isAdmin){
+			res.json({
+				code:-1,
+				message:'账号不存在'
+		    });
+		}else if(manager.password == md5(password)){
+			req.session["manager"] = manager;
+			res.json({
+				code : 1,
+				message:'登陆成功'	//登陆成功
+			});			
+		}else{
+			res.json({
+				code : -2,
+				message:'密码错误'	//密码错误
+			});			
+		}
+	}).catch(function(err){
+		console.log('登陆出错:'+err);
+		next(err);
+	})
+})
+
+
+//后台注册
+router.post('/admin_regist',function(req,res,next){
+	let manager = new User({
+		username: req.body.username,
+		email:req.body.email,
+		password: md5(req.body.password)
+	});
+	User.findOne({isAdmin:true}).exec().then(function(user1){
+		if(user1){
+			throw {
+				code:-1,
+				message:'已有超级管理员，不可重复创建'
+			};
+		}
+		return User.findOne({username:req.body.username}).exec();
+	}).then(function(user2){
+			if(user2){
+				throw {
+					code:-2,
+					message:'该用户名已被注册'
+				};
+			}
+			manager.isAdmin=true;
+			manager.save().then(function(manager){
+				res.json({
+					code:1,
+					message:'成功创建超级管理员！'
+				});
+			});
+	}).catch(function(err){
+		console.log('注册失败:'+err);
+		if(err.code){
+			return res.json({
+				code:err.code,
+				message:err.message
+			});
+		}
+		next(err);
+	});
+})
+
+
+
+
 module.exports = router;
 
 

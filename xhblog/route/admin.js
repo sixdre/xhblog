@@ -62,15 +62,9 @@ const upload = multer({
 //	}
 //	next();
 //})/
-//渲染后台管理页
-router.get('/',function(req,res,next){
-	res.render('admin', {
-		title: '博客后台管理系统',
-	});
-})
 
 //后台angular 请求数据路由
-router.get('/loadData',Auth.checkAdmin,function(req,res,next){
+router.get('/loadData',function(req,res,next){
 	async.parallel({
 		lmdoc:function(callback){
 			Lm.find({"state.isRead":false}).populate('user','username').exec(function(err,lmdoc){
@@ -114,90 +108,14 @@ router.get('/loadData',Auth.checkAdmin,function(req,res,next){
 			categorys:results.categorys,	//文章分类
 			tags:results.tags				//文章标签
 		});
+	
 	});
 });
 
-//后台登陆
-router.post('/login',function(req,res,next){
-	let username=req.body.username;
-	let password=req.body.password;
-	User.findOne({username:username}).then(function(manager){
-		if(!manager|| !manager.isAdmin){
-			res.json({
-				code:-1,
-				message:'账号不存在'
-		    });
-		}else if(manager.password == md5(password)){
-			req.session["manager"] = manager;
-			res.json({
-				code : 1,
-				message:'登陆成功'	//登陆成功
-			});			
-		}else{
-			res.json({
-				code : -2,
-				message:'密码错误'	//密码错误
-			});			
-		}
-	}).catch(function(err){
-		console.log('登陆出错:'+err);
-		next(err);
-	})
-})
 
-
-//后台注册
-router.post('/regist',function(req,res,next){
-	let manager = new User({
-		username: req.body.username,
-		email:req.body.email,
-		password: md5(req.body.password)
-	});
-	User.findOne({isAdmin:true}).exec().then(function(user1){
-		if(user1){
-			throw {
-				code:-1,
-				message:'已有超级管理员，不可重复创建'
-			};
-		}
-		return User.findOne({username:req.body.username}).exec();
-	}).then(function(user2){
-			if(user2){
-				throw {
-					code:-2,
-					message:'该用户名已被注册'
-				};
-			}
-			manager.isAdmin=true;
-			manager.save().then(function(manager){
-				res.json({
-					code:1,
-					message:'成功创建超级管理员！'
-				});
-			});
-	}).catch(function(err){
-		console.log('注册失败:'+err);
-		if(err.code){
-			return res.json({
-				code:err.code,
-				message:err.message
-			});
-		}
-		next(err);
-	});
-})
-
-//后台退出
-router.post('/logout',function(req,res,next){
-	delete req.session["manager"];
-	res.json({
-		code : 1,
-		message:'退出成功'
-	});
-})
 
 //留言
-router.post('/word',Auth.checkAdmin,function(req,res,next){
+router.post('/word',function(req,res,next){
 	let id=req.body.id,
 		content=req.body.replyContent;
 	Lm.update({_id:id},{$set:{
@@ -222,7 +140,7 @@ router.post('/word',Auth.checkAdmin,function(req,res,next){
 
 
 //发布新文章
-router.post('/article/publish',Auth.checkAdmin,function(req,res,next){
+router.post('/article/publish',function(req,res,next){
 	let article=req.body;
 		article['author']=req.session["manager"].username||'徐小浩';
 	let _article=new Article(article);
@@ -246,7 +164,7 @@ router.post('/article/publish',Auth.checkAdmin,function(req,res,next){
 })
 
 //获取所有文章
-router.get('/article/getArticles',Auth.checkAdmin,function(req,res,next){
+router.get('/article/getArticles',function(req,res,next){
 	let query = Article.find({}).sort({"time": -1});
 	query.find({},function(err,article){
 		if(err){
@@ -259,7 +177,7 @@ router.get('/article/getArticles',Auth.checkAdmin,function(req,res,next){
 })
 
 //分页展示
-router.get('/article/page',Auth.checkAdmin,function(req,res,next){
+router.get('/article/page',function(req,res,next){
 	let current=parseInt(req.query.current)-1;
 	let textCount=parseInt(req.query.textCount);
 	let query = Article.find({}).sort({
@@ -287,7 +205,7 @@ router.get('/article/page',Auth.checkAdmin,function(req,res,next){
 })
 
 //编辑文章根据id查找
-router.get('/article/findById',Auth.checkAdmin,function(req,res,next){
+router.get('/article/findById',function(req,res,next){
 	let id=req.query.id;
 	Article.findOne({_id:id}).populate('category').populate('tags').then(function(article){
 		res.json({
@@ -300,7 +218,7 @@ router.get('/article/findById',Auth.checkAdmin,function(req,res,next){
 })
 
 //编辑更新文章
-router.post('/article/update',Auth.checkAdmin,function(req,res,next){	//有问题待修复
+router.post('/article/update',function(req,res,next){	//有问题待修复
 	let newArticle=req.body,
 		bId=newArticle.bId;
 	Article.findOne({bId:bId}).then(function(article){
@@ -321,7 +239,7 @@ router.post('/article/update',Auth.checkAdmin,function(req,res,next){	//有问�
 })
 
 //删除文章 (单项)
-router.post('/article/romoveOne',Auth.checkAdmin,function(req,res,next){
+router.post('/article/romoveOne',function(req,res,next){
 	let id=req.body.id;
 	Article.findById(id).then(function(article){
 		return Category.update({_id:article.category},{$pull:{"articles": article._id}});
@@ -340,7 +258,7 @@ router.post('/article/romoveOne',Auth.checkAdmin,function(req,res,next){
 
 
 //删除文章 （多选)
-router.post('/article/removeMulti',Auth.checkAdmin,function(req,res,next){
+router.post('/article/removeMulti',function(req,res,next){
 	console.log(req.body.ids);
 	Article.find({_id:{"$in":req.body.ids}}).then(function(articles){
 		return Promise.all(articles.map(function(article){
@@ -367,7 +285,7 @@ router.post('/article/removeMulti',Auth.checkAdmin,function(req,res,next){
 
 
 //根据标题来搜寻文章
-router.get('/article/search',Auth.checkAdmin,function(req,res,next){
+router.get('/article/search',function(req,res,next){
 	let title=req.query.title;
 	Article.find({title:{$regex:''+title+''}}).then(function(articles){
 		if(articles.length){
@@ -390,7 +308,7 @@ router.get('/article/search',Auth.checkAdmin,function(req,res,next){
 
 
 //获取友情链接数据 
-router.get('/friend',Auth.checkAdmin,function(req,res,next){
+router.get('/friend',function(req,res,next){
 	Friend.find({}).sort({"meta.update_time":-1}).then(function(friends){
 		res.json({
 			code:1,
@@ -404,7 +322,7 @@ router.get('/friend',Auth.checkAdmin,function(req,res,next){
 
 
 //添加友情链接
-router.post('/friend',Auth.checkAdmin,function(req,res,next){
+router.post('/friend',function(req,res,next){
 	const id=req.body._id,
 		title=req.body.title,
 		url=req.body.url,
@@ -458,7 +376,7 @@ router.post('/friend',Auth.checkAdmin,function(req,res,next){
 });
 
 //删除友情链接
-router.post('/friend/remove',Auth.checkAdmin,function(req,res,next){
+router.post('/friend/remove',function(req,res,next){
 	let id=req.body.id
 	Friend.remove({_id:id}).then(function(){
 		res.json({
@@ -474,7 +392,7 @@ router.post('/friend/remove',Auth.checkAdmin,function(req,res,next){
 
 
 //获取category数据
-router.get("/category",Auth.checkAdmin,function(req,res,next){
+router.get("/category",function(req,res,next){
 	Category.find({}).exec(function(err,categorys){
 		res.json({
 			code:1,
@@ -484,7 +402,7 @@ router.get("/category",Auth.checkAdmin,function(req,res,next){
 })
 
 //分类添加
-router.post("/category",Auth.checkAdmin,function(req,res,next){
+router.post("/category",function(req,res,next){
 	let category=req.body.category,
 		id=category._id,
 		name=category.name;
@@ -545,7 +463,7 @@ router.post("/category",Auth.checkAdmin,function(req,res,next){
 
 
 //分类删除
-router.post('/category/remove',Auth.checkAdmin,function(req,res,next){
+router.post('/category/remove',function(req,res,next){
 	let id=req.body.id;
 	Category.remove({_id:id}).exec(function(err){
 		res.json({
@@ -556,7 +474,7 @@ router.post('/category/remove',Auth.checkAdmin,function(req,res,next){
 })	
 
 //获取标签数据
-router.get('/tag',Auth.checkAdmin,function(req,res,next){
+router.get('/tag',function(req,res,next){
 	Tag.find({}).exec(function(err,tags){
 		res.json({
 			code:1,
@@ -566,7 +484,7 @@ router.get('/tag',Auth.checkAdmin,function(req,res,next){
 })
 
 //新增标签
-router.post('/tag',Auth.checkAdmin,function(req,res,next){
+router.post('/tag',function(req,res,next){
 	console.log(req.body.tag);
 	let _tag=req.body.tag,
 		id=_tag._id,
@@ -626,7 +544,7 @@ router.post('/tag',Auth.checkAdmin,function(req,res,next){
 })
 
 //删除标签
-router.post('/tag/remove',Auth.checkAdmin,function(req,res,next){
+router.post('/tag/remove',function(req,res,next){
 	let id=req.body.tag._id;
 	Tag.remove({_id:id}).exec(function(err){
 		res.json({
@@ -638,7 +556,7 @@ router.post('/tag/remove',Auth.checkAdmin,function(req,res,next){
 
 
 //获取注册用户
-router.get('/users',Auth.checkAdmin,function(req,res,next){
+router.get('/users',function(req,res,next){
 	console.log('123');
 	User.find({}).sort({'create_time':-1}).then(function(users){
 		res.json({
@@ -663,7 +581,7 @@ router.get('/users',Auth.checkAdmin,function(req,res,next){
 
 //首页banner图的添加
 
-router.post('/banner',Auth.checkAdmin,function(req,res,next){
+router.post('/banner',function(req,res,next){
 	upload(req, res, function (err) {
 		if(err){
 			return console.log("upload err:",err);
