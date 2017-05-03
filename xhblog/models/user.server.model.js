@@ -6,17 +6,17 @@ const mongoose = require('mongoose')
 //用户
 const UserSchema=new Schema({ 
  	  username:{				//用户名唯一
-        type:'String',
+        type:String,
         required:true,
         unique: true
     },
-    password:{
-        type:'String',
-        required:true 		
-    },
     email:{					
-        type:'String',
+        type:String,
         required:true
+    },
+    password:{
+        type:String,
+        required:true 		
     },
     isAdmin:{ type: Boolean, default: false },
     create_time: { type: Date, default: Date.now }        //创建时间

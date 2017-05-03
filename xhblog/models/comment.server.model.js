@@ -19,17 +19,17 @@ const CommentSchema = new Schema({
 		    },
 	  }],
 	  content: String,
-	  likes:{
-		  type:Number,
-		  default:0
-	  },
+	  likes:[{
+		  type: ObjectId, 
+		  ref: 'User'
+	  }],
 	  create_time:{
 		  type: Date,
-      	  default: Date.now()
+      default: Date.now()
 	  },
 	  update_time: {
-	      type: Date,
-	      default: Date.now()
+	    type: Date,
+	    default: Date.now()
 	  }  
 });
 CommentSchema.pre('save', function(next) {

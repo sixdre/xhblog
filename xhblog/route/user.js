@@ -69,7 +69,7 @@ router.post('/regist',function(req,res,next){
 	let user=new User({
 		username:username,
 		password:md5(password),
-		email:req.body.email
+		email:email
 	});
 	if(validator.isEmpty(username)){
 		res.json({
@@ -100,7 +100,7 @@ router.post('/regist',function(req,res,next){
 		User.findOne({username:username},function(err,result){
 			if(err){
 				console.dir("查询出错");
-				next(err);
+				return next(err);
 			}else if(result){
 				res.json({
 					code:-1,
@@ -109,8 +109,8 @@ router.post('/regist',function(req,res,next){
 			}else{
 				user.save(function(err){
 					if(err){
-						console.dir("保存用户出错");
-						next(err);
+						console.dir("保存用户出错"+err);
+						return next(err);
 					}
 					res.json({
 						code:1,

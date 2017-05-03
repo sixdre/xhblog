@@ -53,6 +53,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 		},
 		prevArticle:function(callback){
 			Article.findPrev(bid,function(prevArticle){		//上一篇
+				let prevArticleName=prevArticle;
 				callback(null,prevArticle);
 			});
 		},
@@ -61,19 +62,28 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 			Comment.find({articleId:articleId})
 			.populate('from')
 			.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
+				console.log(comments[0].reply)
+				let cTotal=comments.length;
+				comments.forEach(function(value){
+					if(value.reply&&value.reply.length>0){
+						cTotal+=value.reply.length;
+					}
+				})
+				results.cTotal=cTotal;
 				callback(null,comments);
 			});
-		}]
-		
+		}],
 	},function(err,results){
-		res.render("www/new_detial",{
+		let rsObj={
 			article:results.doc,
 			hot:results.hot,
 			title:results.doc.title,
 			nextArticle:results.nextArticle,
 			prevArticle:results.prevArticle,
-			comments:results.comments			//评论
-		});
+			comments:results.comments,			//评论
+			cTotal:results.cTotal			//评论数量
+		}
+		res.render("www/new_detial",rsObj);
 	});
 })
 
@@ -91,8 +101,7 @@ router.get('/comment',function(req,res,next){
 				console.log(err);
 				next(err);
 			}
-			res.json({
-				code:1,
+			res.render("www/comment",{
 				comments:comments
 			})
 		});
@@ -134,8 +143,9 @@ router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 //评论点赞
 router.get('/comment/point',function(req,res,next){
 	let commentId=req.query.commentId,
-		replyId=req.query.replyId;
-		
+		replyId=req.query.replyId,
+		user=req.session['User'];
+		console.log(user._id)
 		if(!commentId){
 			return res.json({
 				code:-2,
@@ -143,13 +153,42 @@ router.get('/comment/point',function(req,res,next){
 			})
 		}
 		if(commentId&&!replyId){			//评论点赞
-			Comment.update({_id:commentId},{'$inc':{'likes':1}}).then(function(){
-				res.json({
-					code:1,
-					message:'点赞更新成功'
-				})
-			}).catch(function(err){
-				console.log('评论点赞更新出错:'+err)
+			Comment.findOne({_id:commentId}).exec(function(err,comment){
+				if(err){
+					console.log('评论点赞出错:'+err);
+					return next(err);
+				}
+				
+				if(comment.likes.indexOf(user._id)>-1){
+					res.json({
+						code:-3,
+						message:'您已点赞'
+					})
+				}else{
+//					Comment.update({_id:commentId}, {'$addToSet':{"likes":user} }).exec(function(err){
+//						if(err){
+//							console.log('评论点赞更新出错:'+err);
+//							next(err);
+//						}
+//						res.json({
+//							code:1,
+//							message:'点赞更新成功'
+//						});
+//					})
+
+					comment.likes.push(user);
+					console.log(comment);
+					comment.save(function(err,ct){
+						if(err){
+							console.log('评论点赞保存出错:'+err);
+							return next(err);
+						}
+						res.json({
+							code:1,
+							message:'点赞更新成功'
+						});
+					});
+				}
 			})
 		}else if(commentId&&replyId){		//给回复点赞
 			Comment.findById(commentId).then(function(comment){
@@ -168,6 +207,42 @@ router.get('/comment/point',function(req,res,next){
 				})
 			})
 		}
+		
+		
+		
+		
+//		if(!commentId){
+//			return res.json({
+//				code:-2,
+//				message:'请求参数有误'
+//			})
+//		}
+//		if(commentId&&!replyId){			//评论点赞
+//			Comment.update({_id:commentId},{'$inc':{'likes':1}}).then(function(){
+//				res.json({
+//					code:1,
+//					message:'点赞更新成功'
+//				})
+//			}).catch(function(err){
+//				console.log('评论点赞更新出错:'+err)
+//			})
+//		}else if(commentId&&replyId){		//给回复点赞
+//			Comment.findById(commentId).then(function(comment){
+//				console.log(comment.reply);
+//				comment.reply.forEach(function(value,key){
+//					if(value._id==replyId){
+//						value.likes+=1;
+//						comment.save(function(){
+//							res.json({
+//								code:1,
+//								message:'点赞更新成功'
+//							})
+//						})
+//						return;
+//					}
+//				})
+//			})
+//		}
 })
 
 //列出类型下的文章

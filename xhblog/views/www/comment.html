@@ -1,9 +1,130 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	<body>
-	</body>
-</html>
+<div class="comment-wrapper">
+	<form id="comment_form" onsubmit="return false;">
+		<input type="hidden" id="articleId" name="articleId" value="<%=article._id%>" />
+		<div class="form-ceil form-user-avatar">
+			<img src="/images/noavatar_default.png" alt="" />
+		</div>
+		<div class="form-ceil form-content">
+			<!--<div class="form-wordlimit">0/300</div>-->
+			<div class="form-textarea">
+				<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
+			</div>
+			<div class="form-toolbars clearfix">
+				<div class="form-action">
+					<input type="submit" value="提交" id="comment_submit"/>
+				</div>
+			</div>
+		</div>
+		
+	</form>
+	
+	<div class="comment-area">
+		<div class="comment-tab">
+			<ul class="comment-tab-left list-unstyled">
+				<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=comments.length%>)</em></li>
+			</ul>
+		</div>
+		<!--<div class="comment-pager-haeder">
+			<div class="comment-pager fix">
+				<div class="comment-pager-state">
+					第<span>1</span>页/共<span>10</span>页
+				</div>
+			</div>
+		</div>-->
+		<ul class="list-unstyled">
+		<%if(comments&&comments.length>0){%>
+			<%comments.forEach(function(v,i){%>
+				<li class="clearfix comment-item">
+					<div class="avatar">
+						<img src="/images/noavatar_default.png" alt="" />
+					</div>
+					<div class="comment-main">
+						<div class="comment-header">
+							<span class="username">
+								<%if(user&&user.isAdmin){%>
+									站主
+								<%}else{%>
+									<%if(v.from){%>
+										<%=v.from.username%>
+									<%}%>
+								<%}%>
+							</span>
+							<div class="comment-time">
+								发表于<em> <%=moment(v.create_time).format('MM-DD HH:mm')%></em>
+							</div>
+						</div>
+						<div class="comment-body">
+							<div class="comment-content">
+								<%=v.content%>
+							</div>
+						</div>
+						<div class="comment-footer clearfix">
+							<em>
+								<a href="javascript:;" class="zan" data-cid="<%=v._id%>">
+									顶<span class="nums"><%=v.likes.length%></span>
+								</a>
+								<span class="pipe">|</span>
+								<%if(v.from){%>
+								<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">	回复</a>
+								<%}%>
+							</em>
+						</div>
+						<div class="reply-area">
+						<%if(v.reply&&v.reply.length>0){%>
+							<%v.reply.forEach(function(reply,i){%>
+								<div class="reply-item clearfix">
+									<div class="avatar">
+										<img src="/images/noavatar_default.png" alt="" />
+									</div>
+									<div class="comment-main">
+										<div class="comment-header">
+											<span class="username">
+												<%if(reply.from){%>
+													<%if(reply.from.isAdmin){%>
+														站主
+													<%}else{%>
+														<%=reply.from.username%>
+													<%}%>
+												<%}%>
+											</span> 
+											回复
+											<span class="username">
+												<%if(reply.to){%>
+													<%if(reply.to.isAdmin){%>
+														站主
+													<%}else{%>
+														<%=reply.to.username%>
+													<%}%>
+												<%}%>
+											</span>
+											<span class="fr comment-time">
+												回复于<em> <%=moment(reply.create_time).format('MM-DD HH:mm')%></em>
+											</span>
+										</div>
+										<div class="comment-body">
+											<div class="comment-content">
+												<%=reply.content%>
+											</div>
+										</div>
+										<div class="comment-footer clearfix">
+											<em>
+												<a href="javascript:;" class="zan" data-cid="<%=v._id%>"  data-replyid="<%=reply._id%>">
+													顶<span class="nums"><%=reply.likes%></span>
+												</a>
+												<span class="pipe">|</span>
+												<%if(reply.from){%>
+												<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>"  data-tid="<%=reply.from._id%>">	回复</a>
+												<%}%>
+											</em>
+										</div>
+									</div>
+								</div>
+							<%})%>
+						<%}%>
+						</div>
+					</div>
+				</li>
+				<%})%>
+			</ul>
+			<%}%>
+		</div>

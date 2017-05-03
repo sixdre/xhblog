@@ -30,10 +30,10 @@ const ArticleSchema = new Schema({
 	source: { //文章来源(出处)
 		type: String
 	},
-	likes: {
-		type: Number,
-		default: 0
-	}, //点赞数
+	likes: [{ //标签
+		type: ObjectId,
+		ref: 'User'
+	}], //点赞数
 	pv: {
 		type: Number,
 		default: 0
