@@ -103,20 +103,50 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  let code = err.status || 500;
-  console.log(code)
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // render the error page
-  res.status(code);
-  res.render('www/error', {
-		code: code
+
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+  	console.log(err);
+    res.status(err.status || 500);
+    res.render('www/error', {
+      message: err.message,
+      error: err
+    });
   });
-  next(err);
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('www/error', {
+    message: err.message,
+    error: {}
+  });
 });
+
+
+
+
+
+//// error handler
+//app.use(function(err, req, res, next) {
+//let code = err.status || 500;
+//console.log(code+'wdw')
+//// set locals, only providing error in development
+//res.locals.message = err.message;
+//res.locals.error = req.app.get('env') === 'development' ? err : {};
+//// render the error page
+//res.status(code);
+//res.render('www/error', {
+//		code: err.status,
+//		message: err.message
+//});
+//next(err);
+//});
 
 module.exports = app;
 

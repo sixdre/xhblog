@@ -27,9 +27,12 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 		doc:function(callback){
 			Article.findByBId(bid,function(article){
 				if(!article){			//没找到就发送一个404
-					//return res.send(404, "Oops! We didn't find it");
-					return next('404');
+//					let err = new Error('Not Found');
+//					err.status = 404;
+//					return next(err);
+					return res.status(404).render('www/404');
 				}
+			
 				let opts = [{
 		            path   : 'category',
 		            select : 'name'
@@ -62,7 +65,6 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 			Comment.find({articleId:articleId})
 			.populate('from')
 			.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
-				console.log(comments[0].reply)
 				let cTotal=comments.length;
 				comments.forEach(function(value){
 					if(value.reply&&value.reply.length>0){
@@ -74,6 +76,7 @@ router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
 			});
 		}],
 	},function(err,results){
+		
 		let rsObj={
 			article:results.doc,
 			hot:results.hot,
@@ -141,11 +144,11 @@ router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 })
 
 //评论点赞
-router.get('/comment/point',function(req,res,next){
+router.get('/comment/point',Auth.checkLoginByAjax,function(req,res,next){
+	console.log(req.query)
 	let commentId=req.query.commentId,
 		replyId=req.query.replyId,
 		user=req.session['User'];
-		console.log(user._id)
 		if(!commentId){
 			return res.json({
 				code:-2,
@@ -165,19 +168,7 @@ router.get('/comment/point',function(req,res,next){
 						message:'您已点赞'
 					})
 				}else{
-//					Comment.update({_id:commentId}, {'$addToSet':{"likes":user} }).exec(function(err){
-//						if(err){
-//							console.log('评论点赞更新出错:'+err);
-//							next(err);
-//						}
-//						res.json({
-//							code:1,
-//							message:'点赞更新成功'
-//						});
-//					})
-
-					comment.likes.push(user);
-					console.log(comment);
+					comment.likes.push(user._id);
 					comment.save(function(err,ct){
 						if(err){
 							console.log('评论点赞保存出错:'+err);
@@ -191,58 +182,36 @@ router.get('/comment/point',function(req,res,next){
 				}
 			})
 		}else if(commentId&&replyId){		//给回复点赞
-			Comment.findById(commentId).then(function(comment){
-				console.log(comment.reply);
-				comment.reply.forEach(function(value,key){
+			Comment.findOne({_id:commentId}).exec(function(err,comment){
+				if(err){
+					console.log('评论点赞出错:'+err);
+					return next(err);
+				}
+				let reply=comment.reply;
+				reply.forEach(function(value,key){
 					if(value._id==replyId){
-						value.likes+=1;
-						comment.save(function(){
+						if(value.likes.indexOf(user._id)>-1){
+							console.log('sxsc')
+							return res.json({
+								code:-3,
+								message:'您已点赞'
+							})
+						}
+						value.likes.push(user._id);
+						comment.save(function(err){
+							if(err){
+								console.log('评论点赞保存出错:'+err);
+								return next(err);
+							}
 							res.json({
 								code:1,
 								message:'点赞更新成功'
 							})
 						})
-						return;
 					}
 				})
 			})
 		}
-		
-		
-		
-		
-//		if(!commentId){
-//			return res.json({
-//				code:-2,
-//				message:'请求参数有误'
-//			})
-//		}
-//		if(commentId&&!replyId){			//评论点赞
-//			Comment.update({_id:commentId},{'$inc':{'likes':1}}).then(function(){
-//				res.json({
-//					code:1,
-//					message:'点赞更新成功'
-//				})
-//			}).catch(function(err){
-//				console.log('评论点赞更新出错:'+err)
-//			})
-//		}else if(commentId&&replyId){		//给回复点赞
-//			Comment.findById(commentId).then(function(comment){
-//				console.log(comment.reply);
-//				comment.reply.forEach(function(value,key){
-//					if(value._id==replyId){
-//						value.likes+=1;
-//						comment.save(function(){
-//							res.json({
-//								code:1,
-//								message:'点赞更新成功'
-//							})
-//						})
-//						return;
-//					}
-//				})
-//			})
-//		}
 })
 
 //列出类型下的文章

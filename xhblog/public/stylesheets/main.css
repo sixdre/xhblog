@@ -264,29 +264,29 @@ nav form .search-btn .search_ic{
 .comment-wrapper{
 	margin-top: 30px;
 }
-#comment_form {
+.comment_form {
     /*display: table;*/
     width: 100%;
     box-sizing: border-box;
     position: relative;
 }
 
-#comment_form .form-user-avatar {
+.comment_form .form-user-avatar {
     float: left;
     margin-right: 10px;
     border-radius: 50%;
     overflow: hidden;
 }
-#comment_form .form-wordlimit {
+.comment_form .form-wordlimit {
     float: right;
     color: #909090;
 }
 
-#comment_form .form-content{
+.comment_form .form-content{
 	padding-left: 60px;
 	width: 100%;
 }
-#comment_form .form-textarea textarea{
+.comment_form .form-textarea textarea{
 	padding: 10px 15px;
    width: 100%;
    height: 80px;
@@ -299,7 +299,7 @@ nav form .search-btn .search_ic{
    vertical-align: top;
    outline-style: none;
 }
-#comment_form .form-toolbars {
+.comment_form .form-toolbars {
     margin-top: 0;
     position: relative;
     z-index: 102;
@@ -309,12 +309,12 @@ nav form .search-btn .search_ic{
     border: 0;
     box-shadow: none;
 }
-#comment_form .form-toolbars .form-action {
+.comment_form .form-toolbars .form-action {
     float: right;
     margin-top: 8px;
 }
-#comment_form .form-toolbars .form-action input[type="submit"]{
-  	width: 78px;
+.comment_form .form-toolbars .form-action input[type="submit"]{
+  	/*width: 78px;
    margin: 10px 0;
    padding: 8px 18px;
    font-size: 16px;
@@ -324,7 +324,22 @@ nav form .search-btn .search_ic{
    background-color: #42c02e;
    cursor: pointer;
    outline: none;
-   display: block;
+   display: block;*/
+  	background: url(../images/post_btn.png) no-repeat 0 0;
+   width: 107px;
+   height: 35px;
+   border: none;
+   box-shadow: none;
+   color: #fff;
+}
+.comment_form .form-toolbars .form-action .cancel{
+	margin: 18px 30px 0 0;
+   font-size: 16px;
+   border: none;
+   background: transparent;
+}
+.comment_form .form-toolbars .form-action .cancel:hover {
+    color: #ea6f5a;
 }
 .comment-area{
     /*position: relative;*/

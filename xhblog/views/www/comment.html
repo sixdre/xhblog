@@ -1,5 +1,5 @@
 <div class="comment-wrapper">
-	<form id="comment_form" onsubmit="return false;">
+	<form id="comment_form" class="comment_form" onsubmit="return false;">
 		<input type="hidden" id="articleId" name="articleId" value="<%=article._id%>" />
 		<div class="form-ceil form-user-avatar">
 			<img src="/images/noavatar_default.png" alt="" />
@@ -21,7 +21,7 @@
 	<div class="comment-area">
 		<div class="comment-tab">
 			<ul class="comment-tab-left list-unstyled">
-				<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=comments.length%>)</em></li>
+				<li data-type="all" class="current comment-show">全部评论<em class="num" id="allCommentNum">(<%=cTotal%>)</em></li>
 			</ul>
 		</div>
 		<!--<div class="comment-pager-haeder">
@@ -109,7 +109,7 @@
 										<div class="comment-footer clearfix">
 											<em>
 												<a href="javascript:;" class="zan" data-cid="<%=v._id%>"  data-replyid="<%=reply._id%>">
-													顶<span class="nums"><%=reply.likes%></span>
+													顶<span class="nums"><%=reply.likes.length%></span>
 												</a>
 												<span class="pipe">|</span>
 												<%if(reply.from){%>

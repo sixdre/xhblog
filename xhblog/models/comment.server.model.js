@@ -9,10 +9,10 @@ const CommentSchema = new Schema({
 		    from: {type: ObjectId, ref: 'User'},
 		    to: {type: ObjectId, ref: 'User'},
 		    content: String,
-		    likes:{
-		    	type:Number,
-			  	default:0
-		    },
+		    likes:[{
+				  type: ObjectId, 
+				  ref: 'User'
+			 }],
 		    create_time:{
 		    	type: Date,
 	      	  	default: Date.now()

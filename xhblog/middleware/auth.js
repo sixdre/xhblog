@@ -16,9 +16,7 @@ exports.checkAdmin=function(req,res,next){
  */
 exports.checkLoginByAjax=function(req,res,next){
 	if(!req.session["User"]){
-       return res.json({
-    	   code:-2
-       });
+      return res.status(403).json({ message: '请重新登陆' })
     }
 	next();
 }
