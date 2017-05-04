@@ -369,8 +369,9 @@ nav form .search-btn .search_ic{
     vertical-align: middle;
     cursor: pointer;
 }
-.comment_item{
-	margin-bottom: 20px;
+.comment-item{
+	padding:20px 0 15px;
+	border-bottom: 1px solid #f0f0f0;
 }
 .comment-item .avatar{
 	float: left;

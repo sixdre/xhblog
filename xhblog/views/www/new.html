@@ -26,7 +26,7 @@
 							<%}%>
 						<li class="<%=cls%>">
 							<%if(value.imgurl&&value.imgurl.length){%>
-							<a class="wrap-img" href="/blog/<%=value.bId%>" target="_blank">
+							<a class="wrap-img" href="/article/<%=value.bId%>" target="_blank">
 						      <img src="<%=value.imgurl%>">
 						    </a>
 						  	<%}%>
@@ -37,7 +37,7 @@
 										<span class="time"><%=moment(value.create_time).format('YYYY-MM-DD')%></span>
 									</div>
 								</div>
-								<a class="title" target="_blank" href="/blog/<%=value.bId%>"><%=value.title%></a>
+								<a class="title" target="_blank" href="/article/<%=value.bId%>"><%=value.title%></a>
 								<p class="abstract">
 									<%-value.content.substring(0,100)%>...
 								</p>

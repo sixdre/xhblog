@@ -21,7 +21,7 @@ const Common=require('./common');
 const Auth=require('../middleware/auth');
 
 //文章详情页面
-router.get('/blog/:bId',Common.loadCommonData,function(req,res,next){
+router.get('/article/:bId',Common.loadCommonData,function(req,res,next){
 	const bid=req.params["bId"];
 	async.auto({			//智能控制
 		doc:function(callback){

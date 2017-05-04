@@ -48,7 +48,7 @@ router.post('/login',function(req,res,next){
 					code:1,
 					message:"登录成功！"
 				});
-				
+//				res.redirect('back');
 			}
 		})	
 	}

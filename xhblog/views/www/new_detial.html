@@ -9,7 +9,6 @@
 					<%=article.author%>
 				</span>
 				<div class="meta">
-              <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
                <span class="publish-time"><%=moment(article.create_time).format('YYYY-MM-DD')%></span>
             	<span class="views-count">阅读 <%=article.pv%></span>
             	<span class="comments-count">评论 <%=cTotal%></span>
@@ -22,14 +21,14 @@
 				
 				<span class="pull-left">上一篇文章：
 					<%if(prevArticle){%>
-						<a href="/blog/<%=prevArticle.bId%>"><%=prevArticle.title%></a>
+						<a href="/article/<%=prevArticle.bId%>"><%=prevArticle.title%></a>
 					<%}else{%>
 						<a href="javascript:void(0);">无</a>
 					<%}%>
 				</span>
 				<span class="pull-right">下一篇文章：
 					<%if(nextArticle){%>
-						<a href="/blog/<%=nextArticle.bId%>"><%=nextArticle.title%></a>
+						<a href="/article/<%=nextArticle.bId%>"><%=nextArticle.title%></a>
 					<%}else{%>
 						<a href="javascript:void(0);">无</a>
 					<%}%>

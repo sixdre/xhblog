@@ -6,29 +6,213 @@ $(function() {
 	     var r = window.location.search.substr(1).match(reg);
 	     if(r!=null)return  unescape(r[2]); return null;
 	}
-	
-	function logout(){
-		$.ajax({
-			type:"GET",
-			url:"/logout",
-			async:true,
-			success:function(res){
-				if(res.code>0){
-					window.location.reload();
-				}else{
-					alert('出错了');
-				}
-			},
-			error:function(err){
-				
-			}
-		})
+		//评论
+	var replyForm='<form id="reply_form" class="comment_form" method="post" onsubmit="return false;">'+
+			'<input type="hidden" name="toId" value="">'+
+			'<input type="hidden" name="cId" value="">'+
+			'<input type="hidden" name="articleId" value="">'+
+			'<div class="form-textarea">'+
+				'<textarea name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea>'+
+			'</div>'+
+			'<div class="form-toolbars clearfix">'+
+				'<div class="form-action">'+
+					'<input type="button" class="cancel" value="取消"  id="replay_cancel"/>'+
+					'<input type="submit" value="回复"  id="replay_submit"/>'+
+				'</div>'+
+			'</div>'+
+		'</form>';
+		
+	var UserHandle={
+		logout:function(){
+			return $.ajax({
+				type:"GET",
+				url:"/logout",
+				async:true,
+			})
+		},
+		login:function(data){
+			return $.ajax({
+				type:"POST",
+				url:"/login",
+				async:true,
+				data:data
+			})
+		},
+		regist:function(data){
+			return $.ajax({
+				type:"POST",
+				url:"/regist",
+				async:true,
+				data:data
+			});
+		},
+		submitWord:function(data){		//提交留言
+			return $.ajax({
+				type:"POST",
+				url:"/word",
+				async:true,
+				data:data
+			});
+		},
+		submitComment:function(data){		//提交文章评论
+			return $.ajax({
+				type:"POST",
+				url:"/comment",
+				async:true,
+				data:data
+			});
+		},
+		commentLikes:function(params){		//评论点赞
+			return $.ajax({
+				url:'/comment/point',
+				type:'GET',
+				data:params,
+				async:true,
+			});
+		}
 	}
 	
+	//退出登录
 	$('#logout').on('click',function(){
-		logout();
+		UserHandle.logout().then(function(res){
+			if(res.code>0){
+				window.location.reload();
+			}else{
+				alert('出错了');
+			}
+		},function(err){
+			alert('退出登录失败，服务器错误!');
+		})
 		return false;
 	})
+	
+	
+	//注册
+	$('#regist_submit').on('click',function(){
+		var data=$("#registForm").serialize();
+		UserHandle.regist(data).then(function(res){
+			if(res.code>0){
+				alert(res.message);
+				window.location.href="/";
+			}else{
+				alert(res.message)
+			}
+		},function(err){
+			alert('注册失败，服务器错误!');
+		})
+		return false;
+	});
+	
+	//登录
+	$('#login_submit').on('click',function(){
+		var data=$("#loginForm").serialize();
+		var backUrl=$.cookie('backUrl');
+		UserHandle.login(data).then(function(res){
+			if(res.code>0){
+				alert(res.message);
+				if(backUrl){
+					window.location.href=backUrl;
+				}else{
+					window.location.href="/";
+				} 
+			}else{
+				alert(res.message)
+			}
+		},function(err){
+			alert('登录失败，服务器错误');
+		})
+	});
+	
+	//提交留言
+	$('#word_submit').on('click',function(){
+		var data=$("#word_form").serialize();
+		UserHandle.submitWord(data).then(function(res){
+			if(res.code==1){
+				alert('留言成功');
+				window.location.reload();
+			}
+		},function(err){
+			if(err.status==403){
+				alert('请先登录')
+				window.location.href="/login";
+			}
+		})
+	});
+	
+	//评论
+	function Comment(formId){
+		var content=$(formId).find('textarea[name="content"]').val().trim();
+		if(content.length>0){
+			var data=$(formId).serialize();
+			UserHandle.submitComment(data).then(function(res){
+				if(res.code==1){
+					alert('评论成功');
+					window.location.reload();
+				}
+			},function(err){
+				if(err.status==403){
+					window.location.href="/login";
+				}
+			})
+		}else{
+			alert('请输入评论内容!');
+		}
+		
+	}
+	//文章评论
+	$('#comment_submit').on('click',function(){
+		Comment('#comment_form');
+	});
+	
+	//评论点赞
+	$('.zan').on('click',function(){
+		var self=$(this);
+		var params={
+			commentId:self.data('cid'),
+			replyId:self.data('replyid')
+		}
+		UserHandle.commentLikes(params).then(function(res){
+			if(res.code==1){
+				var nums=parseInt(self.find('.nums').html());
+					nums+=1;
+				self.find('.nums').html(nums);
+			}else if(res.code==-2){
+				alert(res.message);
+			}else{
+				alert(res.message);
+			}
+		},function(err){
+			if(err.status==403){
+//						alert('请先登陆');
+				var url=window.location.href;
+				$.cookie('backUrl',url,{path: '/'});
+				window.location.href="/login";
+			}
+		})
+		return false;
+	})
+	
+	
+	$('.reply_a').on('click',function(){
+		var cId=$(this).data('cid');		//当前评论的数据模型id
+		var toId=$(this).data('tid');		//评论用户的id
+		$('#reply_form').remove();
+		$(this).parent().parent().parent().append(replyForm);
+		$('#reply_form input[name="toId"]').val(toId);
+		$('#reply_form input[name="cId"]').val(cId);
+		$('#reply_form input[name="articleId"]').val($('#articleId').val());
+	});
+	
+	//评论回复
+	$('body').delegate('#replay_submit',"click",function(){
+		Comment('#reply_form');
+	});
+	
+	//回复取消
+	$('body').delegate('#replay_cancel',"click",function(){
+		$('#reply_form').remove();
+	});
+	
 	//首页顶部轮播
 //	$("#demo1").slide({ mainCell:".bd ul",effect:"topLoop",autoPlay:true,triggerTime:0 });
 	//滚动到顶部
@@ -44,184 +228,64 @@ $(function() {
 		}, 500);
 	});
 	
-	//登录提交
-	$('#login_submit').on('click',function(){
-		var ref=GetQueryString('ref');
-		var articleId=GetQueryString('articleId');
-		$.ajax({
-			type:"POST",
-			url:"/login",
-			async:true,
-			data:$("#loginForm").serialize(), 
-			success:function(res){
-				if(res.code>0){
-					alert(res.message);
-					if(ref){
-						window.location.href=ref+'/'+articleId;
-					}else{
-						window.location.href="/";
-					} 
-				}else{
-					alert(res.message)
-				}
-			},
-			error:function(err){
-				
-			}
-		});
-	});
+
+
 	
-	//注册提交
-	$('#regist_submit').on('click',function(){
-		$.ajax({
-			type:"POST",
-			url:"/regist",
-			async:true,
-			data:$("#registForm").serialize(), 
-			success:function(res){
-				if(res.code>0){
-					alert(res.message);
-					window.location.href="/";
-				}else{
-					alert(res.message)
-				}
-			},
-			error:function(err){
-				
-			}
-		});
-	});
+
+
 	
-	//留言提交
-	$('#word_submit').on('click',function(){
-		$.ajax({
-			type:"POST",
-			url:"/word",
-			async:true,
-			data:$("#word_form").serialize(), 
-			success:function(res){
-				if(res.code==1){
-					alert('留言成功');
-					window.location.reload();
-				}
-			},
-			error:function(err){
-				if(err.status==403){
-					window.location.href="/login";
-				}
-			}
-		});
-	});
-	//评论
+
 	
 	
-	var replyForm='<form id="reply_form" class="comment_form" method="post" onsubmit="return false;">'+
-			'<input type="hidden" name="toId" value="">'+
-			'<input type="hidden" name="cId" value="">'+
-			'<input type="hidden" name="articleId" value="">'+
-			'<div class="form-textarea">'+
-				'<textarea name="content" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea>'+
-			'</div>'+
-			'<div class="form-toolbars clearfix">'+
-				'<div class="form-action">'+
-					'<input type="button" class="cancel" value="取消"  id="replay_cancel"/>'+
-					'<input type="submit" value="回复"  id="replay_submit"/>'+
-				'</div>'+
-			'</div>'+
-		'</form>';
+
 	
-	//评论
-	function Comment(formId){
-		var content=$(formId).find('textarea[name="content"]').val().trim();
-		if(content.length>0){
-			$.ajax({
-				type:"POST",
-				url:"/comment",
-				async:true,
-				data:$(formId).serialize(),
-				success:function(res){
-					if(res.code==1){
-						alert('评论成功');
-						window.location.reload();
-					}
-				},
-				error:function(err){
-					if(err.status==403){
-						window.location.href="/login";
-					}
-				}
-			});
-		}else{
-			alert('请输入评论内容!');
-		}
-		
-	}
+
 	
 	
-	//评论
-	$('#comment_submit').on('click',function(){
-		Comment('#comment_form');
-	});
-	
-	$('.reply_a').on('click',function(){
-		var cId=$(this).data('cid');		//当前评论的数据模型id
-		var toId=$(this).data('tid');		//评论用户的id
-		$('#reply_form').remove();
-		$(this).parent().parent().parent().append(replyForm);
-		$('#reply_form input[name="toId"]').val(toId);
-		$('#reply_form input[name="cId"]').val(cId);
-		$('#reply_form input[name="articleId"]').val($('#articleId').val());
-	});
+
 	
 	
-	//评论回复
-	$('body').delegate('#replay_submit',"click",function(){
-		Comment('#reply_form');
-	});
-	
-	//回复取消
-	$('body').delegate('#replay_cancel',"click",function(){
-		$('#reply_form').remove();
-	});
 	
 	
-	//评论点赞(顶）
-	function likes(){
-		$('.zan').on('click',function(){
-			var self=$(this);
-			var params={
-				commentId:self.data('cid'),
-				replyId:self.data('replyid')
-			}
-		
-			$.ajax({
-				url:'/comment/point',
-				type:'GET',
-				data:params,
-				async:true,
-				success:function(res){
-					if(res.code==1){
-						var nums=parseInt(self.find('.nums').html());
-							nums+=1;
-						self.find('.nums').html(nums);
-					}else if(res.code==-2){
-						alert(res.message);
-					}else{
-						alert(res.message);
-					}
-				},
-				error:function(err){
-					if(err.status==403){
-//						alert('请先登陆');
-						window.location.href="/login";
-					}
-				}
-			})
-			
-			return false;
-		})
-	}
-	likes();
+//	//评论点赞(顶）
+//	function likes(){
+//		$('.zan').on('click',function(){
+//			var self=$(this);
+//			var params={
+//				commentId:self.data('cid'),
+//				replyId:self.data('replyid')
+//			}
+//		
+//			$.ajax({
+//				url:'/comment/point',
+//				type:'GET',
+//				data:params,
+//				async:true,
+//				success:function(res){
+//					if(res.code==1){
+//						var nums=parseInt(self.find('.nums').html());
+//							nums+=1;
+//						self.find('.nums').html(nums);
+//					}else if(res.code==-2){
+//						alert(res.message);
+//					}else{
+//						alert(res.message);
+//					}
+//				},
+//				error:function(err){
+//					if(err.status==403){
+////						alert('请先登陆');
+//						var url=window.location.href;
+//						$.cookie('backUrl',url,{path: '/'});
+//						window.location.href="/login";
+//					}
+//				}
+//			})
+//			
+//			return false;
+//		})
+//	}
+//	likes();
 	
 //	
 //	$.ajax({

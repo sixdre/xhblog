@@ -108,14 +108,14 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 
 
 //留言页面
-router.get('/word',Auth.checkLoginByNative,function(req,res,next){
+router.get('/word',function(req,res,next){
 	res.render("www/word",{
 		title:'留言'
 	});
 })
 
 //提交留言
-router.post('/word',function(req,res,next){
+router.post('/word',Auth.checkLoginByAjax,function(req,res,next){
 	let lm=new Lm({
 		message:req.body.content,
 		user:req.session["User"]._id

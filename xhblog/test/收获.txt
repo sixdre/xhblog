@@ -49,3 +49,5 @@ mongodb 会自动创建_v 代表这个数据的版本号 如果save的时候_v�
 
 angular-cookies介绍
 http://www.cnblogs.com/ys-ys/p/5021085.html
+
+return res.redirect('back');//返回之前的页面
