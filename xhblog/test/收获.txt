@@ -51,3 +51,6 @@ angular-cookies介绍
 http://www.cnblogs.com/ys-ys/p/5021085.html
 
 return res.redirect('back');//返回之前的页面
+
+//数组长度排序
+http://blog.csdn.net/gao36951/article/details/40678875

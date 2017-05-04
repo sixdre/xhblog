@@ -165,7 +165,7 @@ $(function() {
 	});
 	
 	//评论点赞
-	$('.zan').on('click',function(){
+	$('body').delegate('.zan','click',function(){
 		var self=$(this);
 		var params={
 			commentId:self.data('cid'),
@@ -193,7 +193,7 @@ $(function() {
 	})
 	
 	
-	$('.reply_a').on('click',function(){
+	$('body').delegate('.reply_a','click',function(){
 		var cId=$(this).data('cid');		//当前评论的数据模型id
 		var toId=$(this).data('tid');		//评论用户的id
 		$('#reply_form').remove();
@@ -228,6 +228,30 @@ $(function() {
 			scrollTop:$('html').height()
 		}, 500);
 	});
+	
+	
+	//评论获取
+	$('#commentSort a').on('click',function(){
+		if($(this).hasClass('active')){
+			return;
+		}
+		$(this).siblings().removeClass('active');
+		$(this).addClass('active');
+		var params={
+			order_by:$(this).data('sort'),
+			articleId:$('#articleId').val()
+		}
+		$.ajax({
+			url:'/comment',
+			type:'GET',
+			data:params,
+			success:function(res){
+				console.log(res);
+				$('#comment_list').html(res);
+			}
+			
+		})
+	})
 	
 //	
 //	$.ajax({

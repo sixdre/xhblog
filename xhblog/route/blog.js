@@ -64,7 +64,7 @@ router.get('/article/:bId',Common.loadCommonData,function(req,res,next){
 			let articleId=results.doc._id;
 			Comment.find({articleId:articleId})
 			.populate('from')
-			.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
+			.populate('reply.from reply.to').sort({'create_time':-1}).exec(function(err,comments){
 				let cTotal=comments.length;
 				comments.forEach(function(value){
 					if(value.reply&&value.reply.length>0){
@@ -96,15 +96,25 @@ router.get('/comment',function(req,res,next){
 	let articleId=req.query.articleId,
 		order_by=req.query.order_by,
 		page=req.query.page;
-		
+		let sort={
+			create_time:-1
+		}
+		if(order_by=="timeSeq"){
+			sort.create_time=1
+		}else if(order_by=="likes"){
+			sort.likes=-1;
+		}
 		Comment.find({articleId:articleId})
 		.populate('from')
-		.populate('reply.from reply.to').sort({create_time:-1}).exec(function(err,comments){
+		.populate('reply.from reply.to').sort(sort).exec(function(err,comments){
 			if(err){
 				console.log(err);
 				next(err);
 			}
-			res.render("www/comment",{
+//			res.json({
+//				comments:comments
+//			})
+			res.render("www/blocks/comment_list",{
 				comments:comments
 			})
 		});

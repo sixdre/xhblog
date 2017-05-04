@@ -15,7 +15,7 @@ const CommentSchema = new Schema({
 			 }],
 		    create_time:{
 		    	type: Date,
-	      	  	default: Date.now()
+	      	default: Date.now()
 		    },
 	  }],
 	  content: String,
@@ -26,20 +26,16 @@ const CommentSchema = new Schema({
 	  create_time:{
 		  type: Date,
       default: Date.now()
-	  },
-	  update_time: {
-	    type: Date,
-	    default: Date.now()
-	  }  
-});
-CommentSchema.pre('save', function(next) {
-	  if (this.isNew) {
-	    this.create_time = this.update_time = Date.now();
-	  } else {
-	    this.update_time = Date.now();
 	  }
-	  next()
 });
+//CommentSchema.pre('save', function(next) {
+//	  if (this.isNew) {
+//	    this.create_time = this.update_time = Date.now();
+//	  } else {
+//	    this.update_time = Date.now();
+//	  }
+//	  next()
+//});
 
 CommentSchema.statics = {
   findAll: function(cb) {

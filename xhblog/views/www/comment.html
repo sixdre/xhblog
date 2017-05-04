@@ -22,10 +22,10 @@
 		<div class="comment-tab">
 			<ul class="comment-tab-left list-unstyled clearfix">
 				<li data-type="all" class="all pull-left">全部评论<em class="num" id="allCommentNum">(<%=cTotal%>)</em></li>
-				<li class="pull-right sort">
-					<a class="active" data-sort="likes">按喜欢排序</a>
+				<li class="pull-right sort" id="commentSort">
+					<a class="active" data-sort="timeRev">按时间倒序</a>
 					<a data-sort="timeSeq">按时间正序</a>
-					<a data-sort="timeRev">按时间倒序</a>
+					<a data-sort="likes">按喜欢排序</a>
 				</li>
 			</ul>
 		</div>
@@ -36,8 +36,8 @@
 				</div>
 			</div>
 		</div>-->
-		<ul class="list-unstyled">
-			<%if(comments&&comments.length>0){%>
+		<ul class="list-unstyled" id="comment_list">
+		<%if(comments&&comments.length>0){%>
 			<%comments.forEach(function(v,i){%>
 			<li class="clearfix comment-item">
 				<div class="avatar">
@@ -129,7 +129,7 @@
 				</div>
 			</li>
 			<%})%>
-		</ul>
 		<%}%>
+		</ul>
 	</div>
 </div>
