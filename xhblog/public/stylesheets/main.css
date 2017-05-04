@@ -1,9 +1,16 @@
 @charset "utf-8";
+
 body{
 	padding-top: 56px;
 }
 a{
 	color: #333;
+}
+a:focus, a:hover {
+   text-decoration: none;
+}
+a:hover{
+	cursor: pointer;
 }
 i,em,b,small,strong{
 	font-style: normal;
@@ -354,20 +361,30 @@ nav form .search-btn .search_ic{
     /*position: absolute;
     top: 0;*/
 }
-.comment-area .comment-tab .comment-tab-left {
+/*.comment-area .comment-tab .comment-tab-left {
     float: left;
-}
-.comment-area .comment-tab li {
+}*/
+.comment-area .comment-tab li{
     height: 48px;
-    margin-left: 0;
     padding: 0 15px;
     position: relative;
     line-height: 58px;
-    border-bottom: 1px solid #2fb3ff;
     font-size: 16px;
-    color: #2fb3ff;
     vertical-align: middle;
-    cursor: pointer;
+   /* cursor: pointer;*/
+}
+.comment-area .comment-tab li.all{
+	margin-left: 0;
+	border-bottom: 1px solid #2fb3ff;
+	color: #2fb3ff;
+}
+.comment-area .comment-tab li.sort a{
+	margin-left: 10px;
+	color: #969696;
+	font-size: 12px;
+}
+.comment-area .comment-tab li.sort a.active{
+	color: #2f2f2f;
 }
 .comment-item{
 	padding:20px 0 15px;
@@ -443,4 +460,68 @@ nav form .search-btn .search_ic{
 
 .reply-area{
 	/*padding-left: 30px;*/
+}
+
+/*返回顶部与底部*/
+#backTop {
+    width: 32px;
+    float: right;
+    position: fixed;
+    right: 10px;
+    bottom: 50px;
+    z-index: 9999;
+}
+#backTop li a {
+    background: #fff;
+    font-size: 16px;
+    color: #cacaca;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 4px;
+    display: block;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+#backTop li a:hover {
+    background: #2f889a;
+    color: #fff;
+    border: 1px solid #2f889a;
+    transition: all 0.2s ease-in 0s;
+}
+#backTop li a {
+    color: #4cb6cb;
+}
+.qr .fa-qrcode {
+    font-size: 20px !important;
+    line-height: 32px !important;
+}
+.qr-img {
+    position: fixed;
+    background: #fff;
+    bottom: 50px;
+    right: 50px;
+    max-width: 300px;
+    padding: 10px 10px 2px 10px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    display: none;
+}
+.qr:hover .qr-img {
+	display: block;
+}
+#output img {
+    position: absolute;
+    top: 72px;
+    right: 72px;
+    width: 25px;
+    height: 25px;
 }

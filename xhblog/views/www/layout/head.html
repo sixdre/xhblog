@@ -13,16 +13,19 @@
 	<body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="width-limit">
-			<!-- 左上方 Logo -->
+			<!-- Logo -->
 			<a class="logo" href="/"><img src="/images/logo-js.png" alt="Logo"></a>
 
-			<!-- 右上角 -->
-			<!-- 未登录显示登录/注册/ -->
-			<a class="btn sign-up" href="/regist">注册</a>
-			<a class="btn sign-in" href="/login">登录</a>
-			<a class="btn sign-in" id="logout" href="javascript:;">退出</a>
-
-
+			<!-- 登录之后 -->
+			<%if(user){%>
+				<a class="btn sign-in" id="logout" href="javascript:;">退出</a>
+				<span class="btn sign-in">您好,<a href=""><%=user.username%></a></span>
+			<%}else{%>
+				<!--未登录显示登录/注册/-->
+				<a class="btn sign-up" href="/regist">注册</a>
+				<a class="btn sign-in" href="/login">登录</a>
+			<%}%>
+			
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu" aria-expanded="true">

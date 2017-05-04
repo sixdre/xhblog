@@ -1,5 +1,5 @@
 $(function() {
-	
+//	$("[data-toggle='tooltip']").tooltip();
 	//获取地址栏参数
 	function GetQueryString(name){
 	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -214,78 +214,20 @@ $(function() {
 	});
 	
 	//首页顶部轮播
-//	$("#demo1").slide({ mainCell:".bd ul",effect:"topLoop",autoPlay:true,triggerTime:0 });
+	//	$("#demo1").slide({ mainCell:".bd ul",effect:"topLoop",autoPlay:true,triggerTime:0 });
+
 	//滚动到顶部
-	$('#scroll .scroll-h').click(function() {
+	$('#backTop .scroll-h').click(function() {
 		$('html,body').animate({
 			scrollTop: '0px'
 		}, 500);
 	});
 	//滚动到底部
-	$('#scroll .scroll-b').click(function() {
+	$('#backTop .scroll-b').click(function() {
 		$('html,body').animate({
-			scrollTop:$('.bottom-nav').offset().top
+			scrollTop:$('html').height()
 		}, 500);
 	});
-	
-
-
-	
-
-
-	
-
-	
-	
-
-	
-
-	
-	
-
-	
-	
-	
-	
-//	//评论点赞(顶）
-//	function likes(){
-//		$('.zan').on('click',function(){
-//			var self=$(this);
-//			var params={
-//				commentId:self.data('cid'),
-//				replyId:self.data('replyid')
-//			}
-//		
-//			$.ajax({
-//				url:'/comment/point',
-//				type:'GET',
-//				data:params,
-//				async:true,
-//				success:function(res){
-//					if(res.code==1){
-//						var nums=parseInt(self.find('.nums').html());
-//							nums+=1;
-//						self.find('.nums').html(nums);
-//					}else if(res.code==-2){
-//						alert(res.message);
-//					}else{
-//						alert(res.message);
-//					}
-//				},
-//				error:function(err){
-//					if(err.status==403){
-////						alert('请先登陆');
-//						var url=window.location.href;
-//						$.cookie('backUrl',url,{path: '/'});
-//						window.location.href="/login";
-//					}
-//				}
-//			})
-//			
-//			return false;
-//		})
-//	}
-//	likes();
 	
 //	
 //	$.ajax({
