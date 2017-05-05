@@ -49,7 +49,6 @@ function init(currentPage,cb){
 			.limit(pageSize).sort({create_time:-1})
 			.populate('category','name')
 			.populate('tags').exec(function(err,articles){
-				console.log(articles);
 				callback(null,articles);
 			})
 		},

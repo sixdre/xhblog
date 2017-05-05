@@ -3,31 +3,19 @@
 	<div class="container index">
 		<div class="row">
 			<div class="col-xs-8 main">
-				<!--类型-->
-				<div class="category_collection">
-					<%categorys.forEach(function(cate){%>
-					<a class="collection" target="_blank" href="/category/<%=cate.name%>">
-						<span class="category_name"><%=cate.name%> <label><%=cate.total%></label></span>
-					</a>
-					<%})%>
-					<a class="more-collection" target="_blank" href="">
-					        更多分类 <i class="fa fa-angle-right"></i>
-					</a>
-				</div>
-				<!--/ 类型-->
-				
+				<%include ./blocks/category.html%>
 				<!--文章列表-->
 				<div class="article_list_container">
 					<ul class="article_list">
 						<%articles.forEach(function(value,i){%>
 							<%var cls=''%>
-							<%if(value.imgurl&&value.imgurl.length){%>
-								cls='have-img'
+							<%if(value.img&&value.img.length){%>
+								<%cls='have-img'%>
 							<%}%>
 						<li class="<%=cls%>">
-							<%if(value.imgurl&&value.imgurl.length){%>
+							<%if(value.img&&value.img.length){%>
 							<a class="wrap-img" href="/article/<%=value.bId%>" target="_blank">
-						      <img src="<%=value.imgurl%>">
+						      <img src="<%=value.img%>">
 						    </a>
 						  	<%}%>
 						    <div class="content">
@@ -46,7 +34,7 @@
 									<a class="art_category" target="_blank" href="/category/<%=value.category.name%>"><%=value.category.name%></a>
 									<%}%>
 									<a class="fa fa-eye"> <%=value.pv%></a> 
-									<a class="fa fa-thumbs-o-up"> <%=value.likes%></a>
+									<a class="fa fa-thumbs-o-up"> <%=value.likeNum%></a>
 								</div>
 							</div>
 						</li>

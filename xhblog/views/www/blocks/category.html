@@ -1,0 +1,12 @@
+<!--类型-->
+<div class="category_collection">
+	<%categorys.forEach(function(cate){%>
+	<a class="collection" target="_blank" href="/category/<%=cate.name%>">
+		<span class="category_name"><%=cate.name%> <label><%=cate.total%></label></span>
+	</a>
+	<%})%>
+	<a class="more-collection" target="_blank" href="">
+	        更多分类 <i class="fa fa-angle-right"></i>
+	</a>
+</div>
+<!--/ 类型-->

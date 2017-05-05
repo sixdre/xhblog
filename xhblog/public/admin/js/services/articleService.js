@@ -45,15 +45,15 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		removeMulti:function(ids){
 			return handelRequest("POST",'/api/admin/article/removeMulti',{ids:ids});
 		},
-		save:function(data){
-			return $http({
-				method:"POST",
-				url:'/api/admin/article/sub',
-				data:data,
-				headers: {'Content-Type':undefined},
-          		transformRequest:angular.identity   
-			});
-		},
+//		save:function(data){
+//			return $http({
+//				method:"POST",
+//				url:'/api/admin/article/sub',
+//				data:data,
+//				headers: {'Content-Type':undefined},
+//        		transformRequest:angular.identity   
+//			});
+//		},
 		publish:function(data){
 			return handelRequest("POST",'/api/admin/article/publish',data);
 		},

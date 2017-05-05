@@ -136,38 +136,58 @@ router.post('/word',function(req,res,next){
 	});
 })
 
-//router.post('/article/publish',multer({storage: storage,}).single('file'),function(req,res,next){
-//	console.log(req.file)
-//	
-//
-//		
-//})
+//文章发布
+router.post('/article/publish',multer({storage: storage}).single('file'),function(req,res,next){
+	let article=req.body;
+	article['author']=req.session["manager"].username||'徐小浩';
+	if(req.file&&req.file.path){
+		article.img=req.file.path.substring(6);
+	}
+	let _article=new Article(article);
+	let resArticle;
+	_article.save().then(function(article){
+		resArticle=article
+		return article;
+	}).then(function(rs){
+		let categoryId=rs.category;
+		return Category.update({_id:categoryId}, {'$addToSet':{"articles":rs._id} });
+	}).then(function(){
+		res.json({
+			code:1,
+			article:resArticle
+		});
+	}).catch(function(err){
+		console.log('文章发布出错'+err);
+		next(err);
+	});
+		
+})
 	
 	
 	
 //发布新文章
-router.post('/article/publish',function(req,res,next){
-	let article=req.body;
-		article['author']=req.session["manager"].username||'徐小浩';
-	let _article=new Article(article);
-	let resArticle;
-	//promise 解决多个数据传值，可以定义一个空对象然后将数据传入到空对象中，再返回前台
-	 _article.save().then(function(article){
-		 resArticle=article
-		 return article;
-	 }).then(function(rs){
-		 let categoryId=rs.category;
-		 return Category.update({_id:categoryId}, {'$addToSet':{"articles":rs._id} });
-	 }).then(function(){
-			res.json({
-				code:1,
-				article:resArticle
-			});
-	 }).catch(function(err){
-		 console.log('文章发布出错'+err);
-		 next(err);
-	 });
-})
+//router.post('/article/publish',function(req,res,next){
+//	let article=req.body;
+//		article['author']=req.session["manager"].username||'徐小浩';
+//	let _article=new Article(article);
+//	let resArticle;
+//	//promise 解决多个数据传值，可以定义一个空对象然后将数据传入到空对象中，再返回前台
+//	 _article.save().then(function(article){
+//		 resArticle=article
+//		 return article;
+//	 }).then(function(rs){
+//		 let categoryId=rs.category;
+//		 return Category.update({_id:categoryId}, {'$addToSet':{"articles":rs._id} });
+//	 }).then(function(){
+//			res.json({
+//				code:1,
+//				article:resArticle
+//			});
+//	 }).catch(function(err){
+//		 console.log('文章发布出错'+err);
+//		 next(err);
+//	 });
+//})
 
 
 //获取所有文章
@@ -604,7 +624,8 @@ router.post('/banner',function(req,res,next){
 			dec:req.body.dec,
 			url: req.body.link,
 			weight:req.body.weight,
-			imgAdress:req.file.destination.substring(6)+"/"+req.file.filename
+			imgAdress:req.file.path.substring(6)
+//			imgAdress:req.file.destination.substring(6)+"/"+req.file.filename
 		});
 		
 		let nameArray=req.file.originalname.split('.')

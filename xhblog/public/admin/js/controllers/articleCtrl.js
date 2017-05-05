@@ -15,29 +15,7 @@ app.controller('articlePublishCtrl',
 			}
 			$scope.article={};
 			
-//			$scope.publish=function(){
-//				Upload.upload({
-//	            url: '/api/admin/article/publish',
-//	            file:$scope.file,
-//	            data:{
-//	            	name:1
-//	            }
-//	         }).then(function (resp) {
-//	           
-//	         }, function (resp) {
-//	            
-//	         }, function (evt) {
-//	           
-//	         });
-//			}
-			//文章发表
 			$scope.publish=function(state){
-				if($scope.article.tags.length>3){
-		    		return defPopService.defPop({
-		    			status:0,
-						content:"标签最多只能添加3个！"
-		    		})
-		    	}
 				var article={
 					title:$scope.article.title,
 					category:$scope.article.category,
@@ -55,40 +33,65 @@ app.controller('articlePublishCtrl',
 					article.isDraft=true;		//为草稿
 					article.isActive=false;		//无效
 				}
-				articleService.publish(article).then(function(res){
-					if(res.data.code>0){
+				Upload.upload({
+	            url: '/api/admin/article/publish',
+	            file:$scope.file,
+	            data:article,
+//	            fileFormDataName:'cover'
+	         }).then(function (res) {
+	           if(res.data.code>0){
 						alertService.success('发表成功!');
 						DataService.ArticleTotal+=1;
 						$scope.article={};
 					}
-				}).catch(function(err){
-					 defPopService.defPop({
+	         }, function (resp) {
+	            defPopService.defPop({
 						status:0,
 						content:"出错了！"
-					 });
-				});
+					});
+	         }, function (evt) {
+	            console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+	         });
 			}
+			//文章发表
+//			$scope.publish=function(state){
+//				if($scope.article.tags.length>3){
+//		    		return defPopService.defPop({
+//		    			status:0,
+//						content:"标签最多只能添加3个！"
+//		    		})
+//		    	}
+//				var article={
+//					title:$scope.article.title,
+//					category:$scope.article.category,
+//					tags:$scope.article.tags,
+//					content:UE.getEditor('editor').getContentTxt(),
+//					tagcontent:UE.getEditor('editor').getContent()
+//				}
+//				if(article.content.trim().length==0){
+//					return defPopService.defPop({
+//							status:0,
+//							content:"请输入文章内容！"
+//						});
+//				}
+//				if(state&&state=="draft"){			//存为草稿
+//					article.isDraft=true;		//为草稿
+//					article.isActive=false;		//无效
+//				}
+//				articleService.publish(article).then(function(res){
+//					if(res.data.code>0){
+//						alertService.success('发表成功!');
+//						DataService.ArticleTotal+=1;
+//						$scope.article={};
+//					}
+//				}).catch(function(err){
+//					 defPopService.defPop({
+//						status:0,
+//						content:"出错了！"
+//					 });
+//				});
+//			}
 			
-			/*var formData = new FormData($("#Article_form")[0]);
-			formData.append('author',$('#manager_name').text().trim());
-			formData.append('content',UE.getEditor('editor').getContentTxt());
-			formData.append('tagcontent',UE.getEditor('editor').getContent());
-			formData.append("article_type",$scope.article.type.name);	//类型
-			articleService.save(formData).then(function(res){
-				var data=res.data;
-				if(data.code>0){
-					defPopService.defPop({
-						status:1,
-						content:"发表成功!"
-					 });
-				}
-			},function(err){
-				 defPopService.defPop({
-						status:0,
-						content:"出错了！"
-				 });
-			});*/
-
 }])
 
 /*

@@ -1,5 +1,6 @@
 <style>
-	table th,table td{
+	table th,
+	table td {
 		text-align: center;
 	}
 </style>
@@ -14,9 +15,7 @@
 			</div>
 			<div class="row wrapper">
 				<div class="col-sm-5 m-b-xs">
-					<select class="input-sm form-control inline v-middle" style="width: 60px;" 
-						ng-model="pageConfig.limit"
-						ng-options="item for item in pageConfig.pageSizes">
+					<select class="input-sm form-control inline v-middle" style="width: 60px;" ng-model="pageConfig.limit" ng-options="item for item in pageConfig.pageSizes">
 					</select>
 					<button class="btn btn-sm btn-default" ng-click="removeMulti()">删除</button>
 				</div>
@@ -39,9 +38,9 @@
 						<tr>
 							<th style="width:5%;">
 								<label class="i-checks m-b-none">
-					                <input type="checkbox" ng-model="select_all" ng-click="selectAll(select_all)">
-					                <i></i>
-					            </label>
+				                <input type="checkbox" ng-model="select_all" ng-click="selectAll(select_all)">
+				                <i></i>
+				            </label>
 							</th>
 							<th style="width: 16%;">标题</th>
 							<th style="width: 16%;" ng-click="timesort=!timesort">
@@ -66,7 +65,9 @@
 										<i></i>
 									</label>
 								</td>
-								<td style="width: 16%;"><a ng-click="edit(item);" class="text-success">{{item.title |limitTo:10}}</a></td>
+								<td style="width: 16%;">
+									<a ng-click="edit(item);" class="text-success">{{item.title |limitTo:10}}</a>
+								</td>
 								<td style="width: 16%;" ng-bind="item.create_time|date:'yyyy-MM-dd HH:mm:ss'"></td>
 								<td style="width: 16%;">{{item.category.name}}</td>
 								<td style="width: 16%;">{{item.pv}}</td>
@@ -100,17 +101,7 @@
 						<small class="text-muted inline m-t-sm m-b-sm">showing {{StartNum}}-{{EndNum}} of {{CommonData.ArticleTotal}} items</small>
 					</div>
 					<div class="col-sm-8 text-right text-center-xs">
-						<ul uib-pagination 
-							total-items="pageConfig.totalItems" 
-							items-per-page="pageConfig.limit" 
-							max-size="pageConfig.maxSize" 
-							boundary-links="true" 
-							rotate="true" 		
-							num-pages="numPages"
-							previous-text="上一页" 
-							next-text="下一页"
-							ng-model="pageConfig.currentPage" 
-							ng-change="pageChanged()"></ul>
+						<ul uib-pagination total-items="pageConfig.totalItems" items-per-page="pageConfig.limit" max-size="pageConfig.maxSize" boundary-links="true" rotate="true" num-pages="numPages" previous-text="上一页" next-text="下一页" ng-model="pageConfig.currentPage" ng-change="pageChanged()"></ul>
 					</div>
 				</div>
 			</footer>
@@ -121,11 +112,11 @@
 <!--删除对话框-->
 <script type="text/ng-template" id="confirm.html">
 	<div class="modal-header">
-	    <h3 class="modal-title">确定删除吗？</h3>
-	    <p>此操作不可逆</p>
+		<h3 class="modal-title">确定删除吗？</h3>
+		<p>此操作不可逆</p>
 	</div>
-	<div class="modal-footer">                  
-	    <button class="btn btn-default" ng-click="cancel()">取消</button>
-	    <button class="btn btn-primary" ng-click="confirm()">确定</button>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+		<button class="btn btn-primary" ng-click="confirm()">确定</button>
 	</div>
 </script>

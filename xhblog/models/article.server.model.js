@@ -12,63 +12,68 @@ const BaseQuery = require('../models/dbHelper'),
 
 //文章
 const ArticleSchema = new Schema({
-	author: { //作者
+	author: { 	//作者
 		type: String
 	},
 	title: String, //标题
-	category: { //类型
+	category: { 	//类型分类
 		type: ObjectId,
 		ref: 'Category'
 	},
-	tags: [{ //标签
+	tags: [{ 	//标签
 		type: ObjectId,
 		ref: 'Tag'
 	}],
 	content: String, //内容
 	tagcontent: String, //带格式的内容
-	imgurl: String, //封面
-	source: { //文章来源(出处)
+	img: String, 	//封面
+	source: { 	  //文章来源(出处)
 		type: String
 	},
-	likes: [{ //标签
+	likes: [{ 	//点赞用户
 		type: ObjectId,
 		ref: 'User'
-	}], //点赞数
-	pv: {
+	}], 
+	likeNum:{		//点赞数
 		type: Number,
 		default: 0
-	}, //浏览量
-	comments: {
+	},
+	pv: {		//浏览量
 		type: Number,
 		default: 0
-	}, //评论数
-	top: {
+	}, 
+	top: {		 // 置顶文章
 		type: Boolean,
 		default: false
-	}, // 置顶文章
-	good: {
+	},
+	good: {		// 精华文章
 		type: Boolean,
 		default: false
-	}, // 精华文章
-	isDraft: {
+	}, 
+	isDraft: {		//是否草稿
 		type: Boolean,
 		default: false
-	}, //是否草稿
-	isActive: {
+	}, 
+	isActive: {		 //是否有效
 		type: Boolean,
 		default: true
-	}, //是否有效
-	//创建时间
-	create_time: {
+	},
+	create_time: {		//创建时间
 		type: Date,
 		default: Date.now
 	},
-	//更新时间或修改时间
-	update_time: {
+	update_time: {		//更新时间或修改时间
 		type: Date,
 		default: Date.now
 	}
 })
+
+
+ArticleSchema.pre('save', function(next) {
+	this.likeNum=this.likes.length;
+	next();
+});
+
 
 /*const categorySchema = mongoose.Schema({
   name: String
