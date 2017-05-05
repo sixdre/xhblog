@@ -25,33 +25,34 @@ app.controller('articlePublishCtrl',
 				}
 				if(article.content.trim().length==0){
 					return defPopService.defPop({
-							status:0,
-							content:"请输入文章内容！"
-						});
+						status:0,
+						content:"请输入文章内容！"
+					});
 				}
 				if(state&&state=="draft"){			//存为草稿
 					article.isDraft=true;		//为草稿
 					article.isActive=false;		//无效
 				}
 				Upload.upload({
-	            url: '/api/admin/article/publish',
-	            file:$scope.file,
-	            data:article,
-//	            fileFormDataName:'cover'
-	         }).then(function (res) {
-	           if(res.data.code>0){
+		            url: '/api/admin/article/publish',
+		            file:$scope.file,
+		            data:article
+	//	            fileFormDataName:'cover'
+		         }).then(function (res) {
+		           if(res.data.code>0){
 						alertService.success('发表成功!');
 						DataService.ArticleTotal+=1;
 						$scope.article={};
+						$scope.file=null;
 					}
-	         }, function (resp) {
-	            defPopService.defPop({
+		         }, function (resp) {
+		            defPopService.defPop({
 						status:0,
 						content:"出错了！"
 					});
-	         }, function (evt) {
-	            console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
-	         });
+		         }, function (evt) {
+		            //console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+		         });
 			}
 			//文章发表
 //			$scope.publish=function(state){
@@ -112,7 +113,7 @@ app.controller('articleListCtrl',
 		currentPage=parseInt(currentPage);
 	}
 		
-			//分页配置参数
+	//分页配置参数
 	$scope.pageConfig = {
 		maxSize:5,					//分页页数
 		limit:5,					//每页显示的文章数
@@ -122,30 +123,53 @@ app.controller('articleListCtrl',
     };
 	$scope.checkedIds = [];		//id组用来存放选中的文章id
 	
+	$scope.flag=0;
+	
+	
 	
 
-	  //分页显示
-	 $scope.pageChanged = function() {
-	 	
-		 var cp=$scope.pageConfig.currentPage,
-		 	limit=$scope.pageConfig.limit;
-    	 articleService.page({current:cp,textCount:limit}).then(function(res){
+	  //分页加载数据
+	 $scope.loadData = function() {
+	
+		var queryParams={
+			currentPage:$scope.pageConfig.currentPage,
+			limit:$scope.pageConfig.limit,
+			title:$scope.title,
+			flag:$scope.flag
+		}
+    	 articleService.page(queryParams).then(function(res){
     		 $scope.articleList=res.data.results;			//文章列表
-    		 DataService.ArticleTotal=res.data.total;		//文章总数
+    		 $scope.pageConfig.totalItems=res.data.total;
     		 $scope.StartNum=($scope.pageConfig.currentPage-1)*$scope.pageConfig.limit+1;
     		 var End=$scope.pageConfig.currentPage*$scope.pageConfig.limit;
-    		 $scope.EndNum=End<DataService.ArticleTotal?End:DataService.ArticleTotal;
+    		 $scope.EndNum=End<$scope.pageConfig.totalItems?End:$scope.pageConfig.totalItems;
     		
     	 }).catch(function(err){
     		 defPopService.defPop({
-					status:0,
-					content:"出错了！"
+				status:0,
+				content:"出错了！"
 			 });
  		 })
 	};	
 	//初始化
-	$scope.pageChanged();
-	 
+	$scope.loadData();
+	
+	
+	//根据标题查询
+	$scope.queryByTitle=function(){
+		$scope.pageConfig.currentPage=1;
+		$scope.loadData();
+	}
+	
+	//检测类型，发生改变重新加载数据
+	$scope.$watch('flag',function(newVal,oldVal){
+		if(newVal!==oldVal){
+			$scope.pageConfig.currentPage=1;
+			$scope.loadData();
+		}
+	})
+	
+
 	//检测文章列表数据
 	$scope.$watch('articleList',function(newVal,oldVal){
 	 	if(newVal!==oldVal){
@@ -157,7 +181,7 @@ app.controller('articleListCtrl',
 	//检测下拉文章列表数
 	$scope.$watch('pageConfig.limit',function(newVal,oldVal){
 		if(newVal!==oldVal){
-			$scope.pageChanged();
+			$scope.loadData();
 		}
 	})
 	 
@@ -178,19 +202,19 @@ app.controller('articleListCtrl',
 	$scope.selectOne = function (id) {
 		toolService.addSelect($scope.checkedIds,id);
     }
-    
-	$scope.removeMulti=function(){				//多选或单选删除
+    //多选或单选删除
+	$scope.removeMulti=function(){				
 		if($scope.checkedIds.length==0){
 			return defPopService.defPop({
-					status:0,
-					content:"请选择要删除的文章！"
+				status:0,
+				content:"请选择要删除的文章！"
 			 });
 		}
 		alertService.confirm().then(function(){
 			articleService.removeMulti($scope.checkedIds).then(function(res){
 				if(res.data.code>0){
 					alertService.success('删除成功');
-					$scope.pageChanged();
+					$scope.loadData();
 				}
 			}).catch(function(err){
 				alertService.error('删除失败,服务器错误');
@@ -203,12 +227,13 @@ app.controller('articleListCtrl',
 		})
 	}
 	
-	$scope.removeOne=function(id){				//图标点击删除 单个删除
+	//图标点击删除 单个删除
+	$scope.removeOne=function(id){				
 		alertService.confirm().then(function(){
 			articleService.removeOne(id).then(function(res){
 				if(res.data.code==1){
 					alertService.success(res.data.message);
-					$scope.pageChanged();
+					$scope.loadData();
 				}
 			}).catch(function(err){
 				
@@ -233,7 +258,7 @@ app.controller('articleListCtrl',
         	    },
              }
         }).result.then(function(){
-        	$scope.pageChanged();
+        	$scope.loadData();
         }).catch(function(){
         })
 
@@ -251,8 +276,8 @@ app.controller('articleSearchCtrl',
 		$scope.search=function(title){
 			if(!title){
 				return defPopService.defPop({
-						status:0,
-						content:"请输入要搜索文章的标题！"
+					status:0,
+					content:"请输入要搜索文章的标题！"
 				});
 			}
 			articleService.search(title).then(function(res){
@@ -280,12 +305,15 @@ app.controller('articleSearchCtrl',
  * 模态框
  */
 app.controller('ModalInstanceCtrl',
-	['$scope', '$uibModalInstance',"$timeout","articleService","defPopService","alertService",'DataService','data',
-	 function($scope,$uibModalInstance,$timeout,articleService,defPopService,alertService,DataService,data){
+	['$scope', '$uibModalInstance',"$timeout",'Upload',"articleService","defPopService","alertService",'DataService','data',
+	 function($scope,$uibModalInstance,$timeout,Upload,articleService,defPopService,alertService,DataService,data){
 	 	
 	 	$scope.article=angular.copy(data.article);
+	 	if($scope.article.img&&$scope.article.img.length){
+	 		$scope.haveImg=true;
+	 	}
 	 	$scope.article.category=$scope.article.category._id;
-		
+		$scope.isFormal=false;
 		$timeout(function(){					//这里要用$timeout 否则报错
 			UE.delEditor("update_modal");		//先销毁在进行创建否则会报错
 			var upUe=UE.getEditor('update_modal',{
@@ -306,20 +334,49 @@ app.controller('ModalInstanceCtrl',
 	    		})
 	    	}
 	    	var article=angular.copy($scope.article);
-	    		article.isDraft=!$scope.isDraft;
+	    	if($scope.isFormal){
+	    		article.isDraft=!$scope.isFormal;
 	    		article.isActive=true;
-	    		article.tagcontent=UE.getEditor('update_modal').getContent();
-	    		article.content=UE.getEditor('update_modal').getContentTxt();
-	    	articleService.update(article).then(function(res){
-	    		if(res.data.code>0){
+	    	}
+    		article.tagcontent=UE.getEditor('update_modal').getContent();
+    		article.content=UE.getEditor('update_modal').getContentTxt();
+			Upload.upload({
+	            url: '/api/admin/article/update',
+	            file:$scope.file,
+	            data:article
+	         }).then(function (res) {
+	           if(res.data.code>0){
 	    			alertService.success('更新成功').then(function(){
 	    				$uibModalInstance.close();
 	    			});
 	    		}
-	    	}).catch(function(err){
-	    		alertService.error('更新失败!');
-	    	});
-	    	return false;
+	         }, function (resp) {
+	           	alertService.error('更新失败!');
+	         }, function (evt) {
+	            //console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+	         });
+	    	
+//	    	if($scope.article.tags.length>3){
+//	    		return defPopService.defPop({
+//	    			status:0,
+//					content:"标签最多只能添加3个！"
+//	    		})
+//	    	}
+//	    	var article=angular.copy($scope.article);
+//	    		article.isDraft=!$scope.isFormal;
+//	    		article.isActive=true;
+//	    		article.tagcontent=UE.getEditor('update_modal').getContent();
+//	    		article.content=UE.getEditor('update_modal').getContentTxt();
+//	    	articleService.update(article).then(function(res){
+//	    		if(res.data.code>0){
+//	    			alertService.success('更新成功').then(function(){
+//	    				$uibModalInstance.close();
+//	    			});
+//	    		}
+//	    	}).catch(function(err){
+//	    		alertService.error('更新失败!');
+//	    	});
+//	    	return false;
 	    };
 
 	    $scope.cancel = function () {

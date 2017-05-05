@@ -37,35 +37,6 @@ FriendSchema.pre("save",function(next){
 })
 
 
-//查找所有
-FriendSchema.statics.findAll = function(callback) {
-    return this.model('Friend')
-        .find({})
-        .sort({ "meta.create_time": -1 })
-        .exec(function (error, doc) {
-            if (error) {
-               return console.log(error);
-            } else {
-                callback(doc);
-            }
-        });
-}
-//根据标题来对友链查重
-FriendSchema.statics.findByTitle = function(title,callback) {
-    return this.model('Friend')
-        .findOne({title:title})
-        .exec(function (error, doc) {
-            if (error) {
-                return console.log(error);
-            } else if(doc){
-                callback(doc);
-            }else{
-            	 callback(null);
-            }
-        });
-}
-
-
 mongoose.model("Friend",FriendSchema);
 
 

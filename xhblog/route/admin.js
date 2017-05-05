@@ -144,17 +144,15 @@ router.post('/article/publish',multer({storage: storage}).single('file'),functio
 		article.img=req.file.path.substring(6);
 	}
 	let _article=new Article(article);
-	let resArticle;
 	_article.save().then(function(article){
-		resArticle=article
 		return article;
-	}).then(function(rs){
-		let categoryId=rs.category;
-		return Category.update({_id:categoryId}, {'$addToSet':{"articles":rs._id} });
+	}).then(function(article){
+		let categoryId=article.category;
+		return Category.update({_id:categoryId}, {'$addToSet':{"articles":article._id} });
 	}).then(function(){
 		res.json({
 			code:1,
-			article:resArticle
+			article:article
 		});
 	}).catch(function(err){
 		console.log('文章发布出错'+err);
@@ -162,7 +160,30 @@ router.post('/article/publish',multer({storage: storage}).single('file'),functio
 	});
 		
 })
-	
+
+//编辑更新文章
+router.post('/article/update',multer({storage: storage}).single('file'),function(req,res,next){	//有问题待修复
+	let newArticle=req.body;
+	if(req.file&&req.file.path){
+		newArticle.img=req.file.path.substring(6);
+	}
+	Article.findById(newArticle._id).then(function(article){
+		console.log(article);
+		let _article=_.extend(article,newArticle);
+		console.log(_article);
+		return _article.save();
+	}).then(function(rs){
+		res.json({
+			code:1,
+			article:rs,
+			message:'更新成功'
+		});
+	}).catch(function(err){
+		console.log('更新文章失败:'+err);
+		next(err);
+	});
+
+})	
 	
 	
 //发布新文章
@@ -205,15 +226,40 @@ router.get('/article/getArticles',function(req,res,next){
 
 //分页展示
 router.get('/article/page',function(req,res,next){
-	let current=parseInt(req.query.current)-1;
-	let textCount=parseInt(req.query.textCount);
-	let query = Article.find({}).sort({
-		"create_time": -1
-	}).skip(textCount*current).limit(textCount);
-	Article.count({}).then(function(total){
+	let currentPage=parseInt(req.query.currentPage)-1;
+	let limit=parseInt(req.query.limit);
+	let title=req.query.title||'';
+	let flag=parseInt(req.query.flag)||0;
+	let queryObj={
+		title:{'$regex':title},
+	}
+	switch(flag){
+		case 1:		//有效
+		queryObj.isActive=true;
+		queryObj.isDraft=false;
+		break;
+		case 2:		//无效
+		queryObj.isActive=false;
+		break;
+		case 3:		//草稿
+		queryObj.isDraft=true;
+		break;
+	}
+//	if(flag==1){		//有效
+//		queryObj.isActive=true;
+//		queryObj.isDraft=false;
+//	}else if(flag==2){	//无效
+//		
+//	}
+	
+	console.log(queryObj);
+	let query = Article.find(queryObj)
+		.sort({"create_time": -1}).skip(limit*currentPage).limit(limit);
+		
+	Article.count(queryObj).exec().then(function(total){
 		return total;
 	}).then(function(total){
-		query.find({}).populate('category','name').then(function(results){
+		query.find({}).populate('category','name').exec().then(function(results){
 			if(total>0){		//找到文章
 				return res.json({
 					results:results,
@@ -244,26 +290,7 @@ router.get('/article/findById',function(req,res,next){
 	})
 })
 
-//编辑更新文章
-router.post('/article/update',function(req,res,next){	//有问题待修复
-	let newArticle=req.body,
-		bId=newArticle.bId;
-	Article.findOne({bId:bId}).then(function(article){
-		console.log(article);
-		let _article=_.extend(article,newArticle);
-		console.log(_article);
-		return _article.save()
-	}).then(function(rs){
-		res.json({
-			code:1,
-			article:rs
-		});
-	}).catch(function(err){
-		console.log('更新文章失败:'+err);
-		next(err);
-	});
 
-})
 
 //删除文章 (单项)
 router.post('/article/romoveOne',function(req,res,next){
@@ -585,7 +612,7 @@ router.post('/tag/remove',function(req,res,next){
 //获取注册用户
 router.get('/users',function(req,res,next){
 	console.log('123');
-	User.find({}).sort({'create_time':-1}).then(function(users){
+	User.findAll().then(function(users){
 		res.json({
 			code:1,
 			users:users,
@@ -595,7 +622,6 @@ router.get('/users',function(req,res,next){
 		console.log('查询用户列表出错:'+err);
 		next(err);
 	})
-	
 })
 
 

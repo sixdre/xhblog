@@ -45,22 +45,12 @@ const LMSchema=new Schema({
 
 //查询所有未回复的留言
 LMSchema.statics.findAllNotReply=function(){
-	return this.model('Lm')
-			.find({'state.isReply':false}).then(function(doc){
-				return doc;
-			},function(){
-				
-			})
+	return this.find({'state.isReply':false}).exec();
 }
 
 //查询所有已回复的留言
 LMSchema.statics.findAllReply=function(){
-	return this.model('Lm')
-			.find({'state.isReply':true}).then(function(doc){
-				return doc;
-			},function(){
-				
-			})
+	return this.find({'state.isReply':true}).exec();
 }
 
 

@@ -30,26 +30,5 @@ CategorySchema.pre('save', function(next) {
 	}
 	next()
 });
-CategorySchema.statics = {
-	findAll: function(cb) {
-		return this
-			.find({})
-			.sort('create_time')
-			.exec(cb)
-	},
-	findById: function(id, cb) {
-		return this
-			.findOne({
-				_id: id
-			})
-			.exec(cb)
-	},
-	findByName: function(name, cb) {
-		return this
-			.findOne({
-				name: name
-			})
-			.exec(cb)
-	}
-}
+
 mongoose.model('Category', CategorySchema);

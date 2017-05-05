@@ -18,14 +18,26 @@
 					<select class="input-sm form-control inline v-middle" style="width: 60px;" ng-model="pageConfig.limit" ng-options="item for item in pageConfig.pageSizes">
 					</select>
 					<button class="btn btn-sm btn-default" ng-click="removeMulti()">删除</button>
+					<label class="radio-inline">
+					  	<input type="radio" id="inlineCheckbox1" ng-model="flag" ng-value="0"> 全部
+					</label>
+					<label class="radio-inline">
+					  	<input type="radio" id="inlineCheckbox2" ng-model="flag" ng-value="1"> 有效
+					</label>
+					<label class="radio-inline">
+					  	<input type="radio" id="inlineCheckbox3" ng-model="flag" ng-value="2"> 无效
+					</label>
+					<label class="radio-inline">
+					  	<input type="radio" id="inlineCheckbox3" ng-model="flag" ng-value="3"> 草稿
+					</label>
 				</div>
 				<div class="col-sm-4">
 				</div>
 				<div class="col-sm-3">
 					<div class="input-group">
-						<input type="text" class="input-sm form-control" placeholder="Search">
+						<input type="text" ng-model="title" class="input-sm form-control" placeholder="Search">
 						<span class="input-group-btn">
-							<a class="btn btn-sm btn-default" ui-sref="app.article.search">
+							<a class="btn btn-sm btn-default" ng-click="queryByTitle()">
 								<i class="fa fa-search"></i>
 							</a>
 			            </span>
@@ -50,7 +62,7 @@
 							</th>
 							<th style="width: 16%;">分类</th>
 							<th style="width: 16%;">浏览量</th>
-							<th style="width: 16%;" ng-click="isActive=!isActive" ng-init="isActive=true">是否有效</th>
+							<th style="width: 16%;">是否有效</th>
 							<th style="width: 15%;">操作</th>
 						</tr>
 					</thead>
@@ -98,10 +110,16 @@
 			<footer class="panel-footer">
 				<div class="row">
 					<div class="col-sm-4 text-center">
-						<small class="text-muted inline m-t-sm m-b-sm">showing {{StartNum}}-{{EndNum}} of {{CommonData.ArticleTotal}} items</small>
+						<small class="text-muted inline m-t-sm m-b-sm">showing {{StartNum}}-{{EndNum}} of {{pageConfig.totalItems}} items</small>
 					</div>
 					<div class="col-sm-8 text-right text-center-xs">
-						<ul uib-pagination total-items="pageConfig.totalItems" items-per-page="pageConfig.limit" max-size="pageConfig.maxSize" boundary-links="true" rotate="true" num-pages="numPages" previous-text="上一页" next-text="下一页" ng-model="pageConfig.currentPage" ng-change="pageChanged()"></ul>
+						<ul uib-pagination total-items="pageConfig.totalItems" 
+							items-per-page="pageConfig.limit" max-size="pageConfig.maxSize" 
+							boundary-links="true" rotate="true" num-pages="numPages"
+							previous-text="上一页" next-text="下一页" 
+							ng-model="pageConfig.currentPage" 
+							ng-change="loadData()">
+						</ul>
 					</div>
 				</div>
 			</footer>
