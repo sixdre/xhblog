@@ -12,7 +12,7 @@ const CommentSchema = new Schema({
 		    likes:[{
 				  type: ObjectId, 
 				  ref: 'User'
-			 }],
+			 	}],
 		    create_time:{
 		    	type: Date,
 	      	default: Date.now()
@@ -23,20 +23,23 @@ const CommentSchema = new Schema({
 		  type: ObjectId, 
 		  ref: 'User'
 	  }],
+	  likeNum:{
+	  	type:Number,
+	  	default: 0
+	  },
 	  create_time:{
 		  type: Date,
       default: Date.now()
 	  }
 });
-//CommentSchema.pre('save', function(next) {
-//	  if (this.isNew) {
-//	    this.create_time = this.update_time = Date.now();
-//	  } else {
-//	    this.update_time = Date.now();
-//	  }
-//	  next()
-//});
 
+//中间件
+CommentSchema.pre('save', function(next) {
+		this.likeNum=this.likes.length;
+	  next();
+});
+
+//静态方法
 CommentSchema.statics = {
   findAll: function(cb) {
     return this
@@ -44,11 +47,16 @@ CommentSchema.statics = {
       .sort('update_time')
       .exec(cb)
   },
-  findById: function(id, cb) {
-    return this 
-      .findOne({_id: id})
-      .exec(cb)
+  findBySort:function(aId,orderBy){			//aId 文章id,orderBy 排序方式
+  	return this.find({articleId:aId})
+  	.populate('from')
+		.populate('reply.from reply.to')
+  	.sort(orderBy).exec();
   }
+//	pointLikes:function(cId,Rid){		//cId 评论id，Rid评论回复id
+//		return this.
+//	}
+
 }
 
 mongoose.model('Comment',CommentSchema);  

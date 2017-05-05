@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
     destination: "public/upload/banner/"+moment(Date.now()).format('YYYY-MM'),
     limits: {
 	    fileSize: 100000000
-	},
+		},
     //TODO:文件区分目录存放
     //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
     filename: function (req, file, cb) {
@@ -136,9 +136,15 @@ router.post('/word',function(req,res,next){
 	});
 })
 
-
-
-
+//router.post('/article/publish',multer({storage: storage,}).single('file'),function(req,res,next){
+//	console.log(req.file)
+//	
+//
+//		
+//})
+	
+	
+	
 //发布新文章
 router.post('/article/publish',function(req,res,next){
 	let article=req.body;
@@ -162,6 +168,7 @@ router.post('/article/publish',function(req,res,next){
 		 next(err);
 	 });
 })
+
 
 //获取所有文章
 router.get('/article/getArticles',function(req,res,next){

@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const async = require('async');
 const mongoose=require('mongoose');
-
 //数据模型
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");
@@ -64,7 +63,7 @@ router.get('/article/:bId',Common.loadCommonData,function(req,res,next){
 			let articleId=results.doc._id;
 			Comment.find({articleId:articleId})
 			.populate('from')
-			.populate('reply.from reply.to').sort({'create_time':-1}).exec(function(err,comments){
+			.populate('reply.from reply.to').sort({'likeNum':-1}).exec(function(err,comments){
 				let cTotal=comments.length;
 				comments.forEach(function(value){
 					if(value.reply&&value.reply.length>0){
@@ -97,27 +96,29 @@ router.get('/comment',function(req,res,next){
 		order_by=req.query.order_by,
 		page=req.query.page;
 		let sort={
-			create_time:-1
+			likeNum:-1
 		}
 		if(order_by=="timeSeq"){
-			sort.create_time=1
-		}else if(order_by=="likes"){
-			sort.likes=-1;
+			sort={
+				create_time:1
+			}
+		}else if(order_by=="timeRev"){
+			sort={
+				create_time:-1
+			}
 		}
-		Comment.find({articleId:articleId})
-		.populate('from')
-		.populate('reply.from reply.to').sort(sort).exec(function(err,comments){
+		Comment.findBySort(articleId,sort).then(function(comments){
+			if(comments){
+				res.render("www/blocks/comment_list",{
+					comments:comments
+				});
+			}
+		}).catch(function(err){
 			if(err){
 				console.log(err);
-				next(err);
+				res.status(500);
 			}
-//			res.json({
-//				comments:comments
-//			})
-			res.render("www/blocks/comment_list",{
-				comments:comments
-			})
-		});
+		})
 })
 
 
@@ -154,27 +155,24 @@ router.post('/comment',Auth.checkLoginByAjax,function(req,res,next){
 })
 
 //评论点赞
-router.get('/comment/point',Auth.checkLoginByAjax,function(req,res,next){
-	console.log(req.query)
-	let commentId=req.query.commentId,
-		replyId=req.query.replyId,
+router.post('/comment/point',Auth.checkLoginByAjax,function(req,res,next){
+	let commentId=req.body.commentId,
+		replyId=req.body.replyId,
 		user=req.session['User'];
 		if(!commentId){
-			return res.json({
-				code:-2,
+			return res.status(500).json({
 				message:'请求参数有误'
 			})
 		}
-		if(commentId&&!replyId){			//评论点赞
-			Comment.findOne({_id:commentId}).exec(function(err,comment){
-				if(err){
-					console.log('评论点赞出错:'+err);
-					return next(err);
-				}
-				
+		Comment.findOne({_id:commentId}).exec(function(err,comment){
+			if(err){
+				console.log('评论点赞出错:'+err);
+				return next(err);
+			}
+			if(comment&&!replyId){	//评论点赞
 				if(comment.likes.indexOf(user._id)>-1){
 					res.json({
-						code:-3,
+						code:-2,
 						message:'您已点赞'
 					})
 				}else{
@@ -190,20 +188,13 @@ router.get('/comment/point',Auth.checkLoginByAjax,function(req,res,next){
 						});
 					});
 				}
-			})
-		}else if(commentId&&replyId){		//给回复点赞
-			Comment.findOne({_id:commentId}).exec(function(err,comment){
-				if(err){
-					console.log('评论点赞出错:'+err);
-					return next(err);
-				}
+			}else if(comment&&replyId){		//给回复点赞
 				let reply=comment.reply;
-				reply.forEach(function(value,key){
+				reply.forEach(function(value){
 					if(value._id==replyId){
 						if(value.likes.indexOf(user._id)>-1){
-							console.log('sxsc')
 							return res.json({
-								code:-3,
+								code:-2,
 								message:'您已点赞'
 							})
 						}
@@ -220,8 +211,8 @@ router.get('/comment/point',Auth.checkLoginByAjax,function(req,res,next){
 						})
 					}
 				})
-			})
-		}
+			}
+		})
 })
 
 //列出类型下的文章

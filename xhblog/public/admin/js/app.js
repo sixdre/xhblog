@@ -12,6 +12,7 @@ angular.module('app', [
     'ui.jq',
     'ui.validate',
     'oc.lazyLoad',
+    'ngFileUpload',
     //'pascalprecht.translate',
     "toaster",
    /* "textAngular"*/

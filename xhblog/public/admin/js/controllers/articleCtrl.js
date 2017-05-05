@@ -4,8 +4,8 @@ var uetrue=null;
  * 文章发布控制器
  */
 app.controller('articlePublishCtrl',
-		['$rootScope','$scope',"$stateParams",'articleService',"defPopService","alertService",'DataService',
-		 function($rootScope,$scope,$stateParams,articleService,defPopService,alertService,DataService){
+		['$rootScope','$scope',"$stateParams",'Upload','articleService',"defPopService","alertService",'DataService',
+		 function($rootScope,$scope,$stateParams,Upload,articleService,defPopService,alertService,DataService){
 		 	
 
 			$scope.clearArticle=function(){		//注在请求中不要调用此方法,angular会自动脏数据检查
@@ -14,6 +14,22 @@ app.controller('articlePublishCtrl',
 				});
 			}
 			$scope.article={};
+			
+//			$scope.publish=function(){
+//				Upload.upload({
+//	            url: '/api/admin/article/publish',
+//	            file:$scope.file,
+//	            data:{
+//	            	name:1
+//	            }
+//	         }).then(function (resp) {
+//	           
+//	         }, function (resp) {
+//	            
+//	         }, function (evt) {
+//	           
+//	         });
+//			}
 			//文章发表
 			$scope.publish=function(state){
 				if($scope.article.tags.length>3){
