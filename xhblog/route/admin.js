@@ -162,15 +162,13 @@ router.post('/article/publish',multer({storage: storage}).single('cover'),functi
 })
 
 //编辑更新文章
-router.post('/article/update',multer({storage: storage}).single('file'),function(req,res,next){	//有问题待修复
-	let newArticle=req.body;
+router.post('/article/update',multer({storage: storage}).single('cover'),function(req,res,next){	//有问题待修复
+	let newArticle=req.body.article;
 	if(req.file&&req.file.path){
 		newArticle.img=req.file.path.substring(6);
 	}
 	Article.findById(newArticle._id).then(function(article){
-		console.log(article);
 		let _article=_.extend(article,newArticle);
-		console.log(_article);
 		return _article.save();
 	}).then(function(rs){
 		res.json({
@@ -245,14 +243,6 @@ router.get('/article/page',function(req,res,next){
 		queryObj.isDraft=true;
 		break;
 	}
-//	if(flag==1){		//有效
-//		queryObj.isActive=true;
-//		queryObj.isDraft=false;
-//	}else if(flag==2){	//无效
-//		
-//	}
-	
-	console.log(queryObj);
 	let query = Article.find(queryObj)
 		.sort({"create_time": -1}).skip(limit*currentPage).limit(limit);
 		
@@ -280,13 +270,16 @@ router.get('/article/page',function(req,res,next){
 //编辑文章根据id查找
 router.get('/article/findById',function(req,res,next){
 	let id=req.query.id;
-	Article.findOne({_id:id}).populate('category').populate('tags').then(function(article){
+	Article.findById(id).populate('category').populate('tags').then(function(article){
 		res.json({
 			code:1,
 			article:article,
 			message:'success'
 		})
-		console.log(article);
+	}).catch(function(err){
+		res.status(500).json({
+			message:'查询出错'
+		});
 	})
 })
 
@@ -296,9 +289,15 @@ router.get('/article/findById',function(req,res,next){
 router.post('/article/romoveOne',function(req,res,next){
 	let id=req.body.id;
 	Article.findById(id).then(function(article){
-		return Category.update({_id:article.category},{$pull:{"articles": article._id}});
-	}).then(function(){
-		return Article.remove({_id:id});
+		return Category.update({_id:article.category},{$pull:{"articles": article._id}}).then(function(){
+			return article;
+		});
+	}).then(function(article){
+		if(article.isActive==false){//如果文章无效就将其彻底删除
+			return Article.remove({_id:article._id});
+		}else{						//如果文章有效就将其变为无效（假删除）
+			return Article.update({_id:article._id},{'isActive':false});
+		}
 	}).then(function(){
 		res.json({
 			code:1,
@@ -313,15 +312,20 @@ router.post('/article/romoveOne',function(req,res,next){
 
 //删除文章 （多选)
 router.post('/article/removeMulti',function(req,res,next){
-	console.log(req.body.ids);
 	Article.find({_id:{"$in":req.body.ids}}).then(function(articles){
 		return Promise.all(articles.map(function(article){
 			return Category.update({_id:article.category},{
 				$pull:{"articles": article._id}
 			}).then(function(){
-				return Article.remove({_id:article._id}).then(function(){	//返回promise对象
-					return 1;	//返回下一个promise resolve 对象的值
-				});				
+				if(article.isActive==false){		//如果文章无效就将其彻底删除
+					return Article.remove({_id:article._id}).then(function(){	//返回promise对象
+						return 1;	//返回下一个promise resolve 对象的值
+					});				
+				}else{				//如果文章有效就将其变为无效（假删除）
+					return Article.update({_id:article._id},{'isActive':false}).then(function(){	//返回promise对象
+						return 1;	//返回下一个promise resolve 对象的值
+					});				
+				}
 			});
 		}));
 	}).then(function(dd){

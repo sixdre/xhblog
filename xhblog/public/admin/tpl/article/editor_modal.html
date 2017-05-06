@@ -42,6 +42,9 @@
 			<div class="col-sm-6">
 				<input type="file" class="form-control" ngf-select  ngf-pattern="image/*" accept="image/*" ngf-max-size="5MB" ng-model="file" name="file"/>
 			</div>
+			<div class="col-sm-3">
+				<img ngf-src="file" ngf-resize="{width: 60, height:60, quality: 0.9}" >
+			</div>
 			<div ng-show="haveImg">
 				<img ng-src="{{article.img}}" alt="" width="100" height="100" />
 			</div>
@@ -50,7 +53,7 @@
 	   		<script id="update_modal" type="text/plain"></script>
    		</div>
    		<div class="text-right" style="margin-top: 20px;">
-   			<label class="i-checks m-b-none" ng-show="article.isDraft">
+   			<label class="i-checks m-b-none" ng-show="article.isDraft||!article.isActive">
    				标记为有效
                 <input type="checkbox" ng-model="isFormal">
                 <i></i>
