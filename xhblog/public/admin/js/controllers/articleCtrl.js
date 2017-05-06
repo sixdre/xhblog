@@ -16,6 +16,14 @@ app.controller('articlePublishCtrl',
 			$scope.article={};
 			
 			$scope.publish=function(state){
+				if ($scope.article_form.$invalid) {
+		         defPopService.defPop({
+							status:0,
+							content:"请检查输入内容！"
+						});
+					return;
+		      }
+				
 				var article={
 					title:$scope.article.title,
 					category:$scope.article.category,
@@ -35,9 +43,10 @@ app.controller('articlePublishCtrl',
 				}
 				Upload.upload({
 		            url: '/api/admin/article/publish',
-		            file:$scope.file,
-		            data:article
-	//	            fileFormDataName:'cover'
+		            data:{
+		            	cover:$scope.file,
+		            	article:article
+		            }
 		         }).then(function (res) {
 		           if(res.data.code>0){
 						alertService.success('发表成功!');
@@ -47,9 +56,9 @@ app.controller('articlePublishCtrl',
 					}
 		         }, function (resp) {
 		            defPopService.defPop({
-						status:0,
-						content:"出错了！"
-					});
+							status:0,
+							content:"出错了！"
+						});
 		         }, function (evt) {
 		            //console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
 		         });

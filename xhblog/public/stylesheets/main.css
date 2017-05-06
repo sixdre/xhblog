@@ -16,6 +16,9 @@ i,em,b,small,strong{
 	font-style: normal;
 	font-weight: normal;
 }
+ul{
+	list-style: none;
+}
 .container{
 	width: 960px;
 }
@@ -266,6 +269,56 @@ nav form .search-btn .search_ic{
 .post .article .article_foot a{
 	color: #ea6f5a;
 }
+
+
+/*右侧*/
+.index .aside{
+	padding: 40px 0 0;
+}
+.index .aside .friend{
+	margin-bottom: 20px;
+    padding-top: 0;
+    font-size: 13px;
+}
+.index .aside .friend .title {
+    text-align: left;
+    color: #969696;
+}
+.index .aside .friend .reload {
+    float: right;
+}
+.index .aside .friend .page-count {
+    margin: 0 10px 0 0;
+    font-size: 13px;
+    color: #969696;
+    display: inline-block;
+}
+.index .aside .friend .page-change {
+    font-size: 0;
+    display: inline-block;
+}
+.index .aside .friend .page-change a {
+    padding: 3px 5px;
+    font-size: 12px;
+    color: #969696;
+    border: 1px solid #dcdcdc;
+}
+.index .aside .friend .page-change a:first-child {
+    border-radius: 4px 0 0 4px;
+    border-right: none;
+}
+.index .aside .friend .page-change a:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.index .aside .friend .friend_list li {
+    margin-top: 15px;
+}
+
+
+
+
+
 
 /*评论*/
 .comment-wrapper{

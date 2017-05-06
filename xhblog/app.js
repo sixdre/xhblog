@@ -14,6 +14,8 @@ global.moment = require('moment'); 			//时间格式化
 global.md5=require("md5");					//md5加密
 global.validator = require('validator');	//表单验证
 
+//配置文件
+global.CONFIG=JSON.parse(fs.readFileSync('./config/settings.json').toString());
 //数据库连接
 const mongoose=require('./config/mongoose.js');
 const db=mongoose();
@@ -27,7 +29,7 @@ app.use(cookieParser("xhtest"));
 app.use(session({
   secret: 'xhtest',
   //name: 'name',			//设置 cookie 中，保存 session 的字段名称，默认为 connect.sid 。
-  cookie: {maxAge: 1000 * 60 * 60 * 24}, //超时时间
+  cookie: {maxAge: 1000 * 60 * 60 * 24}, //有效时间
   saveUninitialized: true,
   resave: false,
   store:new mongoStroe({
@@ -59,7 +61,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, res, next) {
     //客户端上传文件设置
      var ActionType = req.query.action;
-     console.log(ActionType)
     if (ActionType === 'uploadimage' || ActionType === 'uploadfile' || ActionType === 'uploadvideo') {
         var file_url = '/upload/ueditor/';//默认图片上传地址
         /*其他上传格式的地址*/
@@ -80,7 +81,6 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
     }
     // 客户端发起其它请求
     else {
-           console.log('config.json')
         res.setHeader('Content-Type', 'application/json');
         res.redirect('/ueditor/nodejs/config.json');
     }

@@ -137,8 +137,8 @@ router.post('/word',function(req,res,next){
 })
 
 //文章发布
-router.post('/article/publish',multer({storage: storage}).single('file'),function(req,res,next){
-	let article=req.body;
+router.post('/article/publish',multer({storage: storage}).single('cover'),function(req,res,next){
+	let article=req.body.article;
 	article['author']=req.session["manager"].username||'徐小浩';
 	if(req.file&&req.file.path){
 		article.img=req.file.path.substring(6);

@@ -1,0 +1,16 @@
+<div class="title">
+	<span>友情链接</span>
+	<div class="reload">
+		<div class="page-count" data-cp="<%=current_page%>" data-allpage="<%=allPage%>"><%=current_page%>/<%=allPage%></div>
+		<div class="page-change">
+			<a class="prev"><i class="fa fa-arrow-left"></i></a>
+			<a class="next"><i class="fa fa-arrow-right"></i></a>
+		</div>
+	</div>
+</div>
+<ul class="friend_list">
+<%friends.forEach(function(friend){%>
+	<li><a href="<%=friend.url%>"><%=friend.title%></a></li>
+<%})%>
+</ul>
+

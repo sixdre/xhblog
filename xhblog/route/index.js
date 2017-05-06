@@ -6,7 +6,6 @@ const events = require('events');				//事件处理模块
 const path = require('path');
 const tool =require('../utility/tool');
 const mongoose=require('mongoose');
-
 //数据模型
 const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");			//类型
@@ -104,6 +103,48 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 })
 
 
+
+router.get('/friends',function(req,res,next){
+	let page=parseInt(req.query.page)||1;		//当前页
+	let limit=parseInt(req.query.limit)||parseInt(CONFIG.FriendLimit);	//每页数量
+	async.waterfall([
+		function(cb){
+			Friend.count({}).exec(function(err,total){
+				let allPage=Math.ceil(total/limit);
+				cb(null,allPage);
+			})
+		},
+		function(allPage,cb){
+			if(page>allPage){
+				page=1;
+			}
+			Friend.find({}).skip((page-1)*limit)
+				.limit(limit).exec(function(err,friends){
+				cb(null,allPage,friends);
+			})
+		}
+	],function(err,allPage,friends){
+		if(err){
+			return next(err);
+		}
+		console.log(friends);
+		res.render('www/blocks/friend',{
+			allPage:allPage,
+			current_page:page,
+			friends:friends||[]
+		})
+	})
+//	Friend.find({}).limit(CONFIG.FriendLimit).exec().then(function(friends){
+//		res.render('www/blocks/friend',{
+//			friends:friends||[]
+//		})
+//	}).catch(function(err){
+//		console.log('获取友情链接失败');
+//		res.status(500).json({
+//			message:'获取友情链接失败'
+//		})
+//	});
+})
 
 
 //留言页面

@@ -51,6 +51,25 @@ exports.getConfig = function (filePath, key, callback) {
     });
 };
 
+//promise读取文件
+exports.getConfigAsync = function (filePath,key) {
+//	var promise=new Promise();		//报错， Promise()里要传入一个函数
+	return new Promise(function(resolve,reject){
+		 fs.readFile(filePath, 'utf8', function (err, file) {
+	        if (err) {
+	           console.log('读取文件%s出错：' + err, filePath);
+	           reject(err);
+	        }
+	        var data = JSON.parse(file);
+	        if (typeof key === 'string') {
+	            data = data[key];
+	        }
+	        resolve(data);
+	    });
+	})
+};
+
+
 /**
  * 写入配置文件
  * @param filePath 文件路径
