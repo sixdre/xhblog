@@ -3,6 +3,16 @@
    <h1 class="m-n font-thin h3">文件管理</h1>
 </div>
 <div class="wrapper-md">
-	
+	<div class="form-group">
+		<input type="file" ngf-select  ngf-max-size="50MB"
+    	ng-model="file" name="file" class="btn btn-default" value="上传文件" />
+	</div>
+	<div class="progress bg-light dker" style="">
+     	<div class="progress-bar progress-bar-striped bg-info" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
+  	</div>
+	<div class="form-group">
+    	<input type="button" class="btn btn-info" ng-click="uploadFile()" value="上传"/>
+	</div>
+
 </div>
 

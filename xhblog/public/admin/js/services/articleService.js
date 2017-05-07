@@ -37,37 +37,37 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 	
 	return {
 		list:function(data){
-			return handelRequest("GET",'/api/admin/article/getArticles',data);
+			return handelRequest("GET",'/api/article/getArticles',data);
 		},
 		removeOne:function(id){
-			return handelRequest("POST",'/api/admin/article/romoveOne',{id:id});
+			return handelRequest("POST",'/api/article/romoveOne',{id:id});
 		},
 		removeMulti:function(ids){
-			return handelRequest("POST",'/api/admin/article/removeMulti',{ids:ids});
+			return handelRequest("POST",'/api/article/removeMulti',{ids:ids});
 		},
 //		save:function(data){
 //			return $http({
 //				method:"POST",
-//				url:'/api/admin/article/sub',
+//				url:'/api/article/sub',
 //				data:data,
 //				headers: {'Content-Type':undefined},
 //        		transformRequest:angular.identity   
 //			});
 //		},
 		publish:function(data){
-			return handelRequest("POST",'/api/admin/article/publish',data);
+			return handelRequest("POST",'/api/article/publish',data);
 		},
 		search:function(title){
-			return handelRequest("GET",'/api/admin/article/search',{title:title});
+			return handelRequest("GET",'/api/article/search',{title:title});
 		},
 		page:function(params){
-			return handelRequest("GET",'/api/admin/article/page',params);
+			return handelRequest("GET",'/api/article/page',params);
 		},
 		findById:function(id){
-			return handelRequest("GET",'/api/admin/article/findById',{id:id});
+			return handelRequest("GET",'/api/article/findById',{id:id});
 		},
 		update:function(arg){
-			return handelRequest("POST",'/api/admin/article/update',arg);
+			return handelRequest("POST",'/api/article/update',arg);
 		}
 		
 		

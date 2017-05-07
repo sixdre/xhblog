@@ -11,7 +11,7 @@ angular.module('app').controller('AppCtrl',
 			function getCommonData(){
 				$http({ 
 					method: "GET",
-					url: "/api/admin/loadData"
+					url: "/admin/loadData"
 				}).then(function(res) {
 					DataService.ArticleTotal=res.data.articleTotal;
 					DataService.Words=res.data.lmdoc;

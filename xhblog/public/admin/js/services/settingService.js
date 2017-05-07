@@ -21,7 +21,7 @@ angular.module('app').factory('settingService',['$http','$q',function($http,$q){
 				var deferred=$q.defer();
 				var config={
 					method:"POST",
-					url:'/api/admin/banner',
+					url:'/api/upload/addBanner',
 					data:data,
 					headers: {'Content-Type':undefined},
               		transformRequest:angular.identity   

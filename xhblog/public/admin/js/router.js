@@ -105,16 +105,16 @@ app.config(
 				.state("app.file",{
 					url:"/file",
 					templateUrl:'/admin/tpl/indep/file.html',
-//					controller:'fileCtrl',
-//					resolve: {
-//                    deps: ['uiLoad',
-//                      function( uiLoad){
-//                        return uiLoad.load([
-//                              '/admin/js/services/fileService.js',
-//                              '/admin/js/controllers/fileCtrl.js'
-//                        ]);
-//                    }]
-//              },
+					controller:'fileCtrl',
+					resolve: {
+	                      deps: ['uiLoad',
+	                        function( uiLoad){
+	                          return uiLoad.load([
+	                                '/admin/js/services/fileService.js',
+	                                '/admin/js/controllers/fileCtrl.js'
+	                          ]);
+	                      }]
+	                },
 				})
 				.state('app.setting', {
 					abstract: true,

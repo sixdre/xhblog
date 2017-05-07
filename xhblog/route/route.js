@@ -1,4 +1,7 @@
 "use strict";
+
+//api接口
+const apiRouter=require('./api');
 //后台
 const adminRouter=require('./admin');
 
@@ -6,6 +9,7 @@ const adminRouter=require('./admin');
 const indexRouter=require('./index');
 const userRouter=require('./user');
 const blogRouter=require('./blog');
+const uploadRouter=require('./upload');
 const Auth=require('../middleware/auth');
 module.exports=function(app){
 	
@@ -23,12 +27,8 @@ module.exports=function(app){
 	app.use('/',blogRouter);
 	app.use('/',userRouter);
 
-	app.get('/admin',function(req,res,next){
-		res.render('admin', {
-			title: '博客后台管理系统',
-		});
-	})
-	app.all('/api/admin/*',Auth.checkAdmin);
-	app.use('/api/admin',adminRouter);
-	
+	app.use('/admin',adminRouter)
+//	app.all('/api/*',Auth.checkAdmin);
+	app.use('/api',apiRouter);
+	app.use('/api/upload',uploadRouter);
 }

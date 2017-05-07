@@ -11,7 +11,7 @@ app.controller('WordModalInstanceCtrl',
 			$scope.postReply=function(){
 				$http({
 				  method:"POST",
-				  url:"/admin/word",
+				  url:"/api/word",
 				  data:{
 				  	id:$scope.word._id,
 				  	replyContent:$scope.replyContent

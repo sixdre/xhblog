@@ -134,13 +134,14 @@ router.get('/logout',function(req,res,next){
 	});
 })
 
-//router.get('/admin_logout',function(req,res,next){
-//	delete req.session['manager'];
-//	res.json({
-//		code:1,
-//		message:'退出登陆成功'
-//	});
-//})
+//管理员退出
+router.get('/admin_logout',function(req,res,next){
+	delete req.session['manager'];
+	res.json({
+		code:1,
+		message:'退出登陆成功'
+	});
+})
 //后台登陆
 router.post('/admin_login',function(req,res,next){
 	console.log('sxs')

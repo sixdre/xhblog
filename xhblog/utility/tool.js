@@ -146,6 +146,22 @@ exports.contain=function(arr,val){
     return false;  
 }
 
+exports.checkUploadImg=function(type){
+	let imgArr=CONFIG.UploadImgType;
+	if(imgArr.indexOf(type)==-1){
+		return false;
+	}
+	return true;
+	
+//	return new Promise(function(resolve,reject){
+//		if(imgArr.indexOf(type)>-1){
+//			resolve(type)
+//		}else{
+//			reject('该类型暂不支持上传');
+//		}
+//	})
+}
+
 
 
 

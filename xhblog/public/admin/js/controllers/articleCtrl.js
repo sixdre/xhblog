@@ -40,17 +40,19 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'U
 				article.isActive = false; //无效
 			}
 			Upload.upload({
-				url: '/api/admin/article/publish',
+				url: '/api/article/publish',
 				data: {
 					cover: $scope.file,
 					article: article
 				}
 			}).then(function(res) {
-				if(res.data.code > 0) {
-					alertService.success('发表成功!');
+				if(res.data.code ==1) {
+					alertService.success(res.data.message);
 					DataService.ArticleTotal += 1;
 					$scope.article = {};
 					$scope.file = null;
+				}else if(res.data.code ==-2){
+					alertService.error(res.data.message);
 				}
 			}, function(resp) {
 				defPopService.defPop({
@@ -281,7 +283,7 @@ app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout", 
 				// editor准备好之后才可以使用
 				upUe.setContent($scope.article.tagcontent);
 			});
-		}, 10);
+		});
 
 		//文章更新
 		$scope.update = function() {
@@ -299,7 +301,7 @@ app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout", 
 			article.tagcontent = UE.getEditor('update_modal').getContent();
 			article.content = UE.getEditor('update_modal').getContentTxt();
 			Upload.upload({
-				url: '/api/admin/article/update',
+				url: '/api/article/update',
 				data: {
 					cover: $scope.file,
 					article: article

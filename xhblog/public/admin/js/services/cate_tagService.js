@@ -16,24 +16,24 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 	var api={
 		category:{
 			list:function(){
-				return handelRequest("GET",'/api/admin/category');
+				return handelRequest("GET",'/api/category');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/api/admin/category/remove',{id:data});
+				return handelRequest("POST",'/api/category/remove',{id:data});
 			},
 			add:function(data){
-				return handelRequest("POST",'/api/admin/category',{category:data});
+				return handelRequest("POST",'/api/category',{category:data});
 			}
 		},
 		tag:{
 			list:function(){
-				return handelRequest("GET",'/api/admin/tag');
+				return handelRequest("GET",'/api/tag');
 			},
 			remove:function(data){
-				return handelRequest("POST",'/api/admin/tag/remove',{id:data});
+				return handelRequest("POST",'/api/tag/remove',{id:data});
 			},
 			add:function(data){
-				return handelRequest("POST",'/api/admin/tag',{tag:data});
+				return handelRequest("POST",'/api/tag',{tag:data});
 			}
 		}
 	}

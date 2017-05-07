@@ -136,7 +136,7 @@ $(function() {
 	//评论
 	function Comment(formId){
 		var content=$(formId).find('textarea[name="content"]').val().trim();
-		if(content.length>0){
+		if(content.length){
 			var data=$(formId).serialize();
 			UserHandle.submitComment(data).then(function(res){
 				if(res.code==1){
