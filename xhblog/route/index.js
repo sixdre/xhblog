@@ -128,7 +128,7 @@ router.get('/friends',function(req,res,next){
 			return next(err);
 		}
 		console.log(friends);
-		res.render('www/blocks/friend',{
+		res.json({
 			allPage:allPage,
 			current_page:page,
 			friends:friends||[]

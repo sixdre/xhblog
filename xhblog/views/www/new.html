@@ -61,6 +61,23 @@
 		</div>
 	</div>
 	
+	<script id="test" type="text/html">
+		<div class="title">
+			<span>友情链接</span>
+			<div class="reload">
+				<div class="page-count" data-cp="{{current_page}}" data-allpage="{{allPage}}">{{current_page}}/{{allPage}}</div>
+				<div class="page-change">
+					<a class="prev"><i class="fa fa-arrow-left"></i></a>
+					<a class="next"><i class="fa fa-arrow-right"></i></a>
+				</div>
+			</div>
+		</div>
+		<ul class="friend_list">
+			{{each friends friend i}}
+				<li><a href="{{friend.url}}">{{friend.title}}</a></li>
+			{{/each}}
+		</ul>
+	</script>
 	
 	<script src="/javascripts/page.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">

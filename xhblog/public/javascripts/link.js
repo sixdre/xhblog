@@ -253,7 +253,10 @@ $(function() {
 			data:{page:page},
 			async:true
 		}).then(function(res){
-			$('#friend_wrapper').html(res);
+			var data = res;
+			var html = template('test', data);
+			$('#friend_wrapper').html(html);
+//			$('#friend_wrapper').html(res);
 		},function(err){
 			
 		})
@@ -268,6 +271,9 @@ $(function() {
 	$('body').delegate('#friend_wrapper .next','click',function(){
 		getFriends('next');
 	})
+	
+
+	
 	
 	
 })

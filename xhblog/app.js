@@ -41,6 +41,7 @@ app.use(session({
 //设置模板引擎
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', require('ejs').__express);
+//app.engine('.html', require('express-art-template'));
 //ejs.open = '{{';
 //ejs.close = '}}';
 app.set('view engine', 'html');
