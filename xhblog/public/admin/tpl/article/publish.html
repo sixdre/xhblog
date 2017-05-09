@@ -30,7 +30,7 @@
 			<div class="form-group">
 				<label for="" class="col-sm-1 control-label">标签</label>
 				<div class="col-sm-6">
-					<ui-select multiple ng-model="article.tags" theme="bootstrap" required>
+					<ui-select multiple ng-model="article.tags" theme="bootstrap">
 						<ui-select-match placeholder="请选择文章标签">{{$item.name}}</ui-select-match>
 						<ui-select-choices repeat="tag._id as tag in CommonData.Tags | filter: {name: $select.search}">
 							<div ng-bind-html="tag.name"></div>
