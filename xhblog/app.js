@@ -53,6 +53,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));		//extended为false时，键值对中的值就为'String'或'Array'形式,为true,则可为任何类型
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use('/static', express.static('public'));
 //app.use(express.static(path.join(__dirname, 'upload')));
 /*app.use(bodyParser({ uploadDir: "./public/upload" }));*/  
 

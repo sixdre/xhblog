@@ -591,6 +591,32 @@ router.get('/allFiles',Auth.checkAdmin,function(req,res,next){
 	})
 })
 
+router.get('/download',function(req,res,next){
+	console.log("文件存在");
+	let realPath='public/upload/banner/2017-05/file-1493975809800.jpg';
+	res.download(realPath);
+//fs.readFile(realPath, "binary", function (err, file) {
+//    if (err) {
+//        res.writeHead(500, {
+//            'Content-Type': 'text/plain'
+//        });
+//        console.log("读取文件错误");
+//        res.end(err);
+//    } else {
+//        res.writeHead(200, {
+//            'Content-Type': 'text/html'
+//        });
+//        console.log("读取文件完毕，正在发送......");
+//        res.write(file, "binary");
+//        res.end();
+//        console.log("文件发送完毕");
+//    }
+//});
+})
+
+
+
+
 module.exports = router;
 
 

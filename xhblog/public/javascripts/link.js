@@ -1,5 +1,5 @@
 $(function() {
-
+	'use strict';
 	//评论回复html
 	var replyForm='<form id="reply_form" class="comment_form" method="post" onsubmit="return false;">'+
 			'<input type="hidden" name="toId" value="">'+
