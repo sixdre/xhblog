@@ -52,7 +52,7 @@
                     </span>
                     <span class="media-body">
                       {{item.message|limitTo:10}} --来自{{item.user.username}}<br>
-                      <small class="text-muted"> {{item.meta.postTime|fromNow}}</small>
+                      <small class="text-muted"> {{item.meta.create_time|fromNow}}</small>
                       <span class="pull-right text-info" ng-click="reply(item)">
 	                    	回复
 	                    </span>

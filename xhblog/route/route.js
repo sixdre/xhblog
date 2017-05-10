@@ -8,7 +8,8 @@ const adminRouter=require('./admin');
 //网站
 const indexRouter=require('./index');
 const userRouter=require('./user');
-const blogRouter=require('./blog');
+const postsRouter=require('./posts');
+const commentRouter=require('./comment');
 const uploadRouter=require('./upload');
 const Auth=require('../middleware/auth');
 module.exports=function(app){
@@ -24,9 +25,10 @@ module.exports=function(app){
 	});
 	
 	app.use('/',indexRouter);
-	app.use('/',blogRouter);
+	app.use('/',postsRouter);
 	app.use('/',userRouter);
-
+	app.use('/',commentRouter);
+	
 	app.use('/admin',adminRouter)
 //	app.all('/api/*',Auth.checkAdmin);
 	app.use('/api',apiRouter);

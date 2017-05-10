@@ -10,6 +10,7 @@ const md5 = require('md5');
 const _=require('underscore');
 const mongoose=require('mongoose');
 const tool=require('../utility/tool');
+const post=require('../proxy/posts')
 
 //数据模型
 const Article = mongoose.model('Article');			//文章
@@ -18,7 +19,7 @@ const Tag=mongoose.model('Tag');
 const Banner=mongoose.model("Banner");		
 const Friend=mongoose.model("Friend");
 const User = mongoose.model('User');
-const Lm = mongoose.model('Lm');
+const Word = mongoose.model('Word');
 const File=mongoose.model('File');
 
 //验证中间件
@@ -71,11 +72,11 @@ const upload = multer({
 
 
 
-//留言
-router.post('/word',Auth.checkAdmin,function(req,res,next){
+//留言回复
+router.post('/word/reply',Auth.checkAdmin,function(req,res,next){
 	let id=req.body.id,
 		content=req.body.replyContent;
-	Lm.update({_id:id},{$set:{
+	Word.update({_id:id},{$set:{
 		"reply.user":req.session['manager']._id,
 		"reply.content":content,
 		"reply.replyTime":new Date(),
@@ -92,6 +93,52 @@ router.post('/word',Auth.checkAdmin,function(req,res,next){
 		});
 	});
 })
+
+//获取文章
+router.get('/article',function(req,res,next){
+	let currentPage=parseInt(req.query.currentPage)-1;
+	let limit=parseInt(req.query.limit);
+	let title=req.query.title||'';
+	let flag=parseInt(req.query.flag)||0;
+	let queryObj={
+		title:{'$regex':title},
+	}
+	switch(flag){
+		case 1:		//有效
+		queryObj.isActive=true;
+		queryObj.isDraft=false;
+		break;
+		case 2:		//无效
+		queryObj.isActive=false;
+		break;
+		case 3:		//草稿
+		queryObj.isDraft=true;
+		break;
+	}
+	let query = Article.find(queryObj)
+		.sort({"create_time": -1}).skip(limit*currentPage).limit(limit);
+		
+	Article.count(queryObj).exec().then(function(total){
+		return total;
+	}).then(function(total){
+		query.populate('category','name').exec().then(function(results){
+			if(total>0){		//找到文章
+				return res.json({
+					results:results,
+					total:total
+				});
+			}
+			res.json({		//没有更多文章
+				code:-1,
+				message:'没有更多文章'
+			});
+		})
+	}).catch(function(err){
+		console.log('文章分页查询出错:'+err);
+		next(err);
+	})
+})
+
 
 //文章发布
 router.post('/article/publish',Auth.checkAdmin,upload.single('cover'),function(req,res,next){
@@ -164,64 +211,6 @@ router.post('/article/update',Auth.checkAdmin,upload.single('cover'),function(re
 })	
 	
 
-//获取所有文章
-router.get('/article/getArticles',function(req,res,next){
-	let query = Article.find({}).sort({"time": -1});
-	query.find({},function(err,article){
-		if(err){
-			return console.dir(err);
-		}
-		res.json({
-			article:article
-		});
-	});
-})
-
-//分页展示
-router.get('/article/page',function(req,res,next){
-	let currentPage=parseInt(req.query.currentPage)-1;
-	let limit=parseInt(req.query.limit);
-	let title=req.query.title||'';
-	let flag=parseInt(req.query.flag)||0;
-	let queryObj={
-		title:{'$regex':title},
-	}
-	switch(flag){
-		case 1:		//有效
-		queryObj.isActive=true;
-		queryObj.isDraft=false;
-		break;
-		case 2:		//无效
-		queryObj.isActive=false;
-		break;
-		case 3:		//草稿
-		queryObj.isDraft=true;
-		break;
-	}
-	let query = Article.find(queryObj)
-		.sort({"create_time": -1}).skip(limit*currentPage).limit(limit);
-		
-	Article.count(queryObj).exec().then(function(total){
-		return total;
-	}).then(function(total){
-		query.find({}).populate('category','name').exec().then(function(results){
-			if(total>0){		//找到文章
-				return res.json({
-					results:results,
-					total:total
-				});
-			}
-			res.json({		//没有更多文章
-				code:-1,
-				message:'没有更多文章'
-			});
-		})
-	}).catch(function(err){
-		console.log('文章分页查询出错:'+err);
-		next(err);
-	})
-})
-
 //编辑文章根据id查找
 router.get('/article/findById',function(req,res,next){
 	let id=req.query.id;
@@ -242,6 +231,7 @@ router.get('/article/findById',function(req,res,next){
 
 //删除文章 (单项)
 router.post('/article/romoveOne',Auth.checkAdmin,function(req,res,next){
+
 	let id=req.body.id;
 	Article.findById(id).then(function(article){
 		return Category.update({_id:article.category},{$pull:{"articles": article._id}}).then(function(){

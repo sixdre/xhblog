@@ -20,62 +20,73 @@ exports.loadCommonData = function(req, res, next) {
 	let j = 0;
 	let myEventEmitter = new events.EventEmitter();
 	async.auto({
-		settings: function(cb) {
-			tool.getConfig(path.join(__dirname, '../config/settings.json'), function(err, settings) {
-				if(err) {
-					cb(err);
-				} else {
-					cb(null, settings);
-				}
-			});
-		},
 		friends: function(cb) {
-			Friend.find({}).sort({
-				'sort': -1
-			}).exec(function(err, friends) {
+			Friend.find({}).sort({'sort': -1}).exec(function(err, friends) {
+				if(err){
+					return cb(err);
+				}
 				cb(null, friends)
 			});
 		},
 		types: function(cb) {
-			Article.aggregate([{
-				$group: {
-					_id: "$category",
-					total: {
-						$sum: 1
-					}
+			Article.aggregate([{$group: {_id: "$category",total: {$sum: 1}}}]).exec(function(err, types) {
+				if(err){
+					return cb(err);
 				}
-			}]).exec(function(err, types) {
 				cb(null, types);
 			});
 		},
-		categorys: ["types", function(tt, cb) { //分类下的文章数量统计
-			myEventEmitter.on('next', addResult);
-
-			function addResult() {
-				categorys.push(obj);
-				j++;
-				if(j == tt.types.length) {
-					cb(null, categorys);
-				}
+		categorys: ["types", function(results, cb) { //分类下的文章数量统计
+			if(!results.types.length){
+				cb(null, []);
+				return ;
 			}
-			tt.types.forEach(function(rst, i) {
-				Category.findOne({
-					_id: rst._id
-				}).exec(function(err, cate) {
-					if(cate) {
-						rst.name = cate.name;
-					} else {
-						rst.name = "null";
+			async.eachSeries(results.types,function(type,cb){
+				Category.findById(type._id).exec(function(err, cate) {
+					if(err){
+						return cb(err);
 					}
-					obj = rst;
-					myEventEmitter.emit('next');
-				});
-			});
+					type.name = cate.name;
+					categorys.push(type);
+					cb(null,categorys)
+				})
+			},function(err,results){
+				if(err){
+					return cb(err)
+				}
+				cb(null,categorys)
+			})
+//			results.types.forEach(function(type) {
+//				Category.findOne({_id: type._id}).exec(function(err, cate) {
+//					if(err){
+//						cb(err);
+//					}else if(cate){
+//						type.name = cate.name;
+//					}else{
+//						type.name = "null";
+//					}
+//					obj = type;
+//					myEventEmitter.emit('next');
+//				});
+//			});
+//			function addResult() {
+//				categorys.push(obj);
+//				j++;
+//				if(j == results.types.length) {
+//					cb(null, categorys);
+//				}
+//			}
+//			myEventEmitter.on('next', addResult);
 		}]
-	}, function(err, results) {
+}, function(err, results) {
+		if(err){
+			return res.status(500).json({
+				message:'获取网站基本数据出错'
+			})
+		}
 		app.locals.friends = results.friends; //友链
 		app.locals.categorys = results.categorys; //根据文章类型同计数量
-		app.locals.settings = results.settings; //获取网站设置
+		app.locals.settings = CONFIG; //获取网站设置
 		next();
 	})
 }

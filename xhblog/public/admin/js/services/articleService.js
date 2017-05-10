@@ -36,9 +36,6 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 	
 	
 	return {
-		list:function(data){
-			return handelRequest("GET",'/api/article/getArticles',data);
-		},
 		removeOne:function(id){
 			return handelRequest("POST",'/api/article/romoveOne',{id:id});
 		},
@@ -60,8 +57,8 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		search:function(title){
 			return handelRequest("GET",'/api/article/search',{title:title});
 		},
-		page:function(params){
-			return handelRequest("GET",'/api/article/page',params);
+		getData:function(params){
+			return handelRequest("GET",'/api/article',params);
 		},
 		findById:function(id){
 			return handelRequest("GET",'/api/article/findById',{id:id});

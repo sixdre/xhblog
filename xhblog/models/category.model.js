@@ -6,7 +6,8 @@ const mongoose = require('mongoose'),
 const CategorySchema = new Schema({
 	name: {
 		unique: true,
-		type: String
+		type: String,
+		default:'未分类'
 	},
 	articles: [{
 		type: ObjectId,

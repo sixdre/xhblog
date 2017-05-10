@@ -11,7 +11,7 @@ const Article = mongoose.model('Article');			//文章
 const Category=mongoose.model("Category");			//类型
 const Banner = mongoose.model('Banner');			//轮播图
 const User = mongoose.model('User');				//用户
-const Lm = mongoose.model('Lm');				//留言
+const Word = mongoose.model('Word');				//留言
 const Friend=mongoose.model("Friend");			//友链
 const Comment=mongoose.model('Comment');		//评论
 
@@ -25,13 +25,9 @@ const BaseQuery=require('../models/dbHelper'),
 
 //首页面初始化
 function init(currentPage,cb){
-	let settings=app.locals.settings;
 	async.auto({
 		banners:function(callback){
 			Banner.find({}).sort({weight:-1}).limit(3).exec(function(err,banners){
-				if(err){
-					callback(err);
-				}
 				callback(null,banners);
 			})
 		},
@@ -42,7 +38,7 @@ function init(currentPage,cb){
 			})
 		},
 		articles:function(callback){
-			let pageSize=parseInt(settings.PageSize);
+			let pageSize=parseInt(CONFIG.PageSize);
 			let query=aQuery();
 			Article.find(query).skip((currentPage-1)*pageSize)
 			.limit(pageSize).sort({create_time:-1})
@@ -63,7 +59,7 @@ function init(currentPage,cb){
 		}
 		
 	},function(err,results){
-		results.settings=settings;
+		results.settings=CONFIG;
 		cb(results);
 	})
 }
@@ -127,23 +123,12 @@ router.get('/friends',function(req,res,next){
 		if(err){
 			return next(err);
 		}
-		console.log(friends);
 		res.json({
 			allPage:allPage,
 			current_page:page,
 			friends:friends||[]
 		})
 	})
-//	Friend.find({}).limit(CONFIG.FriendLimit).exec().then(function(friends){
-//		res.render('www/blocks/friend',{
-//			friends:friends||[]
-//		})
-//	}).catch(function(err){
-//		console.log('获取友情链接失败');
-//		res.status(500).json({
-//			message:'获取友情链接失败'
-//		})
-//	});
 })
 
 
@@ -156,11 +141,11 @@ router.get('/word',function(req,res,next){
 
 //提交留言
 router.post('/word',Auth.checkLoginByAjax,function(req,res,next){
-	let lm=new Lm({
+	let word=new Word({
 		message:req.body.content,
 		user:req.session["User"]._id
 	});
-	lm.save(function(err){
+	word.save(function(err){
 		if(err){
 			return console.dir("留言失败:"+err)
 		}

@@ -18,7 +18,7 @@ const Tag=mongoose.model('Tag');
 const Banner=mongoose.model("Banner");		
 const Friend=mongoose.model("Friend");
 const User = mongoose.model('User');
-const Lm = mongoose.model('Lm');
+const Word = mongoose.model('Word');
 const File=mongoose.model('File');
 
 
@@ -33,12 +33,12 @@ router.get('/',function(req,res,next){
 //后台angular 请求数据路由
 router.get('/loadData',function(req,res,next){
 	async.parallel({
-		lmdoc:function(callback){
-			Lm.find({"state.isRead":false}).populate('user','username').exec(function(err,lmdoc){
+		words:function(callback){
+			Word.find({"state.isRead":false}).populate('user','username').exec(function(err,words){
 				if(err){
 					callback(err);
 				}
-				callback(null,lmdoc);
+				callback(null,words);
 			})
 		},
 		articleTotal:function(callback){
@@ -71,7 +71,7 @@ router.get('/loadData',function(req,res,next){
 		}
 		res.json({
 			articleTotal:results.articleTotal,			//文章总数
-			lmdoc:results.lmdoc,			//留言
+			words:results.words,			//留言
 			categorys:results.categorys,	//文章分类
 			tags:results.tags				//文章标签
 		});

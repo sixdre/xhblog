@@ -14,7 +14,7 @@ angular.module('app').controller('AppCtrl',
 					url: "/admin/loadData"
 				}).then(function(res) {
 					DataService.ArticleTotal=res.data.articleTotal;
-					DataService.Words=res.data.lmdoc;
+					DataService.Words=res.data.words;
 					DataService.Categorys=res.data.categorys;
 					DataService.Tags=res.data.tags;
 					$rootScope.CommonData=DataService;

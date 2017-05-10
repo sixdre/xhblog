@@ -99,6 +99,7 @@ ArticleSchema.statics.findAll = function(callback) {
 		});
 }
 
+
 //查找最新的
 ArticleSchema.statics.findNew = function(limit, callback) {
 	let query = aQuery();

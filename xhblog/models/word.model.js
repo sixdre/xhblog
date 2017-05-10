@@ -3,13 +3,13 @@ const mongoose = require('mongoose')
     , Schema = mongoose.Schema  
     , ObjectId = Schema.ObjectId;
     
-const LMSchema=new Schema({
+const WordSchema=new Schema({
 	user:{					//留言用户
 		type: ObjectId,
 		ref: 'User'
 	},
 	message:{				//留言内容
-		type:"String"
+		type:String
 	},
 	reply:{
 		user:{
@@ -35,7 +35,7 @@ const LMSchema=new Schema({
 		}
 	},
 	meta:{
-		postTime:{					//用户留言时间
+		create_time:{					//用户留言时间
 			type:Date,
 			default:Date.now
 		}
@@ -44,16 +44,16 @@ const LMSchema=new Schema({
 });
 
 //查询所有未回复的留言
-LMSchema.statics.findAllNotReply=function(){
+WordSchema.statics.findAllNotReply=function(){
 	return this.find({'state.isReply':false}).exec();
 }
 
 //查询所有已回复的留言
-LMSchema.statics.findAllReply=function(){
+WordSchema.statics.findAllReply=function(){
 	return this.find({'state.isReply':true}).exec();
 }
 
 
-mongoose.model("Lm",LMSchema);
+mongoose.model("Word",WordSchema);
 
 

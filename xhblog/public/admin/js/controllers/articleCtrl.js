@@ -104,7 +104,7 @@ app.controller('articleListCtrl', ['$rootScope', '$scope', "$stateParams",
 				title: $scope.title,
 				flag: $scope.flag
 			}
-			articleService.page(queryParams).then(function(res) {
+			articleService.getData(queryParams).then(function(res) {
 				$scope.articleList = res.data.results; //文章列表
 				$scope.pageConfig.totalItems = res.data.total;
 				$scope.StartNum = ($scope.pageConfig.currentPage - 1) * $scope.pageConfig.limit + 1;
