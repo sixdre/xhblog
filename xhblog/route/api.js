@@ -193,6 +193,7 @@ router.post('/article/publish', Auth.checkAdmin, upload.single('cover'), functio
 //编辑更新文章
 router.put('/article/update', Auth.checkAdmin, upload.single('cover'), function(req, res, next) { //有问题待修复
 	let newArticle = req.body.article;
+	console.log(req.body.article);
 	if(req.file) {
 		let nameArray = req.file.originalname.split('.')
 		let type = nameArray[nameArray.length - 1];
@@ -361,65 +362,72 @@ router.get('/friend', function(req, res, next) {
 
 //添加友情链接
 router.post('/friend', Auth.checkAdmin, function(req, res, next) {
+	const title = req.body.title,
+		url = req.body.url,
+		sort = req.body.sort;
+		
+	let friend = new Friend({
+		title: title,
+		url: url,
+		sort: sort
+	});
+	Friend.findOne({
+		title: title
+	}).then(function(doc) {
+		if(doc) {
+			throw {
+				code: -2,
+				message: '该友链已经添加过了'
+			}
+		}
+		return friend.save();
+	}).then(function(doc) {
+		res.json({
+			code: 1,
+			friend: doc,
+			message: '添加成功'
+		});
+	}).catch(function(err) {
+		console.log('友链添加出错:' + err);
+		if(err.code) {
+			return res.json({
+				code: err.code,
+				message: err.message
+			})
+		}
+		next(err);
+	})
+});
+
+//更新友链
+router.put('/friend', Auth.checkAdmin, function(req, res, next) {
 	const id = req.body._id,
 		title = req.body.title,
 		url = req.body.url,
 		sort = req.body.sort;
-	if(id == undefined) { //说明是新增
-		let friend = new Friend({
-			title: title,
-			url: url,
-			sort: sort
+	Friend.update({
+		_id: id
+	}, {
+		"title": title,
+		"url": url,
+		"sort": sort,
+		"meta.update_time": Date.now()
+	}).then(function() {
+		res.json({
+			code: 1,
+			message: '更新成功'
 		});
-		Friend.findOne({
-			title: title
-		}).then(function(doc) {
-			if(doc) {
-				throw {
-					code: -2,
-					message: '该友链已经添加过了'
-				}
-			}
-			return friend.save();
-		}).then(function(doc) {
-			res.json({
-				code: 1,
-				friend: doc,
-				message: '添加成功'
-			});
-		}).catch(function(err) {
-			console.log('友链添加出错:' + err);
-			if(err.code) {
-				return res.json({
-					code: err.code,
-					message: err.message
-				})
-			}
-			next(err);
-		})
-	} else { //更新
-		Friend.update({
-			_id: id
-		}, {
-			"title": title,
-			"url": url,
-			"sort": sort,
-			"meta.update_time": Date.now()
-		}).then(function() {
-			res.json({
-				code: 1,
-				message: '更新成功'
-			});
-		}).catch(function(err) {
-			console.log('update err :' + err);
-			next(err);
-		});
-	}
+	}).catch(function(err) {
+		console.log('update err :' + err);
+		next(err);
+	});
+	
 });
 
+
 //删除友情链接
-router.post('/friend/remove', Auth.checkAdmin, function(req, res, next) {
-	let id = req.body.id
+router.delete('/friend', Auth.checkAdmin, function(req, res, next) {
+	let id = req.param('id');
 	Friend.remove({
 		_id: id
 	}).then(function() {
@@ -432,6 +440,7 @@ router.post('/friend/remove', Auth.checkAdmin, function(req, res, next) {
 		next(err);
 	});
 })
+
 
 //获取category数据
 router.get("/category", function(req, res, next) {
@@ -475,67 +484,6 @@ router.post("/category", Auth.checkAdmin, function(req, res, next) {
 		}
 		next(err);
 	});
-
-
-//	if(id) { //类型更新
-//		Category.findOne({
-//			name: name
-//		}).then(function(cate) {
-//			if(cate) {
-//				throw {
-//					code: -1,
-//					message: '已有此类型,不可重复'
-//				}
-//			}
-//			return Category.update({
-//				_id: id
-//			}, {
-//				name: name
-//			}).exec();
-//		}).then(function() {
-//			res.json({
-//				code: 2,
-//				message: '更新成功'
-//			});
-//		}).catch(function(err) {
-//			console.log('类型更新失败:' + err);
-//			if(err.code) {
-//				return res.json({
-//					code: err.code,
-//					message: err.message
-//				});
-//			}
-//			next(err);
-//		});
-//	} else { //新添加
-//		Category.findOne({
-//			name: name
-//		}).then(function(cate) {
-//			console.log(cate);
-//			if(cate) {
-//				throw {
-//					code: -1,
-//					message: '已有此类型,不可重复'
-//				}
-//			}
-//			return _category.save();
-//		}).then(function(category) {
-//			res.json({
-//				code: 1,
-//				category: category,
-//				message: '添加成功'
-//			});
-//		}).catch(function(err) {
-//			console.log('类型添加失败:' + err);
-//			if(err.code) {
-//				return res.json({
-//					code: err.code,
-//					message: err.message
-//				})
-//			}
-//			next(err);
-//		});
-//	}
 })
 
 
@@ -608,70 +556,73 @@ router.post('/tag', Auth.checkAdmin, function(req, res, next) {
 		id = _tag._id,
 		name = _tag.name;
 	let newtag = new Tag(_tag);
-
-	if(id) { //类型更新
-		Tag.findOne({
-			name: name
-		}).then(function(tag) {
-			if(tag) {
-				throw {
-					code: -1,
-					message: '已有此标签,不可重复'
-				}
+	
+	Tag.findOne({
+		name: name
+	}).then(function(tag) {
+		if(tag) {
+			throw {
+				code: -1,
+				message: '已有此标签,不可重复'
 			}
-			return Tag.update({
-				_id: id
-			}, {
-				name: name
-			}).exec();
-		}).then(function() {
-			res.json({
-				code: 2,
-				message: '更新成功'
-			});
-		}).catch(function(err) {
-			console.log('标签更新失败:' + err);
-			if(err.code) {
-				return res.json({
-					code: err.code,
-					message: err.message
-				});
-			}
-			next(err);
+		}
+		return newtag.save();
+	}).then(function(tag) {
+		res.json({
+			code: 1,
+			tag: tag,
+			message: '添加成功'
 		});
-	} else { //新添加
-		Tag.findOne({
-			name: name
-		}).then(function(tag) {
-			if(tag) {
-				throw {
-					code: -1,
-					message: '已有此标签,不可重复'
-				}
-			}
-			return newtag.save();
-		}).then(function(tag) {
-			res.json({
-				code: 1,
-				tag: tag,
-				message: '添加成功'
-			});
-		}).catch(function(err) {
-			console.log('类型添加失败:' + err);
-			if(err.code) {
-				return res.json({
-					code: err.code,
-					message: err.message
-				})
-			}
-			next(err);
-		});
-	}
+	}).catch(function(err) {
+		console.log('类型添加失败:' + err);
+		if(err.code) {
+			return res.json({
+				code: err.code,
+				message: err.message
+			})
+		}
+		next(err);
+	});
 })
+
+//更新标签
+router.put('/tag', Auth.checkAdmin, function(req, res, next) {
+	let tag = req.body.tag,
+		id = tag._id,
+		name = tag.name;
+		
+	Tag.findOne({
+		name: name
+	}).then(function(tag) {
+		if(tag) {
+			throw {
+				code: -1,
+				message: '已有此标签,不可重复'
+			}
+		}
+		return Tag.update({_id: id}, {name: name}).exec();
+	}).then(function() {
+		res.json({
+			code: 1,
+			message: '更新成功'
+		});
+	}).catch(function(err) {
+		console.log('标签更新失败:' + err);
+		if(err.code) {
+			return res.json({
+				code: err.code,
+				message: err.message
+			});
+		}
+		next(err);
+	});
+})
+
+
 
 //删除标签
 router.delete('/tag', Auth.checkAdmin, function(req, res, next) {
-	let id = req.body.tag._id;
+	let id = req.param('id');
 	Tag.remove({
 		_id: id
 	}).exec(function(err) {

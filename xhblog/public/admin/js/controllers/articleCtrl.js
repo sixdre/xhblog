@@ -272,7 +272,7 @@ app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout","
 		if($scope.article.img && $scope.article.img.length) {
 			$scope.haveImg = true;
 		}
-		$scope.article.category = $scope.article.category._id;
+//		$scope.article.category = $scope.article.category._id;
 		$scope.isFormal = false;
 		$timeout(function() { //这里要用$timeout 否则报错
 			UE.delEditor("update_modal"); //先销毁在进行创建否则会报错

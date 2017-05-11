@@ -5,7 +5,7 @@ angular.module('app').factory('friendService',['$http','$q',function($http,$q){
 			method:method,
 			url:url
 		};
-		if(method==="POST"){
+		if(method==="POST"||method==="PUT"){
 			config.data=data;
 		}else{
 			config.params=data;
@@ -16,18 +16,18 @@ angular.module('app').factory('friendService',['$http','$q',function($http,$q){
 	
 	
 	return {
-		loadFriend:function(){			
+		list:function(){			
 			return handelRequest("GET","/api/friend");
 		},
-		addFriend:function(data){
+		add:function(data){
 			return handelRequest("POST","/api/friend",data);
 		},
-		delFriend:function(id){
-			return handelRequest("POST","/api/friend/remove",{id:id});
+		update:function(data){
+			return handelRequest("PUT","/api/friend",data);
 		},
-		updateFriend:function(data){
-			return handelRequest("POST","/api/friend/update",data);
-		}
+		remove:function(id){
+			return handelRequest("DELETE","/api/friend",{id:id});
+		},
 	}
 	
 }])

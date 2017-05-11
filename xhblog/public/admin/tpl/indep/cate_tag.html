@@ -19,7 +19,7 @@
 								<a href="javascript:void(0);" ng-click="revise('category',item)">修改</a>
 							</li>
 							<li>
-								<a href="javascript:void(0);" ng-click="remove('category',item);">删除</a>
+								<a href="javascript:void(0);" ng-click="removeCategory(item)">删除</a>
 							</li>
 						</ul>
 					</div>
@@ -32,9 +32,9 @@
 						<div class="form-group">
 							<input type="text" class="form-control" ng-model="category.name" placeholder="请输入分类名称" required="required">
 						</div>
-						<button ng-if="iscNew" type="button" class="btn btn-success" ng-disabled="cform.$invalid" ng-click="add('category');">保存分类
+						<button ng-if="iscNew" type="button" class="btn btn-success" ng-disabled="cform.$invalid" ng-click="addCategory();">保存分类
 	                    </button>
-						<button ng-if="!iscNew" type="button" class="btn btn-success" ng-click="add('category');">更新分类
+						<button ng-if="!iscNew" type="button" class="btn btn-success" ng-click="updateCategory();">更新分类
 	                    </button>
 						<a ng-if="!iscNew" class="btn btn-warning" ng-click="cancel('category')">取消</a>
 					</form>
@@ -56,7 +56,7 @@
 								<a href="javascript:void(0);" ng-click="revise('tag',item)">修改</a>
 							</li>
 							<li>
-								<a href="javascript:void(0);" ng-click="remove('tag',item);">删除</a>
+								<a href="javascript:void(0);" ng-click="removeTag(item);">删除</a>
 							</li>
 						</ul>
 					</div>
@@ -69,9 +69,9 @@
 						<div class="form-group">
 							<input type="text" class="form-control" ng-model="tag.name" placeholder="请输入标签名称" required="required">
 						</div>
-						<button ng-if="istNew" type="button" class="btn btn-success" ng-disabled="tform.$invalid" ng-click="add('tag');">保存标签
+						<button ng-if="istNew" type="button" class="btn btn-success" ng-disabled="tform.$invalid" ng-click="addTag();">保存标签
 	                    </button>
-						<button ng-if="!istNew" type="button" class="btn btn-success" ng-click="add('tag');">更新标签
+						<button ng-if="!istNew" type="button" class="btn btn-success" ng-click="updateTag();">更新标签
 	                    </button>
 						<a ng-if="!istNew" class="btn btn-warning" ng-click="cancel('tag')">取消</a>
 					</form>

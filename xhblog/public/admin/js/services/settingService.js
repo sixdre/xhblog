@@ -5,7 +5,7 @@ angular.module('app').factory('settingService',['$http','$q',function($http,$q){
 			method:method,
 			url:url
 		};
-		if(method==="POST"){
+		if(method==="POST"||method==="PUT"){
 			config.data=data;
 		}else{
 			config.params=data;

@@ -24,7 +24,7 @@ angular.module('app').factory('articleService',['$http','$resource','$q','Upload
 			method:method,
 			url:url
 		};
-		if(method==="POST"){
+		if(method==="POST"||method==="PUT"){
 			config.data=data;
 		}else{
 			config.params=data;

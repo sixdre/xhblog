@@ -5,7 +5,7 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 			method:method,
 			url:url
 		};
-		if(method==="POST"){
+		if(method==="POST"||method==="PUT"){
 			config.data=data;
 		}else{
 			config.params=data;
@@ -20,13 +20,13 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 			},
 			add:function(data){
 				return handelRequest("POST",'/api/category',{category:data});
-			}
+			},
 			update:function(data){
 				return handelRequest("PUT",'/api/category',{category:data});
-			}
-			remove:function(data){
-				return handelRequest("DELETE",'/api/category',{id:data});
 			},
+			remove:function(id){
+				return handelRequest("DELETE",'/api/category',{id:id});
+			}
 			
 		},
 		tag:{
@@ -37,11 +37,11 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 				return handelRequest("POST",'/api/tag',{tag:data});
 			},
 			update:function(data){
-				return handelRequest("PUT",'/api/tag',{category:data});
-			}
-			remove:function(data){
-				return handelRequest("DELETE",'/api/tag',{id:data});
+				return handelRequest("PUT",'/api/tag',{tag:data});
 			},
+			remove:function(id){
+				return handelRequest("DELETE",'/api/tag',{id:id});
+			}
 		}
 	}
 	

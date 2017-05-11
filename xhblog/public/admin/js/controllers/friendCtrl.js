@@ -8,7 +8,7 @@ angular.module('app').controller('friendCtrl',
 	 * getFriends 加载友情链接
 	 * */
 	function getFriends(){
-		friendService.loadFriend().then(function(res){
+		friendService.list().then(function(res){
 			$scope.Friends=res.data.friends;
 		}).catch(function(err){
 			alertService.error('获取友链数据失败,服务器错误');
@@ -19,7 +19,7 @@ angular.module('app').controller('friendCtrl',
 	 * addfriend 添加友情链接
 	 * */
 	$scope.addFriend=function(obj){
-		friendService.addFriend(obj).then(function(res){
+		friendService.add(obj).then(function(res){
 			if(res.data.code>0){
 				$scope.friend={};
 				$scope.Friends.push(res.data.friend);
@@ -38,7 +38,7 @@ angular.module('app').controller('friendCtrl',
 	 * */
 	$scope.delFriend=function(item){	
 		alertService.confirm().then(function(){
-			friendService.delFriend(item._id).then(function(res){
+			friendService.remove(item._id).then(function(res){
 				if(res.data.code==1){
 					alertService.success(res.data.message);
 					$scope.Friends.splice($scope.Friends.indexOf(item), 1);
@@ -57,8 +57,9 @@ angular.module('app').controller('friendCtrl',
 		$scope.isNewHandle=false;
 		$scope.friend=angular.copy(item);
 	}
+	
 	$scope.updateFriend=function(item){
-		friendService.addFriend(item).then(function(res){
+		friendService.update(item).then(function(res){
 			if(res.data.code==1){
 				alertService.success(res.data.message);
 				$scope.friend={};
