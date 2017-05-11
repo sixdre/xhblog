@@ -59,3 +59,6 @@ http://blog.csdn.net/gao36951/article/details/40678875
 http://www.qdfuns.com/notes/15910/c70811d914c54bc8c099b43747a63e71.html
 
 http://www.cnblogs.com/hahazexia/p/6027787.html
+
+//node 请求获取参数
+http://localhost:7892/admin/#/app/article/list/

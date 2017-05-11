@@ -80,6 +80,62 @@ angular.module('app')
 		}					
 	}
 	
+	//添加分类
+	$scope.addCategory=function(){
+		catetagService.category.add($scope.category).then(function(res){
+			if(res.data.code==-1){
+				defPopService.defPop({
+					status:0,
+					content:"已有此类型，不可重复添加"
+				});
+			}else if(res.data.code==1){
+				defPopService.defPop({
+					status:1,
+					content:res.data.message,
+					callback:function(){
+						DataService.Categorys.push(res.data.category);
+						$scope.category={};
+					}
+				});
+			}
+		}).catch(function(){
+			
+		});
+	}
+	//更新分类
+	$scope.updateCategory=function(){
+		catetagService.category.update($scope.category).then(function(res){
+			if(res.data.code==-1){
+				defPopService.defPop({
+					status:0,
+					content:"已有此类型，不可重复添加"
+				});
+			}else if(res.data.code==1){
+				defPopService.defPop({
+					status:1,
+					content:res.data.message,
+					callback:function(){
+						DataService.Categorys.push(res.data.category);
+						$scope.category={};
+					}
+				});
+			}
+		}).catch(function(){
+			
+		});
+	}
+	
+	//添加标签
+	$scope.addTag=function(){
+		
+	}
+	
+	//更新标签
+	$scope.updateTag=function(){
+		
+	}
+	
+	
 	//分类或者标签的保存
 	$scope.add=function(type){				//保存分类
 		if(type=="category"){

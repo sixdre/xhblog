@@ -66,9 +66,9 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'a
 /*
  * 文章列表管理控制器
  */
-app.controller('articleListCtrl', ['$rootScope', '$scope', "$stateParams",
-	"$http", '$log', '$uibModal', 'articleService',
-	"defPopService", "alertService", "toolService", 'DataService',
+app.controller('articleListCtrl', ['$rootScope', '$scope', '$stateParams',
+	'$http', '$log', '$uibModal', 'articleService',
+	'defPopService', 'alertService', 'toolService', 'DataService',
 	function($rootScope, $scope, $stateParams,
 		$http, $log, $uibModal, articleService,
 		defPopService, alertService, toolService, DataService) {
@@ -79,6 +79,9 @@ app.controller('articleListCtrl', ['$rootScope', '$scope', "$stateParams",
 		} else {
 			currentPage = parseInt(currentPage);
 		}
+		
+//		articleService.testGetDataByResource();
+
 
 		//分页配置参数
 		$scope.pageConfig = {

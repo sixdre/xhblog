@@ -139,6 +139,13 @@ router.get('/article', function(req, res, next) {
 	})
 })
 
+//router.delete('/article/:id',function(req,res,next){
+//	res.json({
+//		code:1
+//	})
+//})
+
+
 //文章发布
 router.post('/article/publish', Auth.checkAdmin, upload.single('cover'), function(req, res, next) {
 	console.log(req.file);
@@ -184,7 +191,7 @@ router.post('/article/publish', Auth.checkAdmin, upload.single('cover'), functio
 })
 
 //编辑更新文章
-router.post('/article/update', Auth.checkAdmin, upload.single('cover'), function(req, res, next) { //有问题待修复
+router.put('/article/update', Auth.checkAdmin, upload.single('cover'), function(req, res, next) { //有问题待修复
 	let newArticle = req.body.article;
 	if(req.file) {
 		let nameArray = req.file.originalname.split('.')
@@ -232,9 +239,8 @@ router.get('/article/findById', function(req, res, next) {
 })
 
 //删除文章 (单项)
-router.post('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
-
-	let id = req.body.id;
+router.delete('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
+	let id =req.param('id');
 	Article.findById(id).then(function(article) {
 		return Category.update({
 			_id: article.category
@@ -269,10 +275,10 @@ router.post('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
 })
 
 //删除文章 （多选)
-router.post('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
+router.delete('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
 	Article.find({
 		_id: {
-			"$in": req.body.ids
+			"$in": req.param('ids')
 		}
 	}).then(function(articles) {
 		return Promise.all(articles.map(function(article) {
@@ -287,7 +293,7 @@ router.post('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
 					return Article.remove({
 						_id: article._id
 					}).then(function() { //返回promise对象
-						return 1; //返回下一个promise resolve 对象的值
+						return 1; 		//返回下一个promise resolve 对象的值
 					});
 				} else { //如果文章有效就将其变为无效（假删除）
 					return Article.update({
@@ -295,7 +301,7 @@ router.post('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
 					}, {
 						'isActive': false
 					}).then(function() { //返回promise对象
-						return 1; //返回下一个promise resolve 对象的值
+						return 1; 		//返回下一个promise resolve 对象的值
 					});
 				}
 			});
@@ -440,74 +446,141 @@ router.get("/category", function(req, res, next) {
 //分类添加
 router.post("/category", Auth.checkAdmin, function(req, res, next) {
 	let category = req.body.category,
-		id = category._id,
 		name = category.name;
 	let _category = new Category(category);
 
-	if(id) { //类型更新
-		Category.findOne({
-			name: name
-		}).then(function(cate) {
-			if(cate) {
-				throw {
-					code: -1,
-					message: '已有此类型,不可重复'
-				}
+	Category.findOne({
+		name: name
+	}).then(function(cate) {
+		if(cate) {
+			throw {
+				code: -1,
+				message: '已有此类型,不可重复'
 			}
-			return Category.update({
-				_id: id
-			}, {
-				name: name
-			}).exec();
-		}).then(function() {
-			res.json({
-				code: 2,
-				message: '更新成功'
-			});
-		}).catch(function(err) {
-			console.log('类型更新失败:' + err);
-			if(err.code) {
-				return res.json({
-					code: err.code,
-					message: err.message
-				});
-			}
-			next(err);
+		}
+		return _category.save();
+	}).then(function(category) {
+		res.json({
+			code: 1,
+			category: category,
+			message: '添加成功'
 		});
-	} else { //新添加
-		Category.findOne({
-			name: name
-		}).then(function(cate) {
-			console.log(cate);
-			if(cate) {
-				throw {
-					code: -1,
-					message: '已有此类型,不可重复'
-				}
-			}
-			return _category.save();
-		}).then(function(category) {
-			res.json({
-				code: 1,
-				category: category,
-				message: '添加成功'
-			});
-		}).catch(function(err) {
-			console.log('类型添加失败:' + err);
-			if(err.code) {
-				return res.json({
-					code: err.code,
-					message: err.message
-				})
-			}
-			next(err);
-		});
-	}
+	}).catch(function(err) {
+		console.log('类型添加失败:' + err);
+		if(err.code) {
+			return res.json({
+				code: err.code,
+				message: err.message
+			})
+		}
+		next(err);
+	});
+
+
+//	if(id) { //类型更新
+//		Category.findOne({
+//			name: name
+//		}).then(function(cate) {
+//			if(cate) {
+//				throw {
+//					code: -1,
+//					message: '已有此类型,不可重复'
+//				}
+//			}
+//			return Category.update({
+//				_id: id
+//			}, {
+//				name: name
+//			}).exec();
+//		}).then(function() {
+//			res.json({
+//				code: 2,
+//				message: '更新成功'
+//			});
+//		}).catch(function(err) {
+//			console.log('类型更新失败:' + err);
+//			if(err.code) {
+//				return res.json({
+//					code: err.code,
+//					message: err.message
+//				});
+//			}
+//			next(err);
+//		});
+//	} else { //新添加
+//		Category.findOne({
+//			name: name
+//		}).then(function(cate) {
+//			console.log(cate);
+//			if(cate) {
+//				throw {
+//					code: -1,
+//					message: '已有此类型,不可重复'
+//				}
+//			}
+//			return _category.save();
+//		}).then(function(category) {
+//			res.json({
+//				code: 1,
+//				category: category,
+//				message: '添加成功'
+//			});
+//		}).catch(function(err) {
+//			console.log('类型添加失败:' + err);
+//			if(err.code) {
+//				return res.json({
+//					code: err.code,
+//					message: err.message
+//				})
+//			}
+//			next(err);
+//		});
+//	}
 })
 
+
+//分类更新
+router.put("/category", Auth.checkAdmin, function(req, res, next) {
+	let category = req.body.category,
+		id = category._id,
+		name = category.name;
+	Category.findOne({
+		name: name
+	}).then(function(cate) {
+		if(cate) {
+			throw {
+				code: -1,
+				message: '已有此类型,不可重复'
+			}
+		}
+		return Category.update({
+			_id: id
+		}, {
+			name: name
+		}).exec();
+	}).then(function() {
+		res.json({
+			code: 1,
+			message: '更新成功'
+		});
+	}).catch(function(err) {
+		console.log('类型更新失败:' + err);
+		if(err.code) {
+			return res.json({
+				code: err.code,
+				message: err.message
+			});
+		}
+		next(err);
+	});
+	
+})
+
+
+
 //分类删除
-router.post('/category/remove', Auth.checkAdmin, function(req, res, next) {
-	let id = req.body.id;
+router.delete('/category', Auth.checkAdmin, function(req, res, next) {
+	let id = req.param('id');
 	Category.remove({
 		_id: id
 	}).exec(function(err) {
@@ -597,7 +670,7 @@ router.post('/tag', Auth.checkAdmin, function(req, res, next) {
 })
 
 //删除标签
-router.post('/tag/remove', Auth.checkAdmin, function(req, res, next) {
+router.delete('/tag', Auth.checkAdmin, function(req, res, next) {
 	let id = req.body.tag._id;
 	Tag.remove({
 		_id: id

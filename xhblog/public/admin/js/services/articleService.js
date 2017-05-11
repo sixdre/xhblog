@@ -1,4 +1,4 @@
-angular.module('app').factory('articleService',['$http','$q','Upload',function($http,$q,Upload){
+angular.module('app').factory('articleService',['$http','$resource','$q','Upload',function($http,$resource,$q,Upload){
 
 	/*function handelRequest(method,url,data){
 		var deferred=$q.defer();
@@ -31,8 +31,30 @@ angular.module('app').factory('articleService',['$http','$q','Upload',function($
 		}
 		return $http(config);
 	}
+	var Article=$resource('/api/article/:id/publish',{id:'@id'});
 	
 	return {
+//		testGetDataByResource:function(){
+//			Article.delete({id:1},function(articles){
+//				console.log(articles);
+//			},function(articles){
+//				console.log(articles);
+//			})
+//		},
+//		testGetDataByResource2:function(){
+//			Article.get({id:1},function(articles){
+//				console.log(articles);
+//			},function(articles){
+//				console.log(articles);
+//			})
+//		},
+//		testGetDataByResource3:function(){
+//			Article.get({id:1},function(articles){
+//				console.log(articles);
+//			},function(articles){
+//				console.log(articles);
+//			})
+//		},
 		getData:function(params){		//获取文章数据
 			return handelRequest("GET",'/api/article',params);
 		},
@@ -45,14 +67,15 @@ angular.module('app').factory('articleService',['$http','$q','Upload',function($
 		update:function(data){		//文章更新
 			return Upload.upload({
 				url: '/api/article/update',
+				method:"PUT",
 				data:data
 			})
 		},
 		removeOne:function(id){		//文章单选删除
-			return handelRequest("POST",'/api/article/romoveOne',{id:id});
+			return handelRequest("DELETE",'/api/article/romoveOne',{id:id});
 		},
 		removeMulti:function(ids){	//文章多选删除
-			return handelRequest("POST",'/api/article/removeMulti',{ids:ids});
+			return handelRequest("DELETE",'/api/article/removeMulti',{ids:ids});
 		},
 		search:function(title){		//搜索文章
 			return handelRequest("GET",'/api/article/search',{title:title});

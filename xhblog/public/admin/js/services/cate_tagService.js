@@ -18,23 +18,30 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 			list:function(){
 				return handelRequest("GET",'/api/category');
 			},
-			remove:function(data){
-				return handelRequest("POST",'/api/category/remove',{id:data});
-			},
 			add:function(data){
 				return handelRequest("POST",'/api/category',{category:data});
 			}
+			update:function(data){
+				return handelRequest("PUT",'/api/category',{category:data});
+			}
+			remove:function(data){
+				return handelRequest("DELETE",'/api/category',{id:data});
+			},
+			
 		},
 		tag:{
 			list:function(){
 				return handelRequest("GET",'/api/tag');
 			},
-			remove:function(data){
-				return handelRequest("POST",'/api/tag/remove',{id:data});
-			},
 			add:function(data){
 				return handelRequest("POST",'/api/tag',{tag:data});
+			},
+			update:function(data){
+				return handelRequest("PUT",'/api/tag',{category:data});
 			}
+			remove:function(data){
+				return handelRequest("DELETE",'/api/tag',{id:data});
+			},
 		}
 	}
 	
