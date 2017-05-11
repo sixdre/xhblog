@@ -78,10 +78,9 @@ angular.module('app').controller('AppCtrl',
 				}).result.then(function(data) {
 					if(data.code == 1) {
 						//http://blog.csdn.net/u013415189/article/details/51451431
-						console.log(x);
 					}
-				}).catch(function() {
-					console.log(2);
+				},function(){
+					
 				})
 			}
 			

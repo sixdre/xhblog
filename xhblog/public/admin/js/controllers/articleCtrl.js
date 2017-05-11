@@ -3,8 +3,8 @@ var uetrue = null;
 /*
  * 文章发布控制器
  */
-app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'Upload', 'articleService', "defPopService", "alertService", 'DataService',
-	function($rootScope, $scope, $stateParams, Upload, articleService, defPopService, alertService, DataService) {
+app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'articleService', "defPopService", "alertService", 'DataService',
+	function($rootScope, $scope, $stateParams, articleService, defPopService, alertService, DataService) {
 
 		$scope.clearArticle = function() { //注在请求中不要调用此方法,angular会自动脏数据检查
 			$scope.$apply(function() {
@@ -29,7 +29,7 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'U
 				content: UE.getEditor('editor').getContentTxt(),
 				tagcontent: UE.getEditor('editor').getContent()
 			}
-			if(article.content.trim().length == 0) {
+			if(!article.content.trim().length) {
 				return defPopService.defPop({
 					status: 0,
 					content: "请输入文章内容！"
@@ -39,12 +39,9 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'U
 				article.isDraft = true; //为草稿
 				article.isActive = false; //无效
 			}
-			Upload.upload({
-				url: '/api/article/publish',
-				data: {
-					cover: $scope.file,
-					article: article
-				}
+			articleService.publish({
+				cover: $scope.file,
+				article: article
 			}).then(function(res) {
 				if(res.data.code ==1) {
 					alertService.success(res.data.message);
@@ -105,7 +102,7 @@ app.controller('articleListCtrl', ['$rootScope', '$scope', "$stateParams",
 				flag: $scope.flag
 			}
 			articleService.getData(queryParams).then(function(res) {
-				$scope.articleList = res.data.results; //文章列表
+				$scope.articleList = res.data.articles; //文章列表
 				$scope.pageConfig.totalItems = res.data.total;
 				$scope.StartNum = ($scope.pageConfig.currentPage - 1) * $scope.pageConfig.limit + 1;
 				var End = $scope.pageConfig.currentPage * $scope.pageConfig.limit;
@@ -265,8 +262,8 @@ app.controller('articleSearchCtrl', ['$rootScope', '$scope', 'articleService', "
 /*
  * 模态框
  */
-app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout", 'Upload', "articleService", "defPopService", "alertService", 'DataService', 'data',
-	function($scope, $uibModalInstance, $timeout, Upload, articleService, defPopService, alertService, DataService, data) {
+app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout","articleService", "defPopService", "alertService",'data',
+	function($scope, $uibModalInstance, $timeout,articleService, defPopService, alertService, data) {
 
 		$scope.article = angular.copy(data.article);
 		if($scope.article.img && $scope.article.img.length) {
@@ -300,12 +297,10 @@ app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout", 
 			}
 			article.tagcontent = UE.getEditor('update_modal').getContent();
 			article.content = UE.getEditor('update_modal').getContentTxt();
-			Upload.upload({
-				url: '/api/article/update',
-				data: {
-					cover: $scope.file,
-					article: article
-				}
+
+			articleService.update({
+				cover: $scope.file,
+				article: article
 			}).then(function(res) {
 				if(res.data.code > 0) {
 					alertService.success('更新成功').then(function() {

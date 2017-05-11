@@ -1,4 +1,4 @@
-angular.module('app').factory('articleService',['$http','$q',function($http,$q){
+angular.module('app').factory('articleService',['$http','$q','Upload',function($http,$q,Upload){
 
 	/*function handelRequest(method,url,data){
 		var deferred=$q.defer();
@@ -29,18 +29,33 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 		}else{
 			config.params=data;
 		}
-		
-		return $http(config);		//angular $http返回的是一个promise对象
+		return $http(config);
 	}
 	
-	
-	
 	return {
-		removeOne:function(id){
+		getData:function(params){		//获取文章数据
+			return handelRequest("GET",'/api/article',params);
+		},
+		publish:function(data){			//文章发布
+			return Upload.upload({
+				url: '/api/article/publish',
+				data: data
+			})
+		},
+		update:function(data){		//文章更新
+			return Upload.upload({
+				url: '/api/article/update',
+				data:data
+			})
+		},
+		removeOne:function(id){		//文章单选删除
 			return handelRequest("POST",'/api/article/romoveOne',{id:id});
 		},
-		removeMulti:function(ids){
+		removeMulti:function(ids){	//文章多选删除
 			return handelRequest("POST",'/api/article/removeMulti',{ids:ids});
+		},
+		search:function(title){		//搜索文章
+			return handelRequest("GET",'/api/article/search',{title:title});
 		},
 //		save:function(data){
 //			return $http({
@@ -51,23 +66,9 @@ angular.module('app').factory('articleService',['$http','$q',function($http,$q){
 //        		transformRequest:angular.identity   
 //			});
 //		},
-		publish:function(data){
-			return handelRequest("POST",'/api/article/publish',data);
-		},
-		search:function(title){
-			return handelRequest("GET",'/api/article/search',{title:title});
-		},
-		getData:function(params){
-			return handelRequest("GET",'/api/article',params);
-		},
-		findById:function(id){
-			return handelRequest("GET",'/api/article/findById',{id:id});
-		},
-		update:function(arg){
-			return handelRequest("POST",'/api/article/update',arg);
-		}
-		
-		
+//		findById:function(id){
+//			return handelRequest("GET",'/api/article/findById',{id:id});
+//		}
 	}
 	
 }])
