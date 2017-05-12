@@ -29,7 +29,9 @@ exports.loadCommonData = function(req, res, next) {
 			});
 		},
 		types: function(cb) {
-			Article.aggregate([{$group: {_id: "$category",total: {$sum: 1}}}]).exec(function(err, types) {
+			Article.aggregate([{$match:{'isDeleted':false,'isDraft':false}},
+					{$group: {_id: "$category",total: {$sum: 1}}}])
+			.exec(function(err, types) {
 				if(err){
 					return cb(err);
 				}

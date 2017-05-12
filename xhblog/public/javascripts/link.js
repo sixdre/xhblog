@@ -48,17 +48,17 @@ $(function() {
 				data:data
 			});
 		},
-		submitComment:function(data){		//提交文章评论
+		submitComment:function(articleId,data){		//提交文章评论
 			return $.ajax({
 				type:"POST",
-				url:"/comment",
+				url:"/api/article/"+articleId+"/comment",
 				async:true,
 				data:data
 			});
 		},
-		commentLikes:function(params){		//评论点赞
+		commentLikes:function(commentId,params){		//评论点赞
 			return $.ajax({
-				url:'/comment/point',
+				url:'/api/comment/'+commentId+'/point',
 				type:'POST',
 				data:params,
 				async:true,
@@ -138,13 +138,16 @@ $(function() {
 		var content=$(formId).find('textarea[name="content"]').val().trim();
 		if(content.length){
 			var data=$(formId).serialize();
-			UserHandle.submitComment(data).then(function(res){
+			var articleId=$(formId).find('input[name="articleId"]').val();
+			UserHandle.submitComment(articleId,data).then(function(res){
 				if(res.code==1){
 					alert('评论成功');
-					window.location.reload();
+//					window.location.reload();
 				}
 			},function(err){
 				if(err.status==403){
+					var backUrl=window.location.href;
+					$.cookie('backUrl',backUrl,{path: '/' })
 					window.location.href="/login";
 				}
 			})
@@ -161,11 +164,11 @@ $(function() {
 	//评论点赞
 	$('body').delegate('.zan','click',function(){
 		var self=$(this);
-		var params={
-			commentId:self.data('cid'),
+		var data={
 			replyId:self.data('replyid')
 		}
-		UserHandle.commentLikes(params).then(function(res){
+		var commentId=self.data('cid');
+		UserHandle.commentLikes(commentId,data).then(function(res){
 			if(res.code==1){
 				var nums=parseInt(self.find('.nums').html());
 					nums+=1;
@@ -215,11 +218,11 @@ $(function() {
 		$(this).siblings().removeClass('active');
 		$(this).addClass('active');
 		var params={
-			order_by:$(this).data('sort'),
-			articleId:$('#articleId').val()
+			order_by:$(this).data('sort')
 		}
+		var articleId=$('#articleId').val();
 		$.ajax({
-			url:'/comment',
+			url:'/api/article/'+articleId+'/comment',
 			type:'GET',
 			data:params,
 			success:function(res){
@@ -249,7 +252,7 @@ $(function() {
 		}
 		$.ajax({
 			type:"get",
-			url:"/friends",
+			url:"/api/friend",
 			data:{page:page},
 			async:true
 		}).then(function(res){

@@ -25,7 +25,7 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 				return handelRequest("PUT",'/api/category',{category:data});
 			},
 			remove:function(id){
-				return handelRequest("DELETE",'/api/category',{id:id});
+				return handelRequest("DELETE",'/api/category/'+id);
 			}
 			
 		},
@@ -40,7 +40,7 @@ angular.module('app').factory('catetagService',['$http','$q',function($http,$q){
 				return handelRequest("PUT",'/api/tag',{tag:data});
 			},
 			remove:function(id){
-				return handelRequest("DELETE",'/api/tag',{id:id});
+				return handelRequest("DELETE",'/api/tag/'+id);
 			}
 		}
 	}

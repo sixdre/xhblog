@@ -50,14 +50,18 @@ const ArticleSchema = new Schema({
 		type: Boolean,
 		default: false
 	}, 
+	isDeleted:{		//软删除用于删除找回
+		type: Boolean,
+		default: false
+	},
 	isDraft: {		//是否草稿
 		type: Boolean,
 		default: false
 	}, 
-	isActive: {		 //是否有效
-		type: Boolean,
-		default: true
-	},
+//	isActive: {		 //是否有效
+//		type: Boolean,
+//		default: true
+//	},
 	create_time: {		//创建时间
 		type: Date,
 		default: Date.now

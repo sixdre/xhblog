@@ -72,10 +72,10 @@ angular.module('app').factory('articleService',['$http','$resource','$q','Upload
 			})
 		},
 		removeOne:function(id){		//文章单选删除
-			return handelRequest("DELETE",'/api/article/romoveOne',{id:id});
+			return handelRequest("DELETE",'/api/article/'+id);
 		},
 		removeMulti:function(ids){	//文章多选删除
-			return handelRequest("DELETE",'/api/article/removeMulti',{ids:ids});
+			return handelRequest("POST",'/api/article/removeMulti',{ids:ids});
 		},
 		search:function(title){		//搜索文章
 			return handelRequest("GET",'/api/article/search',{title:title});
@@ -90,7 +90,7 @@ angular.module('app').factory('articleService',['$http','$resource','$q','Upload
 //			});
 //		},
 //		findById:function(id){
-//			return handelRequest("GET",'/api/article/findById',{id:id});
+//			return handelRequest("GET",'/api/article/'+id);
 //		}
 	}
 	

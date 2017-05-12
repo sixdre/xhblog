@@ -37,7 +37,6 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'a
 			}
 			if(state && state == "draft") { //存为草稿
 				article.isDraft = true; //为草稿
-				article.isActive = false; //无效
 			}
 			articleService.publish({
 				cover: $scope.file,
@@ -296,7 +295,7 @@ app.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', "$timeout","
 			var article = angular.copy($scope.article);
 			if($scope.isFormal) {
 				article.isDraft = false;
-				article.isActive = true;
+				article.isDeleted = false;
 			}
 			article.tagcontent = UE.getEditor('update_modal').getContent();
 			article.content = UE.getEditor('update_modal').getContentTxt();

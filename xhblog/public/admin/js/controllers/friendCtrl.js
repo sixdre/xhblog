@@ -8,7 +8,7 @@ angular.module('app').controller('friendCtrl',
 	 * getFriends 加载友情链接
 	 * */
 	function getFriends(){
-		friendService.list().then(function(res){
+		friendService.list({page:1,limit:10}).then(function(res){
 			$scope.Friends=res.data.friends;
 		}).catch(function(err){
 			alertService.error('获取友链数据失败,服务器错误');

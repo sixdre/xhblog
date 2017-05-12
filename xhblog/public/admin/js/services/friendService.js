@@ -16,8 +16,8 @@ angular.module('app').factory('friendService',['$http','$q',function($http,$q){
 	
 	
 	return {
-		list:function(){			
-			return handelRequest("GET","/api/friend");
+		list:function(params){			
+			return handelRequest("GET","/api/friend",params);
 		},
 		add:function(data){
 			return handelRequest("POST","/api/friend",data);
@@ -26,7 +26,7 @@ angular.module('app').factory('friendService',['$http','$q',function($http,$q){
 			return handelRequest("PUT","/api/friend",data);
 		},
 		remove:function(id){
-			return handelRequest("DELETE","/api/friend",{id:id});
+			return handelRequest("DELETE","/api/friend/"+id);
 		},
 	}
 	

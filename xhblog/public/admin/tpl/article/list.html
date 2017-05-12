@@ -14,24 +14,42 @@
 				文章列表
 			</div>
 			<div class="row wrapper">
-				<div class="col-sm-5 m-b-xs">
+				<div class="col-sm-7 m-b-xs">
 					<select class="input-sm form-control inline v-middle" style="width: 60px;" ng-model="pageConfig.limit" ng-options="item for item in pageConfig.pageSizes">
 					</select>
 					<button class="btn btn-sm btn-default" ng-click="removeMulti()">删除</button>
-					<label class="radio-inline">
-					  	<input type="radio" id="inlineCheckbox1" ng-model="flag" ng-value="0"> 全部
-					</label>
-					<label class="radio-inline">
-					  	<input type="radio" id="inlineCheckbox2" ng-model="flag" ng-value="1"> 有效
-					</label>
-					<label class="radio-inline">
-					  	<input type="radio" id="inlineCheckbox3" ng-model="flag" ng-value="2"> 无效
-					</label>
-					<label class="radio-inline">
-					  	<input type="radio" id="inlineCheckbox3" ng-model="flag" ng-value="3"> 草稿
-					</label>
+					<div style="display:inline-block;margin-left: 20px;">
+						<div class="radio-inline" style="padding-left: 0;">
+					        <label class="i-checks">
+					          	<input type="radio" ng-model="flag" ng-value="0">
+					          	<i></i>
+					          	全部
+					        </label>
+						</div>
+						<div class="radio-inline" style="padding-left: 0;">
+					        <label class="i-checks">
+					          	<input type="radio" ng-model="flag" ng-value="1">
+					          	<i></i>
+					          	有效
+					        </label>
+						</div>
+						<div class="radio-inline" style="padding-left: 0;">
+					        <label class="i-checks">
+					          	<input type="radio" ng-model="flag" ng-value="2">
+					          	<i></i>
+					          	草稿
+					        </label>
+						</div>
+						<div class="radio-inline" style="padding-left: 0;">
+					        <label class="i-checks">
+					          	<input type="radio" ng-model="flag" ng-value="3">
+					          	<i></i>
+					          	已删除
+					        </label>
+						</div>
+					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 				</div>
 				<div class="col-sm-3">
 					<div class="input-group">
@@ -84,9 +102,9 @@
 								<td style="width: 16%;">{{item.category.name}}</td>
 								<td style="width: 16%;">{{item.pv}}</td>
 								<td style="width: 16%;">
-									<span ng-if="item.isActive&&!item.isDraft" class="label label-success">有效</span>
-									<span ng-if="!item.isActive&&!item.isDraft" class="label label-warning">无效</span>
-									<span ng-if="item.isDraft" class="label label-danger">草稿</span>
+									<span ng-if="!item.isDeleted&&!item.isDraft" class="label label-success">有效</span>
+									<span ng-if="item.isDraft&&!item.isDeleted" class="label label-danger">草稿</span>
+									<span ng-if="item.isDeleted" class="label label-warning">已删除</span>
 								</td>
 								<td style="width: 15%;">
 									<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">

@@ -10,10 +10,10 @@ const md5 = require('md5');
 const _ = require('underscore');
 const mongoose = require('mongoose');
 const tool = require('../utility/tool');
-const post = require('../proxy/posts')
 
 //数据模型
 const Article = mongoose.model('Article'); //文章
+const Comment=mongoose.model('Comment');		//评论
 const Category = mongoose.model("Category");
 const Tag = mongoose.model('Tag');
 const Banner = mongoose.model("Banner");
@@ -21,6 +21,7 @@ const Friend = mongoose.model("Friend");
 const User = mongoose.model('User');
 const Word = mongoose.model('Word');
 const File = mongoose.model('File');
+
 
 //验证中间件
 const Auth = require('../middleware/auth');
@@ -102,14 +103,15 @@ router.get('/article', function(req, res, next) {
 	}
 	switch(flag) {
 		case 1: //有效
-			queryObj.isActive = true;
+			queryObj.isDeleted = false;
 			queryObj.isDraft = false;
 			break;
-		case 2: //无效
-			queryObj.isActive = false;
-			break;
-		case 3: //草稿
+		case 2: //草稿
 			queryObj.isDraft = true;
+			queryObj.isDeleted = false;
+			break;
+		case 3: //已删除
+			queryObj.isDeleted = true;
 			break;
 	}
 	Article.count(queryObj).exec().then(function(total) {
@@ -121,6 +123,7 @@ router.get('/article', function(req, res, next) {
 					"create_time": -1
 				}).skip(limit * currentPage).limit(limit);
 			query.populate('category', 'name').exec().then(function(articles) {
+				console.log(articles);
 				res.json({
 					code: 1,
 					articles: articles,
@@ -224,8 +227,8 @@ router.put('/article/update', Auth.checkAdmin, upload.single('cover'), function(
 })
 
 //编辑文章根据id查找
-router.get('/article/findById', function(req, res, next) {
-	let id = req.query.id;
+router.get('/article/:id', function(req, res, next) {
+	let id = req.params['id'];
 	Article.findById(id).populate('category').populate('tags').then(function(article) {
 		res.json({
 			code: 1,
@@ -240,8 +243,8 @@ router.get('/article/findById', function(req, res, next) {
 })
 
 //删除文章 (单项)
-router.delete('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
-	let id =req.param('id');
+router.delete('/article/:id', Auth.checkAdmin, function(req, res, next) {
+	let id =req.params['id'];
 	Article.findById(id).then(function(article) {
 		return Category.update({
 			_id: article.category
@@ -253,15 +256,15 @@ router.delete('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
 			return article;
 		});
 	}).then(function(article) {
-		if(article.isActive == false) { //如果文章无效就将其彻底删除
+		if(article.isDeleted) { //如果文章已经是删除掉，进入垃圾箱了就将其彻底删除
 			return Article.remove({
 				_id: article._id
 			});
-		} else { //如果文章有效就将其变为无效（假删除）
+		} else { //（假删除）可在垃圾箱中找回
 			return Article.update({
 				_id: article._id
 			}, {
-				'isActive': false
+				'isDeleted': true
 			});
 		}
 	}).then(function() {
@@ -276,10 +279,10 @@ router.delete('/article/romoveOne', Auth.checkAdmin, function(req, res, next) {
 })
 
 //删除文章 （多选)
-router.delete('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
+router.post('/article/removeMulti', Auth.checkAdmin, function(req, res, next) {
 	Article.find({
 		_id: {
-			"$in": req.param('ids')
+			"$in": req.body.ids
 		}
 	}).then(function(articles) {
 		return Promise.all(articles.map(function(article) {
@@ -290,17 +293,17 @@ router.delete('/article/removeMulti', Auth.checkAdmin, function(req, res, next) 
 					"articles": article._id
 				}
 			}).then(function() {
-				if(article.isActive == false) { //如果文章无效就将其彻底删除
+				if(article.isDeleted) { //彻底删除
 					return Article.remove({
 						_id: article._id
 					}).then(function() { //返回promise对象
 						return 1; 		//返回下一个promise resolve 对象的值
 					});
-				} else { //如果文章有效就将其变为无效（假删除）
+				} else { //（假删除）
 					return Article.update({
 						_id: article._id
 					}, {
-						'isActive': false
+						'isDeleted': true
 					}).then(function() { //返回promise对象
 						return 1; 		//返回下一个promise resolve 对象的值
 					});
@@ -347,17 +350,37 @@ router.get('/article/search', function(req, res, next) {
 
 //获取友情链接数据 
 router.get('/friend', function(req, res, next) {
-	Friend.find({}).sort({
-		"meta.update_time": -1
-	}).then(function(friends) {
+	let page=parseInt(req.query.page)||1;		//当前页
+	let limit=parseInt(req.query.limit)||parseInt(CONFIG.FriendLimit);	//每页数量
+	async.waterfall([
+		function(cb){
+			Friend.count({}).exec(function(err,total){
+				let allPage=Math.ceil(total/limit);
+				cb(null,allPage);
+			})
+		},
+		function(allPage,cb){
+			if(page>allPage){
+				page=1;
+			}
+			Friend.find({}).skip((page-1)*limit)
+				.limit(limit).exec(function(err,friends){
+				cb(null,allPage,friends);
+			})
+		}
+	],function(err,allPage,friends){
+		if(err){
+			return next(err);
+		}
 		res.json({
-			code: 1,
-			friends: friends
-		});
-	}).catch(function(err) {
-		console.log('友链获取失败:' + err);
-		next(err);
-	});
+			code:1,
+			allPage:allPage,
+			current_page:page,
+			friends:friends||[]
+		})
+	})
+	
+	
 })
 
 //添加友情链接
@@ -426,8 +449,8 @@ router.put('/friend', Auth.checkAdmin, function(req, res, next) {
 
 
 //删除友情链接
-router.delete('/friend', Auth.checkAdmin, function(req, res, next) {
-	let id = req.param('id');
+router.delete('/friend/:id', Auth.checkAdmin, function(req, res, next) {
+	let id = req.params['id'];
 	Friend.remove({
 		_id: id
 	}).then(function() {
@@ -527,8 +550,8 @@ router.put("/category", Auth.checkAdmin, function(req, res, next) {
 
 
 //分类删除
-router.delete('/category', Auth.checkAdmin, function(req, res, next) {
-	let id = req.param('id');
+router.delete('/category/:id', Auth.checkAdmin, function(req, res, next) {
+	let id = req.params['id'];
 	Category.remove({
 		_id: id
 	}).exec(function(err) {
@@ -618,11 +641,9 @@ router.put('/tag', Auth.checkAdmin, function(req, res, next) {
 	});
 })
 
-
-
 //删除标签
-router.delete('/tag', Auth.checkAdmin, function(req, res, next) {
-	let id = req.param('id');
+router.delete('/tag/:id', Auth.checkAdmin, function(req, res, next) {
+	let id = req.params['id'];
 	Tag.remove({
 		_id: id
 	}).exec(function(err) {
@@ -632,6 +653,138 @@ router.delete('/tag', Auth.checkAdmin, function(req, res, next) {
 		});
 	});
 })
+
+
+//获取文章评论
+router.get('/article/:id/comment',function(req,res,next){
+	let articleId=req.params['id'],
+		order_by=req.query.order_by,
+		page=req.query.page;
+		let sort={
+			likeNum:-1
+		}
+		if(order_by=="timeSeq"){
+			sort={
+				create_time:1
+			}
+		}else if(order_by=="timeRev"){
+			sort={
+				create_time:-1
+			}
+		}
+		Comment.find({ articleId: articleId })
+			.populate('from')
+			.populate('reply.from reply.to')
+			.sort(sort).exec()
+		.then(function(comments){
+			console.log(comments);
+			if(comments){
+				res.render("www/blocks/comment_list",{
+					comments:comments
+				});
+			}
+		}).catch(function(err){
+			if(err){
+				console.log(err);
+				res.status(500);
+			}
+		})
+})
+
+router.post('/article/:id/comment',Auth.checkLoginByAjax,function(req,res,next){
+	let _comment=req.body;
+	_comment.from=req.session["User"];
+	if(_comment.cId){
+		let reply={
+			from:_comment.from._id,
+			to:_comment.toId,
+			content:_comment.content,
+			create_time:new Date()
+		};
+		Comment.update({_id:_comment.cId},{
+			$addToSet:{"reply": reply}
+		}).then(function(){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log(err);
+		});
+	}else{
+		let comment=new Comment(_comment);
+		comment.save().then(function(comment){
+			res.json({
+				code:1
+			});
+		}).catch(function(err){
+			console.log('评论报错出错:'+err);
+		});
+	}
+})
+
+//评论点赞
+router.post('/comment/:id/point',Auth.checkLoginByAjax,function(req,res,next){
+	let commentId=req.params['id'],
+		replyId=req.body.replyId,
+		user=req.session['User'];
+		if(!commentId){
+			return res.status(500).json({
+				message:'请求参数有误'
+			})
+		}
+		Comment.findOne({_id:commentId}).exec(function(err,comment){
+			if(err){
+				console.log('评论点赞出错:'+err);
+				return next(err);
+			}
+			if(comment&&!replyId){	//评论点赞
+				if(comment.likes.indexOf(user._id)>-1){
+					res.json({
+						code:-2,
+						message:'您已点赞'
+					})
+				}else{
+					comment.likes.push(user._id);
+					comment.save(function(err,ct){
+						if(err){
+							console.log('评论点赞保存出错:'+err);
+							return next(err);
+						}
+						res.json({
+							code:1,
+							message:'点赞更新成功'
+						});
+					});
+				}
+			}else if(comment&&replyId){		//给回复点赞
+				let reply=comment.reply;
+				reply.forEach(function(value){
+					if(value._id==replyId){
+						if(value.likes.indexOf(user._id)>-1){
+							return res.json({
+								code:-2,
+								message:'您已点赞'
+							})
+						}
+						value.likes.push(user._id);
+						comment.save(function(err){
+							if(err){
+								console.log('评论点赞保存出错:'+err);
+								return next(err);
+							}
+							res.json({
+								code:1,
+								message:'点赞更新成功'
+							})
+						})
+					}
+				})
+			}
+		})
+})
+
+
+
 
 //获取注册用户
 router.get('/users', Auth.checkAdmin, function(req, res, next) {

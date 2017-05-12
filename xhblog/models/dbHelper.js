@@ -6,7 +6,8 @@
  */  
 exports.ArticlesQuery=function(params){
 	let query = {};
-    query.isActive = true;		//有效
+	query.isDeleted = false;		//有效
+//  query.isActive = true;		//有效
     query.isDraft = false;		//不是草稿的
     return query;
 }
