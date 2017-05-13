@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	
-	<script id="test" type="text/html">
+	<script id="firend_list_tpl" type="text/html">
 		<div class="title">
 			<span>友情链接</span>
 			<div class="reload">
@@ -78,18 +78,7 @@
 			{{/each}}
 		</ul>
 	</script>
-	
-	<script src="/javascripts/page.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript">
-		$(function(){
-			var pagehtml=page({
-				pagecount:parseInt($('#pagination').data('total')),
-				pagesize:parseInt($('#pagination').data('pagesize')),
-				currentpage:parseInt($('#pagination').data('curp'))
-			});
-			//分页
-			$("#pagination").html(pagehtml);
-		})
-	</script>
+	<script src="/javascripts/require.js" type="text/javascript" defer async="true"  charset="utf-8"></script>
+	<script src="/javascripts/require.js" data-main="/javascripts/home" type="text/javascript" ></script>
 	<%include ./layout/foot.html%>
 	

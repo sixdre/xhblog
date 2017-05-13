@@ -3,7 +3,7 @@
   "RecordNo": "鲁ICP备XXX号",
   "SiteDomain": "www.example.com",
   "LogoPath": "/images/zhr.jpg",
-  "PageSize": "5",
+  "PageSize": "1",
   "FriendLimit":"2",
   "UploadImgType":["jpg","png","gif","jpeg"]
 }

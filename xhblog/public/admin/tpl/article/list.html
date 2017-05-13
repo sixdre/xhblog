@@ -103,8 +103,8 @@
 								<td style="width: 16%;">{{item.pv}}</td>
 								<td style="width: 16%;">
 									<span ng-if="!item.isDeleted&&!item.isDraft" class="label label-success">有效</span>
-									<span ng-if="item.isDraft&&!item.isDeleted" class="label label-danger">草稿</span>
-									<span ng-if="item.isDeleted" class="label label-warning">已删除</span>
+									<span ng-if="item.isDraft&&!item.isDeleted" class="label label-warning">草稿</span>
+									<span ng-if="item.isDeleted" class="label label-danger">已删除</span>
 								</td>
 								<td style="width: 15%;">
 									<a href="javascript:void(0);" bbid="{{item.bId}}" ng-click="edit(item)" class="table-link">
