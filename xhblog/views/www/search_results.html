@@ -10,7 +10,7 @@
 		<%if(articles&&articles.length){%>
 		<ul>
 			<%articles.forEach(function(value){%>
-				<li><%=value.title%></li>
+				<li><a href="/article/<%=value.bId%>"><%=value.title%></a></li>
 			<%})%>
 		</ul>
 	   <%}%>

@@ -142,7 +142,7 @@ $(function() {
 			UserHandle.submitComment(articleId,data).then(function(res){
 				if(res.code==1){
 					alert('评论成功');
-//					window.location.reload();
+					window.location.reload();
 				}
 			},function(err){
 				if(err.status==403){

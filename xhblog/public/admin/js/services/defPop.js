@@ -14,9 +14,7 @@ angular.module('app').factory('defPopService',["$window","toaster",function($win
 	            body: obj.content,
 	            showCloseButton: true,
 	            timeout:800,
-	            onHideCallback: function () { 
-	            	obj.callback?obj.callback():window.location.reload();
-	            }
+	            onHideCallback: obj.callback
 			});
 		}else if(obj.status==0){
 			toaster.pop({

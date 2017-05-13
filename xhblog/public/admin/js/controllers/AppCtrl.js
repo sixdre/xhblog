@@ -35,14 +35,13 @@ angular.module('app').controller('AppCtrl',
 			
 			//登陆成功
 			$scope.$on(AUTH_EVENTS.loginSuccess,function(event,data){
-				alert('欢迎您回来');
+//				alert('欢迎您回来');
 				Manager.name=$cookies.get(USER.user_name);
 				getCommonData();
 			})
 			
 			//用户验证失败
 			$scope.$on(AUTH_EVENTS.notAuthorized,function(event,data){
-				alert(data);
 				$state.go('access.signin');
 			})
 

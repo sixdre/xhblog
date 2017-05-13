@@ -6,14 +6,21 @@
 		</div>
 		<div class="form-ceil form-content">
 			<!--<div class="form-wordlimit">0/300</div>-->
-			<div class="form-textarea">
-				<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
-			</div>
-			<div class="form-toolbars clearfix">
-				<div class="form-action">
-					<input type="submit" value="提交" id="comment_submit" />
+			<%if(!user){%>
+				<div class="comment_sign-container">
+					<a href="/login" class="btn btn-sign">登录</a>
+					<span>后发表评论</span>
 				</div>
-			</div>
+			<%}else{%>
+				<div class="form-textarea">
+					<textarea name="content" rows="" cols="" placeholder="说您想说"></textarea>
+				</div>
+				<div class="form-toolbars clearfix">
+					<div class="form-action">
+						<input type="submit" value="提交" id="comment_submit" />
+					</div>
+				</div>
+			<%}%>
 		</div>
 
 	</form>
@@ -36,8 +43,8 @@
 				</div>
 			</div>
 		</div>-->
-		<ul class="list-unstyled" id="comment_list">
 		<%if(comments&&comments.length>0){%>
+		<ul class="list-unstyled" id="comment_list">
 			<%comments.forEach(function(v,i){%>
 			<li class="clearfix comment-item">
 				<div class="avatar">
@@ -65,14 +72,14 @@
 					</div>
 					<div class="comment-footer clearfix">
 						<em>
-								<a href="javascript:;" class="zan" data-cid="<%=v._id%>">
-									顶<span class="nums"><%=v.likes.length%></span>
-								</a>
-								<span class="pipe">|</span>
-								<%if(v.from){%>
-								<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">	回复</a>
-								<%}%>
-							</em>
+							<a href="javascript:;" class="zan" data-cid="<%=v._id%>">
+								顶<span class="nums"><%=v.likes.length%></span>
+							</a>
+							<span class="pipe">|</span>
+							<%if(v.from){%>
+							<a href="javascript:void(0);" class="reply_a" data-cid="<%=v._id%>" data-tid="<%=v.from._id%>">	回复</a>
+							<%}%>
+						</em>
 					</div>
 					<div class="reply-area">
 						<%if(v.reply&&v.reply.length>0){%>
@@ -92,15 +99,15 @@
 											<%}%>
 										<%}%>
 									</span> 回复
+									<%if(reply.to){%>
 									<span class="username">
-										<%if(reply.to){%>
-											<%if(reply.to.isAdmin){%>
-												站主
-											<%}else{%>
-												<%=reply.to.username%>
-											<%}%>
+										<%if(reply.to.isAdmin){%>
+											站主
+										<%}else{%>
+											<%=reply.to.username%>
 										<%}%>
 									</span>
+									<%}%>
 									<div class="comment-time">
 										回复于<em> <%=moment(reply.create_time).format('MM-DD HH:mm')%></em>
 									</div>
@@ -129,7 +136,7 @@
 				</div>
 			</li>
 			<%})%>
-		<%}%>
 		</ul>
+		<%}%>
 	</div>
 </div>

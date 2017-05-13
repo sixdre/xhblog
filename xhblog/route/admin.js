@@ -25,7 +25,7 @@ const File=mongoose.model('File');
 
 router.get('/',function(req,res,next){
 	res.render('admin', {
-		title: '博客后台管理系统',
+		title: '',
 	});
 })
 

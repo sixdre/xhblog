@@ -654,6 +654,15 @@ router.delete('/tag/:id', Auth.checkAdmin, function(req, res, next) {
 	});
 })
 
+//文章点赞
+router.put('/article/:id/likes',function(req,res,next){
+	console.log('like');
+	console.log(req.params['id'])
+	res.json({
+		code:1
+	})
+})
+
 
 //获取文章评论
 router.get('/article/:id/comment',function(req,res,next){
@@ -691,6 +700,7 @@ router.get('/article/:id/comment',function(req,res,next){
 		})
 })
 
+//文章评论
 router.post('/article/:id/comment',Auth.checkLoginByAjax,function(req,res,next){
 	let _comment=req.body;
 	_comment.from=req.session["User"];
