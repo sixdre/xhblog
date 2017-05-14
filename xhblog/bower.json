@@ -40,6 +40,7 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
     "angular-ui-grid": "^4.0.4",
-    "art-template": "^4.8.2"
+    "art-template": "^4.8.2",
+    "nivo-slider": "*"
   }
 }

@@ -1,12 +1,22 @@
 
 	<%include ./layout/head.html%>
+
 	<div class="container index">
 		<div class="row">
+			<!--banner-->
+			<!--<div class="slider-wrapper col-xs-12">
+			    <div id="slider" class="nivoSlider theme-default">
+			    	<%banners.forEach(function(banner){%>
+			    		 <img src="<%=banner.imgAdress%>" alt=""> 
+			    	<%})%>
+			    </div>
+			</div>-->
+			<!--/banner-->
 			<div class="col-xs-8 main">
 				<%include ./blocks/category.html%>
 				<!--文章列表-->
 				<div class="article_list_container">
-					<ul class="article_list">
+					<ul class="article_list" id="article_list" data-pagesize="<%=pagesize%>" data-total="<%=total%>" data-curp="<%=currentpage%>">
 						<%articles.forEach(function(value,i){%>
 							<%var cls=''%>
 							<%if(value.img&&value.img.length){%>
@@ -41,6 +51,8 @@
 						<%})%>
 					</ul>
 				</div>
+				
+				<a data-page="3" href="/" class="load-more">阅读更多</a>
 				
 				<div class="page_box" style="text-align: center;">
 					<ul class="pagination" id="pagination" data-pagesize="<%=pagesize%>" data-total="<%=total%>" data-curp="<%=currentpage%>"></ul>

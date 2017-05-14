@@ -83,20 +83,39 @@ router.get('/',Common.loadCommonData,function(req,res,next){
 })
 
 router.get('/page/:page',Common.loadCommonData,function(req,res,next){
-	let currentPage=parseInt(req.params["page"]);
-	init(currentPage,function(results){
-		res.render('www/new', {
-			title: results.settings.SiteName,
-			banners:results.banners,
-			total:results.total,
-			articles:results.articles,	//所有文章
-			newArticle:results.newArticle[0],	//最新文章
-			hot:results.hot,				//热门文章
-			currentpage:currentPage,	//当前页码
-			pagesize:parseInt(results.settings.PageSize)			//列表数
-		});
-	});
+	let page=parseInt(req.params["page"]);
+	let pageSize=parseInt(CONFIG.PageSize);
+	let query=aQuery();
+	Article.find(query).skip((page-1)*pageSize)
+	.limit(pageSize).sort({create_time:-1})
+	.populate('category','name')
+	.populate('tags').exec(function(err,articles){
+		if(err){
+			return next(err);
+		}
+		res.render('www/blocks/list',{
+			articles:articles
+		})
+	})
 })
+
+
+
+//router.get('/page/:page',Common.loadCommonData,function(req,res,next){
+//	let currentPage=parseInt(req.params["page"]);
+//	init(currentPage,function(results){
+//		res.render('www/new', {
+//			title: results.settings.SiteName,
+//			banners:results.banners,
+//			total:results.total,
+//			articles:results.articles,	//所有文章
+//			newArticle:results.newArticle[0],	//最新文章
+//			hot:results.hot,				//热门文章
+//			currentpage:currentPage,	//当前页码
+//			pagesize:parseInt(results.settings.PageSize)			//列表数
+//		});
+//	});
+//})
 
 
 

@@ -5,7 +5,8 @@ require.config({
         jquery: '/libs/jquery/dist/jquery.min',  
         bootstrap: '/libs/bootstrap/dist/js/bootstrap.min',
         jqueryCookie: '/javascripts/plugins/jquery.cookie',
-        'art-template': '/libs/art-template/lib/template-web'
+        'art-template': '/libs/art-template/lib/template-web',
+        nivoSlider:'/libs/nivo-slider/jquery.nivo.slider'
 //      createPage:'/javascripts/newPage'
     },  
     shim: {
@@ -17,6 +18,9 @@ require.config({
         },
         jqueryCookie: {
           	deps: ['jquery']
+        },
+        nivoSlider:{
+            deps:['jquery']
         }
     },
     waitSeconds: 200  
