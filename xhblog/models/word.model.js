@@ -21,7 +21,7 @@ const WordSchema=new Schema({
 		},
 		replyTime:{
 			type:Date,
-			default:Date.now
+			default:Date.now()
 		}
 	},
 	state:{
@@ -37,7 +37,7 @@ const WordSchema=new Schema({
 	meta:{
 		create_time:{					//用户留言时间
 			type:Date,
-			default:Date.now
+			default:Date.now()
 		}
 	}
 

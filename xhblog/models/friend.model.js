@@ -5,11 +5,11 @@ const mongoose = require('mongoose')
     
 const FriendSchema=new Schema({
 	title:{
-		type:"String",
+		type:String,
 		required:true 
 	},
 	url:{
-		type:"String"
+		type:String
 	},
 	sort:{
 		type: Number, 
@@ -18,11 +18,11 @@ const FriendSchema=new Schema({
 	meta:{
 		create_time:{
 			type:Date,
-			default:Date.now
+			default:Date.now()
 		},
 		update_time:{ 
 			type: Date, 
-			default: Date.now 
+			default:Date.now()
 		}
 	}
 })

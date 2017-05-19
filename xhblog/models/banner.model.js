@@ -5,11 +5,11 @@ const mongoose = require('mongoose')
     
 const BannerSchema=new Schema({ 
 	dec:{
-        type:'String',
+        type:String,
         required:true 		//轮播图描述
     },
     url:{
-    	type:'String',
+    	type:String,
         default:'#' 		//轮播图链接地址
     },
     weight:{				//权重默认为0，越高排名越前
@@ -17,12 +17,12 @@ const BannerSchema=new Schema({
     	default:0
     },
     imgAdress:{					//图片地址
-    	type:'String',
+    	type:String,
         required:true 			
     },
     create_time:{				//时间
     	type:Date,
-    	default:Date.now
+    	default:Date.now()
     }
 })
 

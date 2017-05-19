@@ -8,8 +8,8 @@ const TagSchema = new Schema({
 		unique: true,
 		type: String
 	},
-	create_time: { type: Date, default: Date.now },
-	update_time: { type: Date, default: Date.now }
+	create_time: { type: Date, default: Date.now() },
+	update_time: { type: Date, default: Date.now() }
 });
 
 TagSchema.pre('save', function(next) {

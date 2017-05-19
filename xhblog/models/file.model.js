@@ -9,7 +9,7 @@ const FileSchema=new Schema({
     filepath:String,
     create_time:{				//时间
     	type:Date,
-    	default:Date.now
+    	default:Date.now()
     }
 })
 

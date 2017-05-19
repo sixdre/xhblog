@@ -8,8 +8,8 @@ const mongoose = require('mongoose')
 //基础Schema
 const base = new Schema({
     //创建时间
-    create_time: {type: Date, default: Date.now},
+    create_time: {type: Date, default: Date.now()},
     //更新时间或修改时间
-    update_time: {type: Date, default: Date.now }
+    update_time: {type: Date, default: Date.now() }
 });
 exports.base = base;

@@ -60,7 +60,7 @@ define(['jquery','jqueryCookie'],function($,jqueryCookie){
 				userApi.regist(data).then(function(res){
 					if(res.code>0){
 						alert(res.message);
-						window.location.href="/";
+						window.location.href="/login";
 					}else{
 						alert(res.message)
 					}

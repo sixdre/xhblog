@@ -64,11 +64,11 @@ const ArticleSchema = new Schema({
 //	},
 	create_time: {		//创建时间
 		type: Date,
-		default: Date.now
+		default: Date.now()
 	},
 	update_time: {		//更新时间或修改时间
 		type: Date,
-		default: Date.now
+		default: Date.now()
 	}
 })
 
