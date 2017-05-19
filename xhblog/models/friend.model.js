@@ -21,7 +21,7 @@ const FriendSchema=new Schema({
 			default:Date.now()
 		},
 		update_time:{ 
-			type: Date, 
+			type: Date,
 			default:Date.now()
 		}
 	}

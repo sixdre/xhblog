@@ -39,6 +39,25 @@ gulp.task('nodemon',function() {
   });
 });
 
+//
+//// 压缩 ejs
+//gulp.task('ejs', function() {
+//	return gulp.src('views/**/*.ejs')
+//		.pipe(htmlmin({ collapseWhitespace: true }))
+//		.pipe(gulp.dest('dist/views/'));
+//});
+//
+//
+//// 压缩 js
+//gulp.task('js', function() {
+//	return gulp.src('public/javascripts/**/*.js')
+//		.pipe(jshint())
+//		.pipe(jshint.reporter('default'))
+//		.pipe(uglify({ compress: true }))
+//		.pipe(gulp.dest('dist/javascripts/'))
+//});
+
+
 //定义一个testLess任务（自定义任务名称）
 /*gulp.task('less', function () {
     gulp.src('public/stylesheets/less/*.less') //该任务针对的文件
@@ -47,31 +66,31 @@ gulp.task('nodemon',function() {
 });*/
 
 //压缩css
-//gulp.task('Cssmain',function(){	
-//  return gulp.src(paths.css)         
-//   	.pipe(minifyCss())
-//      .pipe(gulp.dest(appConfig.dist+'styles'))
-//});
-//
-////压缩js
-//gulp.task('Jsmain',function(){	
-//  return gulp.src(paths.js)         
-//   	.pipe(uglify())
-//      .pipe(gulp.dest(appConfig.dist+'scripts'))
-//});
-////提取html页面的js,css文件进行处理
-//gulp.task('html', function () {
-//  return gulp.src(paths.html)
-//      .pipe(useref())
-//      .pipe(gulpif('*.js', uglify()))
-//      .pipe(gulpif('*.css', minifyCss()))
-//      .pipe(gulp.dest(appConfig.dist));
-//});
-//
-//
-//gulp.task('build',['Jsmain','Cssmain','html'],function(){
-//	console.log('build success');
-//})
+gulp.task('Cssmain',function(){	
+    return gulp.src(paths.css)         
+     	.pipe(minifyCss())
+        .pipe(gulp.dest(appConfig.dist+'styles'))
+});
+
+//压缩js
+gulp.task('Jsmain',function(){	
+    return gulp.src(paths.js)         
+     	.pipe(uglify())
+        .pipe(gulp.dest(appConfig.dist+'scripts'))
+});
+//提取html页面的js,css文件进行处理
+gulp.task('html', function () {
+    return gulp.src(paths.html)
+        .pipe(useref())
+        .pipe(gulpif('*.js', uglify()))
+        .pipe(gulpif('*.css', minifyCss()))
+        .pipe(gulp.dest(appConfig.dist));
+});
+
+
+gulp.task('build',['Jsmain','Cssmain','html'],function(){
+	console.log('build success');
+})
 
 
 gulp.task('server', ["nodemon"], function() {

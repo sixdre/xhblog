@@ -283,6 +283,9 @@ nav form .search-btn .search_ic{
 .post .article .art_info .meta span {
     padding-right: 5px;
 }
+.post .article .article_foot{
+	margin-top: 20px;
+}
 .post .article .article_foot a{
 	color: #ea6f5a;
 }

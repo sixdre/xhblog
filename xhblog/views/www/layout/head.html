@@ -17,43 +17,101 @@
 		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
 		<!-- endbuild -->
 	</head>
-	<body>
+	<body >
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	    <div class="container-fluid">
+		    <div class="navbar-header">
+		        <button type="button" class="navbar-toggle" data-toggle="collapse"
+		                data-target="#example-navbar-collapse">
+		            <span class="sr-only">切换导航</span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		        </button>
+		        <a class="navbar-brand logo" href="/"><img src="/images/logo-js.png" alt="Logo"></a>
+		    </div>
+		    <div class="collapse navbar-collapse" id="example-navbar-collapse">
+		        <ul class="nav navbar-nav">
+		            <li class="active">
+		            	<a href="/">
+		            		<span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+		            	</a>
+		            </li>
+		            <li class="search">
+		            	<form action="/search" method="GET">
+							<input type="text" name="wd" id="wd" value="" placeholder="搜索" class="search-input">
+							<button type="submit" class="search-btn" ><i class="fa fa-search search_ic"></i></button>
+						</form>
+		            </li>
+		        </ul>
+		        <ul class="nav navbar-nav navbar-right">
+		        	<%if(user){%>
+		        	<li>
+		        		<a href="">您好,<%=user.username%></a>
+		        	</li>
+		        	<li>
+		        		<a id="logout" href="javascript:;">退出</a>
+		        	</li>
+		        	<%}else{%>
+		        	<li>
+		        		<a href="/login">登录</a>
+		        	</li>
+		        	<li>
+		        		<a href="/regist">注册</a>
+		        	</li>
+		        	<%}%>
+		           <!--<li class="dropdown">
+		                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		                    Java <b class="caret"></b>
+		                </a>
+		                <ul class="dropdown-menu">
+		                    <li><a href="#">jmeter</a></li>
+		                    <li><a href="#">EJB</a></li>
+		                    <li><a href="#">Jasper Report</a></li>
+		                    <li class="divider"></li>
+		                    <li><a href="#">分离的链接</a></li>
+		                    <li class="divider"></li>
+		                    <li><a href="#">另一个分离的链接</a></li>
+		                </ul>
+		            </li>-->
+		            <!--<li><a class="btn sign-up" href="/regist">注册</a></li>
+		            <li><a class="btn sign-in" href="/login">登录</a></li>-->
+		        </ul>
+		    </div>
+	    </div>
+	</nav>
+	<!--<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="width-limit">
-			<!-- Logo -->
+		
 			<a class="logo" href="/"><img src="/images/logo-js.png" alt="Logo"></a>
 
-			<!-- 登录之后 -->
+		
 			<%if(user){%>
 				<a class="btn sign-in" id="logout" href="javascript:;">退出</a>
 				<span class="btn sign-in">您好,<a href=""><%=user.username%></a></span>
 			<%}else{%>
-				<!--未登录显示登录/注册/-->
+			
 				<a class="btn sign-up" href="/regist">注册</a>
 				<a class="btn sign-in" href="/login">登录</a>
 			<%}%>
 			
 			<div class="container">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu" aria-expanded="true">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
 			          <span class="icon-bar"></span>
 			          <span class="icon-bar"></span>
 			          <span class="icon-bar"></span>
 			        </button>
 				</div>
-				<div class="navbar-collapse collapse in" id="menu" aria-expanded="true">
+				<div class="navbar-collapse collapse in" id="menu">
 					<ul class="nav navbar-nav">
 						<li class="active">
 							<a href="/">
 								<span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
 							</a>
 						</li>
-						<!--<li class="">
-							<a class="app-download-btn" href="/apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
-						</li>-->
 						<li class="search">
 							<form action="/search" method="GET">
-								<!--<input name="utf8" type="hidden" value="✓">-->
 								<input type="text" name="wd" id="wd" value="" placeholder="搜索" class="search-input">
 								<button type="submit" class="search-btn" ><i class="fa fa-search search_ic"></i></button>
 							</form>
@@ -62,5 +120,5 @@
 				</div>
 			</div>
 		</div>
-	</nav>
+	</nav>-->
 	

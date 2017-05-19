@@ -26,7 +26,7 @@ require.config({
     waitSeconds: 200  
 });  
   
-require(['jquery','user'], function ($,user) {  
+require(['jquery','bootstrap','user'], function ($,bootstrap,user) {  
 	//获取地址栏参数
 	function GetQueryString(name){
 	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");

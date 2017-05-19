@@ -19,7 +19,7 @@ const UserSchema = new Schema({
 		required: true
 	},
 	isAdmin: { type: Boolean, default: false },
-	create_time: { type: Date, default: Date.now() } //创建时间
+	create_time: { type: Date,default:Date.now()} //创建时间
 })
 
 //查找所有

@@ -15,11 +15,11 @@ const CategorySchema = new Schema({
 	}],
 	create_time: {
 		type: Date,
-		default: Date.now()
+		default:Date.now()
 	},
 	update_time: {
 		type: Date,
-		default: Date.now()
+		default:Date.now()
 	},
 });
 

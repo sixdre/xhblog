@@ -15,7 +15,7 @@ const CommentSchema = new Schema({
 		}],
 		create_time: {
 			type: Date,
-			default: Date.now()
+			default:Date.now()
 		},
 	}],
 	content: String,
@@ -29,7 +29,7 @@ const CommentSchema = new Schema({
 	},
 	create_time: {
 		type: Date,
-		default: Date.now()
+		default:Date.now()
 	}
 });
 
@@ -44,7 +44,7 @@ CommentSchema.statics = {
 	findAll: function(cb) {
 		return this
 			.find({})
-			.sort('update_time')
+			.sort('create_time')
 			.exec(cb)
 	},
 	findBySort: function(aId, orderBy) { //aId 文章id,orderBy 排序方式
