@@ -24,6 +24,7 @@ angular.module('app').factory('defPopService',["$window","toaster",function($win
 	            body:obj.content,
 	            showCloseButton: true,
 	            timeout:1000,
+	            onHideCallback: obj.callback
 			});
 		}
 	}

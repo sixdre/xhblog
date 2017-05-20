@@ -46,7 +46,7 @@ app.config(
 	                  }					
 				})
 				.state('app.article.publish', {					//new
-					url: '/publish',
+					url: '/publish?id',
 					templateUrl: '/admin/tpl/article/publish.html',
 					controller:'articlePublishCtrl',
 				})

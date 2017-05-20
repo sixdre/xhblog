@@ -80,6 +80,9 @@ angular.module('app').factory('articleService',['$http','$resource','$q','Upload
 		search:function(title){		//搜索文章
 			return handelRequest("GET",'/api/article/search',{title:title});
 		},
+		findById:function(id){
+			return handelRequest("GET",'/api/article/'+id);
+		}
 //		save:function(data){
 //			return $http({
 //				method:"POST",

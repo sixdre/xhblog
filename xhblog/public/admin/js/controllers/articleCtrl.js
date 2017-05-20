@@ -3,16 +3,86 @@ var uetrue = null;
 /*
  * 文章发布控制器
  */
-app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'articleService', "defPopService", "alertService", 'DataService',
-	function($rootScope, $scope, $stateParams, articleService, defPopService, alertService, DataService) {
+app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$stateParams",'$timeout', 'articleService', "defPopService", "alertService", 'DataService',
+	function($rootScope, $scope,$state, $stateParams,$timeout, articleService, defPopService, alertService, DataService) {
+		
+		if(uetrue) {
+			uetrue.destroy();
+		}
+		uetrue = UE.getEditor('editor', {
+			initialFrameHeight: 300 //高度设置
+		});
+		
 
+		
+		$scope.article = {};
 		$scope.clearArticle = function() { //注在请求中不要调用此方法,angular会自动脏数据检查
 			$scope.$apply(function() {
 				$scope.article = {};
 			});
 		}
-		$scope.article = {};
 
+		
+		if($stateParams.id){
+			articleService.findById($stateParams.id).then(function(res){
+				if(res.data.code==1){
+					$scope.isUpdate=true;
+					$scope.article=res.data.article;
+					if($scope.article.img && $scope.article.img.length) {
+						$scope.haveImg = true;
+					}
+					
+					uetrue.addListener("ready", function() {
+						uetrue.setContent($scope.article.tagcontent);
+					});
+					
+				}
+			}).catch(function(err){
+				defPopService.defPop({
+					status: 0,
+					content: "获取文章数据出错！",
+					callback:function(){
+						$state.go('app.article.list')
+					}
+				});
+				
+			})
+		}
+		
+		//文章更新
+		$scope.update = function() {
+			if($scope.article.tags.length > 3) {
+				return defPopService.defPop({
+					status: 0,
+					content: "标签最多只能添加3个！"
+				})
+			}
+			var article = angular.copy($scope.article);
+			if($scope.isFormal) {
+				article.isDraft = false;
+				article.isDeleted = false;
+			}
+			article.tagcontent = UE.getEditor('editor').getContent();
+			article.content = UE.getEditor('editor').getContentTxt();
+
+			articleService.update({
+				cover: $scope.file,
+				article: article
+			}).then(function(res) {
+				if(res.data.code > 0) {
+					alertService.success('更新成功').then(function(){
+						$state.go('app.article.list');
+					})
+				}
+			}, function(resp) {
+				alertService.error('更新失败!');
+			}, function(evt) {
+				//console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+			});
+		};
+		
+		
+		//发表新文章
 		$scope.publish = function(state) {
 			if($scope.article_form.$invalid) {
 				defPopService.defPop({
@@ -65,10 +135,10 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope', "$stateParams", 'a
 /*
  * 文章列表管理控制器
  */
-app.controller('articleListCtrl', ['$rootScope', '$scope', '$stateParams',
+app.controller('articleListCtrl', ['$rootScope', '$scope','$state', '$stateParams',
 	'$http', '$log', '$uibModal', 'articleService',
 	'defPopService', 'alertService', 'toolService', 'DataService',
-	function($rootScope, $scope, $stateParams,
+	function($rootScope, $scope,$state, $stateParams,
 		$http, $log, $uibModal, articleService,
 		defPopService, alertService, toolService, DataService) {
 
@@ -206,24 +276,32 @@ app.controller('articleListCtrl', ['$rootScope', '$scope', '$stateParams',
 			});
 		};
 
-		//编辑文章
 		$scope.edit = function(item) {
-			$uibModal.open({
-				templateUrl: '/admin/tpl/article/editor_modal.html',
-				size: 'lg',
-				controller: 'ModalInstanceCtrl',
-				resolve: {
-					data: function() { //注入到ModalInstanceCtrl 里的data
-						return {
-							article: item
-						};
-					},
-				}
-			}).result.then(function() {
-				$scope.loadData();
-			}).catch(function() {})
+			console.log(item);
+			$state.go('app.article.publish',{id:item._id});
+		
+		}
+			
 
-		};
+
+//		//编辑文章
+//		$scope.edit = function(item) {
+//			$uibModal.open({
+//				templateUrl: '/admin/tpl/article/editor_modal.html',
+//				size: 'lg',
+//				controller: 'ModalInstanceCtrl',
+//				resolve: {
+//					data: function() { //注入到ModalInstanceCtrl 里的data
+//						return {
+//							article: item
+//						};
+//					},
+//				}
+//			}).result.then(function() {
+//				$scope.loadData();
+//			}).catch(function() {})
+//
+//		};
 
 	}
 ])

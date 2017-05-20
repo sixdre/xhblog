@@ -89,15 +89,9 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
     }
 }));
 
-
-
 //页面路由控制
 const routes = require('./route/route.js');				
 routes(app);	
-
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -130,26 +124,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
-
-
-
-//// error handler
-//app.use(function(err, req, res, next) {
-//let code = err.status || 500;
-//console.log(code+'wdw')
-//// set locals, only providing error in development
-//res.locals.message = err.message;
-//res.locals.error = req.app.get('env') === 'development' ? err : {};
-//// render the error page
-//res.status(code);
-//res.render('www/error', {
-//		code: err.status,
-//		message: err.message
-//});
-//next(err);
-//});
 
 module.exports = app;
 

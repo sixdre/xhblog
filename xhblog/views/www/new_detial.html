@@ -18,21 +18,22 @@
 				<%-article.tagcontent%>
 			</div>
 			<div class="article_foot clearfix">
-				
-				<span class="pull-left">上一篇文章：
-					<%if(prevArticle){%>
-						<a href="/article/<%=prevArticle.bId%>"><%=prevArticle.title%></a>
-					<%}else{%>
-						<a href="javascript:void(0);">无</a>
-					<%}%>
-				</span>
-				<span class="pull-right">下一篇文章：
-					<%if(nextArticle){%>
-						<a href="/article/<%=nextArticle.bId%>"><%=nextArticle.title%></a>
-					<%}else{%>
-						<a href="javascript:void(0);">无</a>
-					<%}%>
-				</span>
+				<div class="row">
+					<span class="col-sm-6 col-xs-12" style="margin-bottom:15px;">上一篇文章：
+						<%if(prevArticle){%>
+							<a href="/article/<%=prevArticle.bId%>"><%=prevArticle.title%></a>
+						<%}else{%>
+							<a href="javascript:void(0);">无</a>
+						<%}%>
+					</span>
+					<span class="col-sm-6 col-xs-12">下一篇文章：
+						<%if(nextArticle){%>
+							<a href="/article/<%=nextArticle.bId%>"><%=nextArticle.title%></a>
+						<%}else{%>
+							<a href="javascript:void(0);">无</a>
+						<%}%>
+					</span>
+				</div>
 			</div>
 		</div>
 		<%include comment.html%>

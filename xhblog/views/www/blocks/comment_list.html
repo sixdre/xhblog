@@ -6,15 +6,13 @@
 		</div>
 		<div class="comment-main">
 			<div class="comment-header">
-				<span class="username">
-					<%if(user&&user.isAdmin){%>
-						站主
-					<%}else{%>
-						<%if(v.from){%>
-							<%=v.from.username%>
-						<%}%>
+				<%if(user&&user.isAdmin){%>
+				<span class="username">站主</span>
+				<%}else{%>
+					<%if(v.from){%>
+				<span class="username"><%=v.from.username%></span>
 					<%}%>
-				</span>
+				<%}%>
 				<div class="comment-time">
 					发表于<em> <%=moment(v.create_time).format('MM-DD HH:mm')%></em>
 				</div>
@@ -44,24 +42,21 @@
 					</div>
 					<div class="comment-main">
 						<div class="comment-header">
-							<span class="username">
-								<%if(reply.from){%>
-									<%if(reply.from.isAdmin){%>
-										站主
-									<%}else{%>
-										<%=reply.from.username%>
-									<%}%>
+							<%if(reply.from){%>
+								<%if(reply.from.isAdmin){%>
+									<span class="username">站主</span> 
+								<%}else{%>
+									<span class="username"><%=reply.from.username%></span> 
 								<%}%>
-							</span> 回复
-							<span class="username">
-								<%if(reply.to){%>
-									<%if(reply.to.isAdmin){%>
-										站主
-									<%}else{%>
-										<%=reply.to.username%>
-									<%}%>
+							<%}%>
+							<span>回复</span>
+							<%if(reply.to){%>
+								<%if(reply.to.isAdmin){%>
+									<span class="username">站主</span> 
+								<%}else{%>
+									<span class="username"><%=reply.to.username%></span> 
 								<%}%>
-							</span>
+							<%}%>
 							<div class="comment-time">
 								回复于<em> <%=moment(reply.create_time).format('MM-DD HH:mm')%></em>
 							</div>

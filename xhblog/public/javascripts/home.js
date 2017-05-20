@@ -41,61 +41,68 @@ require(['./config'], function(config) {
 		})
 		
 		//分页
-		var pagehtml=createPage({
-			pagecount:parseInt($('#pagination').data('total')),
-			pagesize:parseInt($('#pagination').data('pagesize')),
-			currentpage:parseInt($('#pagination').data('curp'))
-		});
-		$("#pagination").html(pagehtml);
+//		var pagehtml=createPage({
+//			pagecount:parseInt($('#pagination').data('total')),
+//			pagesize:parseInt($('#pagination').data('pagesize')),
+//			currentpage:parseInt($('#pagination').data('curp'))
+//		});
+//		$("#pagination").html(pagehtml);
 		
 		
 		//轮播
 //		$('#slider').nivoSlider();
 		
+		
+		var loading = false;
+		
+		function getData(){
+			var target = $('#article_list');   
+			if(!target){return false;}  
+			var current_page = parseInt(target.data('curp')); 
+			var max_page =Math.ceil( parseInt(target.data('total'))/parseInt(target.data('pagesize')));
+		    if(current_page >= max_page){  
+		        return false;  
+		    }  
+		    if(loading == false) {
+		    	loading = true;
+			    $.ajax({
+					type:"get",
+					url:"/page/"+(parseInt(current_page)+1),
+					async:true,
+//					beforeSend:function(XMLHttpRequest){ 
+//			            //alert('远程调用开始...'); 
+//			            console.log('send')
+//			            $(".loading").show(); 
+//			        }, 
+//			        complete:function(XMLHttpRequest,textStatus){ 
+//			            // alert('远程调用成功，状态文本值：'+textStatus); 
+//			            console.log('111')
+//			            $(".loading").hide(); 
+//			        }, 
+				}).then(function(res){
+					$('#article_list').append(res);
+					target.data('curp',parseInt(current_page)+1);
+					loading=false;
+				},function(err){
+					console.log(err)
+				})
+		    }
+		}
 		//瀑布流
 //		function waterfall(){
-////			var loading = false;
 //			$(window).scroll(function() {
 //				if((($(window).scrollTop() + $(window).height()) + 150) >= $(document).height()) {
-////					if(loading == false) {
-////						loading = true;
-//						getData()
-////					}
+//					getData()
 //				}
 //			});
 //		}
-//		
-//		waterfall()
-//
-//		
-//		function getData(){
-//			var loading = false;
-//			var target = $('#article_list');   
-////			console.log(target.data('curp'))
-//			if(!target){return false;}  
-//			var current_page = parseInt(target.data('curp')); 
-//			var max_page =Math.ceil( parseInt(target.data('total'))/parseInt(target.data('pagesize')));
-//
-//		    if(current_page >= max_page){  
-//		      return false;  
-//		    }  
-//		    if(loading == false) {
-//		    	loading = true;
-//			    $.ajax({
-//					type:"get",
-//					url:"/page/"+(parseInt(current_page)+1),
-//					async:true
-//				}).then(function(res){
-//					console.log(res);
-//					$('#article_list').append(res);
-//					target.data('curp',parseInt(current_page)+1);
-//					loading=false;
-//				},function(err){
-//					console.log(err)
-//				})
-//		   }
-//		    
-//		}
+//		waterfall();
+
+		$(window).scroll(function() {
+				if((($(window).scrollTop() + $(window).height()) + 150) >= $(document).height()) {
+					getData()
+				}
+			});
 	
 				
 		

@@ -19,6 +19,9 @@ i,em,b,small,strong{
 ul{
 	list-style: none;
 }
+.loading{
+	display: none;
+}
 .container{
 	width: 960px;
 }
@@ -40,6 +43,13 @@ nav .width-limit {
 .navbar-default .navbar-nav>.active>a:hover {
     color: #ea6f5a;
     background: none;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+     background-color:transparent; 
+}
+
+.navbar-default .navbar-toggle {
+     border-color: transparent; 
 }
 nav .logo {
     float: left;
@@ -77,8 +87,10 @@ nav form {
     margin-bottom: 15px;
 }
 nav form .search-input {
+	display: block;
+	width: 100%;
     padding: 0 40px 0 20px;
-    width: 160px;
+    /*width: 160px;*/
     height: 38px;
     font-size: 14px;
     border: 1px solid #eee;
@@ -252,10 +264,11 @@ nav form .search-btn .search_ic{
 }
 /**/
 .post{
-	width: 700px;
+	width: 750px;
 	margin: 0 auto;
-	padding-top: 20px;
-   padding-bottom: 60px;
+	padding:20px 15px 60px 15px;
+	/*padding-top: 20px;
+    padding-bottom: 60px;*/
 }
 .post .article .title {
     word-break: break-word;
@@ -590,6 +603,9 @@ nav form .search-btn .search_ic{
     border-radius: 2px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
+#backTop li a .fa{
+    vertical-align: middle;
+}
 #backTop li a:hover {
     background: #2f889a;
     color: #fff;
@@ -626,4 +642,27 @@ nav form .search-btn .search_ic{
     right: 72px;
     width: 25px;
     height: 25px;
+}
+
+
+
+@media screen and (max-width:600px ) {
+	.container{
+		width: auto;
+	}
+	.post{
+		width:100%;
+		padding:20px 15px 60px 15px;
+	}
+	#backTop {
+	    width: 40px;
+	}
+	#backTop li a {
+	    width: 40px;
+	    height: 40px;
+	    line-height: 34px;
+	}
+	#backTop li a .fa {
+	    font-size:21px;
+	}
 }
