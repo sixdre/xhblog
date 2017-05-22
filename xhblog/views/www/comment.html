@@ -29,11 +29,13 @@
 		<div class="comment-tab">
 			<ul class="comment-tab-left list-unstyled clearfix">
 				<li data-type="all" class="all pull-left">全部评论<em class="num" id="allCommentNum">(<%=cTotal%>)</em></li>
+				<%if(comments.length){%>
 				<li class="pull-right sort" id="commentSort">
 					<a class="active" data-sort="likes">按喜欢排序</a>
 					<a data-sort="timeRev">按时间倒序</a>
 					<a data-sort="timeSeq">按时间正序</a>
 				</li>
+				<%}%>
 			</ul>
 		</div>
 		<!--<div class="comment-pager-haeder">
@@ -43,7 +45,7 @@
 				</div>
 			</div>
 		</div>-->
-		<%if(comments&&comments.length>0){%>
+		<%if(comments&&comments.length){%>
 		<ul class="list-unstyled" id="comment_list">
 			<%comments.forEach(function(v,i){%>
 			<li class="clearfix comment-item">
@@ -132,6 +134,10 @@
 			</li>
 			<%})%>
 		</ul>
+		<%}else{%>
+			<div class="empty-comment">
+                <span >还没有评论，快来抢沙发吧！</span>
+            </div>
 		<%}%>
 	</div>
 </div>

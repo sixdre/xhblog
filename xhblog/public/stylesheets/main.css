@@ -57,8 +57,8 @@ nav .logo {
     padding: 14px 25px 15px 20px;
 }
 nav .logo img {
-    width: 55px;
-    height: 26px;
+    width: auto;
+    height: 30px;
 }
 nav .sign-up {
     float: right;
@@ -90,7 +90,7 @@ nav form .search-input {
 	display: block;
 	width: 100%;
     padding: 0 40px 0 20px;
-    /*width: 160px;*/
+    width: 160px;
     height: 38px;
     font-size: 14px;
     border: 1px solid #eee;
@@ -100,6 +100,10 @@ nav form .search-input {
     -moz-transition: width .5s;
     -webkit-transition: width .5s;
     -o-transition: width .5s;
+}
+nav form .search-input:focus {
+    width: 240px;
+    outline: none;
 }
 nav form .search-btn {
     position: absolute;
@@ -500,6 +504,20 @@ nav form .search-btn .search_ic{
 .comment-area .comment-tab li.sort a.active{
 	color: #2f2f2f;
 }
+.comment-area .empty-comment{
+	margin-top: 20px;
+    height: 30px;
+    background: #f0f0f0;
+    text-align: center;
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+.comment-area .empty-comment span{
+	line-height: 30px;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+}
 .comment-item{
 	padding:20px 0 15px;
 	border-bottom: 1px solid #f0f0f0;
@@ -533,6 +551,7 @@ nav form .search-btn .search_ic{
 	color: #828fa0;
 	margin-top: 5px;
 }
+
 .comment-body{
 	margin-top: 10px;
 }
@@ -646,6 +665,12 @@ nav form .search-btn .search_ic{
 
 
 @media screen and (max-width:600px ) {
+	nav form .search-input {
+		width: 100%;
+	}
+	nav form .search-input:focus{
+		width: 100%;
+	}
 	.container{
 		width: auto;
 	}

@@ -69,7 +69,7 @@ function init(currentPage,cb){
 router.get('/',Common.loadCommonData,function(req,res,next){
 	let currentPage=1;
 	init(currentPage,function(results){
-		res.render('www/new', {
+		res.render('www/index', {
 			title: results.settings.SiteName,
 			banners:results.banners,
 			total:results.total,
@@ -93,7 +93,7 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 		if(err){
 			return next(err);
 		}
-		res.render('www/blocks/list',{
+		res.render('www/blocks/article_list',{
 			articles:articles
 		})
 	})
@@ -122,11 +122,9 @@ router.get('/page/:page',Common.loadCommonData,function(req,res,next){
 //文章详情页面
 router.get('/article/:bId',Common.loadCommonData,function(req,res,next){
 	const bid=req.params["bId"];
-	console.log('qwwwww')
 	async.auto({			//智能控制
 		doc:function(callback){
 			Article.findByBId(bid,function(article){
-				console.log('qwwwww')
 				if(!article){			//没找到就发送一个404
 //					let err = new Error('Not Found');
 //					err.status = 404;
@@ -187,7 +185,7 @@ router.get('/article/:bId',Common.loadCommonData,function(req,res,next){
 			comments:results.comments,			//评论
 			cTotal:results.cTotal			//评论数量
 		}
-		res.render("www/new_detial",rsObj);
+		res.render("www/article",rsObj);
 	});
 })
 

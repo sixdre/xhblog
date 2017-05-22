@@ -254,6 +254,7 @@ app.controller('articleListCtrl', ['$rootScope', '$scope','$state', '$stateParam
 				});
 			}, function() {
 				$scope.$apply(function() {
+					$scope.item_checked=false;
 					$scope.select_all = false;
 					$scope.checkedIds = [];
 				})
