@@ -91,14 +91,16 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$statePa
 				});
 				return;
 			}
-
-			var article = {
-				title: $scope.article.title,
-				category: $scope.article.category,
-				tags: $scope.article.tags,
-				content: UE.getEditor('editor').getContentTxt(),
-				tagcontent: UE.getEditor('editor').getContent()
-			}
+			var article = angular.copy($scope.article);
+			article.content=UE.getEditor('editor').getContentTxt();
+			article.tagcontent=UE.getEditor('editor').getContent();
+//			var article = {
+//				title: $scope.article.title,
+//				category: $scope.article.category,
+//				tags: $scope.article.tags,
+//				content: UE.getEditor('editor').getContentTxt(),
+//				tagcontent: UE.getEditor('editor').getContent()
+//			}
 			if(!article.content.trim().length) {
 				return defPopService.defPop({
 					status: 0,

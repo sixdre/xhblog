@@ -73,6 +73,19 @@ const ArticleSchema = new Schema({
 })
 
 
+
+/*
+ * 字段验证
+ */
+ArticleSchema.path('source').validate(function(value){
+	if(!value||validator.isURL(value)){
+		return true
+	}
+	return false;
+},'文章来源字段不合法')
+
+
+
 ArticleSchema.pre('save', function(next) {
 	this.likeNum=this.likes.length;
 	next();

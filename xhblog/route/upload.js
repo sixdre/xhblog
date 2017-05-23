@@ -6,10 +6,14 @@ const fs = require('fs');
 const path = require('path');
 const multer = require ('multer');  //上传文件中间件 multer
 const mongoose=require('mongoose');
+const tool=require('../utility/tool');
+
 //数据模型
 const File = mongoose.model('File');			
-const Banner=mongoose.model("Banner");	
-const tool=require('../utility/tool');
+const Banner=mongoose.model("Banner");
+
+//控制器
+const FileCtrl=require('../controllers/file.controller');
 
 const storage = multer.diskStorage({
     //设置上传文件路径,以后可以扩展成上传至七牛,文件服务器等等
@@ -37,32 +41,7 @@ const upload = multer({
 
 
 //上传文件
-router.post('/addFile',upload.single('file'),function(req,res,next){
-	console.log(req.file);
-	if(req.file){
-		let file=new File({
-			filename:req.file.filename,
-			filesize:req.file.size,
-			filepath:req.file.path.substring(6)
-		});
-		file.save(function(err,file){
-			if(err){
-				console.log('保存文件出错'+err);
-				return next(err);
-			}
-			res.json({
-				code:1,
-				message:'文件上传成功'
-			})
-		})
-	}else{
-		res.json({
-			code:-2,
-			message:'请选择文件'
-		})
-	}
-
-})
+router.post('/addFile',upload.single('file'),FileCtrl.addFile);
 
 
 //首页banner图的添加

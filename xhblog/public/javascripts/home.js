@@ -88,24 +88,16 @@ require(['./config'], function(config) {
 				})
 		    }
 		}
+		
+		
 		//瀑布流
-//		function waterfall(){
-//			$(window).scroll(function() {
-//				if((($(window).scrollTop() + $(window).height()) + 150) >= $(document).height()) {
-//					getData()
-//				}
-//			});
-//		}
-//		waterfall();
-
 		$(window).scroll(function() {
-				if((($(window).scrollTop() + $(window).height()) + 150) >= $(document).height()) {
-					getData()
-				}
-			});
+			if((($(window).scrollTop() + $(window).height()) + 150) >= $(document).height()) {
+				getData()
+			}
+		});
 	
 				
 		
 	})
-	
 });

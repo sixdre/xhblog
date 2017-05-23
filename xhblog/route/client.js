@@ -252,21 +252,7 @@ router.get('/word',function(req,res,next){
 	});
 })
 
-//提交留言
-router.post('/word',Auth.checkLoginByAjax,function(req,res,next){
-	let word=new Word({
-		message:req.body.content,
-		user:req.session["User"]._id
-	});
-	word.save(function(err){
-		if(err){
-			return console.dir("留言失败:"+err)
-		}
-		res.json({
-			code:1
-		});
-	});
-})
+
 
 
 //关于页面

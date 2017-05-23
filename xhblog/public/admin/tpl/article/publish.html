@@ -7,7 +7,7 @@
 			<div class="form-group">
 				<label for="" class="col-sm-1 control-label">标题</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" ng-model="article.title" ng-minlength="2" ng-maxlength="20" name="title" placeholder="请输入文章标题（必须）" required>
+					<input type="text" class="form-control" ng-model="article.title" ng-minlength="2" ng-maxlength="30" name="title" placeholder="请输入文章标题（必须）" required>
 				</div>
 				<div class="col-sm-3">
 					<small class="help-block" ng-show="article_form.title.$invalid">
@@ -36,6 +36,12 @@
 							<div ng-bind-html="tag.name"></div>
 						</ui-select-choices>
 					</ui-select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="" class="col-sm-1 control-label">转载</label>
+				<div class="col-sm-6">
+					<input type="url" class="form-control" ng-model="article.source" name="source" placeholder="请输入转载网址">
 				</div>
 			</div>
 			<div class="form-group">

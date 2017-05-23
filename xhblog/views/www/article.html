@@ -16,6 +16,9 @@
 			</div>
 			<div class="article_content">
 				<%-article.tagcontent%>
+				<%if(article.source&&article.source.length){%>
+					<p style="margin-top: 20px;">转载于---<a href="<%=article.source%>"><%=article.source%></a></p>
+				<%}%>
 			</div>
 			<div class="article_foot clearfix">
 				<div class="row">

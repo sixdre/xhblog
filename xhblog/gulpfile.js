@@ -9,12 +9,16 @@ const gulp=require('gulp'),
 		useref = require('gulp-useref'),
 		htmlmin = require('gulp-htmlmin'),
 		gulpif = require('gulp-if'),
+//		amdOptimize = require("amd-optimize"),
+		reqOptimize     = require('gulp-requirejs-optimize'),
+		concat	=	 require("gulp-concat"),
+		filter = require('gulp-filter'),
 		reload = browserSync.reload;
 
 
 const appConfig={
     appPath:'public/', //配置源文件路径
-    dist:'public/dist/',//配置打包输出路径
+    dist:'dist/',//配置打包输出路径
     isDebug:true//配置编译方式
 };
 
@@ -30,6 +34,47 @@ const paths={
 		'views/www/layout/head.html'
 	]
 }
+
+//gulp.task('default',function(){
+//  var jsFilter = filter('**/*.js',{restore:true});
+//  var cssFilter = filter('**/*.css',{restore:true});
+//  var indexHtmlFilter = filter(['**/*','!**/index.html'],{restore:true});
+//
+//  return gulp.src('src/index.html')
+//      .pipe(useref())//合并js ，css
+//      .pipe(jsFilter)
+//      .pipe(uglify())//压缩js
+//      .pipe(jsFilter.restore)
+//      .pipe(cssFilter)
+//      .pipe(csso())//压缩css
+//      .pipe(cssFilter.restore)
+//      .pipe(indexHtmlFilter)
+//      .pipe(rev())//添加哈希
+//      .pipe(indexHtmlFilter.restore)
+//      .pipe(revReplace())//替换哈希码
+//      .pipe(gulp.dest('dist'));输出
+//});
+
+
+
+
+
+
+//gulp.task("adddd", function () {  
+//   gulp.src("public/javascripts/home.js")
+//      .pipe(reqOptimize({
+//          optimize:"none",                                //- none为不压缩资源
+//          //findNestedDependencies: true, //- 解析嵌套中的require
+//          paths:{
+//              "PDAppDir":"",                              //- 所有文件的路径都相对于main-build.js，所以这里为空即可
+//              "jquery":"empty:"
+//          }
+//      }))
+//      .pipe(rename("main.min.js"))
+//      .pipe(gulp.dest('dist'));                            //-
+// 
+//});  
+
 
 
 //实时监听入口文件
@@ -69,6 +114,7 @@ gulp.task('nodemon',function() {
 gulp.task('Cssmain',function(){	
     return gulp.src(paths.css)         
      	.pipe(minifyCss())
+     	.pipe(concat("index.min.css"))
         .pipe(gulp.dest(appConfig.dist+'styles'))
 });
 
@@ -86,6 +132,12 @@ gulp.task('html', function () {
         .pipe(gulpif('*.css', minifyCss()))
         .pipe(gulp.dest(appConfig.dist));
 });
+
+
+
+
+
+
 
 
 gulp.task('build',['Jsmain','Cssmain','html'],function(){
