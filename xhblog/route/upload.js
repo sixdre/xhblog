@@ -38,7 +38,18 @@ const upload = multer({
     storage: storage,
 })
 
-
+//router.use(function(req,res,next){
+//	if(!req.session["manager"]){
+//		let err = new Error('错误');
+//		err.status = 401;
+//		next(err);
+//		console.log(123);
+////		return res.status(401).json({
+//	
+//});
+//	}
+//	next();
+//})/
 
 //上传文件
 router.post('/addFile',upload.single('file'),FileCtrl.addFile);

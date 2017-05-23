@@ -21,7 +21,7 @@ define(['jquery'],function($){
 		var commentApi={
 			getComment:function(articleId,params){			//获取评论
 				return $.ajax({
-					url:'/api/article/'+articleId+'/comment',
+					url:'/api/article/'+articleId+'/comments',
 					type:'GET',
 					data:params,
 //					beforeSend:function(XMLHttpRequest){ 
@@ -42,14 +42,14 @@ define(['jquery'],function($){
 			submitComment:function(articleId,data){		//提交文章评论
 				return $.ajax({
 					type:"POST",
-					url:"/api/article/"+articleId+"/comment",
+					url:"/api/article/"+articleId+"/comments",
 					async:true,
 					data:data
 				});
 			},
 			commentLikes:function(commentId,params){		//评论点赞
 				return $.ajax({
-					url:'/api/comment/'+commentId+'/point',
+					url:'/api/comments/'+commentId+'/like',
 					type:'POST',
 					data:params,
 					async:true,

@@ -56,17 +56,17 @@ angular.module('app').factory('articleService',['$http','$resource','$q','Upload
 //			})
 //		},
 		getData:function(params){		//获取文章数据
-			return handelRequest("GET",'/api/article',params);
+			return handelRequest("GET",'/api/articles',params);
 		},
 		publish:function(data){			//文章发布
 			return Upload.upload({
-				url: '/api/article/publish',
+				url: '/api/article',
 				data: data
 			})
 		},
 		update:function(data){		//文章更新
 			return Upload.upload({
-				url: '/api/article/update',
+				url: '/api/article',
 				method:"PUT",
 				data:data
 			})

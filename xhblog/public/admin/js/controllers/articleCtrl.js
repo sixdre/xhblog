@@ -151,9 +151,6 @@ app.controller('articleListCtrl', ['$rootScope', '$scope','$state', '$stateParam
 			currentPage = parseInt(currentPage);
 		}
 		
-//		articleService.testGetDataByResource();
-
-
 		//分页配置参数
 		$scope.pageConfig = {
 			maxSize: 5, 	//分页页数
@@ -252,14 +249,14 @@ app.controller('articleListCtrl', ['$rootScope', '$scope','$state', '$stateParam
 						$scope.loadData();
 					}
 				}).catch(function(err) {
-					alertService.error('删除失败,服务器错误');
+					console.log(err);
+					defPopService.defPop({
+						status: 0,
+						content: "删除失败服务器错误！"
+					});
 				});
 			}, function() {
-				$scope.$apply(function() {
-					$scope.item_checked=false;
-					$scope.select_all = false;
-					$scope.checkedIds = [];
-				})
+				
 			})
 		}
 
@@ -272,17 +269,19 @@ app.controller('articleListCtrl', ['$rootScope', '$scope','$state', '$stateParam
 						$scope.loadData();
 					}
 				}).catch(function(err) {
-
+					console.log(err);
+					defPopService.defPop({
+						status: 0,
+						content: "删除失败服务器错误！"
+					});
 				})
-			}).catch(function(err) {
-				$log.info('Modal dismissed at: ' + new Date());
+			},function(){
+				
 			});
 		};
 
 		$scope.edit = function(item) {
-			console.log(item);
 			$state.go('app.article.publish',{id:item._id});
-		
 		}
 			
 
