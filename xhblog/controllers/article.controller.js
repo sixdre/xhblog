@@ -332,6 +332,7 @@ exports.addComment=function(req,res,next){
 			console.log(err);
 		});
 	}else{
+		_comment.create_time=new Date();
 		let comment=new Comment(_comment);
 		comment.save().then(function(comment){
 			res.json({

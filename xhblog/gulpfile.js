@@ -145,6 +145,159 @@ gulp.task('build',['Jsmain','Cssmain','html'],function(){
 })
 
 
+
+
+
+/*
+ * 测试打包开始
+ */
+
+const projectConfig={
+	"client": {
+	    "css": {
+	        "src": ["public/stylesheets/*.css", "public/stylesheets/**/*.css"],
+	        "dist": "dist/public/stylesheets/"
+	    },
+	    "image": {
+            "src": "public/images/**",
+            "dist": "dist/public/images/"
+        },
+        "js": {
+            "src": ["public/javascripts/*.js","public/javascripts/**/*.js"],
+            "dist": "dist/public/javascripts/"
+        }
+	},
+	"server": {
+		"js": {
+	        "src": "+(middleware|models|route|controllers|utility|config)/**/*.js",
+	        "dist": "dist/"
+	    },
+	    "views": {
+	        "src": [
+	            "views/*.html",
+	            "views/**/*.html",
+	        ],
+	        "dist": "dist/views"
+	    }
+	}
+}
+
+const { client, server } = projectConfig;
+
+/**
+ * 将 options.src 的内容复制到 options.dist，没有内容则不生成目录。
+ *
+ * @param {Object} options 配置对象。
+ * @param {string|array.<string>} options.src 源内容
+ * @param {string} options.dist 输出目录
+ */
+const copy = ({src, dist}) =>
+    gulp.src(src)
+        .pipe(gulp.dest(dist));
+
+
+
+/**
+ * 复制 imgs 目录到生成目录。
+ */
+gulp.task('release-image',
+    () => {
+        copy(client.image);
+    }
+);
+
+/*
+ * 
+ *css 压缩复制
+ */
+
+gulp.task('release-css', () =>
+    gulp.src(client.css.src)
+        .pipe(minifyCss())
+        .pipe(gulp.dest(client.css.dist))
+);
+
+
+/**
+ * 处理并生成前端 js。
+ */
+gulp.task('release-js',function(){
+	gulp.src(client.js.src)
+    .pipe(uglify())
+    .pipe(gulp.dest(client.js.dist))
+});
+/**
+ * 处理并生成server js。
+ */
+gulp.task('release-server-js',
+    () => gulp.src(server.js.src)
+                .pipe(gulp.dest(server.js.dist))
+);
+/**
+ * 生成 views
+ */
+gulp.task('release-views',
+    () => gulp.src(server.views.src)
+                .pipe(gulp.dest(server.views.dist))
+);
+
+
+/**
+ * 生成 app.js
+ */
+gulp.task('release-app',
+    () => gulp.src('app.js')
+            .pipe(gulp.dest('dist/'))
+);
+
+/**
+ * 其它文件
+ */
+gulp.task('release-other',function(){
+	copy({
+        src: ['package.json','bower.json'],
+        dist: 'dist/'
+    });
+     copy({
+        src: ['public/admin/**/*.*'],
+        dist: 'dist//public/admin'
+    });
+    copy({
+        src: ['config/settings.json'],
+        dist: 'dist/config'
+    });
+    copy({
+        src: 'bin/*',
+        dist: 'dist/bin/'
+    });
+    
+    gulp.src('views/admin.html')
+        .pipe(useref())
+        .pipe(gulpif('*.js', uglify()))
+        .pipe(gulpif('*.css', minifyCss()))
+        .pipe(gulp.dest('dist/views'));
+    
+});
+
+
+gulp.task('release',['release-image','release-css','release-js',
+				'release-server-js','release-views','release-app','release-other'],function(){
+	console.log('release success');
+})
+
+/*
+ * 测试打包结束
+ */
+
+
+
+
+
+
+
+
+
+
 gulp.task('server', ["nodemon"], function() {
     var files = [
         'views/**/*.html',
