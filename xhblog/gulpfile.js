@@ -9,143 +9,17 @@ const gulp=require('gulp'),
 		useref = require('gulp-useref'),
 		htmlmin = require('gulp-htmlmin'),
 		gulpif = require('gulp-if'),
+		clean = require('gulp-clean'),
 //		amdOptimize = require("amd-optimize"),
 		reqOptimize     = require('gulp-requirejs-optimize'),
 		concat	=	 require("gulp-concat"),
 		filter = require('gulp-filter'),
-		reload = browserSync.reload;
-
-
-const appConfig={
-    appPath:'public/', //配置源文件路径
-    dist:'dist/',//配置打包输出路径
-    isDebug:true//配置编译方式
-};
-
-const paths={
-	js:[
-		appConfig.appPath+'javascripts/*.js',
-		appConfig.appPath+'javascripts/**/*.js'
-	],
-	css:[
-		appConfig.appPath+'stylesheets/*.css'
-	],
-	html:[
-		'views/www/layout/head.html'
-	]
-}
-
-//gulp.task('default',function(){
-//  var jsFilter = filter('**/*.js',{restore:true});
-//  var cssFilter = filter('**/*.css',{restore:true});
-//  var indexHtmlFilter = filter(['**/*','!**/index.html'],{restore:true});
-//
-//  return gulp.src('src/index.html')
-//      .pipe(useref())//合并js ，css
-//      .pipe(jsFilter)
-//      .pipe(uglify())//压缩js
-//      .pipe(jsFilter.restore)
-//      .pipe(cssFilter)
-//      .pipe(csso())//压缩css
-//      .pipe(cssFilter.restore)
-//      .pipe(indexHtmlFilter)
-//      .pipe(rev())//添加哈希
-//      .pipe(indexHtmlFilter.restore)
-//      .pipe(revReplace())//替换哈希码
-//      .pipe(gulp.dest('dist'));输出
-//});
-
-
-
-
-
-
-//gulp.task("adddd", function () {  
-//   gulp.src("public/javascripts/home.js")
-//      .pipe(reqOptimize({
-//          optimize:"none",                                //- none为不压缩资源
-//          //findNestedDependencies: true, //- 解析嵌套中的require
-//          paths:{
-//              "PDAppDir":"",                              //- 所有文件的路径都相对于main-build.js，所以这里为空即可
-//              "jquery":"empty:"
-//          }
-//      }))
-//      .pipe(rename("main.min.js"))
-//      .pipe(gulp.dest('dist'));                            //-
-// 
-//});  
-
-
-
-//实时监听入口文件
-gulp.task('nodemon',function() {
-  nodemon({ script: 'bin/www',
-    ignore: ['README.md', 'node_modules/**', '.DS_Store']
-  });
-});
-
-//
-//// 压缩 ejs
-//gulp.task('ejs', function() {
-//	return gulp.src('views/**/*.ejs')
-//		.pipe(htmlmin({ collapseWhitespace: true }))
-//		.pipe(gulp.dest('dist/views/'));
-//});
-//
-//
-//// 压缩 js
-//gulp.task('js', function() {
-//	return gulp.src('public/javascripts/**/*.js')
-//		.pipe(jshint())
-//		.pipe(jshint.reporter('default'))
-//		.pipe(uglify({ compress: true }))
-//		.pipe(gulp.dest('dist/javascripts/'))
-//});
-
-
-//定义一个testLess任务（自定义任务名称）
-/*gulp.task('less', function () {
-    gulp.src('public/stylesheets/less/*.less') //该任务针对的文件
-        .pipe(less()) //该任务调用的模块
-        .pipe(gulp.dest('public/stylesheets/')); //将会在public/stylesheets下生成
-});*/
-
-//压缩css
-gulp.task('Cssmain',function(){	
-    return gulp.src(paths.css)         
-     	.pipe(minifyCss())
-     	.pipe(concat("index.min.css"))
-        .pipe(gulp.dest(appConfig.dist+'styles'))
-});
-
-//压缩js
-gulp.task('Jsmain',function(){	
-    return gulp.src(paths.js)         
-     	.pipe(uglify())
-        .pipe(gulp.dest(appConfig.dist+'scripts'))
-});
-//提取html页面的js,css文件进行处理
-gulp.task('html', function () {
-    return gulp.src(paths.html)
-        .pipe(useref())
-        .pipe(gulpif('*.js', uglify()))
-        .pipe(gulpif('*.css', minifyCss()))
-        .pipe(gulp.dest(appConfig.dist));
-});
-
-
-
-
-
-
-
-
-gulp.task('build',['Jsmain','Cssmain','html'],function(){
-	console.log('build success');
-})
-
-
-
+		reload = browserSync.reload,
+		domSrc = require('gulp-dom-src'),
+		cheerio = require('gulp-cheerio'),
+		rev = require('gulp-rev'),
+		revCollector = require('gulp-rev-collector'),
+		htmlreplace = require('gulp-html-replace');
 
 
 /*
@@ -200,28 +74,26 @@ const copy = ({src, dist}) =>
 /**
  * 复制 imgs 目录到生成目录。
  */
-gulp.task('release-image',
-    () => {
-        copy(client.image);
-    }
-);
+gulp.task('release-image',() => {
+    copy(client.image);
+});
 
 /*
  * 
  *css 压缩复制
  */
 
-gulp.task('release-css', () =>
+gulp.task('release-css', () =>{
     gulp.src(client.css.src)
         .pipe(minifyCss())
         .pipe(gulp.dest(client.css.dist))
-);
+});
 
 
 /**
  * 处理并生成前端 js。
  */
-gulp.task('release-js',function(){
+gulp.task('release-js',()=>{
 	gulp.src(client.js.src)
     .pipe(uglify())
     .pipe(gulp.dest(client.js.dist))
@@ -229,31 +101,31 @@ gulp.task('release-js',function(){
 /**
  * 处理并生成server js。
  */
-gulp.task('release-server-js',
-    () => gulp.src(server.js.src)
-                .pipe(gulp.dest(server.js.dist))
-);
+gulp.task('release-server-js',() =>{
+	gulp.src(server.js.src)
+     	.pipe(gulp.dest(server.js.dist))
+});
 /**
  * 生成 views
  */
-gulp.task('release-views',
-    () => gulp.src(server.views.src)
+gulp.task('release-views',() => {
+	gulp.src(server.views.src)
                 .pipe(gulp.dest(server.views.dist))
-);
+});
 
 
 /**
  * 生成 app.js
  */
-gulp.task('release-app',
-    () => gulp.src('app.js')
+gulp.task('release-app', () => {
+	gulp.src('app.js')
             .pipe(gulp.dest('dist/'))
-);
+});
 
 /**
  * 其它文件
  */
-gulp.task('release-other',function(){
+gulp.task('release-other',() => {
 	copy({
         src: ['package.json','bower.json'],
         dist: 'dist/'
@@ -271,24 +143,73 @@ gulp.task('release-other',function(){
         dist: 'dist/bin/'
     });
     
-    gulp.src('views/admin.html')
-        .pipe(useref())
-        .pipe(gulpif('*.js', uglify()))
-        .pipe(gulpif('*.css', minifyCss()))
-        .pipe(gulp.dest('dist/views'));
+//  gulp.src('views/admin.html')
+//      .pipe(useref())
+//      .pipe(gulpif('*.js', uglify()))
+//      .pipe(gulpif('*.css', minifyCss()))
+//      .pipe(gulp.dest('dist/views'));
     
 });
 
 
+
+
+
+gulp.task('adminJs', function() {
+    return gulp.src(['public/admin/js/*.js','public/admin/js/**/*.js'])
+        .pipe(concat('admin.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(client.js.dist));
+});
+
+gulp.task('adminCss', function() {
+    return gulp.src(['public/admin/css/*.css','public/admin/css/**/*.css'])
+        .pipe(concat('admin.min.css'))
+        .pipe(minifyCss())
+        .pipe(gulp.dest(client.css.dist));
+});
+
+gulp.task('adminHtml', function() {
+    return gulp.src('views/admin.html')
+        .pipe(cheerio(function ($) {
+            $('script').remove();
+            $('link').remove();
+            $('body').append('<script src="/javascripts/admin.min.js"></script>');
+            $('head').append('<link rel="stylesheet" href="/stylesheets/admin.min.css">');
+        }))
+        .pipe(gulp.dest('dist/views'));
+});
+
+
+gulp.task('admin',() => {
+	gulp.start(['adminJs','adminCss','adminHtml'],()=>{
+		console.log('admin success');
+	})
+})
+
+
+
 gulp.task('release',['release-image','release-css','release-js',
-				'release-server-js','release-views','release-app','release-other'],function(){
+				'release-server-js','release-views','release-app','release-other'],()=>{
 	console.log('release success');
 })
+
+
+
+
+
+
+
 
 /*
  * 测试打包结束
  */
 
+//清理生成目录
+gulp.task('clean',() => {
+	return gulp.src('dist')
+		.pipe(clean())
+})
 
 
 
@@ -297,8 +218,18 @@ gulp.task('release',['release-image','release-css','release-js',
 
 
 
+//实时监听入口文件
+gulp.task('nodemon',() => {
+  nodemon({ script: 'bin/www',
+    ignore: ['README.md', 'node_modules/**', '.DS_Store']
+  });
+});
 
-gulp.task('server', ["nodemon"], function() {
+
+
+
+
+gulp.task('server', ["nodemon"], () => {
     var files = [
         'views/**/*.html',
         'views/**/*.ejs',

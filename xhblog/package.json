@@ -38,8 +38,12 @@
     "browser-sync": "^2.18.8",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-cheerio": "^0.6.2",
+    "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
+    "gulp-dom-src": "^0.2.0",
     "gulp-filter": "^5.0.0",
+    "gulp-html-replace": "^1.6.2",
     "gulp-htmlmin": "^3.0.0",
     "gulp-if": "^2.0.2",
     "gulp-less": "^3.3.0",
@@ -48,6 +52,8 @@
     "gulp-mocha": "^4.0.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-requirejs-optimize": "^1.2.0",
+    "gulp-rev": "^7.1.2",
+    "gulp-rev-collector": "^1.2.2",
     "gulp-uglify": "^2.1.0",
     "gulp-useref": "^3.1.2"
   }
