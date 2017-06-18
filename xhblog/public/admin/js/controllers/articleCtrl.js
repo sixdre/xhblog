@@ -3,8 +3,10 @@ var uetrue = null;
 /*
  * 文章发布控制器
  */
-app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$stateParams",'$timeout', 'articleService', "defPopService", "alertService", 'DataService',
-	function($rootScope, $scope,$state, $stateParams,$timeout, articleService, defPopService, alertService, DataService) {
+app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$stateParams",'$localStorage',
+				'$timeout', '$interval','articleService', "defPopService", "alertService", 'DataService',
+	function($rootScope, $scope,$state, $stateParams,$localStorage,$timeout,$interval,
+		articleService, defPopService, alertService, DataService) {
 		
 		if(uetrue) {
 			uetrue.destroy();
@@ -13,7 +15,8 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$statePa
 			initialFrameHeight: 300 //高度设置
 		});
 		
-
+		
+		
 		
 		$scope.article = {};
 		$scope.clearArticle = function() { //注在请求中不要调用此方法,angular会自动脏数据检查
@@ -21,7 +24,12 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$statePa
 				$scope.article = {};
 			});
 		}
-
+		
+//		$interval(function(){
+//			console.log($localStorage.article_content);
+//			$localStorage.article_content=UE.getEditor('editor').getContent();
+//		},5000)
+		
 		
 		if($stateParams.id){
 			articleService.findById($stateParams.id).then(function(res){

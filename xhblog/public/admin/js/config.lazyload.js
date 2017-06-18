@@ -7,7 +7,7 @@ angular.module('app')
    * value: array of the css js file located
    */
   .constant('JQ_CONFIG', {
-      slimScroll:['/libs/jquery-slimscroll/jquery.slimscroll.min.js']
+      //slimScroll:['/libs/jquery-slimscroll/jquery.slimscroll.min.js']
    })
   // oclazyload config
   .config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -16,20 +16,13 @@ angular.module('app')
           debug:  false,
           events: true,
           modules: [
-              {
-              name: 'ui.select',
-	              files: [
-	                  '/libs/angular-ui-select/dist/select.min.js',
-	                  '/libs/angular-ui-select/dist/select.min.css'
-	              ]
-              },
-              {
-                  name: 'angularBootstrapNavTree',
-                  files: [
-                      '/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
-                      '/libs/angular-bootstrap-nav-tree/dist/abn_tree.css'
-                  ]
-              }
+//            {
+//                name: 'angularBootstrapNavTree',
+//                files: [
+//                    '/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
+//                    '/libs/angular-bootstrap-nav-tree/dist/abn_tree.css'
+//                ]
+//            }
           ]
       });
   }])

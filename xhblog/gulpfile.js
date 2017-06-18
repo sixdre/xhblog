@@ -48,10 +48,10 @@ const projectConfig={
 	    },
 	    "views": {
 	        "src": [
-	            "views/*.html",
-	            "views/**/*.html",
+	            "public/www/*.html",
+	            "public/www/**/*.html",
 	        ],
-	        "dist": "dist/views"
+	        "dist": "dist/public/www"
 	    }
 	}
 }
@@ -143,11 +143,11 @@ gulp.task('release-other',() => {
         dist: 'dist/bin/'
     });
     
-//  gulp.src('views/admin.html')
-//      .pipe(useref())
-//      .pipe(gulpif('*.js', uglify()))
-//      .pipe(gulpif('*.css', minifyCss()))
-//      .pipe(gulp.dest('dist/views'));
+    gulp.src('public/admin.html')
+        .pipe(useref())
+        .pipe(gulpif('*.js', uglify()))
+        .pipe(gulpif('*.css', minifyCss()))
+        .pipe(gulp.dest('dist/public'));
     
 });
 
@@ -155,37 +155,37 @@ gulp.task('release-other',() => {
 
 
 
-gulp.task('adminJs', function() {
-    return gulp.src(['public/admin/js/*.js','public/admin/js/**/*.js'])
-        .pipe(concat('admin.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest(client.js.dist));
-});
-
-gulp.task('adminCss', function() {
-    return gulp.src(['public/admin/css/*.css','public/admin/css/**/*.css'])
-        .pipe(concat('admin.min.css'))
-        .pipe(minifyCss())
-        .pipe(gulp.dest(client.css.dist));
-});
-
-gulp.task('adminHtml', function() {
-    return gulp.src('views/admin.html')
-        .pipe(cheerio(function ($) {
-            $('script').remove();
-            $('link').remove();
-            $('body').append('<script src="/javascripts/admin.min.js"></script>');
-            $('head').append('<link rel="stylesheet" href="/stylesheets/admin.min.css">');
-        }))
-        .pipe(gulp.dest('dist/views'));
-});
-
-
-gulp.task('admin',() => {
-	gulp.start(['adminJs','adminCss','adminHtml'],()=>{
-		console.log('admin success');
-	})
-})
+//gulp.task('adminJs', function() {
+//  return gulp.src(['public/admin/js/*.js','public/admin/js/**/*.js'])
+//      .pipe(concat('admin.min.js'))
+//      .pipe(uglify())
+//      .pipe(gulp.dest(client.js.dist));
+//});
+//
+//gulp.task('adminCss', function() {
+//  return gulp.src(['public/admin/css/*.css','public/admin/css/**/*.css'])
+//      .pipe(concat('admin.min.css'))
+//      .pipe(minifyCss())
+//      .pipe(gulp.dest(client.css.dist));
+//});
+//
+//gulp.task('adminHtml', function() {
+//  return gulp.src('views/admin.html')
+//      .pipe(cheerio(function ($) {
+//          $('script').remove();
+//          $('link').remove();
+//          $('body').append('<script src="/javascripts/admin.min.js"></script>');
+//          $('head').append('<link rel="stylesheet" href="/stylesheets/admin.min.css">');
+//      }))
+//      .pipe(gulp.dest('dist/views'));
+//});
+//
+//
+//gulp.task('admin',() => {
+//	gulp.start(['adminJs','adminCss','adminHtml'],()=>{
+//		console.log('admin success');
+//	})
+//})
 
 
 

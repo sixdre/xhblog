@@ -32,18 +32,27 @@ app.config(
 					url: '/article',
 					template: '<div ui-view class="fade-in-up"></div>',			//new
 					resolve: {
-	                      deps: ['$ocLazyLoad',
-	                        function( $ocLazyLoad ){
-	                          return $ocLazyLoad.load(['ui.select']).then(
-	                              function(){
-	                                  return $ocLazyLoad.load([
-											'/admin/js/services/articleService.js',
-											'/admin/js/controllers/articleCtrl.js'
-	                                  ]);
-	                              }
-	                          );
+	                      deps: ['uiLoad',
+	                        function( uiLoad){
+	                          return uiLoad.load([
+	                              	'/admin/js/services/articleService.js',
+									'/admin/js/controllers/articleCtrl.js'
+	                          ]);
 	                      }]
-	                  }					
+		            }
+//					resolve: {
+//	                      deps: ['$ocLazyLoad',
+//	                        function( $ocLazyLoad ){
+//	                          return $ocLazyLoad.load(['ui.select']).then(
+//	                              function(){
+//	                                  return $ocLazyLoad.load([
+//											'/admin/js/services/articleService.js',
+//											'/admin/js/controllers/articleCtrl.js'
+//	                                  ]);
+//	                              }
+//	                          );
+//	                      }]
+//	                  }					
 				})
 				.state('app.article.publish', {					//new
 					url: '/publish?id',

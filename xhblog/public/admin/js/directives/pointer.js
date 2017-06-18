@@ -1,5 +1,5 @@
 angular.module('app')
-  .directive('poinTer', function($timeout, $parse) {
+  .directive('poinTer', ['$timeout', '$parse',function($timeout, $parse) {
     return {
       restrict: 'AC',
       link: function(scope, ele, attr) {
@@ -10,4 +10,4 @@ angular.module('app')
       	})
       }
     };
-  });
+  }]);
