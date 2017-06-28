@@ -143,7 +143,7 @@ gulp.task('release-other',() => {
         dist: 'dist/bin/'
     });
     
-    gulp.src('public/admin.html')
+    gulp.src('public/admin/admin.html')
         .pipe(useref())
         .pipe(gulpif('*.js', uglify()))
         .pipe(gulpif('*.css', minifyCss()))

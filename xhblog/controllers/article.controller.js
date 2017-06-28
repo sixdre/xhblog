@@ -16,6 +16,25 @@ const Tag = mongoose.model('Tag');
 const Comment=mongoose.model('Comment');		
 const User = mongoose.model('User');
 
+
+//class ArticleObj{
+//	constructor(props) {
+//
+//	}
+//	async getArticles(req,res,next){
+//		let cc=await Article.count({});
+//		let bb=await Article.find({});
+//		console.log(cc+'----------------------------------------');
+//		console.log(bb.length+'----------------------------------------');
+//	}
+//	
+//	
+//	
+//}
+//export default new ArticleObj()
+
+
+
 //文章获取
 exports.getArticles=function(req,res,next){
 	let currentPage = parseInt(req.query.currentPage) - 1;

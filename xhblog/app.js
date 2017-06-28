@@ -1,18 +1,24 @@
 "use strict";
-const express = require('express');
-const session=require('express-session');
-const mongoStroe=require('connect-mongo')(session);	//connect-mongo用来在数据库存储session的模块
-const cookieParser = require('cookie-parser');
-const formidable = require('formidable');
-const fs = require('fs'); 							//node.js核心的文件处理模块
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const bodyParser = require('body-parser');			//用来处理请求数据
-const ueditor = require("ueditor");			//编辑器
-global.moment = require('moment'); 			//时间格式化
-global.md5=require("md5");					//md5加密
-global.validator = require('validator');	//表单验证
+import express from 'express'
+import session from  'express-session'
+import cookieParser  from 'cookie-parser'
+import formidable from 'formidable'
+import fs from 'fs'							
+import path  from 'path'
+import favicon  from 'serve-favicon'
+import logger from 'morgan'
+import bodyParser from 'body-parser'		
+import ueditor from "ueditor"	
+import moment from 'moment'
+import connectmongo from 'connect-mongo'
+import md5 from 'md5'
+import validator from 'validator'
+
+const  mongoStroe = connectmongo(session);	//connect-mongo用来在数据库存储session的模块
+global.moment =moment;
+global.md5=md5;					
+global.validator =validator;
+
 
 //配置文件
 global.CONFIG=JSON.parse(fs.readFileSync('./config/settings.json').toString());
@@ -58,7 +64,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*app.use(bodyParser({ uploadDir: "./public/upload" }));*/  
 
 
-
+//app.all('*', (req, res, next) => {
+//	res.header("Access-Control-Allow-Origin", req.headers.origin);
+//	res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+//	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+//	res.header("Access-Control-Allow-Credentials", true); //可以带cookies
+//	res.header("X-Powered-By", '3.2.1')
+//	if (req.method == 'OPTIONS') {
+//	  	res.send(200);
+//	} else {
+//	    next();
+//	}
+//});
 
 //百度编辑器
 app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, res, next) {
