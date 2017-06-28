@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-require('babel-register');
+require("babel-polyfill");
+require('babel-core/register');
 var app = require('../app');
 var debug = require('debug')('xhblog:server');
 var http = require('http');

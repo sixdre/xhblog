@@ -6,7 +6,7 @@ class Check{
 		
 	}
 	
-	async checkAdmin(req,res,next){
+    checkAdmin(req,res,next){
 		if(!req.session['manager']){	
 			return res.status(403).json({ message: '请重新登陆' })
 	//		return res.sendStatus(403)
@@ -15,14 +15,14 @@ class Check{
 		next();
 	}
 	
-	async checkLoginByAjax(req,res,next){
+	checkLoginByAjax(req,res,next){
 		if(!req.session["User"]){
 	      return res.status(403).json({ message: '请重新登陆' })
 	    }
 		next();
 	}
 	
-	async checkLoginByNative(req,res,next){
+	checkLoginByNative(req,res,next){
 		if(!req.session["User"]){
 			return res.redirect('login');
 		}
