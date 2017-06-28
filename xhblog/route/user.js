@@ -8,7 +8,7 @@ const async = require('async');
 const events = require('events');				//事件处理模块
 
 //控制器
-const UserCtrl=require('../controllers/user.controller');
+import UserCtrl from '../controllers/user.controller'
 
 //登陆页面
 router.get('/login',function(req,res,next){

@@ -5,11 +5,11 @@ const router = express.Router();
 const multer = require('multer'); //上传文件中间件 multer
 
 const ArticleCtrl=require('../controllers/article.controller');
-const CategoryCtrl=require('../controllers/category.controller');
-const TagCtrl=require('../controllers/tag.controller');
-const FriendCtrl=require('../controllers/friend.controller');
-const UserCtrl=require('../controllers/user.controller');
-const WordCtrl=require('../controllers/word.controller');
+import CategoryCtrl from '../controllers/category.controller'
+import TagCtrl from '../controllers/tag.controller'
+import WordCtrl from '../controllers/word.controller'
+import FriendCtrl from '../controllers/friend.controller'
+import UserCtrl from '../controllers/user.controller'
 const FileCtrl=require('../controllers/file.controller');
 //验证中间件
 const Auth = require('../middleware/auth');
@@ -87,7 +87,7 @@ router.delete('/friend/:id', Auth.checkAdmin,FriendCtrl.remove);
 router.get('/users', Auth.checkAdmin, UserCtrl.getUsers)
 
 //获取留言
-router.get('/word',Auth.checkAdmin,WordCtrl.getTags);
+router.get('/word',Auth.checkAdmin,WordCtrl.getWords);
 //提交留言
 router.post('/word',Auth.checkLoginByAjax,WordCtrl.add);
 //留言回复

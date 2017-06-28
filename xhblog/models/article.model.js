@@ -86,10 +86,6 @@ ArticleSchema.path('source').validate(function(value){
 
 
 
-ArticleSchema.pre('save', function(next) {
-	this.likeNum=this.likes.length;
-	next();
-});
 
 
 /*const categorySchema = mongoose.Schema({
@@ -298,6 +294,7 @@ ArticleSchema.plugin(autoIncrement.plugin, {
 	incrementBy: 1 //每次自增数量
 });
 ArticleSchema.pre('save', function(next) {
+	this.likeNum=this.likes.length;
 	if(this.isNew) {
 		this.create_time = this.update_time = Date.now()
 	} else {

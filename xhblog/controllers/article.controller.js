@@ -36,7 +36,7 @@ const User = mongoose.model('User');
 
 
 //文章获取
-exports.getArticles=function(req,res,next){
+exports.getArticles= function(req,res,next){
 	let currentPage = parseInt(req.query.currentPage) - 1;
 	let limit = parseInt(req.query.limit);
 	let title = req.query.title || '';
