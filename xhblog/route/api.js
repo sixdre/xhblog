@@ -12,7 +12,7 @@ import FriendCtrl from '../controllers/friend.controller'
 import UserCtrl from '../controllers/user.controller'
 const FileCtrl=require('../controllers/file.controller');
 //验证中间件
-const Auth = require('../middleware/auth');
+import Auth from '../middleware/auth'
 
 
 //文件上传multer配置

@@ -8,6 +8,7 @@ angular.module('app', [
     'ngStorage',
     'ui.router',
     'ui.bootstrap',
+    'ui.select',
     'ui.load',
     'ui.jq',
     'ui.grid',

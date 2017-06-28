@@ -16,8 +16,6 @@ app.controller('articlePublishCtrl', ['$rootScope', '$scope','$state', "$statePa
 		});
 		
 		
-		
-		
 		$scope.article = {};
 		$scope.clearArticle = function() { //注在请求中不要调用此方法,angular会自动脏数据检查
 			$scope.$apply(function() {

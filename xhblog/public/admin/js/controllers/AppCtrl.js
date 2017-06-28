@@ -13,6 +13,7 @@ angular.module('app').controller('AppCtrl',
 					method: "GET",
 					url: "/admin/loadData"
 				}).then(function(res) {
+					console.log(res)
 					DataService.ArticleTotal=res.data.articleTotal;
 					DataService.Words=res.data.words;
 					DataService.Categorys=res.data.categorys;

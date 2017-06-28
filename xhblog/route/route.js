@@ -9,7 +9,7 @@ const adminRouter=require('./admin');
 const indexRouter=require('./client');
 const userRouter=require('./user');
 const uploadRouter=require('./upload');
-const Auth=require('../middleware/auth');
+import Auth from '../middleware/auth'
 module.exports=function(app){
 	
 	app.use(function(req,res,next){

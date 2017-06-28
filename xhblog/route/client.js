@@ -18,7 +18,7 @@ const Comment=mongoose.model('Comment');		//评论
 //公用数据
 const Common=require('../middleware/common');
 //验证
-const Auth=require('../middleware/auth');
+import Auth from '../middleware/auth'
 
 const BaseQuery=require('../models/dbHelper'),
 	  aQuery=BaseQuery.ArticlesQuery;
